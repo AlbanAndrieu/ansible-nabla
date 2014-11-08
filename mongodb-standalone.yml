@@ -1,6 +1,0 @@
-- hosts: mongodbservers
-  roles:
-    - role: mongodb
-      mongod_datadir_prefix: "/data/"
-      mongod_replication: false
-      mongod_port: 2701

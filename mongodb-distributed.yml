@@ -1,9 +1,0 @@
-- hosts: mongodbservers
-  roles:
-   - role: mongodb
-     mongod_datadir_prefix: "/data/"
-     mongod_replication: true
-     mongod_port: 2701
-     mongod_repl_servers: ['mongo1', 'mongo2', 'mongo3' ]
-     mongod_repl_master: mongo1
-     mongod_replset_name: rs0
