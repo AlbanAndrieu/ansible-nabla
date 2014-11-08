@@ -4,3 +4,183 @@
 [submodule "roles/chrome"]
 	path = roles/chrome
 	url = https://github.com/AlbanAndrieu/devbox.chrome.git
+[submodule "roles/ansible"]
+	path = roles/ansible
+	url = https://github.com/debops/ansible-role-ansible.git
+[submodule "roles/supervisor"]
+	path = roles/supervisor
+	url = https://github.com/AlbanAndrieu/ansible-supervisor_task.git
+[submodule "roles/xvbf"]
+	path = roles/xvbf
+	url = https://github.com/AlbanAndrieu/ansible-xvbf.git
+[submodule "roles/webmin"]
+	path = roles/webmin
+	url = https://github.com/AlbanAndrieu/ansible-webmin.git
+[submodule "roles/zfs"]
+	path = roles/zfs
+	url = https://github.com/AlbanAndrieu/ansible-zfs.git
+[submodule "roles/zabbix-agent"]
+	path = roles/zabbix-agent
+	url = https://github.com/AlbanAndrieu/ansible-zabbix_agent.git
+[submodule "roles/zabbix-server"]
+	path = roles/zabbix-server
+	url = https://github.com/AlbanAndrieu/ansible-zabbix_server.git
+[submodule "roles/locale"]
+	path = roles/locale
+	url = https://github.com/knopki/ansible-locale
+[submodule "roles/virtualbox"]
+	path = roles/virtualbox
+	url = https://github.com/AlbanAndrieu/ansible-galaxy.ubuntu.virtualbox.git
+[submodule "roles/vagrant"]
+	path = roles/vagrant
+	url = https://github.com/AlbanAndrieu/ansible-vagrant-role.git
+[submodule "roles/docker"]
+	path = roles/docker
+	url = https://github.com/AlbanAndrieu/docker.ubuntu.git
+[submodule "roles/maven"]
+	path = roles/maven
+	url = https://github.com/AlbanAndrieu/ansible-maven.git
+[submodule "roles/java"]
+	path = roles/java
+	url = https://github.com/AlbanAndrieu/ansible-java.git
+[submodule "roles/jenkins-master"]
+	path = roles/jenkins-master
+	url = https://github.com/AlbanAndrieu/Stouts.jenkins.git
+[submodule "roles/jenkins-slave"]
+	path = roles/jenkins-slave
+	url = https://github.com/AlbanAndrieu/ansible-jenkins-slave.git
+[submodule "roles/jenkins-swarm"]
+	path = roles/jenkins-swarm
+	url = https://github.com/AlbanAndrieu/ansible-jenkins-swarm.git
+[submodule "roles/dropbox"]
+	path = roles/dropbox
+	url = https://github.com/AlbanAndrieu/ansible-dropbox.git
+[submodule "roles/sonar"]
+	path = roles/sonar
+	url = https://github.com/AlbanAndrieu/ansible-sonar.git
+[submodule "roles/selenium"]
+	path = roles/selenium
+	url = https://github.com/AlbanAndrieu/ansible-selenium.git
+[submodule "roles/nodejs"]
+	path = roles/nodejs
+	url = https://github.com/AlbanAndrieu/ansible-nodejs.git
+[submodule "roles/conky"]
+	path = roles/conky
+	url = https://github.com/AlbanAndrieu/ansible-conky.git
+[submodule "roles/subversion"]
+	path = roles/subversion
+	url = https://github.com/AlbanAndrieu/ansible-subversion.git
+[submodule "roles/css"]
+	path = roles/css
+	url = https://github.com/AlbanAndrieu/ansible-css.git
+[submodule "roles/security"]
+	path = roles/security
+	url = https://github.com/AlbanAndrieu/ansible-role-security.git
+[submodule "roles/zap"]
+	path = roles/zap
+	url = https://github.com/AlbanAndrieu/ansible-zap.git
+[submodule "roles/nexus"]
+	path = roles/nexus
+	url = https://github.com/AlbanAndrieu/ansible-sonatype_nexus.git
+[submodule "roles/cmake"]
+	path = roles/cmake
+	url = https://github.com/AlbanAndrieu/ansible-cmake.git
+[submodule "roles/shell"]
+	path = roles/shell
+	url = https://github.com/AlbanAndrieu/ansible-shell.git
+[submodule "roles/eclipse"]
+	path = roles/eclipse
+	url = https://github.com/AlbanAndrieu/ansible-eclipse.git
+[submodule "roles/jboss"]
+	path = roles/jboss
+	url = https://github.com/AlbanAndrieu/ansible-jboss.git
+[submodule "roles/windows"]
+	path = roles/windows
+	url = https://github.com/AlbanAndrieu/ansible-windows.git
+[submodule "roles/cpp"]
+	path = roles/cpp
+	url = https://github.com/AlbanAndrieu/ansible-cpp.git
+[submodule "roles/pagespeed"]
+	path = roles/pagespeed
+	url = https://github.com/AlbanAndrieu/ansible-pagespeed.git
+[submodule "roles/jmeter"]
+	path = roles/jmeter
+	url = https://github.com/AlbanAndrieu/ansible-jmeter.git
+[submodule "roles/mon"]
+	path = roles/mon
+	url = https://github.com/AlbanAndrieu/ansible-mon.git
+[submodule "roles/grive"]
+	path = roles/grive
+	url = https://github.com/AlbanAndrieu/ansible-grive.git
+[submodule "roles/python"]
+	path = roles/python
+	url = https://github.com/Stouts/Stouts.python.git
+[submodule "roles/web"]
+	path = roles/web
+	url = https://github.com/AlbanAndrieu/ansible-web.git
+[submodule "roles/common"]
+	path = roles/common
+	url = https://github.com/AlbanAndrieu/ansible-common.git
+[submodule "roles/administration"]
+	path = roles/administration
+	url = https://github.com/AlbanAndrieu/ansible-administration.git
+[submodule "roles/workstation"]
+	path = roles/workstation
+	url = https://github.com/AlbanAndrieu/ansible-workstation.git
+[submodule "roles/dns"]
+	path = roles/dns
+	url = https://github.com/AlbanAndrieu/ansible-dns.git
+[submodule "roles/tomcat"]
+	path = roles/tomcat
+	url = https://github.com/AlbanAndrieu/ansible-tomcat.git
+[submodule "roles/hostname"]
+	path = roles/hostname
+	url = https://github.com/AlbanAndrieu/ansible-hostname.git
+[submodule "roles/monit"]
+	path = roles/monit
+	url = https://github.com/ANXS/monit
+[submodule "roles/geerlingguy.firewall"]
+	path = roles/geerlingguy.firewall
+	url = https://github.com/geerlingguy/ansible-role-firewall.git
+[submodule "roles/geerlingguy.ntp"]
+	path = roles/geerlingguy.ntp
+	url = https://github.com/geerlingguy/ansible-role-ntp.git
+[submodule "roles/geerlingguy.repo-epel"]
+	path = roles/geerlingguy.repo-epel
+	url = https://github.com/geerlingguy/ansible-role-repo-epel.git
+[submodule "roles/geerlingguy.repo-remi"]
+	path = roles/geerlingguy.repo-remi
+	url = https://github.com/geerlingguy/ansible-role-repo-remi.git
+[submodule "roles/geerlingguy.apache"]
+	path = roles/geerlingguy.apache
+	url = https://github.com/geerlingguy/ansible-role-apache.git
+[submodule "roles/geerlingguy.mysql"]
+	path = roles/geerlingguy.mysql
+	url = https://github.com/AlbanAndrieu/ansible-role-mysql.git
+[submodule "roles/geerlingguy.php"]
+	path = roles/geerlingguy.php
+	url = https://github.com/geerlingguy/ansible-role-php.git
+[submodule "roles/geerlingguy.php-mysql"]
+	path = roles/geerlingguy.php-mysql
+	url = https://github.com/geerlingguy/ansible-role-php-mysql.git
+[submodule "roles/geerlingguy.phpmyadmin"]
+	path = roles/geerlingguy.phpmyadmin
+	url = https://github.com/geerlingguy/ansible-role-phpmyadmin.git
+[submodule "roles/geerlingguy.samba"]
+	path = roles/geerlingguy.samba
+	url = https://github.com/geerlingguy/ansible-role-samba.git
+[submodule "roles/geerlingguy.java"]
+	path = roles/geerlingguy.java
+	url = https://github.com/geerlingguy/ansible-role-java
+[submodule "roles/geerlingguy.elasticsearch"]
+	path = roles/geerlingguy.elasticsearch
+	url = https://github.com/geerlingguy/ansible-role-elasticsearch.git
+[submodule "roles/geerlingguy.logstash"]
+	path = roles/geerlingguy.logstash
+	url = https://github.com/AlbanAndrieu/ansible-role-logstash.git
+[submodule "roles/geerlingguy.nginx"]
+	path = roles/geerlingguy.nginx
+	url = https://github.com/geerlingguy/ansible-role-nginx.git
+[submodule "roles/geerlingguy.kibana"]
+	path = roles/geerlingguy.kibana
+	url = https://github.com/AlbanAndrieu/ansible-role-kibana.git
