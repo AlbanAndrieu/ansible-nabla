@@ -1,0 +1,6 @@
+[submodule "ansigenome"]
+	path = ansigenome
+	url = https://github.com/AlbanAndrieu/ansigenome.git
+[submodule "roles/chrome"]
+	path = roles/chrome
+	url = https://github.com/AlbanAndrieu/devbox.chrome.git

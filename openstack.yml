@@ -1,0 +1,13 @@
+#ansible-playbook openstack.yml --extra-vars "host=myhost user=myuser" --ask-sudo-pass
+
+- name: apply common configuration to openstack
+#  hosts: openstack
+  hosts: albandri
+#  user: root
+  connection: local
+  vars_files:
+  - [ "roles/openstack/vars/defaults.yml" ]
+  - [ "roles/openstack/vars/$ansible_distribution-$ansible_architecture.yml", "roles/jenkins-slave/vars/$ansible_distribution.yml" ]
+    
+  roles:
+    - openstack

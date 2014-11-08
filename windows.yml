@@ -1,0 +1,11 @@
+---     
+#This script is used to configure your workstation (for developer)
+
+#sudo ansible-playbook -i hosts -c local -v windows.yml | tee setup.log
+
+- name: Install Windows 
+  hosts: windows 
+  user: root
+#  connection: local
+  roles:
+    - role: windows

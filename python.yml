@@ -1,0 +1,13 @@
+#sudo ansible-playbook -i hosts -c local -v python.yml | tee setup.log
+
+- name: Install python
+  connection: local
+  hosts: workstation
+#  remote_user: root
+#  accelerate: true
+
+  roles:
+    - { role: python,
+        python_version: 2.7 
+      }    
+

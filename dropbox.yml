@@ -1,0 +1,18 @@
+#sudo ansible-playbook -i hosts -c local -v dropbox.yml | tee setup.log
+
+- name: Install subversion
+  connection: local
+  hosts: workstation
+#  remote_user: root
+#  accelerate: true
+
+  roles:
+    - { role: dropbox,
+        docker_files_enable: yes,
+        docker_files_generated_directory: "roles/dropbox"
+        #user: "albandri",
+        #home: "/workspace/users/albandri10"     
+        dropbox_user_directory: "/workspace/Dropbox"
+        dropbox_user_host : "2366450895"
+      }    
+

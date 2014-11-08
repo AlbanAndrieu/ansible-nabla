@@ -1,0 +1,40 @@
+#for testing purpose
+#sudo ansible-playbook -i hosts -c local -v jenkins-master.yml -vvvv
+
+#as root 
+#ansible-playbook jenkins-master.yml -i hosts -vvvv
+#as albandri 
+#ansible-playbook jenkins-master.yml -i hosts -vvvv --ask-sudo-pass --sudo
+# --extra-vars "jenkins_username=aandrieu jenkins_password=tbd"
+
+- name: Apply configuration to jenkins master
+  hosts: jenkins-master
+  remote_user: root
+#  connection: local
+
+  roles:
+    - { role: jenkins-master,
+        docker_files_enable: yes,
+        docker_files_generated_directory: "roles/jenkins-master",
+        #user: "albandri",
+        #home: "/workspace/users/albandri10",      
+      }
+      
+  vars:
+      jenkins_proxy: apache
+      jenkins_proxy_hostname: localhost
+#      jenkins_ssh_key_file: "{{resources_to}}/resources/jenkins/ssh_key"    # (you can manage remote files with Stouts.resources role)
+      jenkins_ssh_key_file: "~/.ssh/id_rsa.pub"
+      jenkins_http_port: 8380
+      jenkins_proxy_port: 7070                     
+#      jenkins_home_dir: /jenkins
+      jenkins_java_args:
+        - "-Xmx1024m"
+        - "-XX:MaxPermSize=512m"
+        - "-Djava.awt.headless=true"
+      jenkins_prefix: "/jenkins"
+      jenkins_plugins:
+        - "todo"
+#      jenkins_jobs:
+#        - name: test
+#          action: delete

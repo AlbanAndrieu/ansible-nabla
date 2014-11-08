@@ -1,0 +1,32 @@
+#sudo ansible-playbook -i hosts -c local -v eclipse.yml | tee setup.log
+
+- name: Install eclipse
+  connection: local
+  hosts: workstation
+#  remote_user: root
+#  accelerate: true
+  roles:
+    - { role: eclipse,
+        docker_files_enable: yes,
+        docker_files_generated_directory: "roles/eclipse",
+        #user: "albandri",
+        #home: "/workspace/users/albandri10",
+        eclipse_plugins_emf_enabled: no,
+        eclipse_plugins_cdt_enabled: yes,
+        eclipse_plugins_cmakeed_enabled: yes,
+        eclipse_plugins_openinterminal_enabled: no,
+        eclipse_plugins_protobuf_enabled: no,
+        eclipse_plugins_yedit_enabled: yes,
+        eclipse_plugins_shelled_enabled: no,
+        eclipse_plugins_webpageed_enabled: no,
+        eclipse_plugins_pydev_enabled: no,
+        eclipse_plugins_m2e_enabled: yes,
+        eclipse_plugins_subclipse_enabled: yes        
+      }
+
+#  vars:
+      #eclipse_base_dir: "/workspace/eclipse"
+      #eclipse_owner: "{{ user }}"
+      #eclipse_group: "{{ eclipse_owner }}"
+      #eclipse_owner_home: "{{ home }}"
+

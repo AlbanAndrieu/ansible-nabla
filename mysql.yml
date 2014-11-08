@@ -1,0 +1,39 @@
+---
+#This script is used to configure your workstation (for developer)
+
+#sudo ansible-playbook -i hosts -c local -v workstation.yml -vvvv | tee setup.log
+
+- hosts: all
+  gather_facts: true
+  tasks:
+    - name: group hosts by distribution
+      group_by: key="{{ ansible_distribution }}-{{ ansible_distribution_version }}"
+
+- hosts: RedHat-7*:RedHat-6*:CentOS-6*:Ubuntu-12.04:Ubuntu-14.04
+  gather_facts: false
+  tasks:
+    - name: group hosts for supported distributions
+      group_by: key="supported"
+
+- hosts: "!supported"
+  gather_facts: false
+  tasks:
+    - name: fail for unsupported distribution
+      fail: msg="{{ ansible_distribution }} {{ ansible_distribution_version }}
+                 is not a supported OS for a Tower installation.  Supported
+                 OSes include Red Hat Enterprise Linux 6/7, CentOS 6, or
+                 Ubuntu 12.04/14.04."
+
+# This playbook deploys a MySQL database.
+- name: Deploy MySQL and configure the databases
+  hosts: mysql-servers
+  remote_user: root
+#  connection: local
+
+  roles:
+    - geerlingguy.mysql
+
+  vars:
+       mysql_innodb_log_file_size: "5M"
+       mysql_root_username: root
+       mysql_root_password: microsoft

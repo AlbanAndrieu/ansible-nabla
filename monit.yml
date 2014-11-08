@@ -1,0 +1,12 @@
+#sudo ansible-playbook -i hosts -c local -v monit.yml | tee setup.log
+
+- name: Install monit
+  hosts: workstation
+  remote_user: root
+#  connection: local
+
+  roles:
+    - monit      
+    
+  vars:      
+      monit_notify_email: "alban.andrieu@free.fr"

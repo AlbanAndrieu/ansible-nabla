@@ -1,0 +1,17 @@
+#sudo ansible-playbook -i hosts -c local -v mon.yml | tee setup.log
+
+- name: Install mon
+  hosts: workstation
+  remote_user: root
+#  connection: local
+
+  roles:
+    - mon      
+    
+  vars:      
+      mon_localhost : "albandri"
+      mon_custom_group: "nabla"        
+      mon_admin_email: "alban.andrieu@free.fr"
+      mon_weekly_email: "team@free.fr"
+      user: root
+      home: "/root"

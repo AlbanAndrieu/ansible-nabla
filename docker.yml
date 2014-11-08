@@ -1,0 +1,57 @@
+---
+#This script is used to configure your workstation (for developer)
+
+#sudo ansible-playbook -i hosts -c local -v docker.yml -vvvv | tee setup.log
+
+- hosts: all
+  gather_facts: true
+  tasks:
+    - name: group hosts by distribution
+      group_by: key="{{ ansible_distribution }}-{{ ansible_distribution_version }}"
+
+- hosts: RedHat-7*:RedHat-6*:CentOS-6*:Ubuntu-12.04:Ubuntu-14.04
+  gather_facts: false
+  tasks:
+    - name: group hosts for supported distributions
+      group_by: key="supported"
+
+- hosts: "!supported"
+  gather_facts: false
+  tasks:
+    - name: fail for unsupported distribution
+      fail: msg="{{ ansible_distribution }} {{ ansible_distribution_version }}
+                 is not a supported OS for a Tower installation.  Supported
+                 OSes include Red Hat Enterprise Linux 6/7, CentOS 6, or
+                 Ubuntu 12.04/14.04."
+
+#- name: Install virtualbox
+#  hosts: virtualbox
+#  remote_user: root
+##  connection: local
+#
+#  roles:
+#    - virtualbox
+#
+#  vars:
+#      virtualbox_package_name: virtualbox
+#      virtualbox_dkms_enable: yes
+#
+#- name: Install vagrant
+#  hosts: vagrant
+#  remote_user: root
+##  connection: local
+#
+#  roles:
+#    - vagrant
+#
+#  vars:
+#       vagrant_libvirt_enabled: true
+#       vagrant_windows_enabled: false
+##      vagrant_url: https://dl.bintray.com/mitchellh/vagrant/vagrant_1.6.3_x86_64.deb
+
+- name: Install docker
+  hosts: docker
+  remote_user: root
+#  connection: local
+  roles:
+    - docker

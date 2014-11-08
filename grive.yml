@@ -1,0 +1,16 @@
+#sudo ansible-playbook -i hosts -c local -v grive.yml | tee setup.log
+
+- name: Install subversion
+  connection: local
+  hosts: workstation
+#  remote_user: root
+#  accelerate: true
+
+  roles:
+    - { role: grive,
+        docker_files_enable: yes,
+        docker_files_generated_directory: "roles/grive"
+        #user: "albandri",
+        #home: "/workspace/users/albandri10"
+      }
+

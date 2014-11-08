@@ -1,0 +1,8 @@
+#sudo ansible-playbook -i hosts -c local -v pagespeed.yml | tee setup.log
+
+- name: Install pagespeed
+  hosts: apache-servers
+  remote_user: root
+#  connection: local
+  roles:
+    - role: pagespeed     

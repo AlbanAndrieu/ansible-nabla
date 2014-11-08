@@ -1,0 +1,11 @@
+#sudo ansible-playbook -i hosts -c local -v workstation-custom.yml -vvvv | tee setup.log
+
+- name: Install workstation add-on
+  remote_user: root
+  connection: local  
+  hosts: workstation
+  sudo: yes
+
+  roles:
+    - workstation
+    

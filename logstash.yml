@@ -1,0 +1,90 @@
+---
+#This script is used to configure your workstation (for developer)
+
+#sudo ansible-playbook -i hosts -c local -v logstash.yml | tee setup.log
+
+- hosts: all
+  gather_facts: true
+  tasks:
+    - name: group hosts by distribution
+      group_by: key="{{ ansible_distribution }}-{{ ansible_distribution_version }}"
+
+- hosts: RedHat-7*:RedHat-6*:CentOS-6*:Ubuntu-12.04:Ubuntu-14.04
+  gather_facts: false
+  tasks:
+    - name: group hosts for supported distributions
+      group_by: key="supported"
+
+- hosts: "!supported"
+  gather_facts: false
+  tasks:
+    - name: fail for unsupported distribution
+      fail: msg="{{ ansible_distribution }} {{ ansible_distribution_version }}
+                 is not a supported OS for a Tower installation.  Supported
+                 OSes include Red Hat Enterprise Linux 6/7, CentOS 6, or
+                 Ubuntu 12.04/14.04."
+
+#See corresponding vagrant file
+
+#- name: Apply elasticsearch configuration for logstash
+#  hosts: logstash
+#  gather_facts: false
+#  remote_user: root
+##  connection: local
+#
+#  roles:
+#    - geerlingguy.elasticsearch
+#
+#  vars:
+#       logstash_elasticsearch_host: albandri.misys.global.ad
+
+- name: Add logstash configuration
+  hosts: logstash
+  remote_user: root
+#  connection: local
+
+  roles:
+    - geerlingguy.logstash
+
+  vars:
+       logstash_listen_port_lumberjack: 6000
+       logstash_elasticsearch_host: "localhost"
+       #logstash_elasticsearch_host: "albandri-laptop-misys"
+       #logstash_local_syslog_path: "/var/log/*.log"
+       logstash_monitor_jenkins_enabled: yes
+       logstash_monitor_nexus_enabled: yes
+       logstash_monitor_apache_enabled: yes
+       logstash_monitor_nginx_enabled: yes
+       logstash_monitor_elasticsearch_enabled: yes
+       logstash_monitor_miscellaneous_enabled: yes
+       logstash_heap: "50m"
+       
+#- name: Add nginx configuration
+#  hosts: logstash
+#  remote_user: root
+##  connection: local
+#
+#  roles:
+#    - geerlingguy.nginx
+#
+#  vars:
+#       nginx_worker_processes: "8"
+#       nginx_worker_connections: "8192"
+#       nginx_user: root
+
+#- name: Add kibana configuration
+#  hosts: logstash
+#  remote_user: root
+##  connection: local
+#
+#  roles:
+#    - geerlingguy.kibana
+#
+#  vars:
+#       kibana_username: kibana
+#       kibana_password: microsoft
+#       nginx_user: root
+#       kibana_domain: home.nabla.mobi
+#       kibana_server_name: home.nabla.mobi
+#       es_address: http://{{ kibana_domain}}/es/
+
