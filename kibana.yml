@@ -1,7 +1,7 @@
 ---
 #This script is used to configure your workstation (for developer)
 
-#sudo ansible-playbook -i hosts -c local -v logstash.yml | tee setup.log
+#sudo ansible-playbook -i hosts -c local -v kibana.yml | tee setup.log
 
 - hosts: all
   gather_facts: true

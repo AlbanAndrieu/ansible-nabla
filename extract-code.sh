@@ -10,6 +10,9 @@
 
 git clone https://github.com/AlbanAndrieu/ansible-nabla.git ansible
 
+git pull && git submodule init && git submodule update && git submodule status
+#git submodule foreach git pull
+
 git submodule add https://github.com/AlbanAndrieu/ansigenome.git 
 
 mkdir roles
