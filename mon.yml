@@ -11,6 +11,10 @@
   vars:      
       mon_localhost : "albandri"
       mon_custom_group: "nabla"        
+      mon_hostgroup_fs: "freenas"
+      mon_hostgroup_gw: "freebox"
+      mon_user_enabled: yes
+      mon_user: "albandri:787bV0y65kxs6"
       mon_admin_email: "alban.andrieu@free.fr"
       mon_weekly_email: "team@free.fr"
       user: root

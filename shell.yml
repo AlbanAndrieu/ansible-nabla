@@ -13,5 +13,10 @@
 
   roles:
     - { role: shell, 
+        shell_git_meld_enabled: yes,
+        shell_git_configure_enabled: yes,
+        shell_git_email: "alban.andrieu@mysis.com",
+        shell_git_name: "Alban Andrieu",
+        shell_git_editor: "gedit",
         docker_files_enable: yes, 
         docker_files_generated_directory: "roles/shell" }
