@@ -103,7 +103,7 @@ git submodule add https://github.com/AlbanAndrieu/ansible-zap.git zap
 #git clone https://github.com/ahelal/ansible-sonatype_nexus.git nexus
 git submodule add https://github.com/AlbanAndrieu/ansible-sonatype_nexus.git nexus
 
-git submodule add https://github.com/AlbanAndrieu/ansible-cmake.git cmake
+git submodule add https://github.com/AlbanAndrieu/ansible-cmake.git alban.andrieu.cmake
 
 git submodule add https://github.com/AlbanAndrieu/ansible-shell.git shell
 

@@ -68,7 +68,7 @@
     - common
 
   vars:
-       apt_notification_email: "alban.andrieu@free.fr"
+       apt_notification_email: "alban.andrieu@misys.com"
        ntp_timezone: Europe/Paris
 
 - name: Apply dns configuration to all nodes
@@ -193,7 +193,7 @@
 ##  connection: local
 #
 #  roles:
-#    - cmake
+#    - alban.andrieu.cmake
 
 - name: Install cpp
   hosts: cpp
@@ -237,7 +237,7 @@
     - vagrant
 
   vars:
-       vagrant_libvirt_enabled: true
+       vagrant_libvirt_enabled: false
        vagrant_windows_enabled: false
 #      vagrant_url: https://dl.bintray.com/mitchellh/vagrant/vagrant_1.6.3_x86_64.deb
 
@@ -303,6 +303,9 @@
 
   roles:
     - nexus
+
+  vars:
+      nexus_home: "/usr/local/{{nexus_user}}"
 
 - name: Install xvbf
   hosts: xvbf

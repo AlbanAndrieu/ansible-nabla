@@ -82,9 +82,6 @@
 [submodule "roles/nexus"]
 	path = roles/nexus
 	url = https://github.com/AlbanAndrieu/ansible-sonatype_nexus.git
-[submodule "roles/cmake"]
-	path = roles/cmake
-	url = https://github.com/AlbanAndrieu/ansible-cmake.git
 [submodule "roles/shell"]
 	path = roles/shell
 	url = https://github.com/AlbanAndrieu/ansible-shell.git
@@ -184,3 +181,6 @@
 [submodule "roles/geerlingguy.kibana"]
 	path = roles/geerlingguy.kibana
 	url = https://github.com/AlbanAndrieu/ansible-role-kibana.git
+[submodule "roles/alban.andrieu.cmake"]
+	path = roles/alban.andrieu.cmake
+	url = https://github.com/AlbanAndrieu/ansible-cmake.git
