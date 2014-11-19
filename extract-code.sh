@@ -142,6 +142,8 @@ git submodule add https://github.com/AlbanAndrieu/ansible-hostname.git hostname
 #git clone https://github.com/debops/ansible-monit.git monit
 git submodule add https://github.com/ANXS/monit monit
 
+git submodule add https://github.com/AlbanAndrieu/ansible-synergy.git synergy
+
 #LAMP
 git submodule add https://github.com/geerlingguy/ansible-role-firewall.git geerlingguy.firewall
 git submodule add https://github.com/geerlingguy/ansible-role-ntp.git geerlingguy.ntp
