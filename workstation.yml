@@ -41,23 +41,7 @@
 
   roles:
     - hostname
-    
-#  vars_files:
-#    - [ "roles/hostname/defaults/main.yml" ]
 
-#- name: Apply ntp configuration to all nodes
-#  hosts: all
-#  gather_facts: false
-#  remote_user: root
-##  connection: local
-#
-#  roles:
-#    - geerlingguy.ntp
-#    
-#  vars:
-#       ntp_timezone: Europe/Paris
-
-#Warning below has a ntp configuration
 - name: Apply common configuration to all nodes
   hosts: Ubuntu-12*:Ubuntu-14*
   gather_facts: false
@@ -69,7 +53,7 @@
 
   vars:
        apt_notification_email: "alban.andrieu@misys.com"
-       ntp_timezone: Europe/Paris
+       apt_upgrade_system_enabled: no
 
 - name: Apply dns configuration to all nodes
   hosts: Ubuntu-12*:Ubuntu-14*
@@ -95,6 +79,20 @@
 #      nameserver1: 10.7.109.27
 #      nameserver2: 10.7.111.244
 
+#Below ntp role is included in administration role
+#- name: Apply ntp configuration to all nodes
+#  hosts: all
+#  gather_facts: false
+#  remote_user: root
+##  connection: local
+#
+#  roles:
+#    - geerlingguy.ntp
+#
+#  vars:
+#       ntp_timezone: Europe/Paris
+
+#Below firewall role is included in administration role
 #- name: Apply firewall configuration to all nodes
 #  hosts: Ubuntu-12*:Ubuntu-14*
 #  gather_facts: false
@@ -158,7 +156,7 @@
 ##   8060 : Atlassion Fisheye
 ##   8082 : Atlassian JIRA
 ##   7000: FreeNas
-##   5001 : xrdp 
+##   5001 : xrdp
 ##   5000 : xrdp / Openstack
 ##   3689: FireFly
 ##   8091 : Transmission
@@ -187,6 +185,7 @@
   roles:
     - security
 
+#Below cmake role is included in cpp role
 #- name: Install cmake
 #  hosts: cmake
 #  remote_user: root
@@ -226,7 +225,7 @@
 
   vars:
       virtualbox_package_name: virtualbox
-      virtualbox_dkms_enable: yes
+      virtualbox_dkms_enable: no
 
 - name: Install vagrant
   hosts: vagrant
@@ -240,18 +239,6 @@
        vagrant_libvirt_enabled: false
        vagrant_windows_enabled: false
 #      vagrant_url: https://dl.bintray.com/mitchellh/vagrant/vagrant_1.6.3_x86_64.deb
-
-#- name: Install vagrant user
-#  hosts: vagrant
-#  remote_user: root
-##  connection: local
-#
-#  roles:
-#    - vagrant-user
-#
-#  vars:
-#      vagrant_root_password_enabled: false
-#      vagrant_user_shell: "/bin/false"
 
 - name: Install docker
   hosts: docker
@@ -283,19 +270,19 @@
       zabbix_agent_revision: '7'
       zabbix_agent_ubuntu: "1:{{zabbix_agent_version}}-1+trusty"
       #zabbix_agent_Server: 127.0.0.1
-      
+
 - name: Install webmin
   hosts: webmin
   remote_user: root
 #  connection: local
 
   roles:
-    - webmin
+    - alban.andrieu.webmin
 
   vars:
       docker_files_enable: yes
       docker_files_generated_directory: "roles/webmin"
-        
+
 - name: Install nexus
   hosts: nexus
   remote_user: root
@@ -313,7 +300,7 @@
 #  connection: local
 
   roles:
-    - xvbf
+    - alban.andrieu.xvbf
 
 - name: Install selenium
   hosts: selenium
@@ -330,17 +317,179 @@
 ##  connection: local
 #
 #  roles:
-#    - zfs
+#    - alban.andrieu.zfs
 
-#Use below only if you want your servers to be part of MGR build farm
-#- name: Apply administration configuration to all nodes
-#  hosts: Ubuntu-12*:Ubuntu-14*
-#  gather_facts: false
+#Use below only if you want your servers to be part of build farm
+- name: Apply administration configuration to all nodes
+  hosts: Ubuntu-12*:Ubuntu-14*
+  gather_facts: false
+  remote_user: root
+  connection: local
+
+  roles:
+    - administration
+
+  vars:
+       ntp_timezone: Europe/Paris
+
+#Below dropbox is included in workstation role
+#- name: Install dropbox
+#  hosts: workstation
+#  remote_user: root
+##  sudo: yes
+##  sudo_user: "{{ user }}"
+##  connection: local
+#
+#  roles:
+#    - dropbox
+#
+#  vars:
+#       docker_files_enable: yes
+#       docker_files_generated_directory: "roles/dropbox"
+
+- name: Install workstation add-on
+  hosts: workstation
+  remote_user: root
+#  connection: local
+
+  roles:
+    - workstation
+
+  vars:
+       dropbox_user_directory: "/workspace/Dropbox"
+       dropbox_user_host: "2366450895"
+       nodejs_enabled: false
+       variety_owner: "{{ user }}"
+       variety_group: "{{ group }}"
+       dropbox_owner: "{{ user }}"
+       dropbox_group: "{{ group }}"
+
+#- name: Apply swarm configuration to all jenkins slaves
+#  hosts: jenkins-swarm
+#  remote_user: root
+##  connection: local
+#
+#  vars_prompt:
+#  - name: jenkins_username
+#    prompt: "What is your jenkins user?"
+#    private: no
+#  - name: jenkins_password
+#    prompt: "What is your jenkins password?"
+#    private: yes
+#
+#  roles:
+#    - jenkins-swarm
+#
+#  vars:
+#       docker_files_enable: yes,
+#       docker_files_generated_directory: "roles/jenkins-swarm",
+
+# This playbook deploys a simple standalone Tomcat 7 server.
+- name: Deploy Tomcat
+  hosts: tomcat-servers
+  remote_user: root
+#  connection: local
+
+  roles:
+    - tomcat
+
+# This playbook deploys a simple standalone JBoss server.
+
+- name: Deploy Jboss
+  hosts: jboss-servers
+  remote_user: root
+#  connection: local
+
+  roles:
+    - jboss
+
+## This playbook deploys a MySQL database.
+#- name: Deploy MySQL and configure the databases
+#  hosts: mysql-servers
 #  remote_user: root
 ##  connection: local
 #
 #  roles:
-#    - administration
+#    - geerlingguy.mysql
+#
+#  vars:
+#       mysql_innodb_log_file_size: "5M"
+#       mysql_root_username: root
+#       mysql_root_password: microsoft
+#
+## This playbook deploys an Apache database.
+#- name: Deploy Apache and configure the server
+#  hosts: apache-servers
+#  remote_user: root
+##  connection: local
+#
+#  roles:
+#    - geerlingguy.apache
+#
+#  vars:
+#       apache_listen_port: 7070
+#
+#- name: Add dependencies for Apache like PHP
+#  hosts: apache-servers
+#  remote_user: root
+##  connection: local
+#
+#  roles:
+#    - geerlingguy.php
+#    - geerlingguy.php-mysql
+#
+#  vars:
+#       php_date_timezone: "Europe/Paris"
+#
+#- name: Add admin tool for Apache like PHPmyAdmin
+#  hosts: apache-servers
+#  remote_user: root
+##  connection: local
+#
+#  roles:
+#    - geerlingguy.phpmyadmin
+#
+#  vars:
+#       phpmyadmin_mysql_user: root
+#       phpmyadmin_mysql_password: microsoft
+#       phpmyadmin_mysql_port: 7070
+#       apache_listen_port: 7070
+#       php_date_timezone: "Europe/Paris"
+#       mysql_innodb_log_file_size: "5M"
+#       mysql_root_username: root
+#       mysql_root_password: microsoft
+
+#WARNING jenkins-master role has disabled a2dissite 000-default
+- name: Configure and deploy the nabla php sample application code to apache
+  hosts: nabla-servers
+  remote_user: root
+#  connection: local
+
+  roles:
+    - web
+
+  vars:
+       apache_listen_port: 7070
+       #jenkins_proxy_port: "{{ apache_listen_port }}" #TODO why is it needed!!!
+       phpmyadmin_mysql_user: root
+       phpmyadmin_mysql_password: microsoft
+       phpmyadmin_mysql_port: "{{ apache_listen_port }}"
+       php_date_timezone: "Europe/Paris"
+       mysql_innodb_log_file_size: "5M"
+       mysql_root_username: root
+       mysql_root_password: microsoft
+       docker_files_enable: yes
+       docker_files_generated_directory: "roles/web"
+
+- name: Install pagespeed
+  hosts: apache-servers
+  remote_user: root
+#  connection: local
+  roles:
+    - role: pagespeed
+
+  vars:
+       pagespeed_package_arch: "amd64"
 
 - name: Apply configuration to jenkins master
   hosts: jenkins-master
@@ -355,8 +504,7 @@
       docker_files_enable: yes
       jenkins_proxy: apache
       jenkins_proxy_hostname: jenkins.myhost.com
-#      jenkins_ssh_key_file: "{{resources_to}}/resources/jenkins/ssh_key"    # (you can manage remote files with Stouts.resources role)
-      jenkins_ssh_key_file: "~/.ssh/id_rsa.pub"
+#      jenkins_ssh_key_file: "~/.ssh/id_rsa.pub"
       jenkins_http_port: 8380
       jenkins_proxy_port: 7070
 #      jenkins_home_dir: /jenkins
@@ -556,7 +704,6 @@
 #  connection: local
 
   vars_files:
-#  - [ "roles/jenkins-slave/defaults/main.yml" ]
   - [ "roles/jenkins-slave/vars/{{ ansible_distribution }}-{{ ansible_architecture }}.yml", "roles/jenkins-slave/vars/{{ ansible_distribution }}.yml" ]
 
   roles:
@@ -605,159 +752,10 @@
   roles:
     - nodejs
 
-- name: Install workstation add-on
-  hosts: workstation
-  remote_user: root
-#  connection: local
-
-  roles:
-    - workstation
-    
   vars:
-       dropbox_user_directory: "/workspace/Dropbox"
-       dropbox_user_host : "2366450895"
-       
-#- name: Install dropbox
-#  hosts: workstation
-#  remote_user: root
-##  sudo: yes
-##  sudo_user: "{{ user }}"
-##  connection: local
-#
-#  roles:
-#    - dropbox
-#
-#  vars:   
-#       docker_files_enable: yes
-#       docker_files_generated_directory: "roles/dropbox"
-       
-#- name: Apply swarm configuration to all jenkins slaves
-#  hosts: jenkins-swarm
-#  remote_user: root
-##  connection: local
-#
-#  vars_prompt:
-#  - name: jenkins_username
-#    prompt: "What is your jenkins user?"
-#    private: no
-#  - name: jenkins_password
-#    prompt: "What is your jenkins password?"
-#    private: yes
-#
-#  roles:
-#    - jenkins-swarm
-#
-#  vars:
-#       docker_files_enable: yes,
-#       docker_files_generated_directory: "roles/jenkins-swarm",
+       nodejs_install_packages: false
+       nodejs_global_packages: []
 
-# This playbook deploys a simple standalone Tomcat 7 server.
-- name: Deploy Tomcat
-  hosts: tomcat-servers
-  remote_user: root
-#  connection: local
-
-  roles:
-    - tomcat
-
-# This playbook deploys a simple standalone JBoss server.
-
-- name: Deploy Jboss
-  hosts: jboss-servers
-  remote_user: root
-#  connection: local
-
-  roles:
-    - jboss
-
-## This playbook deploys a MySQL database.
-#- name: Deploy MySQL and configure the databases
-#  hosts: mysql-servers
-#  remote_user: root
-##  connection: local
-#
-#  roles:
-#    - geerlingguy.mysql
-#
-#  vars:
-#       mysql_innodb_log_file_size: "5M"
-#       mysql_root_username: root
-#       mysql_root_password: microsoft
-#
-## This playbook deploys an Apache database.
-#- name: Deploy Apache and configure the server
-#  hosts: apache-servers
-#  remote_user: root
-##  connection: local
-#
-#  roles:
-#    - geerlingguy.apache
-#
-#  vars:
-#       apache_listen_port: 7070
-#
-#- name: Add dependencies for Apache like PHP
-#  hosts: apache-servers
-#  remote_user: root
-##  connection: local
-#
-#  roles:
-#    - geerlingguy.php
-#    - geerlingguy.php-mysql
-#
-#  vars:
-#       php_date_timezone: "Europe/Paris"
-#
-#- name: Add admin tool for Apache like PHPmyAdmin
-#  hosts: apache-servers
-#  remote_user: root
-##  connection: local
-#
-#  roles:
-#    - geerlingguy.phpmyadmin
-#
-#  vars:
-#       phpmyadmin_mysql_user: root
-#       phpmyadmin_mysql_password: microsoft
-#       phpmyadmin_mysql_port: 7070
-#       apache_listen_port: 7070
-#       php_date_timezone: "Europe/Paris"
-#       mysql_innodb_log_file_size: "5M"
-#       mysql_root_username: root
-#       mysql_root_password: microsoft
-
-#WARNING jenkins-master role has disabled a2dissite 000-default
-- name: Configure and deploy the nabla php sample application code to apache
-  hosts: nabla-servers
-#  hosts: apache-servers
-  remote_user: root
-#  connection: local
-
-  roles:
-    - web
-
-  vars:
-       phpmyadmin_mysql_user: root
-       phpmyadmin_mysql_password: microsoft
-       phpmyadmin_mysql_port: 7070
-       apache_listen_port: 7070
-       php_date_timezone: "Europe/Paris"
-       mysql_innodb_log_file_size: "5M"
-       mysql_root_username: root
-       mysql_root_password: microsoft          
-       docker_files_enable: yes
-       docker_files_generated_directory: "roles/web"
-
-- name: Install pagespeed
-  hosts: apache-servers
-  remote_user: root
-#  connection: local
-  roles:
-    - role: pagespeed     
-
-  vars:
-       pagespeed_package_arch: "amd64"
-        
 - name: configure supervisor
   hosts: supervisors
   remote_user: root
@@ -802,62 +800,69 @@
       sonar_jdbc_driver: "mysql"
       sonar_jdbc_port: 3306
       mysql_root_username: root
-      mysql_root_password: microsoft           
+      mysql_root_password: microsoft
       sonar_jdbc_pass: "{{ mysql_root_password }}"
       sonar_login_user: "{{ mysql_root_username }}"
       sonar_login_password: "{{ mysql_root_password }}"
       sonar_shell: "/bin/false"
 
-- name: Install conky
-  hosts: workstation
-  remote_user: root
-#  connection: local
-  roles:
-    - role: conky
+#Below cmake conky is included in workstation role
+#- name: Install conky
+#  hosts: workstation
+#  remote_user: root
+##  connection: local
+#  roles:
+#    - role: conky
 
 - name: Install subversion
   hosts: workstation
   remote_user: root
 #  connection: local
+
   roles:
     - role: subversion
 
-- name: Apply user shell configuration
-  connection: local
-  hosts: workstation
-  #sudo: yes
-  remote_user: root
-  
-  vars_files:
-  - [ "roles/shell/defaults/main.yml" ]
-  - [ "roles/shell/vars/default.yml" ]
-  - [ "roles/shell/vars/version.yml" ]
-  - [ "roles/shell/vars/custom-{{ ansible_distribution }}-{{ ansible_architecture }}.yml", "roles/shell/vars/custom-{{ ansible_distribution }}.yml" ]
-
-  roles:
-    - role: shell
-
   vars:
-      docker_files_generated_directory: "roles/shell"
-      docker_files_enable: yes  
+      subversion_owner: "{{ user }}"
+      subversion_group: "{{ group }}"
+      
+#- name: Apply user shell configuration
+#  hosts: workstation
+#  remote_user: root
+##  connection: local
+#
+#  vars_files:
+#  - [ "roles/shell/defaults/main.yml" ]
+#  - [ "roles/shell/vars/default.yml" ]
+#  - [ "roles/shell/vars/version.yml" ]
+#  - [ "roles/shell/vars/custom-{{ ansible_distribution }}-{{ ansible_architecture }}.yml", "roles/shell/vars/custom-{{ ansible_distribution }}.yml" ]
+#
+#  roles:
+#    - role: shell
+#
+#  vars:
+#      docker_files_generated_directory: "roles/shell"
+#      docker_files_enable: yes
 #      shell_owner: "{{ user }}"
-#      shell_owner_home: "{{ home }}"
-#      shell_env_directory: "{{ home }}/env/tmp"
+#      shell_group: "{{ group }}"   
+##      shell_owner_home: "{{ home }}"
+##      shell_env_directory: "{{ home }}/env/tmp"
+##      rhosts_hosts: []
 
-- name: Install eclipse
-  connection: local
-  hosts: workstation
-  remote_user: root
+#- name: Install eclipse
 #  connection: local
-  roles:
-    - role: eclipse
-
-  vars:
-      docker_files_generated_directory: "roles/eclipse"
-      docker_files_enable: yes
-      #eclipse_base_dir: /workspace/eclipse
-      #user: "albandri"
-      #home: "/workspace/users/albandri10"
+#  hosts: workstation
+#  remote_user: root
+#
+#  roles:
+#    - role: eclipse
+#
+#  vars:
+#      docker_files_generated_directory: "roles/eclipse"
+#      docker_files_enable: yes
+#      #eclipse_base_dir: /workspace/eclipse
+#      #user: "albandri"
+#      #home: "/workspace/users/albandri10"
 
 - name: Install zap
   connection: local
@@ -870,25 +875,25 @@
   vars:
       docker_files_generated_directory: "roles/zap"
       docker_files_enable: yes
-      
+
 - name: Install jmeter
   hosts: workstation
   remote_user: root
 #  connection: local
   roles:
-    - role: jmeter     
-    
+    - role: jmeter
+
 #- name: Install mon
 #  hosts: workstation
 #  remote_user: root
 ##  connection: local
 #
 #  roles:
-#    - mon      
-#    
-#  vars:      
+#    - mon
+#
+#  vars:
 #      mon_localhost : "albandri"
-#      mon_custom_group: "nabla"        
+#      mon_custom_group: "nabla"
 #      mon_admin_email: "alban.andrieu@free.fr"
 #      mon_weekly_email: "team@free.fr"
 #      user: root

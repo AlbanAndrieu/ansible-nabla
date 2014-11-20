@@ -1,9 +1,11 @@
-#sudo ansible-playbook -i hosts -c local -v shell.yml -vvvv | tee setup.log
+#ansible-playbook -i hosts -c local -v shell.yml -vvvv --ask-sudo-pass | tee setup.log
 
 - name: Apply common shell configuration
-  connection: local
   hosts: workstation
-  sudo: yes
+#  remote_user: root
+  user: albandri
+  connection: local   
+#  sudo: yes
     
   vars_files:
   - [ "roles/shell/defaults/main.yml" ]
@@ -18,5 +20,6 @@
         shell_git_email: "alban.andrieu@mysis.com",
         shell_git_name: "Alban Andrieu",
         shell_git_editor: "gedit",
+#        shell_rlogin_enabled: no,
         docker_files_enable: yes, 
         docker_files_generated_directory: "roles/shell" }

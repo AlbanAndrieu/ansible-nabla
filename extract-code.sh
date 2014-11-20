@@ -30,11 +30,14 @@ git submodule add https://github.com/debops/ansible-role-ansible.git ansible
 git submodule add https://github.com/AlbanAndrieu/ansible-supervisor_task.git supervisor
 #pull request pending
 
-git submodule add https://github.com/AlbanAndrieu/ansible-webmin.git webmin
+#git submodule deinit -f webmin
+git submodule add https://github.com/AlbanAndrieu/ansible-webmin.git alban.andrieu.webmin
 
-git submodule add https://github.com/AlbanAndrieu/ansible-xvbf.git xvbf
+#git submodule deinit -f xvbf
+git submodule add https://github.com/AlbanAndrieu/ansible-xvbf.git alban.andrieu.xvbf
 
-git submodule add https://github.com/AlbanAndrieu/ansible-zfs.git zfs
+#git submodule deinit -f zfs
+git submodule add https://github.com/AlbanAndrieu/ansible-zfs.git alban.andrieu.zfs
 
 #git clone https://github.com/ahelal/ansible-zabbix_agent zabbix_agent
 git submodule add https://github.com/AlbanAndrieu/ansible-zabbix_agent.git zabbix-agent
@@ -77,65 +80,65 @@ git submodule add https://github.com/AlbanAndrieu/ansible-jenkins-slave.git jenk
 
 git submodule add https://github.com/AlbanAndrieu/ansible-jenkins-swarm.git jenkins-swarm
 
-git submodule add https://github.com/AlbanAndrieu/ansible-dropbox.git dropbox
+git submodule add https://github.com/AlbanAndrieu/ansible-dropbox.git alban.andrieu.dropbox
 
 #git clone https://github.com/ahelal/ansible-sonar.git sonar
 git submodule add https://github.com/AlbanAndrieu/ansible-sonar.git sonar
 #pull request mysql
 
-git submodule add https://github.com/AlbanAndrieu/ansible-selenium.git selenium
+git submodule add https://github.com/AlbanAndrieu/ansible-selenium.git alban.andrieu.selenium
 
 git submodule add https://github.com/AlbanAndrieu/ansible-nodejs.git nodejs
 
-git submodule add https://github.com/AlbanAndrieu/ansible-conky.git conky
+git submodule add https://github.com/AlbanAndrieu/ansible-conky.git alban.andrieu.conky
 
-git submodule add https://github.com/AlbanAndrieu/ansible-subversion.git subversion
+git submodule add https://github.com/AlbanAndrieu/ansible-subversion.git alban.andrieu.subversion
 
-git submodule add https://github.com/AlbanAndrieu/ansible-css.git css
+git submodule add https://github.com/AlbanAndrieu/ansible-css.git alban.andrieu.css
 
 #http://www.funix.org/fr/linux/intrusions.htm
 #git clone https://github.com/geerlingguy/ansible-role-security.git security
 git submodule add https://github.com/AlbanAndrieu/ansible-role-security.git security
 #TODO pull request
 
-git submodule add https://github.com/AlbanAndrieu/ansible-zap.git zap
+git submodule add https://github.com/AlbanAndrieu/ansible-zap.git alban.andrieu.zap
 
 #git clone https://github.com/ahelal/ansible-sonatype_nexus.git nexus
 git submodule add https://github.com/AlbanAndrieu/ansible-sonatype_nexus.git nexus
 
 git submodule add https://github.com/AlbanAndrieu/ansible-cmake.git alban.andrieu.cmake
 
-git submodule add https://github.com/AlbanAndrieu/ansible-shell.git shell
+git submodule add https://github.com/AlbanAndrieu/ansible-shell.git alban.andrieu.shell
 
-git submodule add https://github.com/AlbanAndrieu/ansible-eclipse.git eclipse
+git submodule add https://github.com/AlbanAndrieu/ansible-eclipse.git alban.andrieu.eclipse
 
-git submodule add https://github.com/AlbanAndrieu/ansible-jboss.git jboss
+git submodule add https://github.com/AlbanAndrieu/ansible-jboss.git alban.andrieu.jboss
 
-git submodule add https://github.com/AlbanAndrieu/ansible-windows.git windows
+git submodule add https://github.com/AlbanAndrieu/ansible-windows.git alban.andrieu.windows
 
-git submodule add https://github.com/AlbanAndrieu/ansible-cpp.git cpp
+git submodule add https://github.com/AlbanAndrieu/ansible-cpp.git alban.andrieu.cpp
 
-git submodule add https://github.com/AlbanAndrieu/ansible-pagespeed.git pagespeed
+git submodule add https://github.com/AlbanAndrieu/ansible-pagespeed.git alban.andrieu.pagespeed
 
-git submodule add https://github.com/AlbanAndrieu/ansible-jmeter.git jmeter
+git submodule add https://github.com/AlbanAndrieu/ansible-jmeter.git alban.andrieu.jmeter
 
-git submodule add https://github.com/AlbanAndrieu/ansible-mon.git mon
+git submodule add https://github.com/AlbanAndrieu/ansible-mon.git alban.andrieu.mon
 
-git submodule add https://github.com/AlbanAndrieu/ansible-grive.git grive
+git submodule add https://github.com/AlbanAndrieu/ansible-grive.git alban.andrieu.grive
 
 git submodule add https://github.com/Stouts/Stouts.python.git python
 
-git submodule add https://github.com/AlbanAndrieu/ansible-web.git web
+git submodule add https://github.com/AlbanAndrieu/ansible-web.git alban.andrieu.web
 
-git submodule add https://github.com/AlbanAndrieu/ansible-common.git common
+git submodule add https://github.com/AlbanAndrieu/ansible-common.git alban.andrieu.common
 
-git submodule add https://github.com/AlbanAndrieu/ansible-administration.git administration
+git submodule add https://github.com/AlbanAndrieu/ansible-administration.git alban.andrieu.administration
 
-git submodule add https://github.com/AlbanAndrieu/ansible-workstation.git workstation
+git submodule add https://github.com/AlbanAndrieu/ansible-workstation.git alban.andrieu.workstation
 
-git submodule add https://github.com/AlbanAndrieu/ansible-dns.git dns
+git submodule add https://github.com/AlbanAndrieu/ansible-dns.git alban.andrieu.dns
 
-git submodule add https://github.com/AlbanAndrieu/ansible-tomcat.git tomcat
+git submodule add https://github.com/AlbanAndrieu/ansible-tomcat.git alban.andrieu.tomcat
 
 git submodule add https://github.com/AlbanAndrieu/ansible-hostname.git hostname
 

@@ -1,10 +1,10 @@
 [all]
 #127.0.0.1
-albandri-laptop-misys.misys.global.ad
+albandri.misys.global.ad
 
 #below is used only git lamp.yml
 [lamp]
-albandri-laptop-misys.misys.global.ad
+albandri.misys.global.ad
 
 [ntp]
 #Same as all
@@ -13,102 +13,99 @@ albandri-laptop-misys.misys.global.ad
 #Same as all
 
 [administration]
-albandri-laptop-misys.misys.global.ad
+#albandri.misys.global.ad
 
 [security]
-albandri-laptop-misys.misys.global.ad
+albandri.misys.global.ad
 
 [cmake]
-albandri-laptop-misys.misys.global.ad
+albandri.misys.global.ad ansible_connection=local
 
 [cpp]
-albandri-laptop-misys.misys.global.ad
+albandri.misys.global.ad ansible_connection=local
 
 [java]
-albandri-laptop-misys.misys.global.ad
+albandri.misys.global.ad
 
 [maven]
-albandri-laptop-misys.misys.global.ad
+albandri.misys.global.ad
 
 [css]
-albandri-laptop-misys.misys.global.ad
+albandri.misys.global.ad ansible_connection=local
 
 [chrome]
-albandri-laptop-misys.misys.global.ad
+albandri.misys.global.ad
 
 [tomcat-servers]
-albandri-laptop-misys.misys.global.ad
+albandri.misys.global.ad
 
 [jboss-servers]
-albandri-laptop-misys.misys.global.ad
+albandri.misys.global.ad
 
 [nabla-servers]
-albandri-laptop-misys.misys.global.ad
+albandri.misys.global.ad
 
 [apache-servers]
-albandri-laptop-misys.misys.global.ad
+albandri.misys.global.ad
 
 [mysql-servers]
-albandri-laptop-misys.misys.global.ad
-
-[mongodbservers]
-albandri-laptop-misys.misys.global.ad
+albandri.misys.global.ad
 
 [locale]
-albandri-laptop-misys.misys.global.ad
+albandri.misys.global.ad
 
 [zabbix-server]
-albandri-laptop-misys.misys.global.ad
+albandri.misys.global.ad
 
 [zabbix-agent]
-albandri-laptop-misys.misys.global.ad
+albandri.misys.global.ad
 
 [webmin]
-albandri-laptop-misys.misys.global.ad
+albandri.misys.global.ad
 
 [zfs]
-albandri-laptop-misys.misys.global.ad
+albandri.misys.global.ad ansible_connection=local
 
 [xvbf]
-albandri-laptop-misys.misys.global.ad
+albandri.misys.global.ad
 
 [selenium]
-albandri-laptop-misys.misys.global.ad
+albandri.misys.global.ad
 
 [jenkins-master]
-albandri-laptop-misys.misys.global.ad
+albandri.misys.global.ad
 
 [jenkins-slaves]
-albandri-laptop-misys.misys.global.ad
+albandri.misys.global.ad
 
 [jenkins-swarm]
-#albandri-laptop-misys.misys.global.ad
+#albandri.misys.global.ad
 
 [supervisors]
-albandri-laptop-misys.misys.global.ad
+albandri.misys.global.ad
 
 [virtualbox]
-albandri-laptop-misys.misys.global.ad
+albandri.misys.global.ad
 
 [vagrant]
-albandri-laptop-misys.misys.global.ad
+albandri.misys.global.ad
 
 [docker]
-albandri-laptop-misys.misys.global.ad
+albandri.misys.global.ad
 #vagrant local box
 #192.168.33.10
 
 [nodejs]
-albandri-laptop-misys.misys.global.ad
+albandri.misys.global.ad
 
 [workstation]
-albandri-laptop-misys.misys.global.ad
+albandri.misys.global.ad ansible_connection=local
 
 [nexus]
-albandri-laptop-misys.misys.global.ad
+albandri.misys.global.ad
 
 [sonar]
-albandri-laptop-misys.misys.global.ad
+albandri.misys.global.ad
 
 [shell]
 #see workstation
@@ -126,14 +123,11 @@ albandri-laptop-misys.misys.global.ad
 #see workstation
 
 [logstash]
-albandri-laptop-misys.misys.global.ad
-
-[workstation]
-albandri-laptop-misys.misys.global.ad
+albandri.misys.global.ad
 
 [windows]
 #10.0.2.15
-albandri-laptop-misys.misys.global.ad
+albandri.misys.global.ad
 
 [test-boxes]
 #vagrant local box
@@ -143,5 +137,9 @@ albandri-laptop-misys.misys.global.ad
 
 [workstation:vars]
 user=albandri
+group=rms
 version=10
-home=/workspace/users/{{ user }}{{ version }}/
+#home=/workspace/users/{{ user }}{{ version }}/
+home=/home/{{ user }}/
+#ansible_sudo_pass=todo
+

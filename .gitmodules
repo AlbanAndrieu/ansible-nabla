@@ -187,3 +187,12 @@
 [submodule "roles/synergy"]
 	path = roles/synergy
 	url = https://github.com/AlbanAndrieu/ansible-synergy.git
+[submodule "roles/alban.andrieu.webmin"]
+	path = roles/alban.andrieu.webmin
+	url = https://github.com/AlbanAndrieu/ansible-webmin.git
+[submodule "roles/alban.andrieu.zfs"]
+	path = roles/alban.andrieu.zfs
+	url = https://github.com/AlbanAndrieu/ansible-zfs.git
+[submodule "roles/alban.andrieu.xvbf"]
+	path = roles/alban.andrieu.xvbf
+	url = https://github.com/AlbanAndrieu/ansible-xvbf.git
