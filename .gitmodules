@@ -196,3 +196,66 @@
 [submodule "roles/alban.andrieu.xvbf"]
 	path = roles/alban.andrieu.xvbf
 	url = https://github.com/AlbanAndrieu/ansible-xvbf.git
+[submodule "roles/alban.andrieu.dropbox"]
+	path = roles/alban.andrieu.dropbox
+	url = https://github.com/AlbanAndrieu/ansible-dropbox.git
+[submodule "roles/alban.andrieu.selenium"]
+	path = roles/alban.andrieu.selenium
+	url = https://github.com/AlbanAndrieu/ansible-selenium.git
+[submodule "roles/alban.andrieu.conky"]
+	path = roles/alban.andrieu.conky
+	url = https://github.com/AlbanAndrieu/ansible-conky.git
+[submodule "roles/alban.andrieu.subversion"]
+	path = roles/alban.andrieu.subversion
+	url = https://github.com/AlbanAndrieu/ansible-subversion.git
+[submodule "roles/alban.andrieu.css"]
+	path = roles/alban.andrieu.css
+	url = https://github.com/AlbanAndrieu/ansible-css.git
+[submodule "roles/alban.andrieu.shell"]
+	path = roles/alban.andrieu.shell
+	url = https://github.com/AlbanAndrieu/ansible-shell.git
+[submodule "roles/alban.andrieu.eclipse"]
+	path = roles/alban.andrieu.eclipse
+	url = https://github.com/AlbanAndrieu/ansible-eclipse.git
+[submodule "roles/alban.andrieu.jboss"]
+	path = roles/alban.andrieu.jboss
+	url = https://github.com/AlbanAndrieu/ansible-jboss.git
+[submodule "roles/alban.andrieu.windows"]
+	path = roles/alban.andrieu.windows
+	url = https://github.com/AlbanAndrieu/ansible-windows.git
+[submodule "roles/alban.andrieu.cpp"]
+	path = roles/alban.andrieu.cpp
+	url = https://github.com/AlbanAndrieu/ansible-cpp.git
+[submodule "roles/alban.andrieu.pagespeed"]
+	path = roles/alban.andrieu.pagespeed
+	url = https://github.com/AlbanAndrieu/ansible-pagespeed.git
+[submodule "roles/alban.andrieu.jmeter"]
+	path = roles/alban.andrieu.jmeter
+	url = https://github.com/AlbanAndrieu/ansible-jmeter.git
+[submodule "roles/alban.andrieu.mon"]
+	path = roles/alban.andrieu.mon
+	url = https://github.com/AlbanAndrieu/ansible-mon.git
+[submodule "roles/alban.andrieu.grive"]
+	path = roles/alban.andrieu.grive
+	url = https://github.com/AlbanAndrieu/ansible-grive.git
+[submodule "roles/alban.andrieu.web"]
+	path = roles/alban.andrieu.web
+	url = https://github.com/AlbanAndrieu/ansible-web.git
+[submodule "roles/alban.andrieu.common"]
+	path = roles/alban.andrieu.common
+	url = https://github.com/AlbanAndrieu/ansible-common.git
+[submodule "roles/alban.andrieu.administration"]
+	path = roles/alban.andrieu.administration
+	url = https://github.com/AlbanAndrieu/ansible-administration.git
+[submodule "roles/alban.andrieu.workstation"]
+	path = roles/alban.andrieu.workstation
+	url = https://github.com/AlbanAndrieu/ansible-workstation.git
+[submodule "roles/alban.andrieu.dns"]
+	path = roles/alban.andrieu.dns
+	url = https://github.com/AlbanAndrieu/ansible-dns.git
+[submodule "roles/alban.andrieu.tomcat"]
+	path = roles/alban.andrieu.tomcat
+	url = https://github.com/AlbanAndrieu/ansible-tomcat.git
+[submodule "roles/alban.andrieu.synergy"]
+	path = roles/alban.andrieu.synergy
+	url = https://github.com/AlbanAndrieu/ansible-synergy.git

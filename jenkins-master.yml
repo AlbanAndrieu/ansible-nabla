@@ -1,5 +1,5 @@
 #for testing purpose
-#sudo ansible-playbook -i hosts -c local -v jenkins-master.yml -vvvv
+#ansible-playbook -i hosts -c local -v jenkins-master.yml -vvvv --ask-sudo-pass | tee setup.log
 
 #as root 
 #ansible-playbook jenkins-master.yml -i hosts -vvvv

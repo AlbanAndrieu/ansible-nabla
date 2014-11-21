@@ -13,7 +13,7 @@ git clone https://github.com/AlbanAndrieu/ansible-nabla.git ansible
 git pull && git submodule init && git submodule update && git submodule status
 #git submodule foreach git pull
 
-git submodule add https://github.com/AlbanAndrieu/ansigenome.git 
+git submodule add https://github.com/AlbanAndrieu/ansigenome.git
 
 mkdir roles
 
@@ -74,7 +74,6 @@ git submodule add https://github.com/AlbanAndrieu/devbox.chrome.git chrome
 
 #git clone https://github.com/Stouts/Stouts.jenkins.git jenkins-master
 git submodule add https://github.com/AlbanAndrieu/Stouts.jenkins.git jenkins-master
-#pull request pending
 
 git submodule add https://github.com/AlbanAndrieu/ansible-jenkins-slave.git jenkins-slave
 
@@ -145,7 +144,7 @@ git submodule add https://github.com/AlbanAndrieu/ansible-hostname.git hostname
 #git clone https://github.com/debops/ansible-monit.git monit
 git submodule add https://github.com/ANXS/monit monit
 
-git submodule add https://github.com/AlbanAndrieu/ansible-synergy.git synergy
+git submodule add https://github.com/AlbanAndrieu/ansible-synergy.git alban.andrieu.synergy
 
 #LAMP
 git submodule add https://github.com/geerlingguy/ansible-role-firewall.git geerlingguy.firewall
