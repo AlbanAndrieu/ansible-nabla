@@ -9,7 +9,7 @@
   roles:
     - { role: alban.andrieu.zap,
         docker_files_enable: yes,
-        docker_files_generated_directory: "roles/zap"
+        docker_files_generated_directory: "roles/alban.andrieu.zap"
         #user: "albandri",
         #home: "/workspace/users/albandri10"     
       }    

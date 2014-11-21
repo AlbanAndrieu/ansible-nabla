@@ -29,7 +29,7 @@
   roles:
     - { role: alban.andrieu.dropbox,
         docker_files_enable: yes,
-        docker_files_generated_directory: "roles/dropbox",
+        docker_files_generated_directory: "roles/alban.andrieu.dropbox",
         dropbox_owner: "{{ user }}",
         dropbox_group: "{{ group }}",
         dropbox_user_directory: "/workspace/Dropbox",

@@ -1,7 +1,7 @@
 ---
 #This script is used to configure your workstation (for developer)
 
-#sudo ansible-playbook -i hosts -c local -v workstation.yml -vvvv | tee setup.log
+#sudo ansible-playbook -i hosts -c local -v nabla.yml -vvvv | tee setup.log
 
 - hosts: all
   gather_facts: true
@@ -49,7 +49,7 @@
 #  connection: local
 
   roles:
-    - common
+    - alban.andrieu.common
 
   vars:
        apt_notification_email: "alban.andrieu@misys.com"
@@ -62,7 +62,7 @@
 #  connection: local
 
   roles:
-    - dns
+    - alban.andrieu.dns
 
   vars:
        defaultdomain: france.effix.fr
@@ -200,7 +200,7 @@
 #  connection: local
 
   roles:
-    - cpp
+    - alban.andrieu.cpp
 
   vars:
       gcc_version: "4:4.8.2-1ubuntu6"
@@ -281,7 +281,7 @@
 
   vars:
       docker_files_enable: yes
-      docker_files_generated_directory: "roles/webmin"
+      docker_files_generated_directory: "roles/alban.andrieu.webmin"
 
 - name: Install nexus
   hosts: nexus
@@ -308,7 +308,7 @@
 #  connection: local
 
   roles:
-     - role: selenium
+     - alban.andrieu.selenium
 
 #
 #- name: Install zfs
@@ -327,7 +327,7 @@
   connection: local
 
   roles:
-    - administration
+    - alban.andrieu.administration
 
   vars:
        ntp_timezone: Europe/Paris
@@ -345,7 +345,7 @@
 #
 #  vars:
 #       docker_files_enable: yes
-#       docker_files_generated_directory: "roles/dropbox"
+#       docker_files_generated_directory: "roles/alban.andrieu.dropbox"
 
 - name: Install workstation add-on
   hosts: workstation
@@ -353,7 +353,7 @@
 #  connection: local
 
   roles:
-    - workstation
+    - alban.andrieu.workstation
 
   vars:
        dropbox_user_directory: "/workspace/Dropbox"
@@ -382,7 +382,7 @@
 #
 #  vars:
 #       docker_files_enable: yes,
-#       docker_files_generated_directory: "roles/jenkins-swarm",
+#       docker_files_generated_directory: "roles/alban.andrieu.jenkins-swarm",
 
 # This playbook deploys a simple standalone Tomcat 7 server.
 - name: Deploy Tomcat
@@ -391,7 +391,7 @@
 #  connection: local
 
   roles:
-    - tomcat
+    - alban.andrieu.tomcat
 
 # This playbook deploys a simple standalone JBoss server.
 
@@ -401,7 +401,7 @@
 #  connection: local
 
   roles:
-    - jboss
+    - alban.andrieu.jboss
 
 ## This playbook deploys a MySQL database.
 #- name: Deploy MySQL and configure the databases
@@ -466,7 +466,7 @@
 #  connection: local
 
   roles:
-    - web
+    - alban.andrieu.web
 
   vars:
        apache_listen_port: 7070
@@ -479,14 +479,14 @@
        mysql_root_username: root
        mysql_root_password: microsoft
        docker_files_enable: yes
-       docker_files_generated_directory: "roles/web"
+       docker_files_generated_directory: "roles/alban.andrieu.web"
 
 - name: Install pagespeed
   hosts: apache-servers
   remote_user: root
 #  connection: local
   roles:
-    - role: pagespeed
+    - role: alban.andrieu.pagespeed
 
   vars:
        pagespeed_package_arch: "amd64"
@@ -704,14 +704,14 @@
 #  connection: local
 
   vars_files:
-  - [ "roles/jenkins-slave/vars/{{ ansible_distribution }}-{{ ansible_architecture }}.yml", "roles/jenkins-slave/vars/{{ ansible_distribution }}.yml" ]
+  - [ "roles/alban.andrieu.jenkins-slave/vars/{{ ansible_distribution }}-{{ ansible_architecture }}.yml", "roles/alban.andrieu.jenkins-slave/vars/{{ ansible_distribution }}.yml" ]
 
   roles:
-    - jenkins-slave
+    - alban.andrieu.jenkins-slave
 
   vars:
     docker_files_enable: yes
-    docker_files_generated_directory: "roles/jenkins-slave"
+    docker_files_generated_directory: "roles/alban.andrieu.jenkins-slave"
 #    jenkins_home_dir: "/jenkins"
 #    jenkins_slave_home: "/kgr-mvn"
     jenkins_jdk7_enable: yes
@@ -730,7 +730,7 @@
 #  connection: local
 
   roles:
-    - css
+    - alban.andrieu.css
 
 - name: Install chrome
   hosts: chrome
@@ -812,7 +812,7 @@
 #  remote_user: root
 ##  connection: local
 #  roles:
-#    - role: conky
+#    - role: alban.andrieu.conky
 
 - name: Install subversion
   hosts: workstation
@@ -820,7 +820,7 @@
 #  connection: local
 
   roles:
-    - role: subversion
+    - role: alban.andrieu.subversion
 
   vars:
       subversion_owner: "{{ user }}"
@@ -832,16 +832,16 @@
 ##  connection: local
 #
 #  vars_files:
-#  - [ "roles/shell/defaults/main.yml" ]
-#  - [ "roles/shell/vars/default.yml" ]
-#  - [ "roles/shell/vars/version.yml" ]
-#  - [ "roles/shell/vars/custom-{{ ansible_distribution }}-{{ ansible_architecture }}.yml", "roles/shell/vars/custom-{{ ansible_distribution }}.yml" ]
+#  - [ "roles/alban.andrieu.shell/defaults/main.yml" ]
+#  - [ "roles/alban.andrieu.shell/vars/default.yml" ]
+#  - [ "roles/alban.andrieu.shell/vars/version.yml" ]
+#  - [ "roles/alban.andrieu.shell/vars/custom-{{ ansible_distribution }}-{{ ansible_architecture }}.yml", "roles/alban.andrieu.shell/vars/custom-{{ ansible_distribution }}.yml" ]
 #
 #  roles:
-#    - role: shell
+#    - role: alban.andrieu.shell
 #
 #  vars:
-#      docker_files_generated_directory: "roles/shell"
+#      docker_files_generated_directory: "roles/alban.andrieu.shell"
 #      docker_files_enable: yes
 #      shell_owner: "{{ user }}"
 #      shell_group: "{{ group }}"   
@@ -855,10 +855,10 @@
 #  remote_user: root
 #
 #  roles:
-#    - role: eclipse
+#    - role: alban.andrieu.eclipse
 #
 #  vars:
-#      docker_files_generated_directory: "roles/eclipse"
+#      docker_files_generated_directory: "roles/alban.andrieu.eclipse"
 #      docker_files_enable: yes
 #      #eclipse_base_dir: /workspace/eclipse
 #      #user: "albandri"
@@ -870,10 +870,10 @@
   remote_user: root
 #  connection: local
   roles:
-    - role: zap
+    - role: alban.andrieu.zap
 
   vars:
-      docker_files_generated_directory: "roles/zap"
+      docker_files_generated_directory: "roles/alban.andrieu.zap"
       docker_files_enable: yes
 
 - name: Install jmeter
@@ -881,7 +881,7 @@
   remote_user: root
 #  connection: local
   roles:
-    - role: jmeter
+    - role: alban.andrieu.jmeter
 
 #- name: Install mon
 #  hosts: workstation
@@ -889,7 +889,7 @@
 ##  connection: local
 #
 #  roles:
-#    - mon
+#    - alban.andrieu.mon
 #
 #  vars:
 #      mon_localhost : "albandri"

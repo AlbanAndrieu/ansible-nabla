@@ -9,6 +9,6 @@
   roles:
     - { role: alban.andrieu.webmin,
         docker_files_enable: yes,
-        docker_files_generated_directory: "roles/webmin"
+        docker_files_generated_directory: "roles/alban.andrieu.webmin"
       }    
 

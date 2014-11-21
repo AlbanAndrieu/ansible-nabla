@@ -8,10 +8,10 @@
 #  sudo: yes
     
   vars_files:
-  - [ "roles/shell/defaults/main.yml" ]
-  - [ "roles/shell/vars/default.yml" ]
-  - [ "roles/shell/vars/version.yml" ]
-  - [ "roles/shell/vars/custom-{{ ansible_distribution }}-{{ ansible_architecture }}.yml", "roles/shell/vars/custom-{{ ansible_distribution }}.yml" ]
+  - [ "roles/alban.andrieu.shell/defaults/main.yml" ]
+  - [ "roles/alban.andrieu.shell/vars/default.yml" ]
+  - [ "roles/alban.andrieu.shell/vars/version.yml" ]
+  - [ "roles/alban.andrieu.shell/vars/custom-{{ ansible_distribution }}-{{ ansible_architecture }}.yml", "roles/alban.andrieu.shell/vars/custom-{{ ansible_distribution }}.yml" ]
 
   roles:
     - { role: alban.andrieu.shell, 
@@ -22,4 +22,4 @@
         shell_git_editor: "gedit",
 #        shell_rlogin_enabled: no,
         docker_files_enable: yes, 
-        docker_files_generated_directory: "roles/shell" }
+        docker_files_generated_directory: "roles/alban.andrieu.shell" }

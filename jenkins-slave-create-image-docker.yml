@@ -13,9 +13,7 @@
 
   roles:
     - hostname
-  vars_files:
-    - [ "roles/hostname/defaults/main.yml" ]
-  
+
 - name: Apply common configuration to all nodes
 #  hosts: Ubuntu-12*:Ubuntu-14*
   hosts: jenkins-slave-create-image-docker  

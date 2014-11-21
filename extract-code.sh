@@ -75,9 +75,9 @@ git submodule add https://github.com/AlbanAndrieu/devbox.chrome.git chrome
 #git clone https://github.com/Stouts/Stouts.jenkins.git jenkins-master
 git submodule add https://github.com/AlbanAndrieu/Stouts.jenkins.git jenkins-master
 
-git submodule add https://github.com/AlbanAndrieu/ansible-jenkins-slave.git jenkins-slave
+git submodule add https://github.com/AlbanAndrieu/ansible-jenkins-slave.git alban.andrieu.jenkins-slave
 
-git submodule add https://github.com/AlbanAndrieu/ansible-jenkins-swarm.git jenkins-swarm
+git submodule add https://github.com/AlbanAndrieu/ansible-jenkins-swarm.git alban.andrieu.jenkins-swarm
 
 git submodule add https://github.com/AlbanAndrieu/ansible-dropbox.git alban.andrieu.dropbox
 

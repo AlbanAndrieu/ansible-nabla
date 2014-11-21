@@ -27,6 +27,6 @@
   roles:
     - { role: alban.andrieu.jenkins-swarm,
         docker_files_enable: yes,
-        docker_files_generated_directory: "roles/jenkins-swarm",
+        docker_files_generated_directory: "roles/alban.andrieu.jenkins-swarm",
         jenkins_home: "/jenkins"   
       }    

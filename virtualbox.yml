@@ -1,7 +1,4 @@
----
-#This script is used to configure your workstation (for developer)
-
-#sudo ansible-playbook -i hosts -c local -v kibana.yml | tee setup.log
+#sudo ansible-playbook -i hosts -c local -v virtualbox.yml | tee setup.log
 
 - hosts: all
   gather_facts: true
@@ -24,22 +21,15 @@
                  OSes include Red Hat Enterprise Linux 6/7, CentOS 6, or
                  Ubuntu 12.04/14.04."
 
-#See corresponding vagrant file
-
-- name: Add kibana configuration
-  hosts: logstash
+- name: Install virtualbox
+  hosts: virtualbox
   remote_user: root
 #  connection: local
-
+  
   roles:
-    - geerlingguy.kibana
+    - virtualbox
 
   vars:
-       kibana_username: kibana
-       kibana_password: microsoft
-       nginx_user: root
-       kibana_domain: localhost
-       kibana_server_name: localhost
-       es_address: http://{{ kibana_domain}}/es/
-       nginx_worker_processes: "8"
-       nginx_worker_connections: "8192"
+      virtualbox_package_name: virtualbox
+      virtualbox_dkms_enable: no
+      

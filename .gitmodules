@@ -259,3 +259,12 @@
 [submodule "roles/alban.andrieu.synergy"]
 	path = roles/alban.andrieu.synergy
 	url = https://github.com/AlbanAndrieu/ansible-synergy.git
+[submodule "roles/alban.andrieu.jenkins-slave"]
+	path = roles/alban.andrieu.jenkins-slave
+	url = https://github.com/AlbanAndrieu/ansible-jenkins-slave.git
+[submodule "roles/alban.andrieu.jenkins-swarm"]
+	path = roles/alban.andrieu.jenkins-swarm
+	url = https://github.com/AlbanAndrieu/ansible-jenkins-swarm.git
+[submodule "roles/alban.andrieu.zap"]
+	path = roles/alban.andrieu.zap
+	url = https://github.com/AlbanAndrieu/ansible-zap.git
