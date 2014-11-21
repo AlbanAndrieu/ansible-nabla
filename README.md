@@ -10,7 +10,7 @@ Goal is to ensure following roles (GIT submodules) to work in harmony.
 
 Then run the playbook, like this:
 
-	ansible-playbook -i hosts -c local -v workstation.yml -vvvv
+	ansible-playbook -i hosts -c local -v nabla.yml -vvvv
 	or
 	setup.sh
 

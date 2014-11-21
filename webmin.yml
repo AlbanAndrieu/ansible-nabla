@@ -7,10 +7,8 @@
 #  accelerate: true
 
   roles:
-    - { role: webmin,
+    - { role: alban.andrieu.webmin,
         docker_files_enable: yes,
-        docker_files_generated_directory: "roles/webmin",
-        #user: "albandri",
-        #home: "/workspace/users/albandri10"     
+        docker_files_generated_directory: "roles/webmin"
       }    
 

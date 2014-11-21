@@ -30,4 +30,4 @@
 #  connection: local
   
   roles:
-    - common
+    - alban.andrieu.common

@@ -8,4 +8,4 @@
   user: root
 #  connection: local
   roles:
-    - role: windows
+    - role: alban.andrieu.windows

@@ -7,10 +7,8 @@
 #  accelerate: true
 
   roles:
-    - { role: jboss,
+    - { role: alban.andrieu.jboss,
         docker_files_enable: yes,
         docker_files_generated_directory: "roles/jboss"
-        #user: "albandri",
-        #home: "/workspace/users/albandri10"     
       }    
 

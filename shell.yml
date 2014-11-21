@@ -14,7 +14,7 @@
   - [ "roles/shell/vars/custom-{{ ansible_distribution }}-{{ ansible_architecture }}.yml", "roles/shell/vars/custom-{{ ansible_distribution }}.yml" ]
 
   roles:
-    - { role: shell, 
+    - { role: alban.andrieu.shell, 
         shell_git_meld_enabled: yes,
         shell_git_configure_enabled: yes,
         shell_git_email: "alban.andrieu@mysis.com",

@@ -27,10 +27,8 @@
 #  accelerate: true
 
   roles:
-    - { role: grive,
+    - { role: alban.andrieu.grive,
         docker_files_enable: yes,
         docker_files_generated_directory: "roles/grive"
-        #user: "albandri",
-        #home: "/workspace/users/albandri10"
       }
 

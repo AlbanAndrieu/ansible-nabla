@@ -25,8 +25,9 @@
   hosts: workstation
   remote_user: root
 #  connection: local
+
   roles:
-    - role: conky
+    - role: alban.andrieu.conky
      
   vars:     
        conky_sensor_enabled: yes

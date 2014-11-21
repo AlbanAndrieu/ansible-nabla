@@ -27,7 +27,7 @@
 #  accelerate: true
 
   roles:
-    - { role: dropbox,
+    - { role: alban.andrieu.dropbox,
         docker_files_enable: yes,
         docker_files_generated_directory: "roles/dropbox",
         dropbox_owner: "{{ user }}",

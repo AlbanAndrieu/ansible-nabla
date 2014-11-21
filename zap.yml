@@ -7,7 +7,7 @@
 #  accelerate: true
 
   roles:
-    - { role: zap,
+    - { role: alban.andrieu.zap,
         docker_files_enable: yes,
         docker_files_generated_directory: "roles/zap"
         #user: "albandri",

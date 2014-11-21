@@ -1,9 +1,0 @@
-# Here are variables related to the Tomcat installation
-
-tomcat_http_port: 8280
-tomcat_https_port: 8443
-
-# This will configure a default manager-gui user:
-
-tomcat_admin_username: admin
-tomcat_admin_password: microsoft

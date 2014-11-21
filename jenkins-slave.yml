@@ -13,22 +13,11 @@
 #  hosts: test-boxes
   hosts: all  
   user: root
-#  connection: local
-  
+#  connection: local  
+    
   roles:
     - hostname
-  vars_files:
-    - [ "roles/hostname/defaults/main.yml" ]
-    
-#- name: Install zfs
-##  hosts: test-boxes
-#  hosts: zfs
-#  user: root
-##  connection: local
-#  
-#  roles:
-#    - zfs
-    
+
 - name: Apply common configuration to all jenkins slaves
 #  hosts: test-boxes
   hosts: jenkins-slaves
@@ -37,12 +26,13 @@
   remote_user: root  
   connection: local    
 #  remote_user: vagrant
+
   vars_files:
   - [ "roles/jenkins-slave/defaults/main.yml" ]
   - [ "roles/jenkins-slave/vars/{{ ansible_distribution }}-{{ ansible_architecture }}.yml", "roles/jenkins-slave/vars/{{ ansible_distribution }}.yml" ]
 
   roles:
-    - jenkins-slave
+    - alban.andrieu.jenkins-slave
 
   vars:    
     docker_files_enable: yes
@@ -67,7 +57,7 @@
 #    private: yes
 #
 #  roles:
-#    - jenkins-swarm
+#    - alban.andrieu.jenkins-swarm
 #
 #  vars:    
 #    jenkins_home: "/jenkins"
@@ -80,5 +70,5 @@
 #  connection: local
   
   roles:
-    - xvbf
+    - alban.andrieu.xvbf
 

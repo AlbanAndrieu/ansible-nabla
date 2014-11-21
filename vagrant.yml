@@ -34,14 +34,14 @@
       vagrant_windows_enabled: false      
 #      vagrant_url: https://dl.bintray.com/mitchellh/vagrant/vagrant_1.6.3_x86_64.deb    
     
-- name: Install vagrant user
-  hosts: vagrant
-  remote_user: root
-#  connection: local
-  
-  roles:
-    - vagrant-user
-   
-  vars:
-      vagrant_root_password_enabled: false
-      vagrant_user_shell: "/bin/false"
+#- name: Install vagrant user
+#  hosts: vagrant
+#  remote_user: root
+##  connection: local
+#  
+#  roles:
+#    - vagrant-user
+#   
+#  vars:
+#      vagrant_root_password_enabled: false
+#      vagrant_user_shell: "/bin/false"

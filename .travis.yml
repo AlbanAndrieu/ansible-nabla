@@ -15,19 +15,44 @@ install:
 
 # Install required dependencies.
 #  - git clone https://github.com/AlbanAndrieu/ansible-supervisor_task.git supervisor
-  - ansible-galaxy install alban.andrieu.ansible-webmin
-  - ansible-galaxy install geerlingguy.mysql
+#  - ansible-galaxy install alban.andrieu.webmin
+#  - ansible-galaxy install alban.andrieu.xvbf
+#  - ansible-galaxy install alban.andrieu.zfs
+#  - ansible-galaxy install alban.andrieu.dropbox
+#  - ansible-galaxy install alban.andrieu.selenium  
+#  - ansible-galaxy install alban.andrieu.conky
+#  - ansible-galaxy install alban.andrieu.subversion
+#  - ansible-galaxy install alban.andrieu.css
+#  - ansible-galaxy install alban.andrieu.security
+#  - ansible-galaxy install alban.andrieu.zap  
+#  - ansible-galaxy install alban.andrieu.cmake
+#  - ansible-galaxy install alban.andrieu.shell
+#  - ansible-galaxy install alban.andrieu.eclipse
+#  - ansible-galaxy install alban.andrieu.jboss
+#  - ansible-galaxy install alban.andrieu.windows  
+#  - ansible-galaxy install alban.andrieu.cpp
+#  - ansible-galaxy install alban.andrieu.pagespeed
+#  - ansible-galaxy install alban.andrieu.jmeter
+#  - ansible-galaxy install alban.andrieu.mon
+#  - ansible-galaxy install alban.andrieu.grive  
+#  - ansible-galaxy install alban.andrieu.web     
+#  - ansible-galaxy install alban.andrieu.common   
+#  - ansible-galaxy install alban.andrieu.administration   
+#  - ansible-galaxy install alban.andrieu.workstation   
+#  - ansible-galaxy install alban.andrieu.dns     
+#  - ansible-galaxy install alban.andrieu.tomcat     
+#  - ansible-galaxy install alban.andrieu.synergy        
 script:
   # Prepare tests
 #  - echo localhost > inventory
 
   # Check syntax
   # Check the role/playbook's syntax.  
-  - ansible-playbook --syntax-check -i hosts workstation.yml --connection=local
+  - ansible-playbook --syntax-check -i hosts nabla.yml --connection=local
 
   # First run
   # Run the role/playbook with ansible-playbook.  
-  - ansible-playbook -i hosts workstation.yml --connection=local --sudo
+  - ansible-playbook -i hosts nabla.yml --connection=local --sudo
 
   # Second run Idempotence test
   # Run the role/playbook again, checking to make sure it's idempotent.  

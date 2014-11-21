@@ -8,7 +8,7 @@
 #  connection: local
   
   roles:
-    - dns
+    - alban.andrieu.dns
         
   vars:
        defaultdomain: france.effix.fr

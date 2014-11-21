@@ -4,5 +4,6 @@
   hosts: apache-servers
   remote_user: root
 #  connection: local
+
   roles:
-    - role: pagespeed     
+    - role: alban.andrieu.pagespeed     

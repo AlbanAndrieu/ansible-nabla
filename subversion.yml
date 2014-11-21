@@ -28,7 +28,7 @@
   connection: local
 
   roles:
-    - role: subversion     
+    - role: alban.andrieu.subversion     
    
   vars:
       subversion_previous_enabled: true   
