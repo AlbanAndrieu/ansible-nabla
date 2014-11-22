@@ -12,6 +12,7 @@ git clone https://github.com/AlbanAndrieu/ansible-nabla.git ansible
 
 git pull && git submodule init && git submodule update && git submodule status
 #git submodule foreach git pull
+git submodule foreach git checkout master
 
 git submodule add https://github.com/AlbanAndrieu/ansigenome.git
 
@@ -75,24 +76,31 @@ git submodule add https://github.com/AlbanAndrieu/devbox.chrome.git chrome
 #git clone https://github.com/Stouts/Stouts.jenkins.git jenkins-master
 git submodule add https://github.com/AlbanAndrieu/Stouts.jenkins.git jenkins-master
 
+#git submodule deinit -f jenkins-slave
 git submodule add https://github.com/AlbanAndrieu/ansible-jenkins-slave.git alban.andrieu.jenkins-slave
 
+#git submodule deinit -f jenkins-swarm
 git submodule add https://github.com/AlbanAndrieu/ansible-jenkins-swarm.git alban.andrieu.jenkins-swarm
 
+#git submodule deinit -f dropbox
 git submodule add https://github.com/AlbanAndrieu/ansible-dropbox.git alban.andrieu.dropbox
 
 #git clone https://github.com/ahelal/ansible-sonar.git sonar
 git submodule add https://github.com/AlbanAndrieu/ansible-sonar.git sonar
 #pull request mysql
 
+#git submodule deinit -f selenium
 git submodule add https://github.com/AlbanAndrieu/ansible-selenium.git alban.andrieu.selenium
 
 git submodule add https://github.com/AlbanAndrieu/ansible-nodejs.git nodejs
 
+#git submodule deinit -f conky
 git submodule add https://github.com/AlbanAndrieu/ansible-conky.git alban.andrieu.conky
 
+#git submodule deinit -f subversion
 git submodule add https://github.com/AlbanAndrieu/ansible-subversion.git alban.andrieu.subversion
 
+#git submodule deinit -f css
 git submodule add https://github.com/AlbanAndrieu/ansible-css.git alban.andrieu.css
 
 #http://www.funix.org/fr/linux/intrusions.htm
@@ -100,43 +108,60 @@ git submodule add https://github.com/AlbanAndrieu/ansible-css.git alban.andrieu.
 git submodule add https://github.com/AlbanAndrieu/ansible-role-security.git security
 #TODO pull request
 
+#git submodule deinit -f zap
 git submodule add https://github.com/AlbanAndrieu/ansible-zap.git alban.andrieu.zap
 
 #git clone https://github.com/ahelal/ansible-sonatype_nexus.git nexus
 git submodule add https://github.com/AlbanAndrieu/ansible-sonatype_nexus.git nexus
 
+#git submodule deinit -f cmake
 git submodule add https://github.com/AlbanAndrieu/ansible-cmake.git alban.andrieu.cmake
 
+#git submodule deinit -f shell
 git submodule add https://github.com/AlbanAndrieu/ansible-shell.git alban.andrieu.shell
 
+#git submodule deinit -f eclipse
 git submodule add https://github.com/AlbanAndrieu/ansible-eclipse.git alban.andrieu.eclipse
 
+#git submodule deinit -f jboss
 git submodule add https://github.com/AlbanAndrieu/ansible-jboss.git alban.andrieu.jboss
 
+#git submodule deinit -f windows
 git submodule add https://github.com/AlbanAndrieu/ansible-windows.git alban.andrieu.windows
 
+#git submodule deinit -f cpp
 git submodule add https://github.com/AlbanAndrieu/ansible-cpp.git alban.andrieu.cpp
 
+#git submodule deinit -f pagespeed
 git submodule add https://github.com/AlbanAndrieu/ansible-pagespeed.git alban.andrieu.pagespeed
 
+#git submodule deinit -f jmeter
 git submodule add https://github.com/AlbanAndrieu/ansible-jmeter.git alban.andrieu.jmeter
 
+#git submodule deinit -f mon
 git submodule add https://github.com/AlbanAndrieu/ansible-mon.git alban.andrieu.mon
 
+#git submodule deinit -f grive
 git submodule add https://github.com/AlbanAndrieu/ansible-grive.git alban.andrieu.grive
 
 git submodule add https://github.com/Stouts/Stouts.python.git python
 
+#git submodule deinit -f web
 git submodule add https://github.com/AlbanAndrieu/ansible-web.git alban.andrieu.web
 
+#git submodule deinit -f common
 git submodule add https://github.com/AlbanAndrieu/ansible-common.git alban.andrieu.common
 
+#git submodule deinit -f administration
 git submodule add https://github.com/AlbanAndrieu/ansible-administration.git alban.andrieu.administration
 
+#git submodule deinit -f workstation
 git submodule add https://github.com/AlbanAndrieu/ansible-workstation.git alban.andrieu.workstation
 
+#git submodule deinit -f dns
 git submodule add https://github.com/AlbanAndrieu/ansible-dns.git alban.andrieu.dns
 
+#git submodule deinit -f tomcat
 git submodule add https://github.com/AlbanAndrieu/ansible-tomcat.git alban.andrieu.tomcat
 
 git submodule add https://github.com/AlbanAndrieu/ansible-hostname.git hostname
@@ -144,6 +169,7 @@ git submodule add https://github.com/AlbanAndrieu/ansible-hostname.git hostname
 #git clone https://github.com/debops/ansible-monit.git monit
 git submodule add https://github.com/ANXS/monit monit
 
+#git submodule deinit -f synergy
 git submodule add https://github.com/AlbanAndrieu/ansible-synergy.git alban.andrieu.synergy
 
 #LAMP
