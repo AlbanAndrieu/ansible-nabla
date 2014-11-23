@@ -10,15 +10,6 @@
 [submodule "roles/supervisor"]
 	path = roles/supervisor
 	url = https://github.com/AlbanAndrieu/ansible-supervisor_task.git
-[submodule "roles/xvbf"]
-	path = roles/xvbf
-	url = https://github.com/AlbanAndrieu/ansible-xvbf.git
-[submodule "roles/webmin"]
-	path = roles/webmin
-	url = https://github.com/AlbanAndrieu/ansible-webmin.git
-[submodule "roles/zfs"]
-	path = roles/zfs
-	url = https://github.com/AlbanAndrieu/ansible-zfs.git
 [submodule "roles/zabbix-agent"]
 	path = roles/zabbix-agent
 	url = https://github.com/AlbanAndrieu/ansible-zabbix_agent.git
@@ -46,90 +37,24 @@
 [submodule "roles/jenkins-master"]
 	path = roles/jenkins-master
 	url = https://github.com/AlbanAndrieu/Stouts.jenkins.git
-[submodule "roles/jenkins-slave"]
-	path = roles/jenkins-slave
-	url = https://github.com/AlbanAndrieu/ansible-jenkins-slave.git
-[submodule "roles/jenkins-swarm"]
-	path = roles/jenkins-swarm
-	url = https://github.com/AlbanAndrieu/ansible-jenkins-swarm.git
-[submodule "roles/dropbox"]
-	path = roles/dropbox
-	url = https://github.com/AlbanAndrieu/ansible-dropbox.git
 [submodule "roles/sonar"]
 	path = roles/sonar
 	url = https://github.com/AlbanAndrieu/ansible-sonar.git
-[submodule "roles/selenium"]
-	path = roles/selenium
-	url = https://github.com/AlbanAndrieu/ansible-selenium.git
 [submodule "roles/nodejs"]
 	path = roles/nodejs
 	url = https://github.com/AlbanAndrieu/ansible-nodejs.git
-[submodule "roles/conky"]
-	path = roles/conky
-	url = https://github.com/AlbanAndrieu/ansible-conky.git
-[submodule "roles/subversion"]
-	path = roles/subversion
-	url = https://github.com/AlbanAndrieu/ansible-subversion.git
-[submodule "roles/css"]
-	path = roles/css
-	url = https://github.com/AlbanAndrieu/ansible-css.git
 [submodule "roles/security"]
 	path = roles/security
 	url = https://github.com/AlbanAndrieu/ansible-role-security.git
-[submodule "roles/zap"]
-	path = roles/zap
-	url = https://github.com/AlbanAndrieu/ansible-zap.git
 [submodule "roles/nexus"]
 	path = roles/nexus
 	url = https://github.com/AlbanAndrieu/ansible-sonatype_nexus.git
-[submodule "roles/shell"]
-	path = roles/shell
-	url = https://github.com/AlbanAndrieu/ansible-shell.git
-[submodule "roles/eclipse"]
-	path = roles/eclipse
-	url = https://github.com/AlbanAndrieu/ansible-eclipse.git
-[submodule "roles/jboss"]
-	path = roles/jboss
-	url = https://github.com/AlbanAndrieu/ansible-jboss.git
-[submodule "roles/windows"]
-	path = roles/windows
-	url = https://github.com/AlbanAndrieu/ansible-windows.git
-[submodule "roles/cpp"]
-	path = roles/cpp
-	url = https://github.com/AlbanAndrieu/ansible-cpp.git
-[submodule "roles/pagespeed"]
-	path = roles/pagespeed
-	url = https://github.com/AlbanAndrieu/ansible-pagespeed.git
-[submodule "roles/jmeter"]
-	path = roles/jmeter
-	url = https://github.com/AlbanAndrieu/ansible-jmeter.git
-[submodule "roles/mon"]
-	path = roles/mon
-	url = https://github.com/AlbanAndrieu/ansible-mon.git
-[submodule "roles/grive"]
-	path = roles/grive
-	url = https://github.com/AlbanAndrieu/ansible-grive.git
 [submodule "roles/python"]
 	path = roles/python
 	url = https://github.com/Stouts/Stouts.python.git
-[submodule "roles/web"]
-	path = roles/web
-	url = https://github.com/AlbanAndrieu/ansible-web.git
-[submodule "roles/common"]
-	path = roles/common
-	url = https://github.com/AlbanAndrieu/ansible-common.git
 [submodule "roles/administration"]
 	path = roles/administration
 	url = https://github.com/AlbanAndrieu/ansible-administration.git
-[submodule "roles/workstation"]
-	path = roles/workstation
-	url = https://github.com/AlbanAndrieu/ansible-workstation.git
-[submodule "roles/dns"]
-	path = roles/dns
-	url = https://github.com/AlbanAndrieu/ansible-dns.git
-[submodule "roles/tomcat"]
-	path = roles/tomcat
-	url = https://github.com/AlbanAndrieu/ansible-tomcat.git
 [submodule "roles/hostname"]
 	path = roles/hostname
 	url = https://github.com/AlbanAndrieu/ansible-hostname.git
@@ -184,9 +109,6 @@
 [submodule "roles/alban.andrieu.cmake"]
 	path = roles/alban.andrieu.cmake
 	url = https://github.com/AlbanAndrieu/ansible-cmake.git
-[submodule "roles/synergy"]
-	path = roles/synergy
-	url = https://github.com/AlbanAndrieu/ansible-synergy.git
 [submodule "roles/alban.andrieu.webmin"]
 	path = roles/alban.andrieu.webmin
 	url = https://github.com/AlbanAndrieu/ansible-webmin.git
