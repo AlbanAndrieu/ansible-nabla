@@ -65,11 +65,13 @@
     - alban.andrieu.dns
 
   vars:
-       defaultsearch: 
-       nameserver: "8.8.8.8"
+       defaultdomain: france.effix.fr
+       search: misys.global.ad misys.global.ad. nt.france.effix.fr. france.effix.fr. effix.fr.
        dns_nameservers:
+         - "10.25.200.3" # work dns
+         - "10.21.200.3" # work dns 
          - "8.8.8.8" # google dns
-         - "8.8.4.4" # google dns    
+         - "8.8.4.4" # google dns       
 #paris
 #      nameserver1: 10.21.200.3
 #      nameserver2: 10.25.200.3
@@ -175,16 +177,16 @@
 ##   6000: Logstash
 ##   9200: Kibana
 
-#- name: Apply security configuration
-#  hosts: security
-#  remote_user: root
-##  connection: local
-#
-#  roles:
-#    - security
-#    
-#  vars:
-#       sudoers_enabled: no
+- name: Apply security configuration
+  hosts: security
+  remote_user: root
+#  connection: local
+
+  roles:
+    - security
+    
+  vars:
+       sudoers_enabled: no
 
 #Below cmake role is included in cpp role
 #- name: Install cmake
@@ -202,6 +204,11 @@
 
   roles:
     - alban.andrieu.cpp
+
+  vars:
+      gcc_version: "4:4.8.2-1ubuntu6"
+      cppunit_version: "1.13-0"
+      boost_version: "1.54"
 
 - name: Install java
   hosts: java
@@ -258,6 +265,13 @@
 
   roles:
     - zabbix-agent
+
+  vars:
+      zabbix_agent_major: '2'
+      zabbix_agent_minor: '2'
+      zabbix_agent_revision: '7'
+      zabbix_agent_ubuntu: "1:{{zabbix_agent_version}}-1+trusty"
+      #zabbix_agent_Server: 127.0.0.1
 
 - name: Install webmin
   hosts: webmin

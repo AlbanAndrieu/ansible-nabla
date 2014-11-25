@@ -1,10 +1,10 @@
 [all]
 #127.0.0.1
-albandri-laptop-misys.misys.global.ad
+localhost
 
 #below is used only git lamp.yml
 [lamp]
-albandri-laptop-misys.misys.global.ad
+localhost
 
 [ntp]
 #Same as all
@@ -13,99 +13,99 @@ albandri-laptop-misys.misys.global.ad
 #Same as all
 
 [administration]
-#albandri-laptop-misys.misys.global.ad
+#localhost
 
 [security]
-albandri-laptop-misys.misys.global.ad
+localhost
 
 [cmake]
-albandri-laptop-misys.misys.global.ad ansible_connection=local
+localhost ansible_connection=local
 
 [cpp]
-albandri-laptop-misys.misys.global.ad ansible_connection=local
+localhost ansible_connection=local
 
 [java]
-albandri-laptop-misys.misys.global.ad
+localhost
 
 [maven]
-albandri-laptop-misys.misys.global.ad
+localhost
 
 [css]
-albandri-laptop-misys.misys.global.ad ansible_connection=local
+localhost ansible_connection=local
 
 [chrome]
-albandri-laptop-misys.misys.global.ad
+localhost
 
 [tomcat-servers]
-albandri-laptop-misys.misys.global.ad
+localhost
 
 [jboss-servers]
-albandri-laptop-misys.misys.global.ad
+localhost
 
 [nabla-servers]
-albandri-laptop-misys.misys.global.ad
+localhost
 
 [apache-servers]
-albandri-laptop-misys.misys.global.ad
+localhost
 
 [mysql-servers]
-albandri-laptop-misys.misys.global.ad
+localhost
 
 [locale]
-albandri-laptop-misys.misys.global.ad
+localhost
 
 [zabbix-server]
-albandri-laptop-misys.misys.global.ad
+localhost
 
 [zabbix-agent]
-albandri-laptop-misys.misys.global.ad
+localhost
 
 [webmin]
-albandri-laptop-misys.misys.global.ad
+localhost
 
 [zfs]
-albandri-laptop-misys.misys.global.ad ansible_connection=local
+localhost ansible_connection=local
 
 [xvbf]
-albandri-laptop-misys.misys.global.ad
+localhost
 
 [selenium]
-albandri-laptop-misys.misys.global.ad
+localhost
 
 [jenkins-master]
-albandri-laptop-misys.misys.global.ad
+localhost
 
 [jenkins-slaves]
-albandri-laptop-misys.misys.global.ad
+localhost
 
 [jenkins-swarm]
-#albandri-laptop-misys.misys.global.ad
+#localhost
 
 [supervisors]
-albandri-laptop-misys.misys.global.ad
+localhost
 
 [virtualbox]
-albandri-laptop-misys.misys.global.ad
+localhost
 
 [vagrant]
-albandri-laptop-misys.misys.global.ad
+localhost
 
 [docker]
-albandri-laptop-misys.misys.global.ad
+localhost
 #vagrant local box
 #192.168.33.10
 
 [nodejs]
-albandri-laptop-misys.misys.global.ad
+localhost
 
 [workstation]
-albandri-laptop-misys.misys.global.ad ansible_connection=local
+localhost ansible_connection=local
 
 [nexus]
-albandri-laptop-misys.misys.global.ad
+localhost
 
 [sonar]
-albandri-laptop-misys.misys.global.ad
+localhost
 
 [shell]
 #see workstation
@@ -123,11 +123,11 @@ albandri-laptop-misys.misys.global.ad
 #see workstation
 
 [logstash]
-albandri-laptop-misys.misys.global.ad
+localhost
 
 [windows]
 #10.0.2.15
-albandri-laptop-misys.misys.global.ad
+localhost
 
 [test-boxes]
 #vagrant local box
@@ -136,10 +136,10 @@ albandri-laptop-misys.misys.global.ad
 #192.168.33.12
 
 [workstation:vars]
-user=albandri
-group=albandri
-version=10
-home=/workspace/users/{{ user }}{{ version }}/
-#home=/home/{{ user }}/
+user=root
+group=root
+#version=10
+#home=/workspace/users/{{ user }}{{ version }}/
+home=/home/{{ user }}/
 #ansible_sudo_pass=todo
 
