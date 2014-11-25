@@ -184,6 +184,9 @@
 
   roles:
     - security
+    
+  vars:
+       sudoers_enabled: no
 
 #Below cmake role is included in cpp role
 #- name: Install cmake
@@ -715,6 +718,10 @@
 #    jenkins_home_dir: "/jenkins"
 #    jenkins_slave_home: "/kgr-mvn"
     jenkins_jdk7_enable: yes
+    shell_git_machine: 82.231.208.223
+    shell_git_login: jenkins
+    shell_git_password: microsoft    
+    shell_git_email: "alban.andrieu@free.fr"
 
 - name: Install maven
   hosts: maven
