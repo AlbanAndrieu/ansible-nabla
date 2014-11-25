@@ -5,6 +5,8 @@ git remote add upstream https://github.com/silpion/ansible-java.git
 git remote add upstream https://github.com/ahelal/ansible-sonar.git
 git remote add upstream https://github.com/kost/ansible-galaxy.ubuntu.virtualbox.git
 git remote add upstream https://github.com/angstwad/docker.ubuntu.git
+git remote add upstream https://github.com/angstwad/docker.ubuntu.git
+git remote add upstream https://github.com/geerlingguy/ansible-role-security.git
 
 # Fetch all the branches of that remote into remote-tracking branches,
 # such as upstream/master:

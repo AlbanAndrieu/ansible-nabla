@@ -172,6 +172,9 @@ git submodule add https://github.com/ANXS/monit monit
 #git submodule deinit -f synergy
 git submodule add https://github.com/AlbanAndrieu/ansible-synergy.git alban.andrieu.synergy
 
+#git submodule deinit -f geerlingguy.git
+git submodule add https://github.com/AlbanAndrieu/ansible-role-git.git geerlingguy.git
+
 #LAMP
 git submodule add https://github.com/geerlingguy/ansible-role-firewall.git geerlingguy.firewall
 git submodule add https://github.com/geerlingguy/ansible-role-ntp.git geerlingguy.ntp
@@ -199,6 +202,9 @@ git submodule add https://github.com/geerlingguy/ansible-role-nginx.git geerling
 git submodule add https://github.com/AlbanAndrieu/ansible-role-kibana.git geerlingguy.kibana
 
 #SEE
+#https://galaxy.ansible.com/list#/roles/527 https://github.com/ANXS/git.git see TODO
+#https://galaxy.ansible.com/list#/roles/58 see TODO
+
 #https://github.com/ansible/ansible-examples/tree/master/language_features
 #https://github.com/sheldonh/dotfiles-ansible
 #https://github.com/ginas/ginas

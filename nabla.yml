@@ -814,6 +814,14 @@
 #  roles:
 #    - role: alban.andrieu.conky
 
+- name: Install git
+  hosts: workstation
+  remote_user: root
+#  connection: local
+
+  roles:
+    - role: geerlingguy.git
+    
 - name: Install subversion
   hosts: workstation
   remote_user: root

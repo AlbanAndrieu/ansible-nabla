@@ -1,0 +1,12 @@
+#ansible-playbook -i hosts -c local -v security.yml -vvvv --ask-sudo-pass | tee setup.log
+
+- name: Apply common security configuration
+  hosts: workstation
+  remote_user: root
+  connection: local   
+#  sudo: yes
+
+  roles:
+    - { role: security, 
+        sudoers_enabled: no
+      }

@@ -190,3 +190,9 @@
 [submodule "roles/alban.andrieu.zap"]
 	path = roles/alban.andrieu.zap
 	url = https://github.com/AlbanAndrieu/ansible-zap.git
+[submodule "roles/ansible-role-git"]
+	path = roles/ansible-role-git
+	url = https://github.com/AlbanAndrieu/ansible-role-git.git
+[submodule "roles/geerlingguy.git"]
+	path = roles/geerlingguy.git
+	url = https://github.com/AlbanAndrieu/ansible-role-git.git

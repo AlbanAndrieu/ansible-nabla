@@ -11,13 +11,33 @@
 
 - name: Apply hostname configuration
 #  hosts: test-boxes
-  hosts: all  
+  hosts: jenkins-slaves  
   user: root
 #  connection: local  
     
   roles:
     - hostname
 
+- name: Install git
+  hosts: jenkins-slaves
+  remote_user: root
+#  connection: local
+
+  roles:
+    - role: geerlingguy.git
+
+- name: Install subversion
+  hosts: jenkins-slaves
+  remote_user: root
+#  connection: local
+
+  roles:
+    - role: alban.andrieu.subversion
+
+  vars:
+      subversion_rabbitvcs_enabled: no
+      subversion_diff_enabled: no
+      
 - name: Apply common configuration to all jenkins slaves
 #  hosts: test-boxes
   hosts: jenkins-slaves
@@ -41,6 +61,7 @@
 
   vars:    
     jenkins_jdk7_enable: no
+    jenkins_ssh_key_file: "~/.ssh/id_rsa.pub"    
 #    jenkins_home_dir: "/jenkins"
 #    jenkins_slave_home: "/kgr-mvn"
 
@@ -65,10 +86,9 @@
 #  vars:    
 #    jenkins_home: "/jenkins"
     
-# This playbook can be run using vagrant (on virtual box). 
 - name: Install xvbf
 #  hosts: test-boxes
-  hosts: xvbf 
+  hosts: jenkins-slaves 
   user: root
 #  connection: local
   
