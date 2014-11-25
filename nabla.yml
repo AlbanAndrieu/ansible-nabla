@@ -177,16 +177,16 @@
 ##   6000: Logstash
 ##   9200: Kibana
 
-- name: Apply security configuration
-  hosts: security
-  remote_user: root
-#  connection: local
-
-  roles:
-    - security
-    
-  vars:
-       sudoers_enabled: no
+#- name: Apply security configuration
+#  hosts: security
+#  remote_user: root
+##  connection: local
+#
+#  roles:
+#    - security
+#    
+#  vars:
+#       sudoers_enabled: no
 
 #Below cmake role is included in cpp role
 #- name: Install cmake
