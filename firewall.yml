@@ -1,0 +1,47 @@
+#sudo ansible-playbook -i hosts -c local -v firewall.yml | tee setup.log
+
+- name: Install firewall
+  connection: local
+  hosts: workstation
+#  remote_user: root
+#  accelerate: true
+
+  roles:
+    - { role: geerlingguy.firewall
+      }    
+
+  vars:
+       firewall_allowed_tcp_ports:
+       - "22" #Ssh
+       - "25"
+       - "80"
+       - "82" #Varnish
+       - "6082" #Varnish admin
+       - "443"
+       - "8080"
+       - "8280" #Tomcat
+#       - "8380" Jenkins use apache redirect 7072
+       - "9000" #Sonar
+       - "8081" #Nexus
+       - "8085" #Fitness
+       - "3306" #TODO remove
+       - "9090" #Jetty
+       - "8180" #JBoss
+       - "7070" #Apache
+       - "7071" #Apache redirect gearman
+       - "7072" #Apache redirect jenkins
+       - "7073" #Apache redirect nabla
+       - "7074" #Apache redirect visma
+       - "7075" #Apache redirect sample
+       - "7076" #Apache redirect ?????       
+       - "8480" #NGinx
+       - "4243" #Docker
+       - "5001" #xrdp
+       - "5000" #xrdp / Openstack
+       - "10000" #Webmin
+       - "20000" #Usermin
+       - "4445" #Selenium
+       - "4444" #Selenium
+       - "9042" #Supervisor
+       - "6000" #Logstash
+       - "9200" #Elasticsearch

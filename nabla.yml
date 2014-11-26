@@ -143,6 +143,13 @@
 ##   8181: JBoss http debug port
 ##   9990 : Jboss console
 ##   7070: Apache
+##   7071: Apache redirect gearman
+##   7072: Apache redirect jenkins
+##   7073: Apache redirect nabla
+##   7074: Apache redirect visma
+##   7075: Apache redirect sample
+##   7076: Apache redirect ?????
+##   7077: Apache redirect ansible tower (WAS)
 ##   8480: NGinx
 ##   4445: Lumbermill
 ##   4243: Docker
@@ -173,7 +180,7 @@
 ##   4444: Selenium
 ##   9042: Supervisor
 ##   6000: Logstash
-##   9200: Kibana
+##   9200: Elasticsearch
 
 #- name: Apply security configuration
 #  hosts: security

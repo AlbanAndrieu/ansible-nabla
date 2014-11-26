@@ -1,6 +1,6 @@
 #sudo ansible-playbook -i hosts -c local -v webmin.yml | tee setup.log
 
-- name: Install subversion
+- name: Install webmin
   connection: local
   hosts: workstation
 #  remote_user: root
