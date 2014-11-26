@@ -12,7 +12,7 @@
 - name: Apply hostname configuration
 #  hosts: test-boxes
   hosts: jenkins-slaves  
-  user: root
+  remote_user: root
 #  connection: local  
     
   roles:
@@ -72,7 +72,7 @@
 #- name: Apply swarm configuration to all jenkins slaves
 #  hosts: test-boxes
 #  sudo: yes
-#  user: vagrant
+#  remote_user: vagrant
 #  connection: local    
 ##  remote_user: vagrant
 #
@@ -93,7 +93,7 @@
 - name: Install xvbf
 #  hosts: test-boxes
   hosts: jenkins-slaves 
-  user: root
+  remote_user: root
 #  connection: local
   
   roles:
