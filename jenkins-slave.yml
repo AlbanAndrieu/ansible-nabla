@@ -66,7 +66,7 @@
   vars:    
     jenkins_jdk7_enable: no
     jenkins_ssh_key_file: "~/.ssh/id_rsa.pub"    
-#    jenkins_home_dir: "/jenkins"
+#    jenkins_home: "/jenkins"
 #    jenkins_slave_home: "/kgr-mvn"
 
 #- name: Apply swarm configuration to all jenkins slaves

@@ -9,49 +9,38 @@ echo "Configure Jenkins slaves"
 sudo apt-get update -qq
 sudo apt-get install -qq python-apt python-pycurl
 sudo apt-get install -qq wget
-sudo apt-get install -qq virtualbox
-wget https://dl.bintray.com/mitchellh/vagrant/vagrant_1.6.3_x86_64.deb
-sudo dpkg -i vagrant_1.6.3_x86_64.deb
-sudo pip install https://github.com/ansible/ansible/archive/devel.zip
+#sudo apt-get install -qq virtualbox
+#wget https://dl.bintray.com/mitchellh/vagrant/vagrant_1.6.3_x86_64.deb
+#sudo dpkg -i vagrant_1.6.3_x86_64.deb
+#sudo pip install https://github.com/ansible/ansible/archive/devel.zip
+sudo apt-get purge -y ansible
+#/usr/bin/yes | sudo pip uninstall ansible
+sudo pip install ansible --upgrade
 sudo pip install https://github.com/diyan/pywinrm/archive/df049454a9309280866e0156805ccda12d71c93a.zip --upgrade
 #todo use virtualenv
 
 ansible --version
-vagrant --version
-docker --version
 python --version
 pip --version
-VBoxManage --version
 
-cd ./Scripts/ansible
+#vagrant --version
+#docker --version
 
-vagrant box list
+git pull origin master && git submodule init && git submodule update && git submodule status || exit 1
+git submodule foreach git checkout master || exit 2
 
-# shutdown vms
-VBoxManage controlvm hosttest0 poweroff
-VBoxManage controlvm hosttest1 poweroff
-VBoxManage controlvm hosttest2 poweroff
+#List hosts
+ansible-playbook -i hosts -v nabla.yml --list-hosts || exit 3
 
-# delete vms
-VBoxManage unregistervm hosttest0 -delete
-VBoxManage unregistervm hosttest1 -delete
-VBoxManage unregistervm hosttest2 -delete
+#List tasks
+ansible-playbook -i hosts -v nabla.yml --limit=localhost --list-tasks || exit 4
 
-# clean vagrant
-vagrant destroy --force
+#Check syntax 
+sudo ansible-playbook -i hosts -c local -v nabla.yml -vvvv --syntax-check || exit 5
 
-# rebuild vagrant
-vagrant up
-vagrant provision
-vagrant status
-
-sshpass -f /jenkins/pass.txt ssh-copy-id vagrant@192.168.33.10
-sshpass -f /jenkins/pass.txt ssh-copy-id vagrant@192.168.33.11
-sshpass -f /jenkins/pass.txt ssh-copy-id vagrant@192.168.33.12
-
-# test ansible
-ansible-playbook -i hosts jenkins-slave.yml --list-hosts
-ansible-playbook -i hosts jenkins-slave.yml --limit=albandri-laptop-misys --list-tasks
-ansible-playbook -i hosts jenkins-slave.yml -vvvv
+#Run ansible
+sudo ansible-playbook -i hosts -c local -v nabla.yml -vvvv || exit 6
+#./setup.sh
+#ansible-playbook -i hosts-c local -v nabla.yml -vvvv
 #--extra-vars "jenkins_username=${JENKINS_USERNAME} jenkins_password=${JENKINS_PASSWORD}"
 #ansible-playbook -i hosts jenkins-slave.yml -vvvv | grep -q 'changed=0.*failed=0' && (echo 'Idempotence test: pass' && exit 0) || (echo 'Idempotence test: fail' && exit 1)

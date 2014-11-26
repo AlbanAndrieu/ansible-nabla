@@ -27,7 +27,7 @@
       jenkins_ssh_key_file: "~/.ssh/id_rsa.pub"
       jenkins_http_port: 8380
       jenkins_proxy_port: 7070                     
-#      jenkins_home_dir: /jenkins
+#      jenkins_home: /jenkins
       jenkins_java_args:
         - "-Xmx1024m"
         - "-XX:MaxPermSize=512m"

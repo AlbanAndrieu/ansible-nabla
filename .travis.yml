@@ -48,6 +48,9 @@ install:
   - git pull && git submodule init && git submodule update && git submodule status
   - git submodule foreach git checkout master
 script:
+  # Check ansible version
+  - ansible --version
+  
   # Prepare tests
 #  - echo localhost > inventory
 

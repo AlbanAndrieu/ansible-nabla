@@ -55,21 +55,21 @@
        apt_notification_email: "alban.andrieu@misys.com"
        apt_upgrade_system_enabled: no
 
-- name: Apply dns configuration to all nodes
-  hosts: Ubuntu-12*:Ubuntu-14*
-  gather_facts: false
-  remote_user: root
-#  connection: local
-
-  roles:
-    - alban.andrieu.dns
-
-  vars:
-       defaultsearch: 
-       nameserver: "8.8.8.8"
-       dns_nameservers:
-         - "8.8.8.8" # google dns
-         - "8.8.4.4" # google dns    
+#- name: Apply dns configuration to all nodes
+#  hosts: Ubuntu-12*:Ubuntu-14*
+#  gather_facts: false
+#  remote_user: root
+##  connection: local
+#
+#  roles:
+#    - alban.andrieu.dns
+#
+#  vars:
+#       defaultsearch: 
+#       nameserver: "8.8.8.8"
+#       dns_nameservers:
+#         - "8.8.8.8" # google dns
+#         - "8.8.4.4" # google dns    
 #paris
 #      nameserver1: 10.21.200.3
 #      nameserver2: 10.25.200.3
@@ -495,7 +495,7 @@
 #      jenkins_ssh_key_file: "~/.ssh/id_rsa.pub"
       jenkins_http_port: 8380
       jenkins_proxy_port: 7070
-#      jenkins_home_dir: /jenkins
+#      jenkins_home: /jenkins
       jenkins_java_args:
         - "-Xmx1024m"
         - "-XX:MaxPermSize=512m"
@@ -700,7 +700,7 @@
   vars:
     docker_files_enable: yes
     docker_files_generated_directory: "roles/alban.andrieu.jenkins-slave"
-#    jenkins_home_dir: "/jenkins"
+#    jenkins_home: "/jenkins"
 #    jenkins_slave_home: "/kgr-mvn"
     jenkins_jdk7_enable: yes
     shell_git_machine: 82.231.208.223

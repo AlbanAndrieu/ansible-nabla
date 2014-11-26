@@ -58,6 +58,7 @@
        logstash_monitor_elasticsearch_enabled: yes
        logstash_monitor_miscellaneous_enabled: yes
        logstash_heap: "50m"
+       jenkins_home: /var/lib/jenkins
        
 #- name: Add nginx configuration
 #  hosts: logstash
