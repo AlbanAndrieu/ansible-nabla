@@ -218,17 +218,17 @@
   roles:
     - java
 
-- name: Install virtualbox
-  hosts: virtualbox
-  remote_user: root
-#  connection: local
-
-  roles:
-    - virtualbox
-
-  vars:
-      virtualbox_package_name: virtualbox
-      virtualbox_dkms_enable: no
+#- name: Install virtualbox
+#  hosts: virtualbox
+#  remote_user: root
+##  connection: local
+#
+#  roles:
+#    - virtualbox
+#
+#  vars:
+#      virtualbox_package_name: virtualbox
+#      virtualbox_dkms_enable: no
 
 - name: Install vagrant
   hosts: vagrant

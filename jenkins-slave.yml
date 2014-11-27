@@ -3,18 +3,18 @@
 #for testing purpose
 #sudo ansible-playbook -i hosts -c local -v jenkins-slave.yml -vvvv
 
-#as root 
+#as root
 #ansible-playbook jenkins-slave.yml -i hosts -vvvv
-#as albandri 
+#as albandri
 #ansible-playbook jenkins-slave.yml -i hosts -vvvv --ask-sudo-pass --sudo
 # --extra-vars "jenkins_username=aandrieu jenkins_password=tbd"
 
 - name: Apply hostname configuration
 #  hosts: test-boxes
-  hosts: jenkins-slaves  
+  hosts: jenkins-slaves
   remote_user: root
-#  connection: local  
-    
+#  connection: local
+
   roles:
     - alban.andrieu.hostname
 
@@ -37,14 +37,14 @@
   vars:
       subversion_rabbitvcs_enabled: no
       subversion_diff_enabled: no
-      
+
 - name: Apply common configuration to all jenkins slaves
 #  hosts: test-boxes
   hosts: jenkins-slaves
 #  sudo: yes
 #  user: vagrant
-  remote_user: root  
-  connection: local    
+  remote_user: root
+  connection: local
 #  remote_user: vagrant
 
   vars_files:
@@ -60,12 +60,12 @@
         shell_git_password: microsoft,
         shell_git_email: "alban.andrieu@free.fr"
         #user: "albandri",
-        #home: "/workspace/users/albandri10"     
-      }    
+        #home: "/workspace/users/albandri10"
+      }
 
-  vars:    
+  vars:
     jenkins_jdk7_enable: no
-    jenkins_ssh_key_file: "~/.ssh/id_rsa.pub"    
+    jenkins_ssh_key_file: "~/.ssh/id_rsa.pub"
 #    jenkins_home: "/jenkins"
 #    jenkins_slave_home: "/kgr-mvn"
 
@@ -73,7 +73,7 @@
 #  hosts: test-boxes
 #  sudo: yes
 #  remote_user: vagrant
-#  connection: local    
+#  connection: local
 ##  remote_user: vagrant
 #
 #  vars_prompt:
@@ -87,15 +87,15 @@
 #  roles:
 #    - alban.andrieu.jenkins-swarm
 #
-#  vars:    
+#  vars:
 #    jenkins_home: "/jenkins"
-    
+
 - name: Install xvbf
 #  hosts: test-boxes
-  hosts: jenkins-slaves 
+  hosts: jenkins-slaves
   remote_user: root
 #  connection: local
-  
+
   roles:
     - alban.andrieu.xvbf
 

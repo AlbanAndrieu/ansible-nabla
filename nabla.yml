@@ -223,23 +223,21 @@
   roles:
     - java
 
-    - virtualbox
-
   vars:
       java_openjdk_when: false
       java_oracle_when: false #Download is too long for travis build
 
-- name: Install virtualbox
-  hosts: virtualbox
-  remote_user: root
-#  connection: local
-
-  roles:
-    - virtualbox
-
-  vars:
-      virtualbox_package_name: virtualbox
-      virtualbox_dkms_enable: no
+#- name: Install virtualbox
+#  hosts: virtualbox
+#  remote_user: root
+##  connection: local
+#
+#  roles:
+#    - virtualbox
+#
+#  vars:
+#      virtualbox_package_name: virtualbox
+#      virtualbox_dkms_enable: no
 
 - name: Install vagrant
   hosts: vagrant
