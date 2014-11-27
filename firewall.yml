@@ -45,3 +45,8 @@
        - "9042" #Supervisor
        - "6000" #Logstash
        - "9200" #Elasticsearch
+       - "24800" #Synergy
+       - "137" #Samba
+#       - "138" #Samba
+#       - "139" #Samba
+#       - "445" #Samba
