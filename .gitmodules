@@ -52,12 +52,6 @@
 [submodule "roles/python"]
 	path = roles/python
 	url = https://github.com/Stouts/Stouts.python.git
-[submodule "roles/administration"]
-	path = roles/administration
-	url = https://github.com/AlbanAndrieu/ansible-administration.git
-[submodule "roles/hostname"]
-	path = roles/hostname
-	url = https://github.com/AlbanAndrieu/ansible-hostname.git
 [submodule "roles/monit"]
 	path = roles/monit
 	url = https://github.com/ANXS/monit
@@ -196,3 +190,6 @@
 [submodule "roles/geerlingguy.git"]
 	path = roles/geerlingguy.git
 	url = https://github.com/AlbanAndrieu/ansible-role-git.git
+[submodule "roles/alban.andrieu.hostname"]
+	path = roles/alban.andrieu.hostname
+	url = https://github.com/AlbanAndrieu/ansible-hostname.git

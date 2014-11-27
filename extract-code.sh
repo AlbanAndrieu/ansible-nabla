@@ -164,7 +164,8 @@ git submodule add https://github.com/AlbanAndrieu/ansible-dns.git alban.andrieu.
 #git submodule deinit -f tomcat
 git submodule add https://github.com/AlbanAndrieu/ansible-tomcat.git alban.andrieu.tomcat
 
-git submodule add https://github.com/AlbanAndrieu/ansible-hostname.git hostname
+#git submodule deinit -f hostname
+git submodule add https://github.com/AlbanAndrieu/ansible-hostname.git alban.andrieu.hostname
 
 #git clone https://github.com/debops/ansible-monit.git monit
 git submodule add https://github.com/ANXS/monit monit

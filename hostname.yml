@@ -3,16 +3,14 @@
 #as albandri 
 #ansible-playbook hostname.yml -i hosts -vvvv --ask-sudo-pass --sudo
 
-- name: Apply common hostname configuration to all jenkins slaves
+- name: Apply common hostname 
   connection: local  
   hosts: workstation
   sudo: yes
-  vars_files:
-  - [ "roles/hostname/vars/defaults.yml" ]
 
   roles:
-    - role: hostname
-      name: hostname
-      hostname_enabled: yes
+    - { role: alban.andrieu.hostname,
+       hostname_enabled: yes,
 #force inventory_hostname
-      inventory_hostname: todo.nabla.mobi
+      inventory_hostname: test.nabla.mobi
+       }

@@ -40,7 +40,7 @@
 #  connection: local
 
   roles:
-    - hostname
+    - alban.andrieu.hostname
 
 - name: Apply common configuration to all nodes
   hosts: Ubuntu-12*:Ubuntu-14*
@@ -222,6 +222,12 @@
 
   roles:
     - java
+
+    - virtualbox
+
+  vars:
+      java_openjdk_when: false
+      java_oracle_when: false #Download is too long for travis build
 
 - name: Install virtualbox
   hosts: virtualbox

@@ -16,7 +16,7 @@
 #  connection: local  
     
   roles:
-    - hostname
+    - alban.andrieu.hostname
 
 - name: Install git
   hosts: jenkins-slaves
