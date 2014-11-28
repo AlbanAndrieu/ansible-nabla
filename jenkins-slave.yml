@@ -58,14 +58,13 @@
         shell_git_machine: 82.231.208.223,
         shell_git_login: jenkins,
         shell_git_password: microsoft,
-        shell_git_email: "alban.andrieu@free.fr"
+        shell_git_email: "alban.andrieu@free.fr",
+        #jenkins_jdk7_enable: yes,
+        jenkins_ssh_key_file: "~/.ssh/id_rsa.pub",
         #user: "albandri",
         #home: "/workspace/users/albandri10"
       }
 
-  vars:
-    jenkins_jdk7_enable: no
-    jenkins_ssh_key_file: "~/.ssh/id_rsa.pub"
 #    jenkins_home: "/jenkins"
 #    jenkins_slave_home: "/kgr-mvn"
 
