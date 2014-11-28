@@ -1,9 +1,9 @@
 #see https://blog.trifork.com/2013/04/02/ansible-example-playbook-to-setup-jenkins-slave/
 
 #as root
-#ansible-playbook jenkins-slave.yml -i hosts -vvvv
+#ansible-playbook jenkins-slave.yml -i hosts-albandri -vvvv
 #as albandri
-#ansible-playbook jenkins-slave.yml -i hosts -vvvv --ask-sudo-pass --sudo
+#ansible-playbook jenkins-slave.yml -i hosts-albandri -vvvv --ask-sudo-pass --sudo
 # --extra-vars "jenkins_username=aandrieu jenkins_password=tbd"
 
 - name: Apply hostname configuration

@@ -1,6 +1,4 @@
 ---
-#This script is used to configure your workstation (for developer)
-
 #sudo ansible-playbook -i hosts -c local -v nabla.yml -vvvv | tee setup.log
 
 - hosts: all
@@ -707,8 +705,8 @@
   remote_user: root
 #  connection: local
 
-  vars_files:
-  - [ "roles/alban.andrieu.jenkins-slave/vars/{{ ansible_distribution }}-{{ ansible_architecture }}.yml", "roles/alban.andrieu.jenkins-slave/vars/{{ ansible_distribution }}.yml" ]
+#  vars_files:
+#  - [ "roles/alban.andrieu.jenkins-slave/vars/{{ ansible_distribution }}-{{ ansible_architecture }}.yml", "roles/alban.andrieu.jenkins-slave/vars/{{ ansible_distribution }}.yml" ]
 
   roles:
     - alban.andrieu.jenkins-slave

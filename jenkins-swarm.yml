@@ -1,7 +1,7 @@
 #see https://blog.trifork.com/2013/04/02/ansible-example-playbook-to-setup-jenkins-slave/
 
 #for testing purpose
-#sudo ansible-playbook -i hosts -c local -v jenkins-swarm.yml -vvvv
+#sudo ansible-playbook -i hosts-albandri -c local -v jenkins-swarm.yml -vvvv
 
 #as root 
 #ansible-playbook jenkins-swarm.yml -i hosts -vvvv

@@ -1,7 +1,4 @@
----
-#This script is used to configure your nodejs (for developer)
-
-#sudo ansible-playbook -i hosts -c local -v nodejs.yml -vvvv | tee setup.log
+#sudo ansible-playbook -i hosts-albandri -c local -v nodejs.yml -vvvv | tee setup.log
 
 - hosts: all
   gather_facts: true

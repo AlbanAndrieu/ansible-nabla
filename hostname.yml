@@ -1,7 +1,8 @@
 #as root 
-#ansible-playbook hostname.yml -i hosts -vvvv
+#ansible-playbook -i hosts-albandri -c local -v hostname.yml -vvvv | tee setup.log
 #as albandri 
-#ansible-playbook hostname.yml -i hosts -vvvv --ask-sudo-pass --sudo
+#sudo ansible-playbook -i hosts-albandri -c local -v hostname.yml -vvvv | tee setup.log
+#ansible-playbook hostname.yml -i hosts-albandri -vvvv --ask-sudo-pass --sudo
 
 - name: Apply common hostname 
   connection: local  
@@ -12,5 +13,5 @@
     - { role: alban.andrieu.hostname,
        hostname_enabled: yes,
 #force inventory_hostname
-      inventory_hostname: test.nabla.mobi
+      inventory_hostname: albandri-laptop-misys.misys.global.ad
        }

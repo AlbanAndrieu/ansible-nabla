@@ -1,4 +1,4 @@
-#ansible-playbook -i hosts -c local -v shell.yml -vvvv --ask-sudo-pass | tee setup.log
+#ansible-playbook -i hosts-albandri -c local -v shell.yml -vvvv --ask-sudo-pass | tee setup.log
 
 - name: Apply common shell configuration
   hosts: workstation
@@ -7,11 +7,11 @@
   connection: local   
 #  sudo: yes
     
-  vars_files:
-  - [ "roles/alban.andrieu.shell/defaults/main.yml" ]
-  - [ "roles/alban.andrieu.shell/vars/default.yml" ]
-  - [ "roles/alban.andrieu.shell/vars/version.yml" ]
-  - [ "roles/alban.andrieu.shell/vars/custom-{{ ansible_distribution }}-{{ ansible_architecture }}.yml", "roles/alban.andrieu.shell/vars/custom-{{ ansible_distribution }}.yml" ]
+#  vars_files:
+#  - [ "roles/alban.andrieu.shell/defaults/main.yml" ]
+#  - [ "roles/alban.andrieu.shell/vars/default.yml" ]
+#  - [ "roles/alban.andrieu.shell/vars/version.yml" ]
+#  - [ "roles/alban.andrieu.shell/vars/custom-{{ ansible_distribution }}-{{ ansible_architecture }}.yml", "roles/alban.andrieu.shell/vars/custom-{{ ansible_distribution }}.yml" ]
 
   roles:
     - { role: alban.andrieu.shell, 

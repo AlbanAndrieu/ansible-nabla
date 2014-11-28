@@ -1,4 +1,4 @@
-#sudo ansible-playbook -i hosts -c local -v firewall.yml | tee setup.log
+#sudo ansible-playbook -i hosts-albandri -c local -v firewall.yml | tee setup.log
 
 - name: Install firewall
   connection: local

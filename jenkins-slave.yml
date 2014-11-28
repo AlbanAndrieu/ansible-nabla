@@ -1,12 +1,12 @@
 #see https://blog.trifork.com/2013/04/02/ansible-example-playbook-to-setup-jenkins-slave/
 
 #for testing purpose
-#sudo ansible-playbook -i hosts -c local -v jenkins-slave.yml -vvvv
+#sudo ansible-playbook -i hosts-albandri -c local -v jenkins-slave.yml -vvvv
 
 #as root
-#ansible-playbook jenkins-slave.yml -i hosts -vvvv
+#ansible-playbook jenkins-slave.yml -i hosts-albandri -vvvv
 #as albandri
-#ansible-playbook jenkins-slave.yml -i hosts -vvvv --ask-sudo-pass --sudo
+#ansible-playbook jenkins-slave.yml -i hosts-albandri -vvvv --ask-sudo-pass --sudo
 # --extra-vars "jenkins_username=aandrieu jenkins_password=tbd"
 
 - name: Apply hostname configuration
@@ -47,14 +47,14 @@
   connection: local
 #  remote_user: vagrant
 
-  vars_files:
-  - [ "roles/alban.andrieu.jenkins-slave/defaults/main.yml" ]
-  - [ "roles/alban.andrieu.jenkins-slave/vars/{{ ansible_distribution }}-{{ ansible_architecture }}.yml", "roles/alban.andrieu.jenkins-slave/vars/{{ ansible_distribution }}.yml" ]
+#  vars_files:
+#  - [ "roles/alban.andrieu.jenkins-slave/defaults/main.yml" ]
+#  - [ "roles/alban.andrieu.jenkins-slave/vars/{{ ansible_distribution }}-{{ ansible_architecture }}.yml", "roles/alban.andrieu.jenkins-slave/vars/{{ ansible_distribution }}.yml" ]
 
   roles:
     - { role: alban.andrieu.jenkins-slave,
-        docker_files_enable: yes,
-        docker_files_generated_directory: "roles/alban.andrieu.jenkins-slave",
+        docker_files_enable: no,
+        #docker_files_generated_directory: "roles/alban.andrieu.jenkins-slave",
         shell_git_machine: 82.231.208.223,
         shell_git_login: jenkins,
         shell_git_password: microsoft,

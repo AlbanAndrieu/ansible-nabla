@@ -1,7 +1,4 @@
----     
-#This script is used to configure your workstation (for developer)
-
-#sudo ansible-playbook -i hosts -c local -v windows.yml | tee setup.log
+#sudo ansible-playbook -i hosts-albandri -c local -v windows.yml | tee setup.log
 
 - name: Install Windows 
   hosts: windows 

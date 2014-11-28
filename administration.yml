@@ -1,5 +1,5 @@
----     
-# This playbook deploys a simple standalone Tomcat 7 server. 
+#sudo ansible-playbook -i hosts-albandri -c local -v nabla.yml -vvvv | tee setup.log
+
 - hosts: all
   gather_facts: true
   tasks:
