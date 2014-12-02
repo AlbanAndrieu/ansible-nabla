@@ -46,7 +46,9 @@ git submodule add https://github.com/AlbanAndrieu/ansible-zabbix_agent.git zabbi
 #git clone https://github.com/ahelal/ansible-zabbix_server zabbix-server
 git submodule add https://github.com/AlbanAndrieu/ansible-zabbix_server.git zabbix-server
 
-git submodule add https://github.com/knopki/ansible-locale locale
+#git submodule deinit -f locale
+#git submodule add https://github.com/knopki/ansible-locale locale
+git submodule add https://github.com/AlbanAndrieu/ansible-locale.git locale
 
 #git clone https://github.com/kost/ansible-galaxy.ubuntu.virtualbox.git virtualbox
 git submodule add https://github.com/AlbanAndrieu/ansible-galaxy.ubuntu.virtualbox.git virtualbox
@@ -173,6 +175,8 @@ git submodule add https://github.com/ANXS/monit monit
 #git submodule deinit -f synergy
 git submodule add https://github.com/AlbanAndrieu/ansible-synergy.git alban.andrieu.synergy
 
+#TODO
+#git submodule deinit -f ansible-role-git
 #git submodule deinit -f geerlingguy.git
 git submodule add https://github.com/AlbanAndrieu/ansible-role-git.git geerlingguy.git
 

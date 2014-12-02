@@ -1,0 +1,13 @@
+#sudo ansible-playbook -i hosts-albandri -c local -v tomcat.yml | tee setup.log
+
+- name: Install tomcat
+  hosts: workstation
+  remote_user: root
+#  connection: local
+
+  roles:
+    - alban.andrieu.tomcat      
+    
+#  vars:      
+#      user: root
+#      home: "/root"

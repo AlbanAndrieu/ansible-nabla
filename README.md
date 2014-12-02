@@ -18,6 +18,10 @@ When the playbook run completes, you should be able to work on any NABLA project
 
 This is a very simple playbook and could serve as a starting point for more complex projects. 
 
+### Dependency Graph
+
+![alt tag](https://github.com/AlbanAndrieu/ansible-nabla/tree/master/roles/test.png "Dependency Graph")
+
 ### Ideas for Improvement
 
 Here are some ideas for ways that these playbooks could be extended:

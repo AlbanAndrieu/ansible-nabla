@@ -16,9 +16,6 @@
 [submodule "roles/zabbix-server"]
 	path = roles/zabbix-server
 	url = https://github.com/AlbanAndrieu/ansible-zabbix_server.git
-[submodule "roles/locale"]
-	path = roles/locale
-	url = https://github.com/knopki/ansible-locale
 [submodule "roles/virtualbox"]
 	path = roles/virtualbox
 	url = https://github.com/AlbanAndrieu/ansible-galaxy.ubuntu.virtualbox.git
@@ -184,12 +181,12 @@
 [submodule "roles/alban.andrieu.zap"]
 	path = roles/alban.andrieu.zap
 	url = https://github.com/AlbanAndrieu/ansible-zap.git
-[submodule "roles/ansible-role-git"]
-	path = roles/ansible-role-git
-	url = https://github.com/AlbanAndrieu/ansible-role-git.git
 [submodule "roles/geerlingguy.git"]
 	path = roles/geerlingguy.git
 	url = https://github.com/AlbanAndrieu/ansible-role-git.git
 [submodule "roles/alban.andrieu.hostname"]
 	path = roles/alban.andrieu.hostname
 	url = https://github.com/AlbanAndrieu/ansible-hostname.git
+[submodule "roles/locale"]
+	path = roles/locale
+	url = https://github.com/AlbanAndrieu/ansible-locale.git
