@@ -67,9 +67,6 @@
 [submodule "roles/geerlingguy.apache"]
 	path = roles/geerlingguy.apache
 	url = https://github.com/geerlingguy/ansible-role-apache.git
-[submodule "roles/geerlingguy.mysql"]
-	path = roles/geerlingguy.mysql
-	url = https://github.com/AlbanAndrieu/ansible-role-mysql.git
 [submodule "roles/geerlingguy.php"]
 	path = roles/geerlingguy.php
 	url = https://github.com/geerlingguy/ansible-role-php.git
