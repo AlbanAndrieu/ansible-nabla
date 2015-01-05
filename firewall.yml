@@ -47,6 +47,7 @@
        - "9200" #Elasticsearch
        - "24800" #Synergy
        - "137" #Samba
+       - "5000" #xrdp / openstack /windows vm
 #       - "138" #Samba
 #       - "139" #Samba
 #       - "445" #Samba

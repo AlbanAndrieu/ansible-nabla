@@ -117,62 +117,74 @@
 #       - "8180"
 #       - "7070"
 #       - "8480"
-##   21: FTP
-##   8021: FTP FreeNas
-##   22: SSH
-##   25: SMTP
-##   80: HTTP / Nginx
-##   123: DNS
-##   443: HTTPS
-##   2222: SSH alternate
-##   4949: Munin
-##   6082: Varnish admin
-##   8080: HTTP alternate (often used with Tomcat)
-##   8280: Tomcat HTTP
-##   8983: Tomcat HTTP TODO???????
-##   8443: Tomcat HTTPS TODO???????
-##   8380: Jenkins
-##   9000: SonarQube
-##   8081: Nexus
-##   8085: Fitness
-##   3306: Mysql
-##   9090: Jetty
-##   8180: JBoss
-##   8787: JBoss remote debug port
-##   8181: JBoss http debug port
-##   9990 : Jboss console
-##   7070: Apache
-##   8480: NGinx
-##   4445: Lumbermill
-##   4243: Docker
-##   137, 138, 139, 445: Samba
-##   10000: Webmin
-##   20000: Usermin
-##   5050: CouchPatato
-##   8095 : Atlassion Crowd
-##   8060 : Atlassion Fisheye
-##   8082 : Atlassian JIRA
-##   7000: FreeNas
-##   5001 : xrdp
-##   5000 : xrdp / Openstack
-##   3689: FireFly
-##   8091 : Transmission
-##   9091 : Transmission
-##   8200 : MiniDLNA
-##   8083 : SickBeard
-##   32400 : Plex
-##   4040 : Subsonic
-##   8381 : jenkins FreeNas
-##   9090 : SABznbd
-##   8181 : HeadPhone
-##   8084 : OwnCloud
-##   82 : Varnish or Google +
-##   7070 : Gearman
-##   4445: Selenium
-##   4444: Selenium
-##   9042: Supervisor
-##   6000: Logstash
-##   9200: Kibana
+###
+#       - "21" #FTP
+#       - "8021" #FTP FreeNas
+#       - "22" #SSH
+#       - "25" #SMTP
+#       - "80" #HTTP / Nginx
+#       - "123" #DNS
+#       - "443" #HTTPS
+#       - "2222" #SSH alternate
+#       - "4949" #Munin
+#       - "6082" #Varnish admin
+#       - "8080" #HTTP alternate (often used with Tomcat)
+#       - "8280" #Tomcat HTTP
+#       - "8983" #Tomcat HTTP TODO???????
+#       - "8443" #Tomcat HTTPS TODO???????
+#       - "8380" #Jenkins
+#       - "9000" #SonarQube
+#       - "8081" #Nexus
+#       - "8085" #Fitness
+#       - "3306" #Mysql
+#       - "9090" #Jetty
+#       - "8180" #JBoss
+#       - "8787" #JBoss remote debug port
+#       - "8181" #JBoss http debug port
+#       - "9990" #Jboss console
+#       - "7070" #Apache
+#       - "7071" #Apache redirect gearman
+#       - "7072" #Apache redirect jenkins
+#       - "7073" #Apache redirect nabla
+#       - "7074" #Apache redirect visma
+#       - "7075" #Apache redirect sample
+#       - "7076" #Apache redirect ?????
+#       - "7077" #Apache redirect ansible tower (WAS)
+#       - "8480" #NGinx
+#       - "4445" #Lumbermill
+#       - "4243" #Docker
+#       - "137" #Samba
+#       - "138" #Samba
+#       - "139" #Samba
+#       - "445" #Samba
+#       - "10000" #Webmin
+#       - "20000" #Usermin
+#       - "5050" #CouchPatato
+#       - "8095" #Atlassion Crowd
+#       - "8060" #Atlassion Fisheye
+#       - "8082" #Atlassian JIRA
+#       - "7000" #FreeNas
+#       - "5001" #xrdp
+#       - "5000" #xrdp / Openstack
+#       - "3689" #FireFly
+#       - "8091" #Transmission
+#       - "9091" #Transmission
+#       - "8200" #MiniDLNA
+#       - "8083" #SickBeard
+#       - "32400" #Plex
+#       - "4040" #Subsonic
+#       - "8381" #jenkins FreeNas
+#       - "9090" #SABznbd
+#       - "8181" #HeadPhone
+#       - "8084" #OwnCloud
+#       - "82" #Varnish or Google +
+#       - "7070" #Gearman
+#       - "4445" #Selenium
+#       - "4444" #Selenium
+#       - "9042" #Supervisor
+#       - "6000" #Logstash
+#       - "9200" #Elasticsearch
+#       - "24800" #Synergy
 
 - name: Apply security configuration
   hosts: security
