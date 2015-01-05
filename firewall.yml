@@ -8,46 +8,59 @@
 
   roles:
     - { role: geerlingguy.firewall
-      }    
+      }
 
   vars:
        firewall_allowed_tcp_ports:
-       - "22" #Ssh
+       - "22" #SSH
        - "25"
        - "80"
        - "82" #Varnish
-       - "6082" #Varnish admin
        - "443"
-       - "8080"
-       - "8280" #Tomcat
-#       - "8380" Jenkins use apache redirect 7072
-       - "9000" #Sonar
-       - "8081" #Nexus
-       - "8085" #Fitness
-       - "3306" #TODO remove
-       - "9090" #Jetty
-       - "8180" #JBoss
+       - "554" #Freebox tv
+       - "3306" #TODO SECURITY remove mysql direct access
+       - "4243" #Docker
+       - "4445" #Selenium
+       - "4444" #Selenium
+       - "5000" #xrdp / openstack /windows vm
+       - "5001" #xrdp
+       - "6000" #Logstash
+       - "6082" #Varnish admin
        - "7070" #Apache
        - "7071" #Apache redirect gearman
        - "7072" #Apache redirect jenkins
        - "7073" #Apache redirect nabla
        - "7074" #Apache redirect visma
        - "7075" #Apache redirect sample
-       - "7076" #Apache redirect ?????       
+       - "7076" #Apache redirect ?????
+       - "7077" #Apache redirect ansible tower       
+       - "8080"
+       - "8081" #Nexus
+       - "8085" #Fitness
+       - "8180" #JBoss       
+       - "8280" #Tomcat
+#       - "8380" Jenkins use apache redirect 7072
        - "8480" #NGinx
-       - "4243" #Docker
-       - "5001" #xrdp
-       - "5000" #xrdp / Openstack
+       - "9000" #Sonar
+       - "9090" #Jetty
+       - "9042" #Supervisor
+       - "9200" #Elasticsearch       
        - "10000" #Webmin
        - "20000" #Usermin
-       - "4445" #Selenium
-       - "4444" #Selenium
-       - "9042" #Supervisor
-       - "6000" #Logstash
-       - "9200" #Elasticsearch
        - "24800" #Synergy
-       - "137" #Samba
-       - "5000" #xrdp / openstack /windows vm
-#       - "138" #Samba
-#       - "139" #Samba
-#       - "445" #Samba
+#Do not enable
+#       - "139" #Samba/NetBIOS
+#       - "445" #Samba/NetBIOS
+#       - "17500" #DropBox
+#       firewall_allowed_udp_ports:
+#Do not enable
+#       - "137" #Samba/NetBIOS
+#       - "138" #Samba/NetBIOS
+
+       firewall_additional_rules:
+        - "iptables -A INPUT -i wlan1 -p udp -m udp -s mafreebox.freebox.fr -j ACCEPT" #Freebox tv
+#        - "iptables -A INPUT -i wlan1 -p udp -m udp -s 212.27.38.253 -j ACCEPT" #Freebox tv
+        - "iptables -A OUTPUT -o wlan1 -p tcp -m tcp --dport 554 -j ACCEPT" #Freebox tv
+#        - "iptables -A OUTPUT -o wlan1 -s 82.231.208.223 -m state --state ESTABLISHED -j ACCEPT" #Freebox tv
+#       - "iptables -A INPUT -i eth0 -p udp -m udp -s 212.27.38.253 --dport 32000:34000 -j ACCEPT" #Freebox tv
+#       - "iptables -A OUTPUT -o eth0 -p udp -m udp --dport 32000:34000 -j ACCEPT" #Freebox tv

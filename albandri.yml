@@ -66,9 +66,9 @@
        search: misys.global.ad misys.global.ad. nt.france.effix.fr. france.effix.fr. effix.fr.
        dns_nameservers:
          - "10.25.200.3" # work dns
-         - "10.21.200.3" # work dns 
+         - "10.21.200.3" # work dns
          - "8.8.8.8" # google dns
-         - "8.8.4.4" # google dns       
+         - "8.8.4.4" # google dns
 #paris
 #      nameserver1: 10.21.200.3
 #      nameserver2: 10.25.200.3
@@ -101,28 +101,12 @@
 #
 #  vars:
 #       firewall_allowed_tcp_ports:
-#       - "22"
-#       - "25"
-#       - "80"
-#       - "443"
-#       - "6082"
-#       - "8080"
-#       - "8280"
-#       - "8380"
-#       - "9000"
-#       - "8081"
-#       - "8085"
-#       - "3306"
-#       - "9090"
-#       - "8180"
-#       - "7070"
-#       - "8480"
 ###
 #       - "21" #FTP
-#       - "8021" #FTP FreeNas
 #       - "22" #SSH
 #       - "25" #SMTP
 #       - "80" #HTTP / Nginx
+#       - "82" #Varnish
 #       - "123" #DNS
 #       - "443" #HTTPS
 #       - "2222" #SSH alternate
@@ -133,6 +117,7 @@
 #       - "8983" #Tomcat HTTP TODO???????
 #       - "8443" #Tomcat HTTPS TODO???????
 #       - "8380" #Jenkins
+#       - "8021" #FTP FreeNas
 #       - "9000" #SonarQube
 #       - "8081" #Nexus
 #       - "8085" #Fitness
@@ -193,7 +178,7 @@
 
   roles:
     - security
-    
+
   vars:
        sudoers_enabled: no
 
@@ -728,7 +713,7 @@
     jenkins_jdk7_enable: yes
     shell_git_machine: 82.231.208.223
     shell_git_login: jenkins
-    shell_git_password: microsoft    
+    shell_git_password: microsoft
     shell_git_email: "alban.andrieu@free.fr"
 
 - name: Install maven
@@ -836,7 +821,7 @@
 
   roles:
     - role: geerlingguy.git
-    
+
 - name: Install subversion
   hosts: workstation
   remote_user: root
@@ -848,7 +833,7 @@
   vars:
       subversion_owner: "{{ user }}"
       subversion_group: "{{ group }}"
-      
+
 #- name: Apply user shell configuration
 #  hosts: workstation
 #  remote_user: root
@@ -867,7 +852,7 @@
 #      docker_files_generated_directory: "roles/alban.andrieu.shell"
 #      docker_files_enable: yes
 #      shell_owner: "{{ user }}"
-#      shell_group: "{{ group }}"   
+#      shell_group: "{{ group }}"
 ##      shell_owner_home: "{{ home }}"
 ##      shell_env_directory: "{{ home }}/env/tmp"
 ##      rhosts_hosts: []

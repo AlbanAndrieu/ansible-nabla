@@ -136,10 +136,11 @@ localhost
 #192.168.33.12
 
 [workstation:vars]
-user=albandri
-group=rms
+#user=albandri
+#group=rms
+user=root
+group=root
 #version=10
 #home=/workspace/users/{{ user }}{{ version }}/
 home=/home/{{ user }}/
 #ansible_sudo_pass=todo
-
