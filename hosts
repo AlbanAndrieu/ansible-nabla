@@ -136,8 +136,8 @@ localhost
 #192.168.33.12
 
 [workstation:vars]
-user=root
-group=root
+user=albandri
+group=rms
 #version=10
 #home=/workspace/users/{{ user }}{{ version }}/
 home=/home/{{ user }}/
