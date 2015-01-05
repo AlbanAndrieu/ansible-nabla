@@ -11,7 +11,7 @@
 git clone https://github.com/AlbanAndrieu/ansible-nabla.git ansible
 
 git pull && git submodule init && git submodule update && git submodule status
-#git submodule foreach git pull
+git submodule foreach git pull origin master
 git submodule foreach git checkout master
 
 git submodule add https://github.com/AlbanAndrieu/ansigenome.git
