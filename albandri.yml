@@ -106,27 +106,23 @@
 #       - "22" #SSH
 #       - "25" #SMTP
 #       - "80" #HTTP / Nginx
-#       - "82" #Varnish
+#       - "82" #Varnish or Google +
 #       - "123" #DNS
 #       - "443" #HTTPS
 #       - "2222" #SSH alternate
-#       - "4949" #Munin
-#       - "6082" #Varnish admin
-#       - "8080" #HTTP alternate (often used with Tomcat)
-#       - "8280" #Tomcat HTTP
-#       - "8983" #Tomcat HTTP TODO???????
-#       - "8443" #Tomcat HTTPS TODO???????
-#       - "8380" #Jenkins
-#       - "8021" #FTP FreeNas
-#       - "9000" #SonarQube
-#       - "8081" #Nexus
-#       - "8085" #Fitness
 #       - "3306" #Mysql
-#       - "9090" #Jetty
-#       - "8180" #JBoss
-#       - "8787" #JBoss remote debug port
-#       - "8181" #JBoss http debug port
-#       - "9990" #Jboss console
+#       - "3689" #FireFly
+#       - "4040" #Subsonic
+#       - "4444" #Selenium
+#       - "4445" #Lumbermill/Selenium TODO???????
+#       - "4243" #Docker
+#       - "4949" #Munin
+#       - "5000" #xrdp / Openstack
+#       - "5001" #xrdp
+#       - "5050" #CouchPatato
+#       - "6000" #Logstash
+#       - "6082" #Varnish admin
+#       - "7000" #FreeNas
 #       - "7070" #Apache
 #       - "7071" #Apache redirect gearman
 #       - "7072" #Apache redirect jenkins
@@ -135,41 +131,48 @@
 #       - "7075" #Apache redirect sample
 #       - "7076" #Apache redirect ?????
 #       - "7077" #Apache redirect ansible tower (WAS)
-#       - "8480" #NGinx
-#       - "4445" #Lumbermill
-#       - "4243" #Docker
-#       - "137" #Samba
-#       - "138" #Samba
-#       - "139" #Samba
-#       - "445" #Samba
-#       - "10000" #Webmin
-#       - "20000" #Usermin
-#       - "5050" #CouchPatato
-#       - "8095" #Atlassion Crowd
+#       - "8021" #FTP FreeNas
+#       - "8081" #Nexus
+#       - "8084" #OwnCloud
+#       - "8085" #Fitness
 #       - "8060" #Atlassion Fisheye
 #       - "8082" #Atlassian JIRA
-#       - "7000" #FreeNas
-#       - "5001" #xrdp
-#       - "5000" #xrdp / Openstack
-#       - "3689" #FireFly
-#       - "8091" #Transmission
-#       - "9091" #Transmission
-#       - "8200" #MiniDLNA
 #       - "8083" #SickBeard
-#       - "32400" #Plex
-#       - "4040" #Subsonic
+#       - "8080" #HTTP alternate (often used with Tomcat)
+#       - "8091" #Transmission
+#       - "8095" #Atlassion Crowd
+#       - "8180" #JBoss
+#       - "8181" #HeadPhone/JBoss http debug port
+#       - "8200" #MiniDLNA
+#       - "8280" #Tomcat HTTP
+#       - "8380" #Jenkins
 #       - "8381" #jenkins FreeNas
-#       - "9090" #SABznbd
-#       - "8181" #HeadPhone
-#       - "8084" #OwnCloud
-#       - "82" #Varnish or Google +
-#       - "7070" #Gearman
-#       - "4445" #Selenium
-#       - "4444" #Selenium
+#       - "8443" #Tomcat HTTPS TODO???????
+#       - "8480" #NGinx
+#       - "8787" #JBoss remote debug port
+#       - "8983" #Tomcat HTTP TODO???????
 #       - "9042" #Supervisor
-#       - "6000" #Logstash
+#       - "9000" #SonarQube
+#       - "9090" #SABznbd/Jetty
+#       - "9091" #Transmission
+#       - "9990" #Jboss console
 #       - "9200" #Elasticsearch
+#       - "10000" #Webmin
+#       - "20000" #Usermin
 #       - "24800" #Synergy
+#       - "32400" #Plex
+#Do not enable
+#       - "139" #Samba/NetBIOS
+#       - "445" #Samba/NetBIOS
+#       - "17500" #DropBox
+#       firewall_allowed_udp_ports:
+#Do not enable
+#       - "137" #Samba/NetBIOS
+#       - "138" #Samba/NetBIOS
+#
+#       firewall_additional_rules:
+#        - "iptables -A INPUT -i wlan1 -p udp -m udp -s mafreebox.freebox.fr -j ACCEPT" #Freebox tv
+#        - "iptables -A OUTPUT -o wlan1 -p tcp -m tcp --dport 554 -j ACCEPT" #Freebox tv
 
 - name: Apply security configuration
   hosts: security
