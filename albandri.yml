@@ -31,13 +31,13 @@
     - geerlingguy.repo-epel
     - geerlingguy.repo-remi
 
-- name: Apply hostname configuration
-  hosts: all
-  remote_user: root
-#  connection: local
-
-  roles:
-    - alban.andrieu.hostname
+#- name: Apply hostname configuration
+#  hosts: all
+#  remote_user: root
+##  connection: local
+#
+#  roles:
+#    - alban.andrieu.hostname
 
 - name: Apply common configuration to all nodes
   hosts: Ubuntu-12*:Ubuntu-14*
