@@ -196,6 +196,10 @@ git submodule add https://github.com/geerlingguy/ansible-role-php-mysql.git geer
 #git submodule deinit -f geerlingguy.phpmyadmin
 #git submodule add https://github.com/geerlingguy/ansible-role-phpmyadmin.git geerlingguy.phpmyadmin
 git submodule add https://github.com/AlbanAndrieu/ansible-role-phpmyadmin.git geerlingguy.phpmyadmin
+#cd roles/geerlingguy.phpmyadmin
+#git remote remove origin
+#git remote add origin https://github.com/AlbanAndrieu/ansible-role-phpmyadmin.git
+#git remote -v
 #TODO git clone https://github.com/geerlingguy/ansible-role-varnish.git varnish
 git submodule add https://github.com/geerlingguy/ansible-role-samba.git geerlingguy.samba
 
