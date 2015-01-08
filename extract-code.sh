@@ -141,6 +141,8 @@ git submodule add https://github.com/AlbanAndrieu/ansible-pagespeed.git alban.an
 
 git submodule add https://github.com/AlbanAndrieu/ansible-evasive.git alban.andrieu.evasive
 
+git submodule add https://github.com/AlbanAndrieu/ansible-awstats.git alban.andrieu.awstats
+
 #git submodule deinit -f jmeter
 git submodule add https://github.com/AlbanAndrieu/ansible-jmeter.git alban.andrieu.jmeter
 

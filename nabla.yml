@@ -491,7 +491,28 @@
     - role: alban.andrieu.pagespeed
 
   vars:
+       apache_listen_port: 7070  
        pagespeed_package_arch: "amd64"
+
+- name: Install evasive
+  hosts: apache-servers
+  remote_user: root
+#  connection: local
+  roles:
+    - role: alban.andrieu.evasive
+
+  vars:
+       apache_listen_port: 7070  
+       
+- name: Install awstats
+  hosts: apache-servers
+  remote_user: root
+#  connection: local
+  roles:
+    - role: alban.andrieu.awstats
+
+  vars:
+       apache_listen_port: 7070  
 
 - name: Apply configuration to jenkins master
   hosts: jenkins-master
@@ -906,6 +927,7 @@
 #    - alban.andrieu.mon
 #
 #  vars:
+#      apache_listen_port: 7070
 #      mon_localhost : "albandri"
 #      mon_custom_group: "nabla"
 #      mon_admin_email: "alban.andrieu@free.fr"

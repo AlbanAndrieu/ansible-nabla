@@ -7,3 +7,7 @@
 
   roles:
     - role: alban.andrieu.evasive     
+
+  vars:
+       apache_listen_port: 7070
+       
