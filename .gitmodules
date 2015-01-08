@@ -193,3 +193,9 @@
 [submodule "roles/geerlingguy.phpmyadmin"]
 	path = roles/geerlingguy.phpmyadmin
 	url = https://github.com/AlbanAndrieu/ansible-role-phpmyadmin.git
+[submodule "roles/alban.andrieu.evasive"]
+	path = roles/alban.andrieu.evasive
+	url = https://github.com/AlbanAndrieu/ansible-evasive.git
+[submodule "roles/alban.andrieu.awstats"]
+	path = roles/alban.andrieu.awstats
+	url = https://github.com/AlbanAndrieu/ansible-awstats.git
