@@ -16,6 +16,7 @@
        - "25"
        - "80"
        - "82" #Varnish
+#       - "2583" #Mon
        - "443"
        - "554" #Freebox tv
        - "3306" #TODO SECURITY remove mysql direct access

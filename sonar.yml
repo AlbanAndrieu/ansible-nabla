@@ -34,12 +34,92 @@
 #Handle by jenkins_slave role, Warning it will override settings.xml.j2 from jenkins_slave role
       maven_install: false
       sonar_mysql_install: true
+      sonar_postgres_install : false
       sonar_jdbc_driver: "mysql"
       sonar_jdbc_port: 3306
       mysql_root_username: root
-      mysql_root_password: microsoft             
-      sonar_jdbc_pass: "{{ mysql_root_password }}" 
+      mysql_root_password: microsoft
+      sonar_jdbc_pass: "{{ mysql_root_password }}"
       sonar_login_user: "{{ mysql_root_username }}"
-      sonar_login_password: "{{ mysql_root_password }}"  
+      sonar_login_password: "{{ mysql_root_password }}"
       sonar_shell: "/bin/false"
+      sonar_name: "sonarqube-{{sonar_version}}"
+      sonar_archive: "sonarqube-{{sonar_version}}.zip"
+      sonar_major: "4"
+      sonar_minor: "5.2"
+      sonar_plugins :
+          - name  : "Python support"
+            url   : "http://repository.codehaus.org/org/codehaus/sonar-plugins/python/sonar-python-plugin/1.3/sonar-python-plugin-1.3.jar"
 
+          - name  : "Java support"
+            url   : "http://repository.codehaus.org/org/codehaus/sonar-plugins/java/sonar-java-plugin/2.8/sonar-java-plugin-2.8.jar"
+
+          - name  : "JavaScript support"
+            url   : "http://repository.codehaus.org/org/codehaus/sonar-plugins/javascript/sonar-javascript-plugin/2.2/sonar-javascript-plugin-2.2.jar"
+
+          - name  : "Cxx support"
+            url   : "http://repository.codehaus.org/org/codehaus/sonar-plugins/sonar-cxx-plugin/0.2/sonar-cxx-plugin-0.2.jar"
+
+#          - name  : "Flex support"
+#            url   : "http://repository.codehaus.org/org/codehaus/sonar-plugins/sonar-flex-plugin/2.1/sonar-flex-plugin-2.1.jar"
+
+          - name  : "Groovy support"
+            url   : "http://repository.codehaus.org/org/codehaus/sonar-plugins/sonar-groovy-plugin/1.0.1/sonar-groovy-plugin-1.0.1.jar"
+
+          - name  : "Web HTML (included in HTML, JSP, JSF, Ruby, PHP, etc. pages) support"
+            url   : "http://repository.codehaus.org/org/codehaus/sonar-plugins/sonar-web-plugin/2.3/sonar-web-plugin-2.3.jar"
+
+          - name  : "XML support"
+            url   : "http://repository.codehaus.org/org/codehaus/sonar-plugins/xml/sonar-xml-plugin/1.2/sonar-xml-plugin-1.2.jar"
+
+#WARNING use 06-SNAPSHOT from git clone https://github.com/gvsmirnov/sonar-pitest.git
+          - name  : "Pitest support"
+            url   : "http://repository.codehaus.org/org/codehaus/sonar-plugins/sonar-pitest-plugin/0.5/sonar-pitest-plugin-0.5.jar"
+
+          - name  : "Checkstyle support"
+            url   : "http://repository.codehaus.org/org/codehaus/sonar-plugins/java/sonar-checkstyle-plugin/2.2/sonar-checkstyle-plugin-2.2.jar"
+
+#          - name  : "Findbugs support"
+#            url   : "http://repository.codehaus.org/org/codehaus/sonar-plugins/java/sonar-findbugs-plugin/3.1/sonar-findbugs-plugin-3.1.jar"
+
+          - name  : "PMD support"
+            url   : "http://repository.codehaus.org/org/codehaus/sonar-plugins/java/sonar-pmd-plugin/2.3/sonar-pmd-plugin-2.3.jar"
+
+          - name  : "Generic Coverage support"
+            url   : "http://repository.codehaus.org/org/codehaus/sonar-plugins/sonar-generic-coverage-plugin/1.1/sonar-generic-coverage-plugin-1.1.jar"
+
+          - name  : "Clirr support"
+            url   : "http://repository.codehaus.org/org/codehaus/sonar-plugins/sonar-clirr-plugin/1.1/sonar-clirr-plugin-1.1.jar"
+
+#          - name  : "NCSS support"
+#            url   : "http://repository.codehaus.org/org/codehaus/sonar-plugins/sonarncss/0.1/sonarncss-0.1.jar"
+
+          - name  : "Artifact size support"
+            url   : "http://repository.codehaus.org/org/codehaus/sonar-plugins/sonar-artifact-size-plugin/0.3/sonar-artifact-size-plugin-0.3.jar"
+
+          - name  : "Build stability support"
+            url   : "http://repository.codehaus.org/org/codehaus/sonar-plugins/sonar-build-stability-plugin/1.2.1/sonar-build-stability-plugin-1.2.1.jar"
+
+          - name  : "Clover support"
+            url   : "http://repository.codehaus.org/org/codehaus/sonar-plugins/sonar-clover-plugin/3.0/sonar-clover-plugin-3.0.jar"
+
+          - name  : "CSS stability support"
+            url   : "http://repository.codehaus.org/org/codehaus/sonar-plugins/css/sonar-css-plugin/1.1/sonar-css-plugin-1.1.jar"
+
+          - name  : "Jmeter stability support"
+            url   : "http://repository.codehaus.org/org/codehaus/sonar-plugins/jmeter/sonar-jmeter-plugin/0.2/sonar-jmeter-plugin-0.2.jar"
+
+          - name  : "Cobertura support"
+            url   : "http://repository.codehaus.org/org/codehaus/sonar-plugins/sonar-cobertura-plugin/1.6.3/sonar-cobertura-plugin-1.6.3.jar"
+
+          - name  : "Crowd support"
+            url   : "http://repository.codehaus.org/org/codehaus/sonar-plugins/sonar-crowd-plugin/1.0/sonar-crowd-plugin-1.0.jar"
+
+          - name  : "JIRA support"
+            url   : "http://repository.codehaus.org/org/codehaus/sonar-plugins/sonar-jira-plugin/1.2/sonar-jira-plugin-1.2.jar"
+
+          - name  : "SCM activity support"
+            url   : "http://repository.codehaus.org/org/codehaus/sonar-plugins/scm-activity/sonar-scm-activity-plugin/1.8/sonar-scm-activity-plugin-1.8.jar"
+
+          - name  : "SCM stats support"
+            url   : "http://repository.codehaus.org/org/codehaus/sonar-plugins/sonar-scm-stats-plugin/0.3.1/sonar-scm-stats-plugin-0.3.1.jar"
