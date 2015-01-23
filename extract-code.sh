@@ -133,6 +133,8 @@ git submodule add https://github.com/AlbanAndrieu/ansible-jboss.git alban.andrie
 #git submodule deinit -f windows
 git submodule add https://github.com/AlbanAndrieu/ansible-windows.git alban.andrieu.windows
 
+git submodule add https://github.com/AlbanAndrieu/ansible-solaris.git alban.andrieu.solaris
+
 #git submodule deinit -f cpp
 git submodule add https://github.com/AlbanAndrieu/ansible-cpp.git alban.andrieu.cpp
 
