@@ -51,6 +51,7 @@ git submodule add https://github.com/AlbanAndrieu/ansible-zabbix_server.git zabb
 #git submodule deinit -f locale
 #git submodule add https://github.com/knopki/ansible-locale locale
 git submodule add https://github.com/AlbanAndrieu/ansible-locale.git locale
+#TODO maybe switch to https://github.com/nickjj/ansible-locale
 
 #git clone https://github.com/kost/ansible-galaxy.ubuntu.virtualbox.git virtualbox
 git submodule add https://github.com/AlbanAndrieu/ansible-galaxy.ubuntu.virtualbox.git virtualbox
@@ -220,7 +221,11 @@ git submodule add https://github.com/geerlingguy/ansible-role-nginx.git geerling
 #git clone https://github.com/geerlingguy/ansible-role-kibana.git geerlingguy.kibana
 git submodule add https://github.com/AlbanAndrieu/ansible-role-kibana.git geerlingguy.kibana
 
+git submodule add  https://github.com/sivel/ansible-newrelic.git
+
 #SEE
+#https://github.com/docker/docker-registry
+
 #https://galaxy.ansible.com/list#/roles/527 https://github.com/ANXS/git.git see TODO
 #https://galaxy.ansible.com/list#/roles/58 see TODO
 

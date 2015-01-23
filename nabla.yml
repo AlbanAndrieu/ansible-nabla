@@ -195,6 +195,7 @@
 #    
 #  vars:
 #       sudoers_enabled: no
+#       restart_ssh_enabled: false
 
 #Below cmake role is included in cpp role
 #- name: Install cmake
@@ -878,6 +879,7 @@
 #  vars:
 #      docker_files_generated_directory: "roles/alban.andrieu.shell"
 #      docker_files_enable: yes
+#      newrelic_license_key: de35bf5d191ebb208d359b2cd24a60616a02b1f3
 #      shell_owner: "{{ user }}"
 #      shell_group: "{{ group }}"   
 ##      shell_owner_home: "{{ home }}"

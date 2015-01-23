@@ -10,9 +10,9 @@ current_version = Gem::Version.new(Vagrant::VERSION)
 windows_version = Gem::Version.new("1.6.0")
 
 hosts_ubuntu = {
-  "jenkins-slave-create-image-docker" => "192.168.33.10",
-#  "host1" => "192.168.33.11",
-#  "host2" => "192.168.33.12"
+  "jenkins-slave-create-image-docker" => "10",
+#  "host1" => "11",
+#  "host2" => "12"
 }
 
 hosts_solaris = {
@@ -28,7 +28,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   #config.vm.network "public_network"
 
-  hosts_ubuntu.each do |name, ip|
+  hosts_ubuntu.each do |name, port|
+  
+	VAGRANT_BASE_PORT = port
+	VAGRANT_SSH_PORT = "22" + VAGRANT_BASE_PORT
+	VAGRANT_NETWORK_IP = "192.168.11." + VAGRANT_BASE_PORT
+	  
     config.vm.define name do |machine|
       #machine.vm.box = "precise32"
       ##machine.vm.box_url = "http://files.vagrantup.com/precise32.box"
@@ -43,7 +48,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
       machine.vm.hostname = "%s.example.org" % name
       machine.vm.synced_folder "./app", "/var/www/", create:true
-      machine.vm.network :private_network, ip: ip
+      machine.vm.network :private_network, ip: VAGRANT_NETWORK_IP
       # Create a forwarded port mapping which allows access to a specific port
       # within the machine from a port on the host machine.
       config.vm.network :forwarded_port, guest: 8080, host: 8080, auto_correct:true
@@ -90,6 +95,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
        ansible.limit = 'all'
       end
 
+      #master.vm.provision :shell, :path => "buildup.sh"
+	  machine.vm.network "forwarded_port", guest: 22, host: 2222, id: "ssh", disabled: "true"
+	  machine.vm.network "forwarded_port", guest: 22, host: VAGRANT_SSH_PORT, auto_correct: true
+	  
       #config.vm.provision "docker" do |docker|
       #  docker.build_image "/vagrant/app"
       #end
@@ -180,6 +189,18 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   #        v.customize ["modifyvm", :id, "--memory", 1024]
   #        # v.customize ["modifyvm", :id, "--memory", "4096", "--cpus", "4"]
   #    end
+  #    config.vm.provision "ansible" do |ansible|
+  #     #see https://docs.vagrantup.com/v2/provisioning/ansible.html
+  #     ansible.playbook = "solaris.yml"
+  #     ansible.inventory_path = "hosts"
+  #     ansible.verbose = "vvvv"
+  #     ansible.sudo = true
+  #     ansible.host_key_checking = false
+  #     ansible.extra_vars = { ansible_ssh_user: 'vagrant',
+  #                            ansible_ssh_pass: '' }
+  #     # Disable default limit (required with Vagrant 1.5+)
+  #     ansible.limit = 'all'
+  #    end  
   #  end
   #end
 

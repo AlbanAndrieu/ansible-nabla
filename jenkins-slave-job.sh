@@ -1,8 +1,11 @@
 #!/bin/bash
 set -xv
+
 echo "USER : $USER"
 echo "HOME : $HOME"
 echo "WORKSPACE : $WORKSPACE"
+
+lsb_release -a
 
 echo "Configure Jenkins slaves"
 
