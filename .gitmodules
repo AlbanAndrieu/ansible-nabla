@@ -202,3 +202,6 @@
 [submodule "roles/ansible-newrelic"]
 	path = roles/ansible-newrelic
 	url = https://github.com/sivel/ansible-newrelic.git
+[submodule "roles/alban.andrieu.solaris"]
+	path = roles/alban.andrieu.solaris
+	url = https://github.com/AlbanAndrieu/ansible-solaris.git

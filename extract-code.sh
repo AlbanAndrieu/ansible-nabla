@@ -131,10 +131,13 @@ git submodule add https://github.com/AlbanAndrieu/ansible-eclipse.git alban.andr
 #git submodule deinit -f jboss
 git submodule add https://github.com/AlbanAndrieu/ansible-jboss.git alban.andrieu.jboss
 
-#git submodule deinit -f windows
+#git submodule deinit -f alban.andrieu.windows
 git submodule add https://github.com/AlbanAndrieu/ansible-windows.git alban.andrieu.windows
 
-git submodule add https://github.com/AlbanAndrieu/ansible-solaris.git alban.andrieu.solaris
+#TODO
+#git submodule update --init
+#git rm --cached alban.andrieu.solaris
+#git submodule add https://github.com/AlbanAndrieu/ansible-solaris.git alban.andrieu.solaris
 
 #git submodule deinit -f cpp
 git submodule add https://github.com/AlbanAndrieu/ansible-cpp.git alban.andrieu.cpp
@@ -183,6 +186,18 @@ git submodule add https://github.com/ANXS/monit monit
 
 #git submodule deinit -f synergy
 git submodule add https://github.com/AlbanAndrieu/ansible-synergy.git alban.andrieu.synergy
+
+git submodule add https://github.com/AlbanAndrieu/ansible-yourkit.git alban.andrieu.yourkit
+#TODO add to ansible galaxy
+
+git submodule add https://github.com/AlbanAndrieu/ansible-visualvm.git alban.andrieu.visualvm
+#TODO add to ansible galaxy
+
+git submodule add https://github.com/AlbanAndrieu/ansible-jdiskreport.git alban.andrieu.jdiskreport
+#TODO add to ansible galaxy
+
+git submodule add https://github.com/AlbanAndrieu/ansible-private-bower.git alban.andrieu.private-bower
+#TODO add to ansible galaxy
 
 #TODO
 #git submodule deinit -f ansible-role-git

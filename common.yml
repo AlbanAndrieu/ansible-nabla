@@ -22,7 +22,7 @@
                  Ubuntu 12.04/14.04."
                  
 #Use below only if you want your servers to be part of MGR build farm                 
-- name: apply common configuration to all nodes
+- name: Apply common configuration to all nodes
   hosts: Ubuntu-12*:Ubuntu-14*
 #  hosts: all  
   gather_facts: false

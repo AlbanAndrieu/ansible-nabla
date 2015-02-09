@@ -26,6 +26,7 @@ git checkout master
 # other branch:
 
 git rebase upstream/master
+#git rebase origin/develop
 git rebase --continue
 
 git push -f origin master

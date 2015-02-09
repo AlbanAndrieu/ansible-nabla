@@ -27,7 +27,9 @@ vagrant --version
 docker --version
 VBoxManage --version
 
-vagrant box list
+vagrant box list -i
+
+VBoxManage list vms
 
 # shutdown vms
 VBoxManage controlvm hosttest0 poweroff
@@ -38,6 +40,8 @@ VBoxManage controlvm hosttest2 poweroff
 VBoxManage unregistervm hosttest0 -delete
 VBoxManage unregistervm hosttest1 -delete
 VBoxManage unregistervm hosttest2 -delete
+
+#VBoxManage startvm vagrant-windows-2012 --type headless
 
 # clean vagrant
 vagrant destroy --force

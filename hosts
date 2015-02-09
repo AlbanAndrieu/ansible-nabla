@@ -98,9 +98,6 @@ localhost
 [nodejs]
 localhost
 
-[workstation]
-localhost ansible_connection=local
-
 [nexus]
 localhost
 
@@ -135,6 +132,9 @@ localhost
 #192.168.33.11
 #192.168.33.12
 
+[workstation]
+localhost ansible_connection=local
+
 [workstation:vars]
 #user=albandri
 #group=rms
@@ -144,3 +144,16 @@ group=root
 #home=/workspace/users/{{ user }}{{ version }}/
 home=/home/{{ user }}/
 #ansible_sudo_pass=todo
+
+[zone]
+mgrv062.misys.global.ad
+
+[zone:vars]
+user=kgr
+group=other
+home=/thomsonreuters/home/{{ user }}/
+ansible_sudo_pass=Kondor_123
+ansible_python_interpreter="/usr/local/bin/python2.7"
+ansible_ssh_user="root"
+ansible_ssh_pass="Kondor_123"
+

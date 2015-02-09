@@ -1,0 +1,22 @@
+#sudo ansible-playbook -i hosts-albandri -c local -v visualvm.yml | tee setup.log
+
+- name: Install visualvm
+  connection: local
+  hosts: workstation
+#  remote_user: root
+#  accelerate: true
+
+  roles:
+    - { role: alban.andrieu.visualvm,
+        visualvm_remote_hosts_enable: yes,
+      }    
+      
+  vars:
+      visualvm_remote_hosts: 
+        - { name  : "Zone",
+            serverip: "10.21.11.62",
+            serverhostname: "mgrv062.misys.global.ad",
+            servername: "mgrv062",
+            serverjstatdport: "2020",
+            serverposition: "4"
+            }
