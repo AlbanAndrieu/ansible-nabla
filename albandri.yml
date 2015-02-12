@@ -120,8 +120,10 @@
 #       - "5000" #xrdp / Openstack
 #       - "5001" #xrdp
 #       - "5050" #CouchPatato
+#       - "5678" #Private bower
 #       - "6000" #Logstash
 #       - "6082" #Varnish admin
+#       - "6379" #Redis port for bower registry
 #       - "7000" #FreeNas
 #       - "7070" #Apache
 #       - "7071" #Apache redirect gearman
@@ -139,6 +141,7 @@
 #       - "8082" #Atlassian JIRA
 #       - "8083" #SickBeard
 #       - "8080" #HTTP alternate (often used with Tomcat)
+#       - "8089" #Bower registry
 #       - "8091" #Transmission
 #       - "8095" #Atlassion Crowd
 #       - "8180" #JBoss

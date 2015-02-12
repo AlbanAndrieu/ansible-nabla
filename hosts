@@ -146,7 +146,7 @@ home=/home/{{ user }}/
 #ansible_sudo_pass=todo
 
 [zone]
-mgrv062.misys.global.ad
+#mgrv062.misys.global.ad
 
 [zone:vars]
 user=kgr
