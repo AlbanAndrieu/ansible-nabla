@@ -234,8 +234,10 @@ git submodule add https://github.com/geerlingguy/ansible-role-samba.git geerling
 #TODO merge below geerlingguy.java with other java role
 git submodule add https://github.com/geerlingguy/ansible-role-java geerlingguy.java
 git submodule add https://github.com/geerlingguy/ansible-role-elasticsearch.git geerlingguy.elasticsearch
-#git clone https://github.com/geerlingguy/ansible-role-logstash geerlingguy.logstash
+#TODO SEE https://github.com/Stouts/Stouts.logstash
 git submodule add https://github.com/AlbanAndrieu/ansible-role-logstash.git geerlingguy.logstash
+
+git submodule add https://github.com/AlbanAndrieu/ansible-logstash-settings.git alban.andrieu.logstash-settings
 
 git submodule add https://github.com/geerlingguy/ansible-role-nginx.git geerlingguy.nginx
 #git clone https://github.com/geerlingguy/ansible-role-kibana.git geerlingguy.kibana

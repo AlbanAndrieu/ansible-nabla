@@ -217,3 +217,12 @@
 [submodule "roles/alban.andrieu.yourkit"]
 	path = roles/alban.andrieu.yourkit
 	url = https://github.com/AlbanAndrieu/ansible-yourkit.git
+[submodule "roles/alban.andrieu.logstash-settings"]
+	path = roles/alban.andrieu.logstash-settings
+	url = https://github.com/AlbanAndrieu/ansible-logstash-settings.git
+[submodule "roles/alban.andrieu.squirrel"]
+	path = roles/alban.andrieu.squirrel
+	url = https://github.com/AlbanAndrieu/ansible-squirrel.git
+[submodule "roles/alban.andrieu.sublimetext"]
+	path = roles/alban.andrieu.sublimetext
+	url = https://github.com/AlbanAndrieu/ansible-sublimetext.git
