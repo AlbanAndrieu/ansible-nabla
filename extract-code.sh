@@ -96,6 +96,7 @@ git submodule add https://github.com/AlbanAndrieu/ansible-sonar.git sonar
 
 #git submodule deinit -f selenium
 git submodule add https://github.com/AlbanAndrieu/ansible-selenium.git alban.andrieu.selenium
+#TOSEE https://github.com/bcoca/ansible-selenium-role.git
 
 git submodule add https://github.com/AlbanAndrieu/ansible-nodejs.git nodejs
 
@@ -127,6 +128,10 @@ git submodule add https://github.com/AlbanAndrieu/ansible-shell.git alban.andrie
 
 #git submodule deinit -f eclipse
 git submodule add https://github.com/AlbanAndrieu/ansible-eclipse.git alban.andrieu.eclipse
+
+git submodule add https://github.com/AlbanAndrieu/ansible-sublimetext.git alban.andrieu.sublimetext
+
+git submodule add https://github.com/AlbanAndrieu/ansible-squirrel.git alban.andrieu.squirrel
 
 #git submodule deinit -f jboss
 git submodule add https://github.com/AlbanAndrieu/ansible-jboss.git alban.andrieu.jboss

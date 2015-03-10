@@ -1,0 +1,12 @@
+#sudo ansible-playbook -i hosts-albandri -c local -v selenium.yml -vvvv | tee setup.log
+
+- name: Apply common selenium configuration
+  hosts: workstation
+#  remote_user: root
+  user: albandri
+  connection: local   
+#  sudo: yes
+
+  roles:
+    - { role: alban.andrieu.selenium, 
+        docker_files_enable: no, }
