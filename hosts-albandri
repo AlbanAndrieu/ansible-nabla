@@ -125,6 +125,9 @@ albandri-laptop-misys.misys.global.ad
 [logstash]
 albandri-laptop-misys.misys.global.ad
 
+[collectd]
+albandri-laptop-misys.misys.global.ad
+
 [windows]
 #10.0.2.15
 albandri-laptop-misys.misys.global.ad

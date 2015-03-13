@@ -10,6 +10,7 @@ git remote add upstream https://github.com/angstwad/docker.ubuntu.git
 git remote add upstream https://github.com/geerlingguy/ansible-role-security.git
 git remote add upstream https://github.com/geerlingguy/ansible-role-phpmyadmin.git
 git remote add upstream https://github.com/ahelal/ansible-sonatype_nexus.git
+git remote add upstream https://github.com/nickjj/ansigenome.git
 
 git remote -v
 

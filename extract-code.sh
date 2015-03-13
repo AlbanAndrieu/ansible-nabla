@@ -165,6 +165,8 @@ git submodule add https://github.com/AlbanAndrieu/ansible-grive.git alban.andrie
 
 git submodule add https://github.com/Stouts/Stouts.python.git python
 
+git submodule add https://github.com/Stouts/Stouts.collectd.git collectd
+
 #git submodule deinit -f web
 git submodule add https://github.com/AlbanAndrieu/ansible-web.git alban.andrieu.web
 
