@@ -48,17 +48,27 @@
        logstash_elasticsearch_host: "localhost"
        #logstash_elasticsearch_host: "albandri-laptop-misys"
        #logstash_local_syslog_path: "/var/log/*.log"
-       logstash_monitor_local_syslog: no
+       logstash_monitor_local_syslog: yes
        logstash_monitor_jenkins_enabled: yes
        logstash_monitor_nexus_enabled: yes
        logstash_monitor_apache_enabled: yes
        logstash_monitor_nginx_enabled: yes
+       logstash_monitor_tomcat_enabled: yes
+       logstash_monitor_jetty_enabled: yes
+       logstash_monitor_jboss_enabled: yes
        logstash_monitor_elasticsearch_enabled: yes
        logstash_monitor_miscellaneous_enabled: yes
        logstash_monitor_application_enabled: yes
+       logstash_monitor_sybase_enabled: yes
        logstash_monitor_log4j_enabled: no
        logstash_heap: "50m"
        jenkins_home: /var/lib/jenkins
+       application_dir: "/thomsonreuters"
+       application_user: "kgr"
+       application_name: "cmr"
+       tomcat_catalina_base_dir: "{{ application_home }}"
+       tomcat_catalina_out: "{{ application_home }}/log/catalina.out"
+       tomcat_catalina_log_dir: "{{ tomcat_catalina_base_dir }}/data/J2EE/TomcatConfigs/logs"
 
 #- name: Add nginx configuration
 #  hosts: logstash
