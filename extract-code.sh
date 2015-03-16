@@ -280,3 +280,9 @@ git submodule add  https://github.com/sivel/ansible-newrelic.git
 #https://github.com/mivok/ansible-users
 
 ansigenome gendoc -f md
+
+git clone https://github.com/AlbanAndrieu/nabla-build-tools.git build-tools
+git clone https://github.com/AlbanAndrieu/nabla-maven.git maven
+git clone https://github.com/AlbanAndrieu/nabla-uml.git uml
+
+
