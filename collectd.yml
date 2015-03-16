@@ -31,6 +31,8 @@
 
   vars:
        collectd_write_graphite: no
+#       collectd_hostname: "{{ inventory_hostname }}"
+       collectd_hostname: "albandri.misys.global.ad"
        collectd_plugins: [nginx, memcached]
        collectd_write_graphite_options:
          Host: localhost

@@ -67,6 +67,7 @@
        application_dir: "/thomsonreuters"
        application_user: "kgr"
        application_name: "cmr"
+       sybase_log_file: "KGR.log"
        tomcat_catalina_base_dir: "{{ application_home }}"
        tomcat_catalina_out: "{{ application_home }}/log/catalina.out"
        tomcat_catalina_log_dir: "{{ tomcat_catalina_base_dir }}/data/J2EE/TomcatConfigs/logs"
