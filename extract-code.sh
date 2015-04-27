@@ -165,7 +165,8 @@ git submodule add https://github.com/AlbanAndrieu/ansible-grive.git alban.andrie
 
 git submodule add https://github.com/Stouts/Stouts.python.git python
 
-git submodule add https://github.com/Stouts/Stouts.collectd.git collectd
+#git submodule deinit -f collectd
+git submodule add https://github.com/AlbanAndrieu/Stouts.collectd.git collectd
 
 #git submodule deinit -f web
 git submodule add https://github.com/AlbanAndrieu/ansible-web.git alban.andrieu.web
@@ -280,16 +281,3 @@ git submodule add  https://github.com/sivel/ansible-newrelic.git
 #https://github.com/mivok/ansible-users
 
 ansigenome gendoc -f md
-
-git clone https://github.com/AlbanAndrieu/nabla-build-tools.git build-tools
-git clone https://github.com/AlbanAndrieu/nabla-maven.git maven
-git clone https://github.com/AlbanAndrieu/nabla-uml.git uml
-git clone https://github.com/AlbanAndrieu/nabla-servers-bower.git bower
-git clone https://github.com/AlbanAndrieu/nabla-servers-bower-sample.git bower-sample
-#git clone https://github.com/AlbanAndrieu/nabla-bower-sample-component.git
-#/usr/bin/git clone git@github.com:AlbanAndrieu/nabla-bower-sample-component.git /workspace/users/albandri30/bower-sample/scripts/bower/bower-sample-component
-git clone https://github.com/AlbanAndrieu/nabla-servers.git servers
-git clone https://github.com/AlbanAndrieu/nabla-databases.git databases
-git clone https://github.com/AlbanAndrieu/nabla-projects.git projects
-git clone https://github.com/AlbanAndrieu/nabla-andromda.git andromda
-git clone https://github.com/AlbanAndrieu/nabla-cpp.git cpp

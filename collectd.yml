@@ -33,7 +33,26 @@
        collectd_write_graphite: no
 #       collectd_hostname: "{{ inventory_hostname }}"
        collectd_hostname: "albandri.misys.global.ad"
-       collectd_plugins: [nginx, memcached]
+       collectd_prefix: "/etc/collectd"
+       collectd_type: no
+       collectd_prefix_type: "/usr/share/collectd/"
+       collectd_prefix_conf: "{{ collectd_prefix_type }}"
+       collectd_prefix_sbin: "/usr/sbin"
+       collectd_upstart: no # used ubuntu default one
+       collectd_plugins: [apache, battery, irq, java, mysql, nginx, memcached]
+       collectd_default_plugins: [cpu, df, disk, entropy, interface, load, memory, swap, processes, network, uptime, users]
+       collectd_default_plugins_options:
+         swap:
+         - ReportByDevice false
+         interface:
+         - Interface lo
+         - Interface eth0
+         - Interface eth1
+         - Interface wlan1
+         - Interface docker0
+         - IgnoreSelected true
+         network:
+         - Server 10.25.40.139 25826
        collectd_write_graphite_options:
          Host: localhost
          LogSendErrors: 'true'
