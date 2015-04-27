@@ -35,6 +35,14 @@
 #  vars:
 #       logstash_elasticsearch_host: albandri.misys.global.ad
 
+- name: Add elasticsearch curator
+  hosts: logstash
+  remote_user: root
+#  connection: local
+
+  roles:
+    - geerlingguy.elasticsearch-curator
+
 - name: Add logstash configuration
   hosts: logstash
   remote_user: root

@@ -79,9 +79,6 @@
 [submodule "roles/geerlingguy.java"]
 	path = roles/geerlingguy.java
 	url = https://github.com/geerlingguy/ansible-role-java
-[submodule "roles/geerlingguy.elasticsearch"]
-	path = roles/geerlingguy.elasticsearch
-	url = https://github.com/geerlingguy/ansible-role-elasticsearch.git
 [submodule "roles/geerlingguy.logstash"]
 	path = roles/geerlingguy.logstash
 	url = https://github.com/AlbanAndrieu/ansible-role-logstash.git
@@ -226,3 +223,6 @@
 [submodule "roles/alban.andrieu.sublimetext"]
 	path = roles/alban.andrieu.sublimetext
 	url = https://github.com/AlbanAndrieu/ansible-sublimetext.git
+[submodule "roles/collectd"]
+	path = roles/collectd
+	url = https://github.com/AlbanAndrieu/Stouts.collectd.git

@@ -236,7 +236,9 @@ git submodule add https://github.com/geerlingguy/ansible-role-samba.git geerling
 #git clone https://github.com/valentinogagliardi/logstash-role.git logstash
 #TODO merge below geerlingguy.java with other java role
 git submodule add https://github.com/geerlingguy/ansible-role-java geerlingguy.java
-git submodule add https://github.com/geerlingguy/ansible-role-elasticsearch.git geerlingguy.elasticsearch
+#git submodule add https://github.com/geerlingguy/ansible-role-elasticsearch.git geerlingguy.elasticsearch
+git submodule add https://github.com/AlbanAndrieu/ansible-role-elasticsearch.git geerlingguy.elasticsearch
+git submodule add https://github.com/geerlingguy/ansible-role-elasticsearch-curator.git geerlingguy.elasticsearch-curator
 #TODO SEE https://github.com/Stouts/Stouts.logstash
 git submodule add https://github.com/AlbanAndrieu/ansible-role-logstash.git geerlingguy.logstash
 
