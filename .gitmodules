@@ -226,6 +226,3 @@
 [submodule "roles/alban.andrieu.sublimetext"]
 	path = roles/alban.andrieu.sublimetext
 	url = https://github.com/AlbanAndrieu/ansible-sublimetext.git
-[submodule "roles/collectd"]
-	path = roles/collectd
-	url = https://github.com/Stouts/Stouts.collectd.git
