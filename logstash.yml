@@ -53,6 +53,7 @@
 
   vars:
        elasticsearch_plugin_hq: yes
+       logstash_monitor_local_collectd: yes
        logstash_listen_port_lumberjack: 6000
        logstash_elasticsearch_host: "localhost"
        #logstash_elasticsearch_host: "albandri-laptop-misys"
@@ -80,6 +81,10 @@
        tomcat_catalina_base_dir: "{{ application_home }}"
        tomcat_catalina_out: "{{ application_home }}/log/catalina.out"
        tomcat_catalina_log_dir: "{{ tomcat_catalina_base_dir }}/data/J2EE/TomcatConfigs/logs"
+       collectd_prefix: "/etc/collectd"
+       collectd_type: no
+       collectd_prefix_type: "/usr/share/collectd/"
+       collectd_prefix_conf: "{{ collectd_prefix }}"
 
 #- name: Add nginx configuration
 #  hosts: logstash

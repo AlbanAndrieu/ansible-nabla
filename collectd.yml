@@ -36,7 +36,7 @@
        collectd_prefix: "/etc/collectd"
        collectd_type: no
        collectd_prefix_type: "/usr/share/collectd/"
-       collectd_prefix_conf: "{{ collectd_prefix_type }}"
+       collectd_prefix_conf: "{{ collectd_prefix }}"
        collectd_prefix_sbin: "/usr/sbin"
        collectd_prefix_custom_dir: "/usr/lib/collectd"
        collectd_upstart: no # used ubuntu default one
