@@ -226,3 +226,9 @@
 [submodule "roles/collectd"]
 	path = roles/collectd
 	url = https://github.com/AlbanAndrieu/Stouts.collectd.git
+[submodule "roles/geerlingguy.elasticsearch"]
+	path = roles/geerlingguy.elasticsearch
+	url = https://github.com/AlbanAndrieu/ansible-role-elasticsearch.git
+[submodule "roles/geerlingguy.elasticsearch-curator"]
+	path = roles/geerlingguy.elasticsearch-curator
+	url = https://github.com/geerlingguy/ansible-role-elasticsearch-curator.git

@@ -52,6 +52,7 @@
     - alban.andrieu.logstash-settings
 
   vars:
+       elasticsearch_plugin_hq: yes
        logstash_listen_port_lumberjack: 6000
        logstash_elasticsearch_host: "localhost"
        #logstash_elasticsearch_host: "albandri-laptop-misys"
