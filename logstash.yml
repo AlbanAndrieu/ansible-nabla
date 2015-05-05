@@ -55,7 +55,6 @@
        elasticsearch_plugin_hq: yes
        logstash_monitor_local_collectd: yes
        logstash_listen_port_lumberjack: 6000
-       logstash_elasticsearch_host: "localhost"
        #logstash_elasticsearch_host: "albandri-laptop-misys"
        #logstash_local_syslog_path: "/var/log/*.log"
        logstash_monitor_local_syslog: yes

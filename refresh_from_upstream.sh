@@ -6,11 +6,12 @@ git remote add upstream https://github.com/silpion/ansible-java.git
 git remote add upstream https://github.com/ahelal/ansible-sonar.git
 git remote add upstream https://github.com/kost/ansible-galaxy.ubuntu.virtualbox.git
 git remote add upstream https://github.com/angstwad/docker.ubuntu.git
-git remote add upstream https://github.com/angstwad/docker.ubuntu.git
 git remote add upstream https://github.com/geerlingguy/ansible-role-security.git
 git remote add upstream https://github.com/geerlingguy/ansible-role-phpmyadmin.git
 git remote add upstream https://github.com/ahelal/ansible-sonatype_nexus.git
 git remote add upstream https://github.com/nickjj/ansigenome.git
+git remote add upstream https://github.com/silpion/ansible-maven.git
+git remote add upstream https://github.com/klynch/ansible-vagrant-role.git
 
 git remote -v
 

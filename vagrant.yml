@@ -25,23 +25,28 @@
   hosts: vagrant
   remote_user: root
 #  connection: local
-  
+
   roles:
     - vagrant
-  
-  vars:    
-      vagrant_libvirt_enabled: true  
-      vagrant_windows_enabled: false      
-#      vagrant_url: https://dl.bintray.com/mitchellh/vagrant/vagrant_1.6.3_x86_64.deb    
-    
+
+  vars:
+      vagrant_libvirt_enabled: true
+      vagrant_windows_enabled: true
+      vagrant_lxc_enabled: false
+      vagrant_vbguest_enabled: true
+      vagrant_hosts_enabled: true
+      vagrant_share_enabled: true
+      vagrant_winrm_enabled: true
+      vagrant_version: "1.7.1"
+
 #- name: Install vagrant user
 #  hosts: vagrant
 #  remote_user: root
 ##  connection: local
-#  
+#
 #  roles:
 #    - vagrant-user
-#   
+#
 #  vars:
 #      vagrant_root_password_enabled: false
 #      vagrant_user_shell: "/bin/false"

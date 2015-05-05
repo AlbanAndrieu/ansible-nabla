@@ -250,6 +250,9 @@ git submodule add https://github.com/AlbanAndrieu/ansible-role-kibana.git geerli
 
 git submodule add  https://github.com/sivel/ansible-newrelic.git
 
+git clone https://github.com/darthwade/ansible-role-wordpress-apache.git
+#git submodule add https://github.com/darthwade/ansible-role-wordpress-apache.git wordpress
+
 #SEE
 #https://github.com/docker/docker-registry
 
