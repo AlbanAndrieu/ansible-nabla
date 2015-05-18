@@ -232,3 +232,15 @@
 [submodule "roles/geerlingguy.elasticsearch-curator"]
 	path = roles/geerlingguy.elasticsearch-curator
 	url = https://github.com/geerlingguy/ansible-role-elasticsearch-curator.git
+[submodule "roles/alban.andrieu.phpvirtualbox"]
+	path = roles/alban.andrieu.phpvirtualbox
+	url = https://github.com/AlbanAndrieu/ansible-phpvirtualbox.git
+[submodule "roles/geerlingguy.redis"]
+	path = roles/geerlingguy.redis
+	url = https://github.com/AlbanAndrieu/ansible-role-redis.git
+[submodule "roles/darthwade.wordpress"]
+	path = roles/darthwade.wordpress
+	url = https://github.com/AlbanAndrieu/ansible-role-wordpress.git
+[submodule "roles/darthwade.wordpress-apache"]
+	path = roles/darthwade.wordpress-apache
+	url = https://github.com/AlbanAndrieu/ansible-role-wordpress-apache.git

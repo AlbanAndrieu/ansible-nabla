@@ -25,11 +25,13 @@
   hosts: virtualbox
   remote_user: root
 #  connection: local
-  
+
   roles:
     - virtualbox
 
   vars:
-      virtualbox_package_name: virtualbox
+      #virtualbox_package_name: virtualbox
+      #virtualbox_version: 4.3
       virtualbox_dkms_enable: no
-      
+      virtualbox_extension_enable: yes
+

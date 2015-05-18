@@ -241,6 +241,7 @@ git submodule add https://github.com/AlbanAndrieu/ansible-role-elasticsearch.git
 git submodule add https://github.com/geerlingguy/ansible-role-elasticsearch-curator.git geerlingguy.elasticsearch-curator
 #TODO SEE https://github.com/Stouts/Stouts.logstash
 git submodule add https://github.com/AlbanAndrieu/ansible-role-logstash.git geerlingguy.logstash
+git submodule add https://github.com/AlbanAndrieu/ansible-role-redis.git geerlingguy.redis
 
 git submodule add https://github.com/AlbanAndrieu/ansible-logstash-settings.git alban.andrieu.logstash-settings
 
@@ -248,9 +249,13 @@ git submodule add https://github.com/geerlingguy/ansible-role-nginx.git geerling
 #git clone https://github.com/geerlingguy/ansible-role-kibana.git geerlingguy.kibana
 git submodule add https://github.com/AlbanAndrieu/ansible-role-kibana.git geerlingguy.kibana
 
-git submodule add  https://github.com/sivel/ansible-newrelic.git
+git submodule add https://github.com/sivel/ansible-newrelic.git
 
-git clone https://github.com/darthwade/ansible-role-wordpress-apache.git
+git submodule add https://github.com/AlbanAndrieu/ansible-phpvirtualbox.git alban.andrieu.phpvirtualbox
+
+git submodule add https://github.com/AlbanAndrieu/ansible-role-wordpress.git darthwade.wordpress
+git submodule add https://github.com/AlbanAndrieu/ansible-role-wordpress-apache.git darthwade.wordpress-apache
+#git clone https://github.com/MatthewMi11er/ansible-role-wordpress wordpress
 #git submodule add https://github.com/darthwade/ansible-role-wordpress-apache.git wordpress
 
 #SEE

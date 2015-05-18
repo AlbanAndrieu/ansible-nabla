@@ -1,0 +1,42 @@
+#sudo ansible-playbook -i hosts-albandri -c local -v phpvirtualbox.yml | tee setup.log
+
+#WARNING jenkins-master role has disabled a2dissite 000-default
+#- name: Configure and deploy the nabla php sample application code to apache
+#  connection: local
+#  hosts: workstation
+##  remote_user: root
+#
+#  roles:
+#    - { role: alban.andrieu.web,
+#       apache_listen_port: 7070,
+#       #jenkins_proxy_port: "{{ apache_listen_port }}" #TODO why is it needed!!!
+#       phpmyadmin_mysql_user: root,
+#       phpmyadmin_mysql_password: microsoft,
+#       phpmyadmin_mysql_port: "{{ apache_listen_port }}",
+#       php_date_timezone: "Europe/Paris",
+#       mysql_innodb_log_file_size: "5M",
+#       mysql_root_username: root,
+#       mysql_root_password: microsoft,
+#       docker_files_enable: yes,
+#       docker_files_generated_directory: "roles/alban.andrieu.web",
+#       }
+
+- name: Install phpvirtualbox
+  connection: local
+  hosts: workstation
+#  remote_user: root
+#  accelerate: true
+
+  roles:
+    - { role: alban.andrieu.phpvirtualbox,
+        virtualbox_extension_enable: yes,
+        phpvirtualbox_owner_password: "microsoft",
+        apache_listen_port: 7070,
+        #jenkins_proxy_port: "{{ apache_listen_port }}" #TODO why is it needed!!!
+        #mysql_user_home: '/home/{{ user }}'
+        #phpvirtualbox_install_dir: '/var/www/wordpress',
+        phpvirtualbox_apache_listen_port: '{{ apache_listen_port }}',
+        phpvirtualbox_apache_hostname: 'phpvirtualbox',
+        phpvirtualbox_apache_alias: 'localhost',
+        phpvirtualbox_apache_admin_email: 'admin@example.com'
+      }
