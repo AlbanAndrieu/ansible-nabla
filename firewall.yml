@@ -28,6 +28,7 @@
        - "5678" #bower registry
        - "6000" #Logstash
        - "6082" #Varnish admin
+       - "6379" #Redis      
        - "7070" #Apache
        - "7071" #Apache redirect gearman
        - "7072" #Apache redirect jenkins

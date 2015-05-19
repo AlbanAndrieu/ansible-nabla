@@ -123,7 +123,7 @@
 #       - "5678" #Private bower
 #       - "6000" #Logstash
 #       - "6082" #Varnish admin
-#       - "6379" #Redis port for bower registry
+#       - "6379" #Redis 
 #       - "7000" #FreeNas
 #       - "7070" #Apache
 #       - "7071" #Apache redirect gearman
