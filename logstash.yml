@@ -65,6 +65,7 @@
        logstash_monitor_nginx_enabled: yes
        logstash_monitor_tomcat_enabled: yes
        logstash_monitor_jetty_enabled: yes
+       logstash_monitor_redis_enabled: yes
        logstash_monitor_jboss_enabled: yes
        logstash_monitor_elasticsearch_enabled: yes
        logstash_monitor_miscellaneous_enabled: yes
@@ -72,6 +73,7 @@
        logstash_monitor_sybase_enabled: yes
        logstash_monitor_log4j_enabled: no
        logstash_heap: "50m"
+       redis_bind_interface: "127.0.0.1"
        jenkins_home: /var/lib/jenkins
        application_dir: "/thomsonreuters"
        application_user: "kgr"
