@@ -131,8 +131,9 @@
 #       - "7073" #Apache redirect nabla
 #       - "7074" #Apache redirect visma
 #       - "7075" #Apache redirect sample
-#       - "7076" #Apache redirect ?????
+#       - "7076" #Apache redirect kibana
 #       - "7077" #Apache redirect ansible tower (WAS)
+#       - "7078" #Apache redirect Wordpress
 #       - "8021" #FTP FreeNas
 #       - "8081" #Nexus
 #       - "8084" #OwnCloud

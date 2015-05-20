@@ -32,7 +32,7 @@
   vars:
        collectd_write_graphite: no
 #       collectd_hostname: "{{ inventory_hostname }}"
-       collectd_hostname: "albandri.misys.global.ad"
+       collectd_hostname: "albandri"
        collectd_prefix: "/etc/collectd"
        collectd_type: no
        collectd_prefix_type: "/usr/share/collectd/"
