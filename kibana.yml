@@ -37,6 +37,9 @@
        nginx_user: root
        kibana_domain: localhost
        kibana_server_name: localhost
+       #kibana_port: 7076
+       kibana_elasticsearch_port: 80
+       #kibana_elasticsearch_url: "/elasticsearch"
        es_address: http://{{ kibana_domain}}/es/
        nginx_worker_processes: "8"
        nginx_worker_connections: "8192"

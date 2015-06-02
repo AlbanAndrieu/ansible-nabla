@@ -28,7 +28,7 @@
 
   roles:
     - { role: darthwade.wordpress-apache,
-        apache_listen_port: 7070,
+        apache_listen_port: 7078,
         #jenkins_proxy_port: "{{ apache_listen_port }}" #TODO why is it needed!!!
         phpmyadmin_mysql_user: root,
         phpmyadmin_mysql_password: microsoft,

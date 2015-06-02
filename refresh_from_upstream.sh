@@ -12,6 +12,7 @@ git remote add upstream https://github.com/ahelal/ansible-sonatype_nexus.git
 git remote add upstream https://github.com/nickjj/ansigenome.git
 git remote add upstream https://github.com/silpion/ansible-maven.git
 git remote add upstream https://github.com/klynch/ansible-vagrant-role.git
+git remote add upstream https://github.com/Stouts/Stouts.collectd.git
 
 git remote -v
 
@@ -33,3 +34,5 @@ git rebase upstream/master
 git rebase --continue
 
 git push -f origin master
+
+#git branch --set-upstream-to master origin/master

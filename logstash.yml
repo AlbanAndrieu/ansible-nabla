@@ -65,7 +65,7 @@
        logstash_monitor_nginx_enabled: yes
        logstash_monitor_tomcat_enabled: yes
        logstash_monitor_jetty_enabled: yes
-       logstash_monitor_redis_enabled: yes
+       logstash_monitor_redis_enabled: no
        logstash_monitor_jboss_enabled: yes
        logstash_monitor_elasticsearch_enabled: yes
        logstash_monitor_miscellaneous_enabled: yes
