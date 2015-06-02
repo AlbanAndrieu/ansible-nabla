@@ -25,7 +25,6 @@ cd roles
 #git submodule add https://github.com/AlbanAndrieu/devbox.chrome.git chrome
 #...
 
-
 #git clone https://github.com/debops/ansible-role-ansible.git ansible
 git submodule add https://github.com/debops/ansible-role-ansible.git ansible
 
