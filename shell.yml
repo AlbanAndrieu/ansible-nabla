@@ -4,9 +4,9 @@
   hosts: workstation
 #  remote_user: root
   user: albandri
-  connection: local   
+  connection: local
 #  sudo: yes
-    
+
 #  vars_files:
 #  - [ "roles/alban.andrieu.shell/defaults/main.yml" ]
 #  - [ "roles/alban.andrieu.shell/vars/default.yml" ]
@@ -14,13 +14,14 @@
 #  - [ "roles/alban.andrieu.shell/vars/custom-{{ ansible_distribution }}-{{ ansible_architecture }}.yml", "roles/alban.andrieu.shell/vars/custom-{{ ansible_distribution }}.yml" ]
 
   roles:
-    - { role: alban.andrieu.shell, 
+    - { role: alban.andrieu.shell,
         shell_git_meld_enabled: yes,
         shell_git_configure_enabled: yes,
         shell_git_email: "alban.andrieu@mysis.com",
         shell_git_name: "Alban Andrieu",
         shell_git_editor: "gedit",
 #        shell_rlogin_enabled: no,
+        shell_maven_enabled: no,
         newrelic_license_key: de35bf5d191ebb208d359b2cd24a60616a02b1f3,
-        docker_files_enable: yes, 
+        docker_files_enable: yes,
         docker_files_generated_directory: "roles/alban.andrieu.shell" }

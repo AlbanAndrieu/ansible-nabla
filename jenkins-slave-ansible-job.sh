@@ -5,6 +5,13 @@ echo "USER : $USER"
 echo "HOME : $HOME"
 echo "WORKSPACE : $WORKSPACE"
 
+if [ -t 0 ]; then
+   echo interactive
+   stty erase ^H
+else
+   echo non-interactive
+fi
+
 lsb_release -a
 
 echo "Configure Jenkins slaves"

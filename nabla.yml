@@ -184,6 +184,7 @@
 #       - "6000" #Logstash
 #       - "9200" #Elasticsearch
 #       - "24800" #Synergy
+#       - "25826" #Collectd
 
 #- name: Apply security configuration
 #  hosts: security
@@ -1252,3 +1253,11 @@
     - { role: alban.andrieu.private-bower,
       }
 
+- name: Install OWASP tools
+  connection: local
+  hosts: workstation
+  remote_user: root
+#  accelerate: true
+  roles:
+    - { role: alban.andrieu.owasp-twe,
+      }

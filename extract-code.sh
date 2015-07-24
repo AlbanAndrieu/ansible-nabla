@@ -67,11 +67,15 @@ git submodule add https://github.com/AlbanAndrieu/ansible-vagrant-role.git vagra
 #git clone https://github.com/angstwad/docker.ubuntu.git docker
 git submodule add https://github.com/AlbanAndrieu/docker.ubuntu.git docker
 
+git submodule add https://github.com/AlbanAndrieu/ansible-util.git silpion.util
+
 #git clone https://github.com/silpion/ansible-maven maven
 git submodule add https://github.com/AlbanAndrieu/ansible-maven.git maven
+#TODO rename to silpion.maven
 
 #git clone https://github.com/silpion/ansible-java java
 git submodule add https://github.com/AlbanAndrieu/ansible-java.git java
+#TODO rename to silpion.maven
 #pull request pending
 
 #git clone https://github.com/alourie/devbox.chrome.git chrome
@@ -244,7 +248,7 @@ git submodule add https://github.com/AlbanAndrieu/ansible-role-redis.git geerlin
 
 git submodule add https://github.com/AlbanAndrieu/ansible-logstash-settings.git alban.andrieu.logstash-settings
 
-git submodule add https://github.com/geerlingguy/ansible-role-nginx.git geerlingguy.nginx
+git submodule add https://github.com/AlbanAndrieu/ansible-role-nginx.git geerlingguy.nginx
 #git clone https://github.com/geerlingguy/ansible-role-kibana.git geerlingguy.kibana
 git submodule add https://github.com/AlbanAndrieu/ansible-role-kibana.git geerlingguy.kibana
 
@@ -256,6 +260,8 @@ git submodule add https://github.com/AlbanAndrieu/ansible-role-wordpress.git dar
 git submodule add https://github.com/AlbanAndrieu/ansible-role-wordpress-apache.git darthwade.wordpress-apache
 #git clone https://github.com/MatthewMi11er/ansible-role-wordpress wordpress
 #git submodule add https://github.com/darthwade/ansible-role-wordpress-apache.git wordpress
+
+git submodule add https://github.com/AlbanAndrieu/ansible-owasp-wte.git alban.andrieu.owasp-wte
 
 #SEE
 #https://github.com/docker/docker-registry

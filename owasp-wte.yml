@@ -1,0 +1,14 @@
+#sudo ansible-playbook -i hosts-albandri -c local -v owasp-wte.yml | tee setup.log
+
+- name: Install OWASP tools
+  connection: local
+  hosts: workstation
+#  remote_user: root
+#  accelerate: true
+
+  roles:
+    - { role: alban.andrieu.owasp-wte,
+        docker_files_enable: yes,
+        docker_files_generated_directory: "roles/alban.andrieu.owasp-wte"
+      }
+

@@ -123,7 +123,7 @@
 #       - "5678" #Private bower
 #       - "6000" #Logstash
 #       - "6082" #Varnish admin
-#       - "6379" #Redis 
+#       - "6379" #Redis
 #       - "7000" #FreeNas
 #       - "7070" #Apache
 #       - "7071" #Apache redirect gearman
@@ -164,6 +164,7 @@
 #       - "10000" #Webmin
 #       - "20000" #Usermin
 #       - "24800" #Synergy
+#       - "25826" #Collectd
 #       - "32400" #Plex
 #Do not enable
 #       - "139" #Samba/NetBIOS
@@ -189,7 +190,7 @@
   vars:
        sudoers_enabled: no
        restart_ssh_enabled: false
-      
+
 #Below cmake role is included in cpp role
 #- name: Install cmake
 #  hosts: cmake
@@ -493,7 +494,7 @@
     - role: alban.andrieu.pagespeed
 
   vars:
-       apache_listen_port: 7070  
+       apache_listen_port: 7070
        pagespeed_package_arch: "amd64"
 
 - name: Install evasive
@@ -504,8 +505,8 @@
     - role: alban.andrieu.evasive
 
   vars:
-       apache_listen_port: 7070  
-       
+       apache_listen_port: 7070
+
 - name: Install awstats
   hosts: apache-servers
   remote_user: root
@@ -514,8 +515,8 @@
     - role: alban.andrieu.awstats
 
   vars:
-       apache_listen_port: 7070  
-              
+       apache_listen_port: 7070
+
 - name: Apply configuration to jenkins master
   hosts: jenkins-master
   remote_user: root
@@ -937,3 +938,31 @@
 #      mon_weekly_email: "team@free.fr"
 #      user: root
 #      home: "/root"
+
+- name: Install jdiskreport
+  connection: local
+  hosts: workstation
+  remote_user: root
+#  accelerate: true
+
+  roles:
+    - { role: alban.andrieu.jdiskreport,
+      }
+
+- name: Install private-bower
+  connection: local
+  hosts: workstation
+  remote_user: root
+#  accelerate: true
+  roles:
+    - { role: alban.andrieu.private-bower,
+      }
+
+- name: Install OWASP tools
+  connection: local
+  hosts: workstation
+  remote_user: root
+#  accelerate: true
+  roles:
+    - { role: alban.andrieu.owasp-twe,
+      }

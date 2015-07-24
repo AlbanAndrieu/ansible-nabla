@@ -1,14 +1,24 @@
 #!/bin/bash
 set -xv
+
 echo "USER : $USER"
 echo "HOME : $HOME"
 echo "WORKSPACE : $WORKSPACE"
+
+if [ -t 0 ]; then
+   echo interactive
+   stty erase ^H
+else
+   echo non-interactive
+fi
 
 #scl enable python27 bash
 export PATH="/opt/rh/python27/root/usr/bin:/usr/lib64/qt-3.3/bin:/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin"
 export LD_LIBRARY_PATH="/opt/rh/python27/root/usr/lib64"
 
 #alias python='/opt/rh/python27/root/usr/bin/python2.7'
+
+lsb_release -a
 
 echo "Configure Jenkins slaves"
 

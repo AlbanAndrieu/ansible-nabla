@@ -244,3 +244,6 @@
 [submodule "roles/geerlingguy.elasticsearch-curator"]
 	path = roles/geerlingguy.elasticsearch-curator
 	url = https://github.com/AlbanAndrieu/ansible-role-elasticsearch-curator.git
+[submodule "roles/silpion.util"]
+	path = roles/silpion.util
+	url = https://github.com/AlbanAndrieu/ansible-util.git

@@ -8,7 +8,8 @@
 
   roles:
     - { role: alban.andrieu.web,
-       apache_listen_port: 7070,
+       apache_listen_port: 7075,
+       web_base_dir: "/var/www/sample",
        #jenkins_proxy_port: "{{ apache_listen_port }}" #TODO why is it needed!!!
        phpmyadmin_mysql_user: root,
        phpmyadmin_mysql_password: microsoft,
@@ -17,6 +18,9 @@
        mysql_innodb_log_file_size: "5M",
        mysql_root_username: root,
        mysql_root_password: microsoft,
+       php_enable: no,
+       repository: "https://github.com/AlbanAndrieu/nabla-servers-bower-sample.git",
+       repository_version: "gh-pages",
        docker_files_enable: yes,
        docker_files_generated_directory: "roles/alban.andrieu.web",
        }
