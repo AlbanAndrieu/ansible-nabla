@@ -124,6 +124,7 @@
 #       - "6000" #Logstash
 #       - "6082" #Varnish admin
 #       - "6379" #Redis
+#       - "6789" #Private bower git cache
 #       - "7000" #FreeNas
 #       - "7070" #Apache
 #       - "7071" #Apache redirect gearman
