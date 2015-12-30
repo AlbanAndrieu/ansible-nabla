@@ -256,3 +256,6 @@
 [submodule "roles/elao.base"]
 	path = roles/elao.base
 	url = https://github.com/AlbanAndrieu/ansible-role-base.git
+[submodule "roles/alban.andrieu.owasp-wte"]
+	path = roles/alban.andrieu.owasp-wte
+	url = https://github.com/AlbanAndrieu/ansible-owasp-wte.git
