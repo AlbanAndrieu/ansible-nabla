@@ -15,9 +15,10 @@
 
   roles:
     - { role: alban.andrieu.shell,
+        shell_default_version: "30",
         shell_git_meld_enabled: yes,
         shell_git_configure_enabled: yes,
-        shell_git_email: "alban.andrieu@mysis.com",
+        shell_git_email: "alban.andrieu@misys.com",
         shell_git_name: "Alban Andrieu",
         shell_git_editor: "gedit",
 #        shell_rlogin_enabled: no,

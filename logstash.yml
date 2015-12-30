@@ -52,7 +52,6 @@
     - alban.andrieu.logstash-settings
 
   vars:
-       elasticsearch_plugin_hq: yes
        logstash_monitor_local_collectd: yes
        logstash_listen_port_lumberjack: 6000
        #logstash_elasticsearch_host: "albandri-laptop-misys"
@@ -74,6 +73,7 @@
        logstash_monitor_log4j_enabled: no
        logstash_heap: "50m"
        redis_bind_interface: "127.0.0.1"
+       elasticsearch_plugin_hq: yes
        jenkins_home: /var/lib/jenkins
        application_dir: "/thomsonreuters"
        application_user: "kgr"
@@ -86,6 +86,16 @@
        collectd_type: no
        collectd_prefix_type: "/usr/share/collectd/"
        collectd_prefix_conf: "{{ collectd_prefix }}"
+       nginx_worker_processes: "8"
+       nginx_worker_connections: "8192"
+       nginx_user: root
+#       kibana_elasticsearch_url: ""
+       kibana_username: kibana
+       kibana_password: microsoft
+       nginx_user: root
+       kibana_domain: home.nabla.mobi
+       kibana_server_name: home.nabla.mobi
+       es_address: http://{{ kibana_domain}}/es/
 
 #- name: Add nginx configuration
 #  hosts: logstash

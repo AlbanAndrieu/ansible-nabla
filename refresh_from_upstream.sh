@@ -29,6 +29,7 @@ git remote add upstream https://github.com/ahelal/ansible-zabbix.git
 git remote add upstream https://github.com/AlbanAndrieu/ansible-supervisor_task.git
 git remote add upstream https://github.com/AlbanAndrieu/ansible-nodejs.git
 git remote add upstream https://github.com/geerlingguy/ansible-role-git.git
+git remote add upstream https://github.com/silpion/ansible-util.git
 
 #git remote rm origin
 #git remote add origin https://github.com/AlbanAndrieu/ansible-role-elasticsearch-curator.git

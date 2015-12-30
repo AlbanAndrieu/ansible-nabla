@@ -247,3 +247,12 @@
 [submodule "roles/silpion.util"]
 	path = roles/silpion.util
 	url = https://github.com/AlbanAndrieu/ansible-util.git
+[submodule "roles/elao.ruby"]
+	path = roles/elao.ruby
+	url = https://github.com/AlbanAndrieu/ansible-role-ruby.git
+[submodule "roles/elao.sass"]
+	path = roles/elao.sass
+	url = https://github.com/AlbanAndrieu/ansible-role-sass.git
+[submodule "roles/elao.base"]
+	path = roles/elao.base
+	url = https://github.com/AlbanAndrieu/ansible-role-base.git

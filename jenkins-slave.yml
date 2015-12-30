@@ -26,17 +26,17 @@
   roles:
     - role: geerlingguy.git
 
-- name: Install subversion
-  hosts: jenkins-slaves
-  remote_user: root
-#  connection: local
-
-  roles:
-    - role: alban.andrieu.subversion
-
-  vars:
-      subversion_rabbitvcs_enabled: no
-      subversion_diff_enabled: no
+#- name: Install subversion
+#  hosts: jenkins-slaves
+#  remote_user: root
+##  connection: local
+#
+#  roles:
+#    - role: alban.andrieu.subversion
+#
+#  vars:
+#      subversion_rabbitvcs_enabled: no
+#      subversion_diff_enabled: no
 
 - name: Apply common configuration to all jenkins slaves
 #  hosts: test-boxes
@@ -55,12 +55,15 @@
     - { role: alban.andrieu.jenkins-slave,
         docker_files_enable: no,
         #docker_files_generated_directory: "roles/alban.andrieu.jenkins-slave",
+        #NOK nodejs_version: "0.12.7",
         shell_git_machine: 82.231.208.223,
         shell_git_login: jenkins,
         shell_git_password: microsoft,
         shell_git_email: "alban.andrieu@free.fr",
         #jenkins_jdk7_enable: yes,
         jenkins_ssh_key_file: "~/.ssh/id_rsa.pub",
+        home_url: "http://home.nabla.mobi",
+        npm_phantomjs_cdnurl: "{{ home_url }}:7070/download/phantomjs",
         #user: "albandri",
         #home: "/workspace/users/albandri10"
       }

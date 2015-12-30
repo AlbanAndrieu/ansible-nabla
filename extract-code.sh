@@ -217,7 +217,8 @@ git submodule add https://github.com/AlbanAndrieu/ansible-role-git.git geerlingg
 
 #LAMP
 git submodule add https://github.com/geerlingguy/ansible-role-firewall.git geerlingguy.firewall
-git submodule add https://github.com/geerlingguy/ansible-role-ntp.git geerlingguy.ntp
+#git submodule add https://github.com/geerlingguy/ansible-role-ntp.git geerlingguy.ntp
+git submodule add https://github.com/AlbanAndrieu/ansible-role-ntp.git geerlingguy.ntp
 git submodule add https://github.com/geerlingguy/ansible-role-repo-epel.git geerlingguy.repo-epel
 git submodule add https://github.com/geerlingguy/ansible-role-repo-remi.git geerlingguy.repo-remi
 git submodule add https://github.com/geerlingguy/ansible-role-apache.git geerlingguy.apache
@@ -262,6 +263,10 @@ git submodule add https://github.com/AlbanAndrieu/ansible-role-wordpress-apache.
 #git submodule add https://github.com/darthwade/ansible-role-wordpress-apache.git wordpress
 
 git submodule add https://github.com/AlbanAndrieu/ansible-owasp-wte.git alban.andrieu.owasp-wte
+
+git submodule add https://github.com/AlbanAndrieu/ansible-role-base.git elao.base
+git submodule add https://github.com/AlbanAndrieu/ansible-role-ruby.git elao.ruby
+git submodule add https://github.com/AlbanAndrieu/ansible-role-sass.git elao.sass
 
 #SEE
 #https://github.com/docker/docker-registry

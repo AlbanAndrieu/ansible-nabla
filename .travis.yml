@@ -6,6 +6,7 @@ env:
 cache: bundler
 #sudo: false
 sudo: required
+dist: trusty
 before_install:
  - sudo apt-get update -qq
  - sudo apt-get install curl
@@ -14,11 +15,10 @@ before_install:
 install:
   # Install Ansible.
 #  - pip install ansible>=1.6.0
-  # Install Ansible.
   - sudo pip install ansible==$ANSIBLE_VERSION
 
   # Add ansible.cfg to pick up roles path.
-  #- "{ echo '[defaults]'; echo 'roles_path = ../'; } >> ansible.cfg"
+  - "{ echo '[defaults]'; echo 'roles_path = ../'; } >> ansible.cfg"
 
 # Install required dependencies.
 #  - git clone https://github.com/AlbanAndrieu/ansible-supervisor_task.git supervisor
@@ -56,7 +56,7 @@ install:
   - git submodule foreach git checkout master
 script:
   # Check ansible version
-  - ansible --version
+  - sudo ansible --version
   - export ANSIBLE_ROLES_PATH="../"
 
   # Prepare tests
