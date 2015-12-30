@@ -262,6 +262,7 @@ git submodule add https://github.com/AlbanAndrieu/ansible-role-wordpress-apache.
 #git clone https://github.com/MatthewMi11er/ansible-role-wordpress wordpress
 #git submodule add https://github.com/darthwade/ansible-role-wordpress-apache.git wordpress
 
+#git rm --cached alban.andrieu.owasp-wte
 git submodule add https://github.com/AlbanAndrieu/ansible-owasp-wte.git alban.andrieu.owasp-wte
 
 git submodule add https://github.com/AlbanAndrieu/ansible-role-base.git elao.base
