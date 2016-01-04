@@ -275,6 +275,13 @@
   roles:
     - zabbix-agent
 
+  vars:
+      zabbix_agent_major: '2'
+      zabbix_agent_minor: '2'
+      zabbix_agent_revision: '7'
+      zabbix_agent_ubuntu: "1:{{zabbix_agent_version}}-1+trusty"
+      #zabbix_agent_Server: 127.0.0.1
+
 - name: Install webmin
   hosts: webmin
   remote_user: root
