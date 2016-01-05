@@ -21,20 +21,20 @@
                  OSes include Red Hat Enterprise Linux 6/7, CentOS 6, or
                  Ubuntu 12.04/14.04."
 
-# This playbook can be run using vagrant (on virtual box). 
-- name: Install zabbix-agent 
+# This playbook can be run using vagrant (on virtual box).
+- name: Install zabbix-agent
   hosts: zabbix-agent
   remote_user: root
 #  connection: local
-  
+
   roles:
     - role: zabbix-agent
-      name: zabbix-agent  
-      
+      name: zabbix-agent
+
   vars:
       zabbix_agent_major: '2'
       zabbix_agent_minor: '2'
-      zabbix_agent_revision: '7'
+      zabbix_agent_revision: '9'
       zabbix_agent_ubuntu: "1:{{zabbix_agent_version}}-1+trusty"
       #zabbix_agent_Server: 127.0.0.1
-    
+
