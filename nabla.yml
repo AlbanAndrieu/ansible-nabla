@@ -267,20 +267,20 @@
   roles:
     - locale
 
-#- name: Install zabbix-agent
-#  hosts: zabbix-agent
-#  remote_user: root
-##  connection: local
-#
-#  roles:
-#    - zabbix-agent
-#
-#  vars:
-#      zabbix_agent_major: '2'
-#      zabbix_agent_minor: '2'
-#      zabbix_agent_revision: '9'
-#      zabbix_agent_ubuntu: "1:{{zabbix_agent_version}}-1+trusty"
-#      #zabbix_agent_Server: 127.0.0.1
+- name: Install zabbix-agent
+  hosts: zabbix-agent
+  remote_user: root
+#  connection: local
+
+  roles:
+    - zabbix-agent
+
+  vars:
+      zabbix_agent_major: '2'
+      zabbix_agent_minor: '2'
+      zabbix_agent_revision: '9'
+      zabbix_agent_ubuntu: "1:{{zabbix_agent_version}}-1+trusty"
+      #zabbix_agent_Server: 127.0.0.1
 
 - name: Install webmin
   hosts: webmin
@@ -607,6 +607,9 @@
   vars:
        dropbox_user_directory: "/workspace/Dropbox"
        dropbox_user_host: "2366450895"
+       dash_enabled: no
+       webapps_enabled: no
+       apache_create_vhosts: no
        nodejs_enabled: false
        variety_owner: "{{ user }}"
        variety_group: "{{ group }}"
