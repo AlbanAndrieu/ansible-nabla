@@ -609,6 +609,7 @@
        dropbox_user_host: "2366450895"
        dash_enabled: no
        webapps_enabled: no
+       ansigenome_enabled: no
        apache_create_vhosts: no
        nodejs_enabled: false
        variety_owner: "{{ user }}"
