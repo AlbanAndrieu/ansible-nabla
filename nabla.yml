@@ -646,6 +646,9 @@
   roles:
     - alban.andrieu.tomcat
 
+  vars:
+       tomcat_started_check_enable: no
+
 # This playbook deploys a simple standalone JBoss server.
 
 - name: Deploy Jboss
