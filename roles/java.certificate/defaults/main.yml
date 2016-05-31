@@ -1,0 +1,7 @@
+---
+java_certificate_host: example.com
+java_certificate_port: 443
+java_certificate_alias: '{{java_certificate_host}}'
+java_certificate_ca_path: /usr/lib/jvm/default-java/jre/lib/security/cacerts
+java_certificate_store_pass: changeit
+

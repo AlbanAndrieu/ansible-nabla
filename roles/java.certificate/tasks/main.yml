@@ -1,0 +1,15 @@
+---
+- shell: 'keytool -list -keystore {{java_certificate_ca_path}} -storepass {{java_certificate_store_pass}} -noprompt -alias {{java_certificate_alias}}'
+  name: 'java-certificate | check if already imported'
+  ignore_errors: true
+  register: java_cert_imported
+
+- shell: "echo -n | openssl s_client -connect {{java_certificate_host}}:{{java_certificate_port}} | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > /tmp/{{java_certificate_alias}}.crt"
+  name: 'java-certificate | download certificate'
+  args:
+    creates: " /tmp/{{java_certificate_alias}}.crt"
+  when: java_cert_imported|failed
+
+- shell: 'keytool -import -trustcacerts -keystore {{java_certificate_ca_path}} -storepass {{java_certificate_store_pass}} -noprompt -alias {{java_certificate_alias}} -file /tmp/{{java_certificate_alias}}.crt'
+  name: 'java-certificate | import certificate'
+  when: java_cert_imported|failed

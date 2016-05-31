@@ -1,6 +1,6 @@
-#ansible-playbook -i hosts-albandri -c local -v workstation-custom.yml -vvvv --ask-sudo-pass | tee setup.log
+#ansible-playbook -i hosts-albandri -c local -v workstation.yml -vvvv --ask-sudo-pass | tee setup.log
 
-- hosts: all
+- hosts: workstation
   gather_facts: true
   tasks:
     - name: group hosts by distribution
@@ -19,7 +19,7 @@
       fail: msg="{{ ansible_distribution }} {{ ansible_distribution_version }}
                  is not a supported OS for a Tower installation.  Supported
                  OSes include Ubuntu 12.04/14.04."
-                 
+
 - name: Install worksation add-on
   hosts: workstation
   remote_user: root
@@ -28,7 +28,7 @@
 
   roles:
     - alban.andrieu.workstation
-    
+
   vars:
        dropbox_user_directory: "/workspace/Dropbox"
        dropbox_user_host: "2366450895"

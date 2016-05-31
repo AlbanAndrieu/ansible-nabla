@@ -8,7 +8,7 @@
 #git remote add origin https://github.com/AlbanAndrieu/ansible-swarm.git
 #git push -u origin master
 
-git clone https://github.com/AlbanAndrieu/ansible-nabla.git ansible
+git clone https://github.com/AlbanAndrieu/ansible-nabla.git ansible-nabla
 
 git pull && git submodule init && git submodule update && git submodule status
 #git fetch --recurse-submodules
@@ -268,6 +268,9 @@ git submodule add https://github.com/AlbanAndrieu/ansible-owasp-wte.git alban.an
 git submodule add https://github.com/AlbanAndrieu/ansible-role-base.git elao.base
 git submodule add https://github.com/AlbanAndrieu/ansible-role-ruby.git elao.ruby
 git submodule add https://github.com/AlbanAndrieu/ansible-role-sass.git elao.sass
+
+git submodule add https://github.com/AlbanAndrieu/ansible-java-certificate.git java.certificate
+git submodule add https://github.com/AlbanAndrieu/ansible-role-ssl-certs.git ssl.certificate
 
 #SEE
 #https://github.com/docker/docker-registry

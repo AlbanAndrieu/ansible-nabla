@@ -259,3 +259,9 @@
 [submodule "roles/alban.andrieu.owasp-wte"]
 	path = roles/alban.andrieu.owasp-wte
 	url = https://github.com/AlbanAndrieu/ansible-owasp-wte.git
+[submodule "roles/java.certificate"]
+	path = roles/java.certificate
+	url = https://github.com/zealot128/ansible-java-certificate.git
+[submodule "roles/ssl.certificate"]
+	path = roles/ssl.certificate
+	url = https://github.com/AlbanAndrieu/ansible-role-ssl-certs.git
