@@ -37,7 +37,7 @@
       vagrant_hosts_enabled: true
       vagrant_share_enabled: true
       vagrant_winrm_enabled: true
-      vagrant_version: "1.7.1"
+#      vagrant_version: "1.7.1"
 
 #- name: Install vagrant user
 #  hosts: vagrant
