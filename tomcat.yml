@@ -6,8 +6,9 @@
 #  connection: local
 
   roles:
-    - alban.andrieu.tomcat      
-    
-#  vars:      
+    - alban.andrieu.tomcat
+
+  vars:
+       tomcat_started_check_enable: yes
 #      user: root
 #      home: "/root"
