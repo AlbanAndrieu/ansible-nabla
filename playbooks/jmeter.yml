@@ -1,4 +1,4 @@
-#sudo ansible-playbook -i hosts-albandri -c local -v jmeter.yml | tee setup.log
+#ansible-playbook -i hosts-albandri -c local -v jmeter.yml -vvvv --ask-sudo-pass | tee setup.log
 
 - name: Install jmeter
   connection: local
@@ -14,6 +14,6 @@
         jmeter_plugins_webdriver_enabled: yes,
         jmeter_plugins_hadoop_enabled: no,
         jmeter_serveragent_enabled: yes,
-      }    
+      }
 
 

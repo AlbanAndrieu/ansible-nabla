@@ -1,12 +1,54 @@
 #sudo ansible-playbook -i hosts-albandri -c local -v albandri.yml -vvvv | tee setup.log
 
+- name: Assert platform is supported
+  hosts: all
+  gather_facts: false
+
+  tasks:
+    - name: Assert platform is supported
+      assert:
+        that:
+          - ansible_os_family in ['Debian', 'RedHat', 'Windows', 'Solaris']
+          - ansible_architecture in ['x86_64']
+
+#supported version
+#Solaris
+##  when: ((ansible_distribution == 'Solaris') and (ansible_distribution_version not in ['11.1']))
+#  when: ansible_distribution_release is defined and ansible_distribution_release == 'Solaris 10 10/08 s10x_u6wos_07b X86'
+#  when: ansible_distribution_release is defined and ansible_distribution_release == 'Oracle Solaris 10 9/10 s10x_u9wos_14a X86'
+#  when: ansible_distribution_release is defined and ansible_distribution_release == 'Oracle Solaris 10 1/13 s10x_u11wos_24a X86'
+#SPARC
+#  when: ansible_distribution_release is defined and ansible_distribution_release == 'Solaris 10 10/08 s10s_u6wos_07b SPARC'
+#  when: ansible_distribution_release is defined and ansible_distribution_release == 'Oracle Solaris 10 1/13 s10s_u11wos_24a SPARC'
+#REDHAT
+#  when: ansible_distribution == 'RedHat' and ansible_lsb.major_release|int >= 5
+#  when: ansible_distribution == 'RedHat' and ansible_distribution_major_version == "5"
+#  when: ansible_distribution == 'RedHat' and ansible_distribution_major_version == "6"
+#  when: ansible_distribution == 'RedHat' and ansible_distribution_major_version == "7"
+#CENTOS
+#  when: ansible_distribution == 'CentOS' and ansible_distribution_major_version == "6"
+#  when: ansible_distribution == 'CentOS' and ansible_distribution_major_version == "7"
+#UBUNTU
+#https://wiki.ubuntu.com/DevelopmentCodeNames
+#  when: ansible_distribution == 'Ubuntu' and ansible_distribution_version == "12.04"
+#  when: ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'precise'
+#  when: ansible_distribution == 'Ubuntu' and ansible_distribution_version == "14.04"
+#  when: ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'trusty'
+#  when: ansible_distribution == 'Ubuntu' and ansible_distribution_version == "16.04"
+#  when: ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'xenial'
+#SLES
+#  when: ansible_distribution == 'SLES' and ansible_distribution_version == "12"
+#Windows
+#  when: ansible_os_family == 'Windows' and ansible_os_name == 'Microsoft Windows Server 2008 R2 Enterprise'
+#  when: ansible_os_family == 'Windows' and ansible_os_name == 'Microsoft Windows Server 2012 R2 Standard'
+
 - hosts: all
   gather_facts: true
   tasks:
     - name: group hosts by distribution
       group_by: key="{{ ansible_distribution }}-{{ ansible_distribution_version }}"
 
-- hosts: RedHat-7*:RedHat-6*:CentOS-6*:Ubuntu-12.04:Ubuntu-14.04
+- hosts: RedHat-7*:RedHat-6*:CentOS-7*:CentOS-6*:Ubuntu-16.04:Ubuntu-14.04:Ubuntu-12.04
   gather_facts: false
   tasks:
     - name: group hosts for supported distributions
@@ -17,12 +59,12 @@
   tasks:
     - name: fail for unsupported distribution
       fail: msg="{{ ansible_distribution }} {{ ansible_distribution_version }}
-                 is not a supported OS for a Tower installation.  Supported
-                 OSes include Red Hat Enterprise Linux 6/7, CentOS 6, or
-                 Ubuntu 12.04/14.04."
+                 is not a supported OS for a Nabla installation.  Supported
+                 OSes include Red Hat Enterprise Linux 6/7, CentOS 6/7, or
+                 Ubuntu 16.04/14.04/12.04."
 
 - name: Add repo configuration to all nodes
-  hosts: RedHat-7*:RedHat-6*:CentOS-6*
+  hosts: RedHat-7*:RedHat-6*:CentOS-7*:CentOS-6*
   gather_facts: false
   remote_user: root
 #  connection: local
@@ -40,7 +82,7 @@
 #    - alban.andrieu.hostname
 
 - name: Apply common configuration to all nodes
-  hosts: Ubuntu-12*:Ubuntu-14*
+  hosts: Ubuntu-16*:Ubuntu-14*:Ubuntu-12*
   gather_facts: false
   remote_user: root
 #  connection: local
@@ -53,7 +95,7 @@
        apt_upgrade_system_enabled: no
 
 - name: Apply dns configuration to all nodes
-  hosts: Ubuntu-12*:Ubuntu-14*
+  hosts: Ubuntu-16*:Ubuntu-14*:Ubuntu-12*
   gather_facts: false
   remote_user: root
 #  connection: local
@@ -94,7 +136,7 @@
 
 #Below firewall role is included in administration role
 #- name: Apply firewall configuration to all nodes
-#  hosts: Ubuntu-12*:Ubuntu-14*
+#  hosts: Ubuntu-16*:Ubuntu-14*:Ubuntu-12*
 #  gather_facts: false
 #  remote_user: root
 ##  connection: local
@@ -226,7 +268,7 @@
     - java
 
 - name: Apply ssl configuration to all nodes
-  hosts: Ubuntu-12*:Ubuntu-14*
+  hosts: Ubuntu-16*:Ubuntu-14*:Ubuntu-12*
   gather_facts: false
 #  remote_user: root
   roles:
@@ -286,6 +328,9 @@
 #  connection: local
   roles:
     - docker
+
+  vars:
+       docker_opts: "-H tcp://127.0.0.1:4243 -H unix:///var/run/docker.sock --dns 8.8.8.8 --dns 8.8.4.4 --storage-driver=overlay"
 
 - name: Install locale
   hosts: locale
@@ -360,7 +405,7 @@
 
 #Use below only if you want your servers to be part of build farm
 - name: Apply administration configuration to all nodes
-  hosts: Ubuntu-12*:Ubuntu-14*
+  hosts: Ubuntu-16*:Ubuntu-14*:Ubuntu-12*
   gather_facts: false
   remote_user: root
   connection: local
@@ -775,10 +820,18 @@
 #    jenkins_home: "/jenkins"
 #    jenkins_slave_home: "/kgr-mvn"
     jenkins_jdk7_enable: yes
-    shell_git_machine: 82.231.208.223
-    shell_git_login: jenkins
-    shell_git_password: microsoft
-    shell_git_email: "alban.andrieu@free.fr"
+    shell_git:
+      # Additional properties: 'shell_git_machine, shell_git_login, shell_git_email, shell_git_password, shell_git_name, shell_git_path, shell_git_ssl'.
+       - {
+         shell_git_machine: '82.231.208.223',
+         shell_git_login: 'AlbanAndrieu',
+         shell_git_email: 'alban.andrieu@free.fr',
+         shell_git_password: 'microsoft',
+         # Optional.
+         shell_git_name: 'AlbanAndrieu',
+         shell_git_path: '/usr/bin',
+         shell_git_ssl: false
+         }
 
 - name: Install maven
   hosts: maven

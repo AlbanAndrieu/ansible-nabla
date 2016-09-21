@@ -2,7 +2,7 @@
 language: python
 python: "2.7"
 env:
-  - ANSIBLE_VERSION=1.9.2
+  - ANSIBLE_VERSION=2.1.1
 cache: bundler
 #sudo: false
 sudo: required
@@ -16,9 +16,6 @@ install:
   # Install Ansible.
 #  - pip install ansible>=1.6.0
   - sudo pip install ansible==$ANSIBLE_VERSION
-
-  # Add ansible.cfg to pick up roles path.
-  - "{ echo '[defaults]'; echo 'roles_path = ../'; } >> ansible.cfg"
 
 # Install required dependencies.
 #  - git clone https://github.com/AlbanAndrieu/ansible-supervisor_task.git supervisor
@@ -57,23 +54,23 @@ install:
 script:
   # Check ansible version
   - sudo ansible --version
-  - export ANSIBLE_ROLES_PATH="../"
+  #- export ANSIBLE_ROLES_PATH="../"
 
   # Prepare tests
 #  - echo localhost > inventory
 
   # Check syntax
   # Check the role/playbook's syntax.
-  - ansible-playbook --syntax-check -i hosts nabla.yml --connection=local
+  - sudo ansible-playbook --syntax-check -i ./playbooks/hosts ./playbooks/nabla.yml --connection=local
 
   # First run
   # Run the role/playbook with ansible-playbook.
-  - ansible-playbook -i hosts nabla.yml --connection=local --sudo
+  - sudo ansible-playbook -i ./playbooks/hosts ./playbooks/nabla.yml --connection=local --sudo
 
   # Second run Idempotence test
   # Run the role/playbook again, checking to make sure it's idempotent.
 #  - >
-#    ansible-playbook -i hosts workstation.yml --connection=local --sudo
+#    ansible-playbook -i ./playbooks/hosts ./playbooks/nabla.yml --connection=local --sudo
 #    | grep -q 'changed=0.*failed=0'
 #    && (echo 'Idempotence test: pass' && exit 0)
 #    || (echo 'Idempotence test: fail' && exit 1)

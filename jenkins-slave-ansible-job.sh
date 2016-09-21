@@ -27,7 +27,7 @@ sudo apt-get purge -y ansible
 #/usr/bin/yes | sudo pip uninstall ansible
 #sudo pip install ansible --upgrade
 #sudo pip install https://github.com/ansible/ansible/archive/devel.zip
-sudo pip install 'ansible<1.8'
+sudo pip install 'ansible<1.9'
 #sudo pip install https://github.com/diyan/pywinrm/archive/df049454a9309280866e0156805ccda12d71c93a.zip --upgrade
 sudo pip install ansible-lint
 
@@ -42,6 +42,10 @@ pip --version
 
 git pull origin master && git submodule init && git submodule update && git submodule status || exit 1
 git submodule foreach git checkout master || exit 2
+
+export ANSIBLE_REMOTE_USER=vagrant
+export ANSIBLE_PRIVATE_KEY_FILE=$HOME/.vagrant.d/insecure_private_key
+ssh-add $ANSIBLE_PRIVATE_KEY_FILE
 
 # check quality
 ansible-lint nabla.yml || exit 3

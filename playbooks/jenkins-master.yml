@@ -1,11 +1,19 @@
 #for testing purpose
 #ansible-playbook -i hosts-albandri -c local -v jenkins-master.yml -vvvv --ask-sudo-pass | tee setup.log
 
-#as root 
+#as root
 #ansible-playbook jenkins-master.yml -i hosts-albandri -vvvv
-#as albandri 
+#as albandri
 #ansible-playbook jenkins-master.yml -i hosts-albandri -vvvv --ask-sudo-pass --sudo
 # --extra-vars "jenkins_username=aandrieu jenkins_password=tbd"
+
+- hosts: jenkins-master
+  tasks:
+    - name: gather facts from db servers
+      setup:
+      delegate_to: "{{item}}"
+      delegate_facts: True
+      with_items: "{{groups['jenkins-master']}}"
 
 - name: Apply configuration to jenkins master
   hosts: jenkins-master
@@ -17,16 +25,16 @@
         docker_files_enable: yes,
         docker_files_generated_directory: "roles/jenkins-master",
         #user: "albandri",
-        #home: "/workspace/users/albandri10",      
+        #home: "/workspace/users/albandri10",
       }
-      
+
   vars:
       jenkins_proxy: apache
       jenkins_proxy_hostname: localhost
 #      jenkins_ssh_key_file: "{{resources_to}}/resources/jenkins/ssh_key"    # (you can manage remote files with Stouts.resources role)
       jenkins_ssh_key_file: "~/.ssh/id_rsa.pub"
       jenkins_http_port: 8380
-      jenkins_proxy_port: 7070                     
+      jenkins_proxy_port: 7070
 #      jenkins_home: /jenkins
       jenkins_java_args:
         - "-Xmx1024m"
@@ -34,11 +42,13 @@
         - "-Djava.awt.headless=true"
       jenkins_prefix: "/jenkins"
       jenkins_plugins:
+        - "swarm"
         - "ws-cleanup"
         - "envinject"
         - "artifactdeployer"
         - "nodenamecolumn"
         - "summary_report"
+        - "docker-commons"
         - "publish-over-cifs"
         - "progress-bar-column-plugin"
         - "thinBackup"
@@ -46,9 +56,11 @@
         - "jobConfigHistory"
         - "scons"
         - "downstream-buildview"
+        - "clamav"
         - "scm-sync-configuration"
         - "deploy"
-        - "docker-plugin"
+        - "naginator"
+#        - "docker-plugin"
         - "build-publisher"
         - "sonar"
         - "xvfb"
@@ -58,6 +70,7 @@
         - "scm-api"
         - "maven-repo-cleaner"
         - "ssh-agent"
+        - "robot"
         - "clover"
         - "environment-script"
         - "stepcounter"
@@ -65,10 +78,13 @@
         - "jenkins-cloudformation-plugin"
         - "cvs"
         - "jira"
+        - "fail-the-build-plugin"
+        - "workflow-step-api"
         - "JiraTestResultReporter"
         - "checkmarx"
         - "selenium"
-        - "sonatype-ci"
+        - "matrix-combinations-parameter"
+#        - "sonatype-ci"
         - "jobtype-column"
         - "findbugs"
         - "batch-task"
@@ -86,6 +102,7 @@
         - "gatling"
         - "job-node-stalker"
         - "favorite"
+        - "exclusive-execution"
         - "build-pipeline-plugin"
         - "postbuild-task"
         - "skip-certificate-check"
@@ -98,13 +115,16 @@
         - "publish-over-ssh"
         - "sitemonitor"
         - "build-metrics"
+        - "distfork"
         - "promoted-builds"
         - "flexible-publish"
         - "selenium-builder"
         - "tasks"
         - "computer-queue-plugin"
         - "saferestart"
+        - "zaproxy"
         - "throttle-concurrents"
+        - "read-only-configurations"
         - "ant"
         - "countjobs-viewstabbar"
         - "email-ext"
@@ -116,6 +136,7 @@
         - "text-finder-run-condition"
         - "versioncolumn"
         - "global-build-stats"
+        - "mapdb-api"
         - "plot"
         - "jquery"
         - "svn-tag"
@@ -135,8 +156,11 @@
         - "ldap"
         - "claim"
         - "docker-build-step"
+        - "join"
+        - "tap"
         - "hudson-jirareporter-plugin"
         - "nodelabelparameter"
+        - "custom-tools-plugin"
         - "ansicolor"
         - "translation"
         - "sidebar-link"
@@ -147,12 +171,15 @@
         - "ssh-slaves"
         - "swarm"
         - "ssh-credentials"
+        - "Exclusion"
         - "subversion"
         - "antisamy-markup-formatter"
         - "covcomplplot"
         - "trac"
         - "testng-plugin"
         - "greenballs"
+        - "dropdown-viewstabbar-plugin"
+        - "nested-view"
         - "test-stability"
         - "external-monitor-job"
         - "docker-build-publish"
@@ -162,14 +189,19 @@
         - "build-name-setter"
         - "build-timeout"
         - "prereq-buildstep"
+        - "jacoco"
         - "caliper-ci"
         - "pmd"
         - "lastsuccessversioncolumn"
         - "ec2"
         - "dry"
+        - "dependencyanalyzer"
         - "analysis-collector"
         - "analysis-core"
-        - "insight-ci"
+#        - "insight-ci"
+        - "description-setter"
+        - "chosen-views-tabbar"
+        - "port-allocator"
         - "description-setter"
         - "publish-over-ftp"
         - "groovy-postbuild"
@@ -177,13 +209,16 @@
         - "build-environment"
         - "seleniumrc-plugin"
         - "git-client"
+        - "authentication-tokens"
         - "monitoring"
         - "text-finder"
+        - "extended-choice-parameter"
         - "ftppublisher"
         - "built-on-column"
         - "run-condition"
         - "lastfailureversioncolumn"
         - "mask-passwords"
+        - "htmlpublisher"
         - "hp-application-automation-tools-plugin"
         - "project-description-setter"
         - "build-with-parameters"
@@ -192,9 +227,11 @@
         - "javadoc"
         - "build-failure-analyzer"
         - "confluence-publisher"
+        - "script-security"
         - "html5-notifier-plugin"
         - "violations"
         - "next-executions"
+        - "jenkins-multijob-plugin"
         - "matrix-auth"
         - "testInProgress"
         - "copy-data-to-workspace-plugin"
@@ -203,17 +240,20 @@
         - "qc"
         - "multiple-scms"
         - "job-import-plugin"
+        - "junit"
         - "files-found-trigger"
         - "compact-columns"
         - "build-keeper-plugin"
+        - "dependency-check-jenkins-plugin"
         - "pam-auth"
         - "log-parser"
         - "locale"
         - "all-changes"
-        - "dependencyanalyzer"
+#        - "dependencyanalyzer"
         - "WebSVN2"
         - "SquishPlugin"
         - "slave-status"
-#      jenkins_jobs:
-#        - name: test
-#          action: delete
+      jenkins_disabled_plugins: [ 'versioncolumn', 'scm-sync-configuration', 'clamav', 'selenium', 'seleniumrc-plugin', 'selenium-builder', 'svnmerge', 'WebSVN2', 'svn-revert-plugin', 'subversion', 'ec2', 'scons', 'gearman-plugin', 'findbugs', 'checkstyle', 'pmd', 'clover', 'fitnesse' ]
+#     jenkins_jobs:
+#       - name: test
+#         action: delete

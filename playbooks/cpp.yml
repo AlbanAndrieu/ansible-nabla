@@ -1,0 +1,37 @@
+#ansible-playbook -i hosts-albandri -c local -v cpp.yml -vvvv --ask-sudo-pass | tee setup.log
+
+- hosts: all
+  gather_facts: true
+  tasks:
+    - name: group hosts by distribution
+      group_by: key="{{ ansible_distribution }}-{{ ansible_distribution_version }}"
+
+- hosts: RedHat-7*:RedHat-6*:CentOS-6*:Ubuntu-12.04:Ubuntu-14.04
+  gather_facts: false
+  tasks:
+    - name: group hosts for supported distributions
+      group_by: key="supported"
+
+- hosts: "!supported"
+  gather_facts: false
+  tasks:
+    - name: fail for unsupported distribution
+      fail: msg="{{ ansible_distribution }} {{ ansible_distribution_version }}
+                 is not a supported OS for a Tower installation.  Supported
+                 OSes include Red Hat Enterprise Linux 6/7, CentOS 6, or
+                 Ubuntu 12.04/14.04."
+
+# This playbook can be run using vagrant (on virtual box).
+- name: Install cpp
+  hosts: cpp
+  connection: local
+#  remote_user: root
+
+  roles:
+    - alban.andrieu.cpp
+
+  vars:
+      gcc_version: "4:4.8.2-1ubuntu6"
+      cppunit_version: "1.13-0"
+      boost_version: "1.54"
+      clang_version: "3.5"

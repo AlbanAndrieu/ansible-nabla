@@ -21,31 +21,6 @@
                  OSes include Red Hat Enterprise Linux 6/7, CentOS 6, or
                  Ubuntu 12.04/14.04."
 
-#- name: Install virtualbox
-#  hosts: virtualbox
-#  remote_user: root
-##  connection: local
-#
-#  roles:
-#    - virtualbox
-#
-#  vars:
-#      virtualbox_package_name: virtualbox
-#      virtualbox_dkms_enable: yes
-#
-#- name: Install vagrant
-#  hosts: vagrant
-#  remote_user: root
-##  connection: local
-#
-#  roles:
-#    - vagrant
-#
-#  vars:
-#       vagrant_libvirt_enabled: true
-#       vagrant_windows_enabled: false
-##      vagrant_url: https://dl.bintray.com/mitchellh/vagrant/vagrant_1.6.3_x86_64.deb
-
 - name: Install docker
   hosts: docker
   remote_user: root
@@ -54,4 +29,5 @@
     - docker
 
   vars:
-       docker_opts: "-H tcp://127.0.0.1:4243 -H unix:///var/run/docker.sock --dns 8.8.8.8 --dns 8.8.4.4 --storage-driver=zfs"
+#       docker_opts: "-H tcp://127.0.0.1:4243 -H unix:///var/run/docker.sock --dns 8.8.8.8 --dns 8.8.4.4 --storage-driver=zfs"
+       docker_opts: "-H tcp://127.0.0.1:4243 -H unix:///var/run/docker.sock --dns 8.8.8.8 --dns 8.8.4.4 --storage-driver=overlay"

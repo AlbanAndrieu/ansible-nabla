@@ -29,11 +29,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   #config.vm.network "public_network"
 
   hosts_ubuntu.each do |name, port|
-  
+
 	VAGRANT_BASE_PORT = port
 	VAGRANT_SSH_PORT = "22" + VAGRANT_BASE_PORT
 	VAGRANT_NETWORK_IP = "192.168.11." + VAGRANT_BASE_PORT
-	  
+
     config.vm.define name do |machine|
       #machine.vm.box = "precise32"
       ##machine.vm.box_url = "http://files.vagrantup.com/precise32.box"
@@ -45,6 +45,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       #machine.vm.box_url = "https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-i386-vagrant-disk1.box"
       machine.vm.box_url = "https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box"
       #machine.vm.box_url = "ubuntu/trusty64"
+      #machine.vm.box = "hfm4/centos5"
+	  #machine.vm.boot_timeout = 600
+
+      #machine.ssh.private_key_path = "../keys/id_rsa"
+      #machine.ssh.forward_agent = true
 
       machine.vm.hostname = "%s.example.org" % name
       machine.vm.synced_folder "./app", "/var/www/", create:true
@@ -74,31 +79,34 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         #prov.vm.provision :shell, :path => "test.sh"
         prov.vm.provision_run :always
         # :once or :always with :once being the default
+
+        #prov.vm.provision "file", source: "../keys/id_rsa", destination: "id_rsa"
+		#prov.vm.provision "file", source: "../keys/id_rsa.pub", destination: "id_rsa.pub"
       end
 
       config.vm.provision "ansible" do |ansible|
         #see https://docs.vagrantup.com/v2/provisioning/ansible.html
-       ansible.playbook = "jenkins-slave-create-image-docker.yml"
-       ansible.inventory_path = "hosts-vagrant"
-       ansible.verbose = "vvvv"
-       ansible.sudo = true
-       ansible.host_key_checking = false
-       ansible.extra_vars = { ansible_ssh_user: 'vagrant' }
-       #ansible.extra_vars = {
-       #  ntp_server: "pool.ntp.org",
-       #  nginx: {
-       #   port: 8008,
-       #   workers: 4
-       #  }
-       #}
-       # Disable default limit (required with Vagrant 1.5+)
-       ansible.limit = 'all'
+        ansible.playbook = "jenkins-slave-create-image-docker.yml"
+        ansible.inventory_path = "hosts-vagrant"
+        ansible.verbose = "vvvv"
+        ansible.sudo = true
+        ansible.host_key_checking = false
+        ansible.extra_vars = { ansible_ssh_user: 'vagrant' }
+        #ansible.extra_vars = {
+        #  ntp_server: "pool.ntp.org",
+        #  nginx: {
+        #   port: 8008,
+        #   workers: 4
+        #  }
+        #}
+        # Disable default limit (required with Vagrant 1.5+)
+        ansible.limit = 'all'
       end
 
       #master.vm.provision :shell, :path => "buildup.sh"
 	  machine.vm.network "forwarded_port", guest: 22, host: 2222, id: "ssh", disabled: "true"
 	  machine.vm.network "forwarded_port", guest: 22, host: VAGRANT_SSH_PORT, auto_correct: true
-	  
+
       #config.vm.provision "docker" do |docker|
       #  docker.build_image "/vagrant/app"
       #end
@@ -177,13 +185,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   #    machine.vm.box = "solaris11"
   #    #machine.vm.box_url = "http://www.benden.us/vagrant/solaris-11.1.box"
   #    machine.vm.box_url = "solaris-11.1.box"
-  #    
+  #
   #    machine.vm.hostname = "%s.example.org" % name
   #    machine.vm.network :private_network, ip: ip
   #    # Create a forwarded port mapping which allows access to a specific port
   #    # within the machine from a port on the host machine.
   #    config.vm.network :forwarded_port, guest: 8080, host: 8080, auto_correct:true
-  #    
+  #
   #    machine.vm.provider "virtualbox" do |v|
   #        v.name = name
   #        v.customize ["modifyvm", :id, "--memory", 1024]
@@ -200,7 +208,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   #                            ansible_ssh_pass: '' }
   #     # Disable default limit (required with Vagrant 1.5+)
   #     ansible.limit = 'all'
-  #    end  
+  #    end
   #  end
   #end
 

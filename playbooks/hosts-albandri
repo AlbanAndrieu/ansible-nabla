@@ -78,8 +78,14 @@ albandri-laptop-misys
 [jenkins-slaves]
 albandri-laptop-misys
 
+[jenkins-slaves:vars]
+ansible_ssh_common_args='-o StrictHostKeyChecking=no'
+
 [jenkins-swarm]
 #albandri-laptop-misys
+
+[jenkins-swarm:vars]
+ansible_ssh_common_args='-o StrictHostKeyChecking=no'
 
 [supervisors]
 albandri-laptop-misys
@@ -137,6 +143,9 @@ albandri-laptop-misys
 #192.168.33.10
 #192.168.33.11
 #192.168.33.12
+
+[test-boxes:vars]
+ansible_ssh_common_args='-o StrictHostKeyChecking=no'
 
 [workstation:vars]
 user=albandri

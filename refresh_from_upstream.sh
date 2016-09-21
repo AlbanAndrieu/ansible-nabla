@@ -27,9 +27,13 @@ git remote add upstream https://github.com/Stouts/Stouts.collectd.git
 git remote add upstream https://github.com/ahelal/ansible-zabbix.git
 #TODO MOVED so NOK : git remote add upstream https://github.com/ahelal/ansible-zabbix_agent.git
 git remote add upstream https://github.com/AlbanAndrieu/ansible-supervisor_task.git
-git remote add upstream https://github.com/AlbanAndrieu/ansible-nodejs.git
+git remote add upstream https://github.com/AnsibleShipyard/ansible-nodejs.git
 git remote add upstream https://github.com/geerlingguy/ansible-role-git.git
 git remote add upstream https://github.com/silpion/ansible-util.git
+git remote add upstream https://github.com/Stouts/Stouts.python.giti
+git remote add upstream https://github.com/geerlingguy/ansible-role-git.git
+git remote add upstream https://github.com/alourie/devbox.chrome.git
+git remote add upstream https://github.com/geerlingguy/ansible-role-ntp.git
 
 #git remote rm origin
 #git remote add origin https://github.com/AlbanAndrieu/ansible-role-elasticsearch-curator.git
@@ -39,6 +43,7 @@ git remote -v
 # Fetch all the branches of that remote into remote-tracking branches,
 # such as upstream/master:
 
+#git remote update
 git fetch upstream
 
 # Make sure that you're on your master branch:
@@ -53,6 +58,9 @@ git rebase upstream/master
 #git rebase origin/develop
 git rebase --continue
 
-git push -f origin master
+#Clean and restart from scratch
+#git reset --hard upstream/master
+
+git push origin master --force
 
 #git branch --set-upstream-to master origin/master

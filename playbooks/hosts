@@ -78,8 +78,27 @@ localhost
 [jenkins-slaves]
 localhost
 
+[jenkins-UAT-master]
+master ansible_ssh_host=192.168.11.33 ansible_ssh_port=22 ansible_connection=ssh ansible_user=vagrant
+
+[jenkins-UAT-master:vars]
+ansible_ssh_common_args='-o StrictHostKeyChecking=no'
+
+[jenkins-UAT-slaves]
+#192.168.11.[51:56]
+slave01 ansible_ssh_host=192.168.11.51 ansible_ssh_port=22 ansible_connection=ssh ansible_user=vagrant
+#slave02 ansible_ssh_host=192.168.11.52 ansible_ssh_port=22 ansible_connection=ssh ansible_user=vagrant
+#slave03 ansible_ssh_host=192.168.11.53 ansible_ssh_port=22 ansible_connection=ssh ansible_user=vagrant
+#slave04 ansible_ssh_host=192.168.11.54 ansible_ssh_port=22 ansible_connection=ssh ansible_user=vagrant
+
+[jenkins-UAT-slaves:vars]
+ansible_ssh_common_args='-o StrictHostKeyChecking=no'
+
 [jenkins-swarm]
 #localhost
+
+[jenkins-swarm:vars]
+ansible_ssh_common_args='-o StrictHostKeyChecking=no'
 
 [supervisors]
 localhost
@@ -152,11 +171,10 @@ home=/home/{{ user }}/
 #mgrv062.misys.global.ad
 
 [zone:vars]
-user=kgr
+user=test
 group=other
-home=/thomsonreuters/home/{{ user }}/
-ansible_sudo_pass=Kondor_123
+home=/todo/home/{{ user }}/
+ansible_sudo_pass=Test_123
 ansible_python_interpreter="/usr/local/bin/python2.7"
 ansible_ssh_user="root"
-ansible_ssh_pass="Kondor_123"
-
+ansible_ssh_pass="Test_123"
