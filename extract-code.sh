@@ -273,7 +273,11 @@ git submodule add -f  https://github.com/AlbanAndrieu/ansible-role-nginx.git gee
 #git clone https://github.com/geerlingguy/ansible-role-kibana.git geerlingguy.kibana
 git submodule add -f  https://github.com/AlbanAndrieu/ansible-role-kibana.git geerlingguy.kibana
 
-git submodule add -f  https://github.com/sivel/ansible-newrelic.git
+#git submodule deinit -f ansible-newrelic
+#git rm ansible-newrelic
+#rm -rf ../.git/modules/roles/ansible-newrelic/
+#git submodule add -f  https://github.com/sivel/ansible-newrelic.git
+git submodule add -f  https://github.com/AlbanAndrieu/ansible-newrelic.git
 
 git submodule add -f  https://github.com/AlbanAndrieu/ansible-phpvirtualbox.git alban.andrieu.phpvirtualbox
 

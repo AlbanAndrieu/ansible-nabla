@@ -193,9 +193,6 @@
 [submodule "roles/alban.andrieu.awstats"]
 	path = roles/alban.andrieu.awstats
 	url = https://github.com/AlbanAndrieu/ansible-awstats.git
-[submodule "roles/ansible-newrelic"]
-	path = roles/ansible-newrelic
-	url = https://github.com/sivel/ansible-newrelic.git
 [submodule "roles/alban.andrieu.solaris"]
 	path = roles/alban.andrieu.solaris
 	url = https://github.com/AlbanAndrieu/ansible-solaris.git
@@ -258,7 +255,7 @@
 	url = https://github.com/AlbanAndrieu/ansible-owasp-wte.git
 [submodule "roles/java.certificate"]
 	path = roles/java.certificate
-	url = https://github.com/zealot128/ansible-java-certificate.git
+	url = https://github.com/AlbanAndrieu/ansible-java-certificate.git
 [submodule "roles/ssl.certificate"]
 	path = roles/ssl.certificate
 	url = https://github.com/AlbanAndrieu/ansible-role-ssl-certs.git
