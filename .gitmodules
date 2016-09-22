@@ -268,3 +268,9 @@
 [submodule "nodejs"]
 	path = nodejs
 	url = https://github.com/AlbanAndrieu/ansible-nodejs.git
+[submodule "roles/ansible-login"]
+	path = roles/ansible-login
+	url = https://github.com/AlbanAndrieu/ansible-login.git
+[submodule "roles/ansible-newrelic"]
+	path = roles/ansible-newrelic
+	url = https://github.com/AlbanAndrieu/ansible-newrelic.git

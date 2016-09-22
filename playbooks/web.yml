@@ -22,5 +22,5 @@
        repository: "https://github.com/AlbanAndrieu/nabla-servers-bower-sample.git",
        repository_version: "gh-pages",
        docker_files_enable: yes,
-       docker_files_generated_directory: "roles/alban.andrieu.web",
+       docker_files_generated_directory: "../roles/alban.andrieu.web",
        }

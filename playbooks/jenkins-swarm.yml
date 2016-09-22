@@ -3,9 +3,9 @@
 #for testing purpose
 #sudo ansible-playbook -i hosts-albandri -c local -v jenkins-swarm.yml -vvvv
 
-#as root 
+#as root
 #ansible-playbook jenkins-swarm.yml -i hosts -vvvv
-#as albandri 
+#as albandri
 #ansible-playbook jenkins-swarm.yml -i hosts -vvvv --ask-sudo-pass --sudo
 # --extra-vars "jenkins_username=aandrieu jenkins_password=tbd"
 
@@ -13,7 +13,7 @@
   hosts: test-boxes
   sudo: yes
   user: vagrant
-  connection: local    
+  connection: local
 #  remote_user: vagrant
 
 #  vars_prompt:
@@ -27,6 +27,6 @@
   roles:
     - { role: alban.andrieu.jenkins-swarm,
         docker_files_enable: yes,
-        docker_files_generated_directory: "roles/alban.andrieu.jenkins-swarm",
-        jenkins_home: "/jenkins"   
-      }    
+        docker_files_generated_directory: "../roles/alban.andrieu.jenkins-swarm",
+        jenkins_home: "/jenkins"
+      }

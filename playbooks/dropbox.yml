@@ -19,7 +19,7 @@
       fail: msg="{{ ansible_distribution }} {{ ansible_distribution_version }}
                  is not a supported OS for a Tower installation.  Supported
                  OSes include Ubuntu 12.04/14.04."
-                 
+
 - name: Install subversion
   connection: local
   hosts: workstation
@@ -29,10 +29,10 @@
   roles:
     - { role: alban.andrieu.dropbox,
         docker_files_enable: yes,
-        docker_files_generated_directory: "roles/alban.andrieu.dropbox",
+        docker_files_generated_directory: "../roles/alban.andrieu.dropbox",
         dropbox_owner: "{{ user }}",
         dropbox_group: "{{ group }}",
         dropbox_user_directory: "/workspace/Dropbox",
         dropbox_user_host : "2366450895"
-      }    
+      }
 

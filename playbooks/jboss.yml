@@ -9,6 +9,6 @@
   roles:
     - { role: alban.andrieu.jboss,
         docker_files_enable: yes,
-        docker_files_generated_directory: "roles/jboss"
-      }    
+        docker_files_generated_directory: "../roles/jboss"
+      }
 

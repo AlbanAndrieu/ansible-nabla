@@ -124,7 +124,7 @@ git submodule add -f  https://github.com/AlbanAndrieu/ansible-css.git alban.andr
 #rm -rf ../.git/modules/roles/security/
 #git rm --cached security
 git submodule add -f  https://github.com/AlbanAndrieu/ansible-role-security.git security
-#TODO pull request
+git submodule add -f  https://github.com/AlbanAndrieu/ansible-login.git ansible-login
 
 #git submodule deinit -f zap
 git submodule add -f  https://github.com/AlbanAndrieu/ansible-zap.git alban.andrieu.zap

@@ -56,4 +56,4 @@
         shell_maven_enabled: no,
         newrelic_license_key: de35bf5d191ebb208d359b2cd24a60616a02b1f3,
         docker_files_enable: yes,
-        docker_files_generated_directory: "roles/alban.andrieu.shell" }
+        docker_files_generated_directory: "../roles/alban.andrieu.shell" }

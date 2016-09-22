@@ -19,30 +19,30 @@
       fail: msg="{{ ansible_distribution }} {{ ansible_distribution_version }}
                  is not a supported OS for a Tower installation.  Supported
                  OSes include Ubuntu 12.04/14.04."
-                 
+
 - name: Install eclipse
   connection: local
   hosts: workstation
 #  remote_user: root
 #  accelerate: true
-  roles:
-    - { role: alban.andrieu.eclipse,
-        docker_files_enable: yes,
-        docker_files_generated_directory: "roles/alban.andrieu.eclipse",
-        eclipse_plugins_emf_enabled: no,
-        eclipse_plugins_cdt_enabled: yes,
-        eclipse_plugins_cmakeed_enabled: yes,
-        eclipse_plugins_openinterminal_enabled: no,
-        eclipse_plugins_protobuf_enabled: no,
-        eclipse_plugins_yedit_enabled: yes,
-        eclipse_plugins_shelled_enabled: no,
-        eclipse_plugins_webpageed_enabled: no,
-        eclipse_plugins_pydev_enabled: no,
-        eclipse_plugins_m2e_enabled: yes,
-        eclipse_plugins_subclipse_enabled: yes        
-      }
 
-#  vars:
+  roles:
+    - alban.andrieu.eclipse
+
+  vars:
+       docker_files_enable: yes
+       docker_files_generated_directory: "../roles/alban.andrieu.eclipse"
+       eclipse_plugins_emf_enabled: no
+       eclipse_plugins_cdt_enabled: yes
+       eclipse_plugins_cmakeed_enabled: yes
+       eclipse_plugins_openinterminal_enabled: no
+       eclipse_plugins_protobuf_enabled: no
+       eclipse_plugins_yedit_enabled: yes
+       eclipse_plugins_shelled_enabled: no
+       eclipse_plugins_webpageed_enabled: no
+       eclipse_plugins_pydev_enabled: no
+       eclipse_plugins_m2e_enabled: yes
+       eclipse_plugins_subclipse_enabled: yes
       #eclipse_base_dir: "/workspace/eclipse"
       #eclipse_owner: "{{ user }}"
       #eclipse_group: "{{ eclipse_owner }}"

@@ -85,7 +85,7 @@
 
   vars:
     docker_files_enable: no
-    #docker_files_generated_directory: "roles/alban.andrieu.jenkins-slave"
+    #docker_files_generated_directory: "../roles/alban.andrieu.jenkins-slave"
     #NOK nodejs_version: "0.12.7"
     shell_git:
       # Additional properties: 'shell_git_machine, shell_git_login, shell_git_email, shell_git_password, shell_git_name, shell_git_path, shell_git_ssl'.

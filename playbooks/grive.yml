@@ -19,7 +19,7 @@
       fail: msg="{{ ansible_distribution }} {{ ansible_distribution_version }}
                  is not a supported OS for a Tower installation.  Supported
                  OSes include Ubuntu 12.04/14.04."
-                 
+
 - name: Install subversion
   connection: local
   hosts: workstation
@@ -29,6 +29,6 @@
   roles:
     - { role: alban.andrieu.grive,
         docker_files_enable: yes,
-        docker_files_generated_directory: "roles/grive"
+        docker_files_generated_directory: "../roles/grive"
       }
 

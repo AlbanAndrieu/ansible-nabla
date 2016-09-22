@@ -23,7 +23,7 @@
   roles:
     - { role: jenkins-master,
         docker_files_enable: yes,
-        docker_files_generated_directory: "roles/jenkins-master",
+        docker_files_generated_directory: "../roles/jenkins-master",
         #user: "albandri",
         #home: "/workspace/users/albandri10",
       }

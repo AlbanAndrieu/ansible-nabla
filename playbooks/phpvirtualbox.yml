@@ -18,7 +18,7 @@
 #       mysql_root_username: root,
 #       mysql_root_password: microsoft,
 #       docker_files_enable: yes,
-#       docker_files_generated_directory: "roles/alban.andrieu.web",
+#       docker_files_generated_directory: "../roles/alban.andrieu.web",
 #       }
 
 - name: Install phpvirtualbox
