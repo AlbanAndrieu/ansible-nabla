@@ -1,10 +1,10 @@
 [all]
 #127.0.0.1
-albandri-laptop-misys
+albandri.misys.global.ad
 
 #below is used only git lamp.yml
 [lamp]
-albandri-laptop-misys
+albandri.misys.global.ad
 
 [ntp]
 #Same as all
@@ -13,105 +13,130 @@ albandri-laptop-misys
 #Same as all
 
 [administration]
-#albandri-laptop-misys
+#albandri.misys.global.ad
 
 [security]
-albandri-laptop-misys
+albandri.misys.global.ad
 
 [cmake]
-albandri-laptop-misys ansible_connection=local
+albandri.misys.global.ad
 
 [cpp]
-albandri-laptop-misys ansible_connection=local
+albandri.misys.global.ad
 
 [java]
-albandri-laptop-misys
+albandri.misys.global.ad
 
 [maven]
-albandri-laptop-misys
+albandri.misys.global.ad
 
 [css]
-albandri-laptop-misys ansible_connection=local
+albandri.misys.global.ad
 
 [chrome]
-albandri-laptop-misys
+albandri.misys.global.ad
 
 [tomcat-servers]
-albandri-laptop-misys
+albandri.misys.global.ad
 
 [jboss-servers]
-albandri-laptop-misys
+albandri.misys.global.ad
 
 [nabla-servers]
-albandri-laptop-misys
+albandri.misys.global.ad
 
 [apache-servers]
-albandri-laptop-misys
+albandri.misys.global.ad
 
 [mysql-servers]
-albandri-laptop-misys
+albandri.misys.global.ad
 
 [locale]
-albandri-laptop-misys
+albandri.misys.global.ad
 
 [zabbix-server]
-albandri-laptop-misys
+albandri.misys.global.ad
 
 [zabbix-agent]
-albandri-laptop-misys
+albandri.misys.global.ad
 
 [webmin]
-albandri-laptop-misys
+albandri.misys.global.ad
 
 [zfs]
-albandri-laptop-misys ansible_connection=local
+albandri.misys.global.ad ansible_connection=local
 
 [xvbf]
-albandri-laptop-misys
+albandri.misys.global.ad
 
 [selenium]
-albandri-laptop-misys
+albandri.misys.global.ad
+
+[vagrant_hosts:children]
+jenkins-master
+jenkins-slaves
+#sonar
 
 [jenkins-master]
-albandri-laptop-misys
+albandri.misys.global.ad
+master ansible_ssh_host=192.168.11.33 ansible_ssh_port=22 ansible_connection=ssh ansible_user=vagrant
+
+[jenkins-master:vars]
+ansible_ssh_common_args='-o StrictHostKeyChecking=no'
 
 [jenkins-slaves]
-albandri-laptop-misys
+albandri.misys.global.ad
+slave01 ansible_ssh_host=192.168.11.51 ansible_ssh_port=22 ansible_connection=ssh ansible_user=vagrant
+slave02 ansible_ssh_host=192.168.11.52 ansible_ssh_port=22 ansible_connection=ssh ansible_user=vagrant
+slave03 ansible_ssh_host=192.168.11.53 ansible_ssh_port=22 ansible_connection=ssh ansible_user=vagrant
+slave04 ansible_ssh_host=192.168.11.54 ansible_ssh_port=22 ansible_connection=ssh ansible_user=vagrant
 
 [jenkins-slaves:vars]
 ansible_ssh_common_args='-o StrictHostKeyChecking=no'
 
 [jenkins-swarm]
-#albandri-laptop-misys
+#albandri.misys.global.ad
 
 [jenkins-swarm:vars]
 ansible_ssh_common_args='-o StrictHostKeyChecking=no'
 
 [supervisors]
-albandri-laptop-misys
+albandri.misys.global.ad
 
 [virtualbox]
-albandri-laptop-misys
+albandri.misys.global.ad
 
 [vagrant]
-albandri-laptop-misys
+albandri.misys.global.ad
 
 [docker]
-albandri-laptop-misys
+albandri.misys.global.ad
 #vagrant local box
 #192.168.33.10
 
 [nodejs]
-albandri-laptop-misys
+albandri.misys.global.ad
 
 [workstation]
-albandri-laptop-misys ansible_connection=local
+albandri.misys.global.ad
+
+[workstation:vars]
+user=albandri
+group=albandri
+version=10
+home=/workspace/users/{{ user }}{{ version }}/
+#home=/home/{{ user }}/
+#ansible_sudo_pass=todo
 
 [nexus]
-albandri-laptop-misys
+albandri.misys.global.ad
 
 [sonar]
-albandri-laptop-misys
+albandri.misys.global.ad
+sonar ansible_ssh_host=192.168.11.99 ansible_ssh_port=22 ansible_connection=ssh ansible_user=vagrant
+
+[sonar:vars]
+ansible_ssh_common_args='-o StrictHostKeyChecking=no'
 
 [shell]
 #see workstation
@@ -129,29 +154,11 @@ albandri-laptop-misys
 #see workstation
 
 [logstash]
-albandri-laptop-misys
+albandri.misys.global.ad
 
 [collectd]
-albandri-laptop-misys
+albandri.misys.global.ad
 
 [windows]
 #10.0.2.15
-albandri-laptop-misys
-
-[test-boxes]
-#vagrant local box
-#192.168.33.10
-#192.168.33.11
-#192.168.33.12
-
-[test-boxes:vars]
-ansible_ssh_common_args='-o StrictHostKeyChecking=no'
-
-[workstation:vars]
-user=albandri
-group=albandri
-version=10
-home=/workspace/users/{{ user }}{{ version }}/
-#home=/home/{{ user }}/
-#ansible_sudo_pass=todo
-
+albandri.misys.global.ad

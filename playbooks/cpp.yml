@@ -22,6 +22,26 @@
                  Ubuntu 12.04/14.04."
 
 # This playbook can be run using vagrant (on virtual box).
+- name: Install gcc
+  hosts: cpp
+  connection: local
+#  remote_user: root
+
+  roles:
+    - alban.andrieu.gcc
+
+  vars:
+      gcc_version: "=4:4.8.2-1ubuntu6"
+      gcc_priority: 10
+
+  roles:
+    - alban.andrieu.gcc
+
+  vars:
+      gcc_version: "-5"
+      gcc_priority: 50
+
+# This playbook can be run using vagrant (on virtual box).
 - name: Install cpp
   hosts: cpp
   connection: local
@@ -31,7 +51,6 @@
     - alban.andrieu.cpp
 
   vars:
-      gcc_version: "4:4.8.2-1ubuntu6"
       cppunit_version: "1.13-0"
       boost_version: "1.54"
       clang_version: "3.5"

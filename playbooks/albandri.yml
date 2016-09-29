@@ -1,8 +1,10 @@
-#sudo ansible-playbook -i hosts-albandri -c local -v albandri.yml -vvvv | tee setup.log
+#sudo ansible-playbook -i hosts-albandri -v albandri.yml --limit albandri --ask-sudo-pass -vvvv | tee setup.log
+# -c local  --ask-pass --ask-sudo-pass --sudo
 
 - name: Assert platform is supported
   hosts: all
-  gather_facts: false
+  remote_user: albandri
+  gather_facts: true
 
   tasks:
     - name: Assert platform is supported
@@ -44,18 +46,21 @@
 
 - hosts: all
   gather_facts: true
+  remote_user: albandri
   tasks:
     - name: group hosts by distribution
       group_by: key="{{ ansible_distribution }}-{{ ansible_distribution_version }}"
 
 - hosts: RedHat-7*:RedHat-6*:CentOS-7*:CentOS-6*:Ubuntu-16.04:Ubuntu-14.04:Ubuntu-12.04
   gather_facts: false
+  remote_user: albandri
   tasks:
     - name: group hosts for supported distributions
       group_by: key="supported"
 
 - hosts: "!supported"
   gather_facts: false
+  remote_user: albandri
   tasks:
     - name: fail for unsupported distribution
       fail: msg="{{ ansible_distribution }} {{ ansible_distribution_version }}
@@ -66,7 +71,7 @@
 - name: Add repo configuration to all nodes
   hosts: RedHat-7*:RedHat-6*:CentOS-7*:CentOS-6*
   gather_facts: false
-  remote_user: root
+  remote_user: albandri
 #  connection: local
 
   roles:
@@ -75,7 +80,7 @@
 
 #- name: Apply hostname configuration
 #  hosts: all
-#  remote_user: root
+#  remote_user: albandri
 ##  connection: local
 #
 #  roles:
@@ -84,7 +89,7 @@
 - name: Apply common configuration to all nodes
   hosts: Ubuntu-16*:Ubuntu-14*:Ubuntu-12*
   gather_facts: false
-  remote_user: root
+  remote_user: albandri
 #  connection: local
 
   roles:
@@ -97,16 +102,19 @@
 - name: Apply dns configuration to all nodes
   hosts: Ubuntu-16*:Ubuntu-14*:Ubuntu-12*
   gather_facts: false
-  remote_user: root
+  remote_user: albandri
 #  connection: local
 
   roles:
     - alban.andrieu.dns
 
   vars:
-       defaultdomain: nabla.freeboxos.fr
-       defaultsearch: nabla.freeboxos.fr. freeboxos.fr. home.nabla.mobi. nabla.mobi.
+#       defaultdomain: nabla.freeboxos.fr
+#       defaultsearch: nabla.freeboxos.fr. freeboxos.fr. home.nabla.mobi. nabla.mobi.
+       defaultdomain: misys.global.ad
+       defaultsearch: misys.global.ad
        dns_nameservers:
+         - "10.0.2.3" # work dns
          - "10.25.200.3" # work dns
          - "10.21.200.3" # work dns
          - "8.8.8.8" # google dns
@@ -122,23 +130,23 @@
 #      nameserver2: 10.7.111.244
 
 #Below ntp role is included in administration role
-#- name: Apply ntp configuration to all nodes
-#  hosts: all
-#  gather_facts: false
-#  remote_user: root
-##  connection: local
-#
-#  roles:
-#    - geerlingguy.ntp
-#
-#  vars:
-#       ntp_timezone: Europe/Paris
+- name: Apply ntp configuration to all nodes
+  hosts: all
+  gather_facts: false
+  remote_user: albandri
+#  connection: local
+
+  roles:
+    - geerlingguy.ntp
+
+  vars:
+       ntp_timezone: Europe/Paris
 
 #Below firewall role is included in administration role
 #- name: Apply firewall configuration to all nodes
 #  hosts: Ubuntu-16*:Ubuntu-14*:Ubuntu-12*
 #  gather_facts: false
-#  remote_user: root
+#  remote_user: albandri
 ##  connection: local
 #
 #  roles:
@@ -227,50 +235,80 @@
 
 - name: Apply security configuration
   hosts: security
-  remote_user: root
+  remote_user: albandri
 #  connection: local
 
   roles:
     - security
 
   vars:
-       sudoers_enabled: no
-       restart_ssh_enabled: false
+      sudoers_enabled: no
+      restart_ssh_enabled: false
+      security_ssh_password_authentication: "yes"
+      security_ssh_permit_root_login: "yes"
+      security_ssh_x11_forwarding: "yes"
+      security_fail2ban_enabled: false
+      security_autoupdate_enabled: false #make yum to get stuck later
 
 #Below cmake role is included in cpp role
 #- name: Install cmake
 #  hosts: cmake
-#  remote_user: root
+#  remote_user: albandri
 ##  connection: local
 #
 #  roles:
 #    - alban.andrieu.cmake
 
+#Below scons role is included in cpp role
+#- name: Install scons
+#  hosts: scons
+#  remote_user: albandri
+##  connection: local
+#
+#  roles:
+#    - alban.andrieu.scons
+
+#Below gcc role is included in cpp role
+- name: Install gcc
+  hosts: gcc
+  remote_user: albandri
+#  connection: local
+
+  roles:
+    - role: alban.andrieu.gcc
+      gcc_version: "=4:4.8.2-1ubuntu6"
+      gcc_priority: 10
+
+    - role: alban.andrieu.gcc
+      gcc_version: "-5"
+      gcc_priority: 50
+
+
 - name: Install cpp
   hosts: cpp
-  remote_user: root
+  remote_user: albandri
 #  connection: local
 
   roles:
     - alban.andrieu.cpp
 
   vars:
-      gcc_version: "4:4.8.2-1ubuntu6"
       cppunit_version: "1.13-0"
       boost_version: "1.54"
 
 - name: Install java
   hosts: java
-  remote_user: root
+  remote_user: albandri
 #  connection: local
 
   roles:
     - java
 
 - name: Apply ssl configuration to all nodes
-  hosts: Ubuntu-16*:Ubuntu-14*:Ubuntu-12*
+  #hosts: Ubuntu-16*:Ubuntu-14*:Ubuntu-12*
+  hosts: java
   gather_facts: false
-#  remote_user: root
+#  remote_user: albandri
   roles:
     - role: ssl.certificate
       ssl_certs_country: "FR"
@@ -287,7 +325,7 @@
 
 - name: Install java certificate
   hosts: java
-  remote_user: root
+  remote_user: albandri
 #  connection: local
 
   roles:
@@ -299,7 +337,7 @@
 
 #- name: Install virtualbox
 #  hosts: virtualbox
-#  remote_user: root
+#  remote_user: albandri
 ##  connection: local
 #
 #  roles:
@@ -311,7 +349,7 @@
 
 - name: Install vagrant
   hosts: vagrant
-  remote_user: root
+  remote_user: albandri
 #  connection: local
 
   roles:
@@ -324,7 +362,7 @@
 
 - name: Install docker
   hosts: docker
-  remote_user: root
+  remote_user: albandri
 #  connection: local
   roles:
     - docker
@@ -334,7 +372,7 @@
 
 - name: Install locale
   hosts: locale
-  remote_user: root
+  remote_user: albandri
 #  connection: local
 
   roles:
@@ -342,7 +380,7 @@
 
 - name: Install zabbix-agent
   hosts: zabbix-agent
-  remote_user: root
+  remote_user: albandri
 #  connection: local
 
   roles:
@@ -357,7 +395,7 @@
 
 - name: Install webmin
   hosts: webmin
-  remote_user: root
+  remote_user: albandri
 #  connection: local
 
   roles:
@@ -369,7 +407,7 @@
 
 - name: Install nexus
   hosts: nexus
-  remote_user: root
+  remote_user: albandri
 #  connection: local
 
   roles:
@@ -380,7 +418,7 @@
 
 - name: Install xvbf
   hosts: xvbf
-  remote_user: root
+  remote_user: albandri
 #  connection: local
 
   roles:
@@ -388,7 +426,7 @@
 
 - name: Install selenium
   hosts: selenium
-  remote_user: root
+  remote_user: albandri
 #  connection: local
 
   roles:
@@ -397,7 +435,7 @@
 #
 #- name: Install zfs
 #  hosts: zfs
-#  remote_user: root
+#  remote_user: albandri
 ##  connection: local
 #
 #  roles:
@@ -407,7 +445,7 @@
 - name: Apply administration configuration to all nodes
   hosts: Ubuntu-16*:Ubuntu-14*:Ubuntu-12*
   gather_facts: false
-  remote_user: root
+  remote_user: albandri
   connection: local
 
   roles:
@@ -419,7 +457,7 @@
 #Below dropbox is included in workstation role
 #- name: Install dropbox
 #  hosts: workstation
-#  remote_user: root
+#  remote_user: albandri
 ##  sudo: yes
 ##  sudo_user: "{{ user }}"
 ##  connection: local
@@ -433,7 +471,7 @@
 
 - name: Install workstation add-on
   hosts: workstation
-  remote_user: root
+  remote_user: albandri
 #  connection: local
 
   roles:
@@ -450,7 +488,7 @@
 
 #- name: Apply swarm configuration to all jenkins slaves
 #  hosts: jenkins-swarm
-#  remote_user: root
+#  remote_user: albandri
 ##  connection: local
 #
 #  vars_prompt:
@@ -471,7 +509,7 @@
 # This playbook deploys a simple standalone Tomcat 7 server.
 - name: Deploy Tomcat
   hosts: tomcat-servers
-  remote_user: root
+  remote_user: albandri
 #  connection: local
 
   roles:
@@ -481,7 +519,7 @@
 
 - name: Deploy Jboss
   hosts: jboss-servers
-  remote_user: root
+  remote_user: albandri
 #  connection: local
 
   roles:
@@ -490,7 +528,7 @@
 ## This playbook deploys a MySQL database.
 #- name: Deploy MySQL and configure the databases
 #  hosts: mysql-servers
-#  remote_user: root
+#  remote_user: albandri
 ##  connection: local
 #
 #  roles:
@@ -504,7 +542,7 @@
 ## This playbook deploys an Apache database.
 #- name: Deploy Apache and configure the server
 #  hosts: apache-servers
-#  remote_user: root
+#  remote_user: albandri
 ##  connection: local
 #
 #  roles:
@@ -515,7 +553,7 @@
 #
 #- name: Add dependencies for Apache like PHP
 #  hosts: apache-servers
-#  remote_user: root
+#  remote_user: albandri
 ##  connection: local
 #
 #  roles:
@@ -527,7 +565,7 @@
 #
 #- name: Add admin tool for Apache like PHPmyAdmin
 #  hosts: apache-servers
-#  remote_user: root
+#  remote_user: albandri
 ##  connection: local
 #
 #  roles:
@@ -546,7 +584,7 @@
 #WARNING jenkins-master role has disabled a2dissite 000-default
 - name: Configure and deploy the nabla php sample application code to apache
   hosts: nabla-servers
-  remote_user: root
+  remote_user: albandri
 #  connection: local
 
   roles:
@@ -567,7 +605,7 @@
 
 - name: Install pagespeed
   hosts: apache-servers
-  remote_user: root
+  remote_user: albandri
 #  connection: local
   roles:
     - role: alban.andrieu.pagespeed
@@ -578,7 +616,7 @@
 
 - name: Install evasive
   hosts: apache-servers
-  remote_user: root
+  remote_user: albandri
 #  connection: local
   roles:
     - role: alban.andrieu.evasive
@@ -588,7 +626,7 @@
 
 - name: Install awstats
   hosts: apache-servers
-  remote_user: root
+  remote_user: albandri
 #  connection: local
   roles:
     - role: alban.andrieu.awstats
@@ -598,7 +636,7 @@
 
 - name: Apply configuration to jenkins master
   hosts: jenkins-master
-  remote_user: root
+  remote_user: albandri
 #  connection: local
 
   roles:
@@ -805,7 +843,7 @@
 
 - name: Apply common configuration to all jenkins slaves
   hosts: jenkins-slaves
-  remote_user: root
+  remote_user: albandri
 #  connection: local
 
 #  vars_files:
@@ -835,7 +873,7 @@
 
 - name: Install maven
   hosts: maven
-  remote_user: root
+  remote_user: albandri
 #  connection: local
 
   roles:
@@ -843,7 +881,7 @@
 
 - name: Install css
   hosts: css
-  remote_user: root
+  remote_user: albandri
 #  connection: local
 
   roles:
@@ -851,7 +889,7 @@
 
 - name: Install chrome
   hosts: chrome
-  remote_user: root
+  remote_user: albandri
 #  connection: local
 
   roles:
@@ -863,7 +901,7 @@
 
 - name: Install nodejs
   hosts: nodejs
-  remote_user: root
+  remote_user: albandri
 #  connection: local
 
   roles:
@@ -875,7 +913,7 @@
 
 - name: configure supervisor
   hosts: supervisors
-  remote_user: root
+  remote_user: albandri
 #  connection: local
   roles:
     - role: supervisor
@@ -891,7 +929,7 @@
 
 #- name: configure supervisor
 #  hosts: supervisors
-#  remote_user: root
+#  remote_user: albandri
 ##  connection: local
 #  roles:
 #    - role: supervisor
@@ -903,7 +941,7 @@
 
 - name: Install sonar
   hosts: sonar
-  remote_user: root
+  remote_user: albandri
 #  connection: local
   roles:
     - role: sonar
@@ -926,14 +964,14 @@
 #Below cmake conky is included in workstation role
 #- name: Install conky
 #  hosts: workstation
-#  remote_user: root
+#  remote_user: albandri
 ##  connection: local
 #  roles:
 #    - role: alban.andrieu.conky
 
 - name: Install git
   hosts: workstation
-  remote_user: root
+  remote_user: albandri
 #  connection: local
 
   roles:
@@ -941,7 +979,7 @@
 
 - name: Install subversion
   hosts: workstation
-  remote_user: root
+  remote_user: albandri
 #  connection: local
 
   roles:
@@ -953,7 +991,7 @@
 
 #- name: Apply user shell configuration
 #  hosts: workstation
-#  remote_user: root
+#  remote_user: albandri
 ##  connection: local
 #
 #  vars_files:
@@ -978,7 +1016,7 @@
 #- name: Install eclipse
 #  connection: local
 #  hosts: workstation
-#  remote_user: root
+#  remote_user: albandri
 #
 #  roles:
 #    - role: alban.andrieu.eclipse
@@ -993,7 +1031,7 @@
 - name: Install zap
   connection: local
   hosts: workstation
-  remote_user: root
+  remote_user: albandri
 #  connection: local
   roles:
     - role: alban.andrieu.zap
@@ -1004,14 +1042,14 @@
 
 - name: Install jmeter
   hosts: workstation
-  remote_user: root
+  remote_user: albandri
 #  connection: local
   roles:
     - role: alban.andrieu.jmeter
 
 #- name: Install mon
 #  hosts: workstation
-#  remote_user: root
+#  remote_user: albandri
 ##  connection: local
 #
 #  roles:
@@ -1029,7 +1067,7 @@
 - name: Install jdiskreport
   connection: local
   hosts: workstation
-  remote_user: root
+  remote_user: albandri
 #  accelerate: true
 
   roles:
@@ -1039,7 +1077,7 @@
 - name: Install private-bower
   connection: local
   hosts: workstation
-  remote_user: root
+  remote_user: albandri
 #  accelerate: true
   roles:
     - { role: alban.andrieu.private-bower,
@@ -1048,8 +1086,8 @@
 - name: Install OWASP tools
   connection: local
   hosts: workstation
-  remote_user: root
+  remote_user: albandri
 #  accelerate: true
   roles:
-    - { role: alban.andrieu.owasp-twe,
+    - { role: alban.andrieu.owasp-wte,
       }

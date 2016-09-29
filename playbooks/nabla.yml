@@ -219,6 +219,28 @@
 #  roles:
 #    - alban.andrieu.cmake
 
+#Below scons role is included in cpp role
+#- name: Install scons
+#  hosts: scons
+#  remote_user: root
+##  connection: local
+#
+#  roles:
+#    - alban.andrieu.scons
+
+#Below gcc role is included in cpp role
+- name: Install gcc
+  hosts: gcc
+  remote_user: root
+#  connection: local
+
+  roles:
+    - alban.andrieu.gcc
+
+  vars:
+      gcc_version: "=4:4.8.2-1ubuntu6"
+      gcc_priority: 10
+
 - name: Install cpp
   hosts: cpp
   remote_user: root
@@ -226,6 +248,10 @@
 
   roles:
     - alban.andrieu.cpp
+
+  vars:
+      cppunit_version: "1.13-0"
+      boost_version: "1.54"
 
 - name: Install java
   hosts: java

@@ -134,6 +134,9 @@ git submodule add -f  https://github.com/AlbanAndrieu/ansible-sonatype_nexus.git
 
 #git submodule deinit -f cmake
 git submodule add -f  https://github.com/AlbanAndrieu/ansible-cmake.git alban.andrieu.cmake
+git submodule add -f  https://github.com/AlbanAndrieu/ansible-scons.git alban.andrieu.scons
+git submodule add -f  https://github.com/AlbanAndrieu/ansible-gcc.git alban.andrieu.gcc
+git submodule add -f  https://github.com/AlbanAndrieu/ansible-cpp.git alban.andrieu.cpp
 
 #git submodule deinit -f shell
 git submodule add -f  https://github.com/AlbanAndrieu/ansible-shell.git alban.andrieu.shell
@@ -155,9 +158,6 @@ git submodule add -f  https://github.com/AlbanAndrieu/ansible-windows.git alban.
 #git submodule update --init
 #git rm --cached alban.andrieu.solaris
 #git submodule add -f  https://github.com/AlbanAndrieu/ansible-solaris.git alban.andrieu.solaris
-
-#git submodule deinit -f cpp
-git submodule add -f  https://github.com/AlbanAndrieu/ansible-cpp.git alban.andrieu.cpp
 
 #git submodule deinit -f pagespeed
 git submodule add -f  https://github.com/AlbanAndrieu/ansible-pagespeed.git alban.andrieu.pagespeed
