@@ -1,59 +1,56 @@
-#ansible-playbook -i hosts-albandri -c local -v shell.yml -vvvv --ask-sudo-pass | tee setup.log
+#ansible-playbook -i hosts-albandri -v shell.yml --limit albandri.misys.global.ad --ask-sudo-pass -vvvv | tee setup.log
+# -c local  --ask-pass --ask-sudo-pass --sudo
 
 - name: Apply common shell configuration
   hosts: workstation
 #  remote_user: root
-  user: albandri
-  connection: local
-#  sudo: yes
-
-#  vars_files:
-#  - [ "roles/alban.andrieu.shell/defaults/main.yml" ]
-#  - [ "roles/alban.andrieu.shell/vars/default.yml" ]
-#  - [ "roles/alban.andrieu.shell/vars/version.yml" ]
-#  - [ "roles/alban.andrieu.shell/vars/custom-{{ ansible_distribution }}-{{ ansible_architecture }}.yml", "roles/alban.andrieu.shell/vars/custom-{{ ansible_distribution }}.yml" ]
+  remote_user: albandri
+#  connection: local
+  become: yes
 
   roles:
-    - { role: alban.andrieu.shell,
-        shell_default_version: "30",
-        shell_git_configure_enabled: yes,
-        shell_git:
-          # Additional properties: 'shell_git_machine, shell_git_login, shell_git_email, shell_git_password, shell_git_name, shell_git_path, shell_git_ssl'.
-           - {
-             shell_git_machine: '82.231.208.223',
-             shell_git_login: 'AlbanAndrieu',
-             shell_git_email: 'alban.andrieu@free.fr',
-             shell_git_password: 'microsoft',
-             shell_git_name: "Alban Andrieu",
-             shell_git_path: '/usr/bin',
-             shell_git_ssl: false,
-             shell_git_meld_enabled: yes,
-             shell_git_editor: "gedit"
-             }
-           - {
-             shell_git_machine: 'https://github.com',
-             shell_git_login: 'AlbanAndrieu',
-             shell_git_email: 'alban.andrieu@free.fr',
-             shell_git_password: 'microsoft',
-             shell_git_name: "Alban Andrieu",
-             shell_git_path: '/usr/bin',
-             shell_git_ssl: false,
-             shell_git_meld_enabled: yes,
-             shell_git_editor: "gedit"
-             }
-           - {
-             shell_git_machine: 'https://bitbucket.org',
-             shell_git_login: 'AlbanAndrieu',
-             shell_git_email: 'alban.andrieu@free.fr',
-             shell_git_password: 'microsoft',
-             shell_git_name: "Alban Andrieu",
-             shell_git_path: '/usr/bin',
-             shell_git_ssl: false,
-             shell_git_meld_enabled: yes,
-             shell_git_editor: "gedit"
-             }
-#        shell_rlogin_enabled: no,
-        shell_maven_enabled: no,
-        newrelic_license_key: de35bf5d191ebb208d359b2cd24a60616a02b1f3,
-        docker_files_enable: yes,
-        docker_files_generated_directory: "../roles/alban.andrieu.shell" }
+    - alban.andrieu.shell
+
+  vars:
+    shell_default_version: "30"
+    shell_git_configure_enabled: yes
+    shell_git:
+      # Additional properties: 'shell_git_machine, shell_git_login, shell_git_email, shell_git_password, shell_git_name, shell_git_path, shell_git_ssl'.
+         - {
+           shell_git_machine: '82.231.208.223',
+           shell_git_login: 'AlbanAndrieu',
+           shell_git_email: 'alban.andrieu@free.fr',
+           shell_git_password: 'microsoft',
+           shell_git_name: "Alban Andrieu",
+           shell_git_path: '/usr/bin',
+           shell_git_ssl: false,
+           shell_git_meld_enabled: yes,
+           shell_git_editor: "gedit"
+           }
+#         - {
+#           shell_git_machine: 'https://github.com',
+#           shell_git_login: 'AlbanAndrieu',
+#           shell_git_email: 'alban.andrieu@free.fr',
+#           shell_git_password: 'microsoft',
+#           shell_git_name: "Alban Andrieu",
+#           shell_git_path: '/usr/bin',
+#           shell_git_ssl: false,
+#           shell_git_meld_enabled: yes,
+#           shell_git_editor: "gedit"
+#           }
+#         - {
+#           shell_git_machine: 'https://bitbucket.org',
+#           shell_git_login: 'AlbanAndrieu',
+#           shell_git_email: 'alban.andrieu@free.fr',
+#           shell_git_password: 'microsoft',
+#           shell_git_name: "Alban Andrieu",
+#           shell_git_path: '/usr/bin',
+#           shell_git_ssl: false,
+#           shell_git_meld_enabled: yes,
+#           shell_git_editor: "gedit"
+#           }
+#      shell_rlogin_enabled: no
+    shell_maven_enabled: no
+    newrelic_license_key: de35bf5d191ebb208d359b2cd24a60616a02b1f3
+    docker_files_enable: no
+#    docker_files_generated_directory: "../roles/alban.andrieu.shell"

@@ -64,7 +64,8 @@ albandri.misys.global.ad
 albandri.misys.global.ad
 
 [zfs]
-albandri.misys.global.ad ansible_connection=local
+albandri.misys.global.ad
+#albandri.misys.global.ad ansible_connection=local
 
 [xvbf]
 albandri.misys.global.ad

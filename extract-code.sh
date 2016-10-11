@@ -71,7 +71,7 @@ git submodule add -f  https://github.com/AlbanAndrieu/ansible-vagrant-role.git v
 git submodule add -f  https://github.com/AlbanAndrieu/docker.ubuntu.git docker
 
 git submodule add -f  https://github.com/AlbanAndrieu/ansible-util.git silpion.util
-git submodule add -f  https://github.com/AlbanAndrieu/ansible-lib silpion.lib
+git submodule add -f  https://github.com/AlbanAndrieu/ansible-lib.git silpion.lib
 
 #git clone https://github.com/silpion/ansible-maven maven
 git submodule add -f  https://github.com/AlbanAndrieu/ansible-maven.git maven

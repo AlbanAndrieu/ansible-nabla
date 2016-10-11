@@ -1,4 +1,4 @@
-#sudo ansible-playbook -i hosts-albandri -v albandri.yml --limit albandri --ask-sudo-pass -vvvv | tee setup.log
+#ansible-playbook -i hosts-albandri -v albandri.yml --limit albandri.misys.global.ad --ask-sudo-pass -vvvv | tee setup.log
 # -c local  --ask-pass --ask-sudo-pass --sudo
 
 - name: Assert platform is supported
@@ -130,10 +130,25 @@
 #      nameserver2: 10.7.111.244
 
 #Below ntp role is included in administration role
+- name: Apply python configuration to all nodes
+  hosts: all
+  gather_facts: false
+  remote_user: albandri
+  become: yes
+#  connection: local
+
+  roles:
+    - python
+
+#  vars:
+#       ntp_timezone: Europe/Paris
+
+#Below ntp role is included in administration role
 - name: Apply ntp configuration to all nodes
   hosts: all
   gather_facts: false
   remote_user: albandri
+  become: yes
 #  connection: local
 
   roles:
@@ -141,6 +156,16 @@
 
   vars:
        ntp_timezone: Europe/Paris
+
+#Use below only if you want your servers to be part of build farm
+- name: Apply administration configuration to all nodes
+  hosts: Ubuntu-16*:Ubuntu-14*:Ubuntu-12*
+  gather_facts: false
+  remote_user: albandri
+#  connection: local
+
+  roles:
+    - alban.andrieu.administration
 
 #Below firewall role is included in administration role
 #- name: Apply firewall configuration to all nodes
@@ -236,6 +261,7 @@
 - name: Apply security configuration
   hosts: security
   remote_user: albandri
+  become: yes
 #  connection: local
 
   roles:
@@ -302,13 +328,19 @@
 #  connection: local
 
   roles:
-    - java
+    - role: java
+      java_oracle_version: 7u71
+
+    - role: java
+      java_oracle_version: 8u66
 
 - name: Apply ssl configuration to all nodes
   #hosts: Ubuntu-16*:Ubuntu-14*:Ubuntu-12*
   hosts: java
   gather_facts: false
 #  remote_user: albandri
+  become: yes
+
   roles:
     - role: ssl.certificate
       ssl_certs_country: "FR"
@@ -351,6 +383,7 @@
   hosts: vagrant
   remote_user: albandri
 #  connection: local
+  become: yes
 
   roles:
     - vagrant
@@ -364,6 +397,8 @@
   hosts: docker
   remote_user: albandri
 #  connection: local
+  become: yes
+
   roles:
     - docker
 
@@ -382,6 +417,7 @@
   hosts: zabbix-agent
   remote_user: albandri
 #  connection: local
+  become: yes
 
   roles:
     - zabbix-agent
@@ -440,19 +476,6 @@
 #
 #  roles:
 #    - alban.andrieu.zfs
-
-#Use below only if you want your servers to be part of build farm
-- name: Apply administration configuration to all nodes
-  hosts: Ubuntu-16*:Ubuntu-14*:Ubuntu-12*
-  gather_facts: false
-  remote_user: albandri
-  connection: local
-
-  roles:
-    - alban.andrieu.administration
-
-  vars:
-       ntp_timezone: Europe/Paris
 
 #Below dropbox is included in workstation role
 #- name: Install dropbox
