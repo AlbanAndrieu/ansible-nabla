@@ -6,7 +6,7 @@
     - name: group hosts by distribution
       group_by: key="{{ ansible_distribution }}-{{ ansible_distribution_version }}"
 
-- hosts: Ubuntu-12.04:Ubuntu-14.04
+- hosts: Ubuntu-12.04:Ubuntu-14.04:Ubuntu-16.04
   gather_facts: false
   tasks:
     - name: group hosts for supported distributions
@@ -21,8 +21,9 @@
                  OSes include Ubuntu 12.04/14.04."
 
 - name: Install eclipse
-  connection: local
+#  connection: local
   hosts: workstation
+  remote_user: albandri
 #  remote_user: root
 #  accelerate: true
 
@@ -30,7 +31,7 @@
     - alban.andrieu.eclipse
 
   vars:
-       docker_files_enable: yes
+       docker_files_enable: no
        docker_files_generated_directory: "../roles/alban.andrieu.eclipse"
        eclipse_plugins_emf_enabled: no
        eclipse_plugins_cdt_enabled: yes

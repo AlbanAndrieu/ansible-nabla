@@ -68,6 +68,12 @@
                  OSes include Red Hat Enterprise Linux 6/7, CentOS 6/7, or
                  Ubuntu 16.04/14.04/12.04."
 
+#- hosts: localhost
+#
+#  pre_tasks:
+#    - name: Install Ansible-Galaxy dependencies
+#      shell: ansible-galaxy install -r requirements.yml -p ./roles/ --ignore-errors
+
 - name: Add repo configuration to all nodes
   hosts: RedHat-7*:RedHat-6*:CentOS-7*:CentOS-6*
   gather_facts: false
@@ -301,9 +307,17 @@
 #  connection: local
 
   roles:
+#    - role: alban.andrieu.gcc
+#      gcc_version: "=4:4.8.2-1ubuntu6"
+#      gcc_priority: 10
+
     - role: alban.andrieu.gcc
-      gcc_version: "=4:4.8.2-1ubuntu6"
+      gcc_version: "-4.8"
       gcc_priority: 10
+
+    - role: alban.andrieu.gcc
+      gcc_version: "-4.9"
+      gcc_priority: 20
 
     - role: alban.andrieu.gcc
       gcc_version: "-5"
@@ -319,8 +333,10 @@
     - alban.andrieu.cpp
 
   vars:
-      cppunit_version: "1.13-0"
-      boost_version: "1.54"
+      #cppunit_version: "1.13-0"
+      cppunit_version: "1.13-0v5"
+      #boost_version: "1.54"
+      boost_version: "1.58"
 
 - name: Install java
   hosts: java
@@ -338,7 +354,7 @@
   #hosts: Ubuntu-16*:Ubuntu-14*:Ubuntu-12*
   hosts: java
   gather_facts: false
-#  remote_user: albandri
+  remote_user: albandri
   become: yes
 
   roles:
@@ -359,6 +375,7 @@
   hosts: java
   remote_user: albandri
 #  connection: local
+  become: yes
 
   roles:
     - java.certificate
@@ -413,21 +430,21 @@
   roles:
     - locale
 
-- name: Install zabbix-agent
-  hosts: zabbix-agent
-  remote_user: albandri
-#  connection: local
-  become: yes
-
-  roles:
-    - zabbix-agent
-
-  vars:
-      zabbix_agent_major: '2'
-      zabbix_agent_minor: '2'
-      zabbix_agent_revision: '7'
-      zabbix_agent_ubuntu: "1:{{zabbix_agent_version}}-1+trusty"
-      #zabbix_agent_Server: 127.0.0.1
+#- name: Install zabbix-agent
+#  hosts: zabbix-agent
+#  remote_user: albandri
+##  connection: local
+#  become: yes
+#
+#  roles:
+#    - zabbix-agent
+#
+#  vars:
+#      zabbix_agent_major: '2'
+#      zabbix_agent_minor: '2'
+#      zabbix_agent_revision: '7'
+#      zabbix_agent_ubuntu: "1:{{zabbix_agent_version}}-1+trusty"
+#      #zabbix_agent_Server: 127.0.0.1
 
 - name: Install webmin
   hosts: webmin
@@ -438,13 +455,14 @@
     - alban.andrieu.webmin
 
   vars:
-      docker_files_enable: yes
+      docker_files_enable: no
       docker_files_generated_directory: "../roles/alban.andrieu.webmin"
 
 - name: Install nexus
   hosts: nexus
   remote_user: albandri
 #  connection: local
+  become: yes
 
   roles:
     - nexus
@@ -1102,9 +1120,9 @@
   hosts: workstation
   remote_user: albandri
 #  accelerate: true
+
   roles:
-    - { role: alban.andrieu.private-bower,
-      }
+    - role: private-bower
 
 - name: Install OWASP tools
   connection: local

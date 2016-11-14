@@ -1,12 +1,13 @@
 #sudo ansible-playbook -i hosts-albandri -c local -v private-bower.yml | tee setup.log
 
 - name: Install private-bower
-  connection: local
+#  connection: local
   hosts: workstation
+  remote_user: albandri
 #  remote_user: root
 #  accelerate: true
 
   roles:
     - { role: alban.andrieu.private-bower,
-      }    
-      
+      }
+

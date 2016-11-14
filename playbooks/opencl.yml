@@ -1,0 +1,45 @@
+#as albandri
+#ansible-playbook opencl.yml -i hosts-production --limit mgrpricer.misys.global.ad -vvvv --ask-sudo-pass --sudo
+
+#TODO service lightdm stop
+# pkill -u jenkins
+# pkill -u jenkins-bm
+
+- hosts: jenkins-slaves
+  become: yes
+  remote_user: root
+
+  pre_tasks:
+    - set_fact:
+       cpu_driver: "{% if 'GenuineIntel' in ansible_processor %}intel{% elif 'AuthenticAMD' in ansible_processor %}amd{%else%}unknown{%endif%}"
+
+    - debug: msg="{{cpu_driver}}"
+
+    - command: "dkms status"
+
+#Remove older nvidia driver from kernel
+    #modprobe -v nvidia-uvm
+    #dpkg -l | grep nvidia
+    #apt-get remove nvidia-*
+    #apt-get purge nvidia-304
+
+- name: Configure opencl
+  hosts: jenkins-slaves
+  become: yes
+  remote_user: root
+  #connection: local
+
+  roles:
+    - opencl
+
+  vars:
+    nvidia_driver_version: 352.41
+    #nvidia_driver_version: 304.132
+    base_url: "http://kgrweb/download/opencl"
+    kmod_install: true
+
+    #modprobe -v nvidia-uvm
+
+#cat /proc/driver/nvidia/version
+
+#sudo update-alternatives --config opencl-intel-runtime

@@ -44,11 +44,8 @@ git submodule add -f  https://github.com/AlbanAndrieu/ansible-xvbf.git alban.and
 #rm -rf ../.git/modules/roles/zfs/
 git submodule add -f  https://github.com/AlbanAndrieu/ansible-zfs.git alban.andrieu.zfs
 
-#git clone https://github.com/ahelal/ansible-zabbix_agent zabbix_agent
-git submodule add -f  https://github.com/AlbanAndrieu/ansible-zabbix_agent.git zabbix-agent
-
 #git clone https://github.com/ahelal/ansible-zabbix_server zabbix-server
-git submodule add -f  https://github.com/AlbanAndrieu/ansible-zabbix_server.git zabbix-server
+git submodule add -f  https://github.com/AlbanAndrieu/ansible-zabbix_server.git zabbix
 
 #git submodule deinit -f locale
 #git submodule add -f  https://github.com/knopki/ansible-locale locale
@@ -298,6 +295,7 @@ git submodule add -f  https://github.com/AlbanAndrieu/ansible-role-sass.git elao
 #rm -rf ../.git/modules/roles/java.certificate/
 git submodule add -f  https://github.com/AlbanAndrieu/ansible-java-certificate.git java.certificate
 git submodule add -f  https://github.com/AlbanAndrieu/ansible-role-ssl-certs.git ssl.certificate
+git submodule add -f  https://github.com/AlbanAndrieu/ansible-trust-ca.git ssl.ca-certificate
 
 #SEE
 #https://github.com/docker/docker-registry
@@ -340,6 +338,19 @@ TODO https://github.com/ypid/ypid-ansible-common
 sudo pip install ansigenome --upgrade
 ./misc/ansigenome/bin/ansigenome scan
 ./misc/ansigenome/bin/ansigenome gendoc -f md
+ansigenome export -t reqs -o ./test.yml -f yml ./roles
+ansigenome export -o ./test.dot -f dot ./roles
+ansigenome export -o ./test.png ./roles --size=20,20 -dpi=300
+
+#ansigenome scan --limit roles/alban.andrieu.eclipse
+#ansigenome gendoc --format=md --limit roles/alban.andrieu.eclipse
+
+#See https://github.com/fboender/ansible-cmdb
+mkdir out
+#Add missing python-simplejson
+ansible myserver -i hosts-production -m raw -a "sudo yum install -y python-simplejson"  -k -u root -vvvv
+ansible -i hosts-production -m setup --user=root --tree out/ all
+ansible-cmdb out/ > overview.html
 
 ansible-galaxy login
 ansible-galaxy setup travis AlbanAndrieu ansible-jmeter Mc7ofHYG4bP5zSbuxEdQ

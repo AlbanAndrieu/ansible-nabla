@@ -34,6 +34,7 @@ fi
 
 ln -sf "$ansigenome_config_file_path" "$HOME/.ansigenome.conf"
 #ansigenome gendoc --format=md --limit "$role_full_name" ..
+#ansigenome gendoc --format=md ./roles
 ansigenome scan --limit "$role_full_name" ..
 
-echo "Regenerate README.md using Ansigenome"
+echo "Regenerate README.md using Ansigenome for $role_full_name $role_owner"

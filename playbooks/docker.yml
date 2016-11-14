@@ -1,4 +1,5 @@
-#sudo ansible-playbook -i hosts-albandri -c local -v docker.yml -vvvv | tee setup.log
+#ansible-playbook -i hosts-albandri -c local -v docker.yml -vvvv | tee setup.log
+#ansible-playbook -i hosts -v docker.yml --limit albandri --ask-sudo-pass -vvvv | tee setup.log
 
 - hosts: all
   gather_facts: true
@@ -6,7 +7,7 @@
     - name: group hosts by distribution
       group_by: key="{{ ansible_distribution }}-{{ ansible_distribution_version }}"
 
-- hosts: RedHat-7*:RedHat-6*:CentOS-6*:Ubuntu-12.04:Ubuntu-14.04
+- hosts: RedHat-7*:RedHat-6*:CentOS-6*:Ubuntu-12.04:Ubuntu-14.04:Ubuntu-16.04
   gather_facts: false
   tasks:
     - name: group hosts for supported distributions
@@ -21,13 +22,55 @@
                  OSes include Red Hat Enterprise Linux 6/7, CentOS 6, or
                  Ubuntu 12.04/14.04."
 
+#- hosts: docker
+#
+#  pre_tasks:
+#  - name: Log into DockerHub
+#    docker_login:
+#      username: nabla
+#      password: todo
+#      email: alban.andrieu@free.fr
+
 - name: Install docker
   hosts: docker
   remote_user: root
 #  connection: local
+
   roles:
     - docker
 
   vars:
 #       docker_opts: "-H tcp://127.0.0.1:4243 -H unix:///var/run/docker.sock --dns 8.8.8.8 --dns 8.8.4.4 --storage-driver=zfs"
        docker_opts: "-H tcp://127.0.0.1:4243 -H unix:///var/run/docker.sock --dns 8.8.8.8 --dns 8.8.4.4 --storage-driver=overlay"
+       #--insecure-registry mydtr:443
+       pip_version_docker_py: 1.9.0 #Fix issue with https://github.com/angstwad/docker.ubuntu/issues/109#issuecomment-257706232
+
+#TODO https://askubuntu.com/questions/477551/how-can-i-use-docker-without-sudo
+#sudo groupadd docker
+#sudo gpasswd -a ${USER} docker
+
+#TODO restart docker after installing docker CA
+#sudo service docker start
+
+#sudo docker logout https://docker:5000
+#sudo docker login docker:443
+- hosts: docker
+  become: yes
+
+  post_tasks:
+    - name: Log into private registry and force re-authorization
+      docker_login:
+        registry: https://docker/
+        username: test
+        password: Microsoft
+        reauthorize: yes
+
+
+- hosts: docker
+  become: yes
+
+  post_tasks:
+    - name: Inspect multiple images
+      docker_image_facts:
+        name:
+          - todo/java

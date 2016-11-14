@@ -2,9 +2,11 @@
 
 #WARNING jenkins-master role has disabled a2dissite 000-default
 - name: Configure and deploy the nabla php sample application code to apache
-  connection: local
+#  connection: local
   hosts: workstation
+  remote_user: albandri
 #  remote_user: root
+  become: yes
 
   roles:
     - { role: alban.andrieu.web,
@@ -21,6 +23,6 @@
        php_enable: no,
        repository: "https://github.com/AlbanAndrieu/nabla-servers-bower-sample.git",
        repository_version: "gh-pages",
-       docker_files_enable: yes,
+       docker_files_enable: no,
        docker_files_generated_directory: "../roles/alban.andrieu.web",
        }

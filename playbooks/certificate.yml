@@ -1,4 +1,4 @@
-#sudo ansible-playbook -i hosts-albandri -c local -v certificate.yml -vvvv --ask-sudo-pass | tee setup.log
+#ansible-playbook -i hosts-albandri -c local -v certificate.yml -vvvv --ask-sudo-pass | tee setup.log
 
 - hosts: all
   gather_facts: true
@@ -6,11 +6,38 @@
     - name: group hosts by distribution
       group_by: key="{{ ansible_distribution }}-{{ ansible_distribution_version }}"
 
-- name: Apply ssl configuration to all nodes
-#  hosts: Ubuntu-12*:Ubuntu-14*
-  hosts: workstation
-  gather_facts: false
+- hosts: workstation
+  connection: local
 #  remote_user: root
+#  become: yes
+
+  pre_tasks:
+    - name: Get the CA root certificate
+      get_url: dest=~/ca.pem url=http://kgrweb/download/certs/UK1VSWCERT01-CA-5.crt
+
+    - name: Get the server DER certificate
+      get_url: dest=~/{{ansible_fqdn}}-der.cer url=http://kgrweb/download/certs/servers/{{ansible_fqdn}}-der.cer
+      become: yes
+
+    - name: Convert DER certificate to PEM
+      command: openssl x509 -inform DER -outform PEM -in ~/{{ansible_fqdn}}-der.cer -out /etc/ssl/{{ansible_fqdn}}/{{ansible_fqdn}}.pem
+      become: yes
+
+- name: Install CA root certificate
+  connection: local
+  hosts: workstation
+  remote_user: root
+
+  roles:
+    - role: ssl.ca-certificate
+      trust_ca_pki_dir: '~'
+
+- name: Install server certificate
+  connection: local
+  hosts: workstation
+  remote_user: root
+  become: yes
+
   roles:
     - role: ssl.certificate
       ssl_certs_country: "FR"
@@ -21,6 +48,7 @@
       ssl_certs_common_name: "nabla.freeboxos.fr"
       ssl_certs_days: "365"
       #ssl_certs_fields: "/C={{ssl_certs_country}}/ST={{ssl_certs_state}}/L={{ssl_certs_locality}}/O={{ssl_certs_organization}}/CN={{ssl_certs_common_name}}"
+      ssl_certs_fields: "/C={{ssl_certs_country}}/ST={{ssl_certs_state}}/L={{ssl_certs_locality}}/O={{ssl_certs_organization}}/CN={{ssl_certs_common_name}}/emailAddress=alban.andrieu@fre.fr/subjectAltName=DNS.1={{ssl_certs_common_name}},DNS.2=nabla.mobi,DNS.3=localhost"
       ssl_certs_path_owner: "root"
       #ssl_certs_path_group: "root"
       ssl_certs_mode: 700
@@ -28,7 +56,7 @@
 - name: Install java certificate
   connection: local
   hosts: workstation
-#  remote_user: root
+  remote_user: root
 #  accelerate: true
 
   roles:

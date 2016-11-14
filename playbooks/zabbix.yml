@@ -1,4 +1,4 @@
-#sudo ansible-playbook -i hosts-albandri -c local -v zabbix-agent.yml | tee setup.log
+#ansible-playbook -i hosts-albandri -c local -v zabbix.yml | tee setup.log
 
 - hosts: all
   gather_facts: true
@@ -22,16 +22,22 @@
                  Ubuntu 12.04/14.04."
 
 #TODO this role is not using the saome mysql role as I used to
-# This playbook can be run using vagrant (on virtual box). 
-- name: Install zabbix-server 
-  hosts: zabbix-server
+# This playbook can be run using vagrant (on virtual box).
+- name: Install zabbix
+  hosts: zabbix
   remote_user: root
 #  connection: local
-  
+
   roles:
-    - role: zabbix-server
-      name: zabbix-server  
-      
+    - role: zabbix
+      name: zabbix
+
   vars:
       zabbix_server_db_type: 'mysql'
-    
+      zabbix_agent_major: '2'
+      zabbix_agent_minor: '2'
+      zabbix_agent_revision: '9'
+      zabbix_agent_ubuntu: "1:{{zabbix_agent_version}}-1+trusty"
+      #zabbix_agent_Server: 127.0.0.1
+
+

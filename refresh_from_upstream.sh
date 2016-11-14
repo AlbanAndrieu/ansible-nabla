@@ -30,10 +30,12 @@ git remote add upstream https://github.com/AlbanAndrieu/ansible-supervisor_task.
 git remote add upstream https://github.com/AnsibleShipyard/ansible-nodejs.git
 git remote add upstream https://github.com/geerlingguy/ansible-role-git.git
 git remote add upstream https://github.com/silpion/ansible-util.git
+git remote add upstream https://github.com/silpion/ansible-lib.git
 git remote add upstream https://github.com/Stouts/Stouts.python.giti
 git remote add upstream https://github.com/geerlingguy/ansible-role-git.git
 git remote add upstream https://github.com/alourie/devbox.chrome.git
 git remote add upstream https://github.com/geerlingguy/ansible-role-ntp.git
+git remote add upstream https://github.com/jdauphant/ansible-role-ssl-certs.git
 
 #git remote rm origin
 #git remote add origin https://github.com/AlbanAndrieu/ansible-role-elasticsearch-curator.git

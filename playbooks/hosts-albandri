@@ -125,8 +125,8 @@ albandri.misys.global.ad
 user=albandri
 group=albandri
 version=10
-home=/workspace/users/{{ user }}{{ version }}/
-#home=/home/{{ user }}/
+#home=/workspace/users/{{ user }}{{ version }}/
+home=/home/{{ user }}/
 #ansible_sudo_pass=todo
 
 [nexus]
