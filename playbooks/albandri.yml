@@ -91,7 +91,10 @@
 #
 #  roles:
 #    - alban.andrieu.hostname
-
+#
+#  vars:
+#       hostname_hostname_loopback: "{{ ansible_hostname }} nabla"
+       
 - name: Apply common configuration to all nodes
   hosts: Ubuntu-16*:Ubuntu-14*:Ubuntu-12*
   gather_facts: false
