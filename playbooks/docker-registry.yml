@@ -1,0 +1,55 @@
+#ansible-playbook -i hosts -c local -v docker-registry.yml --ask-pass -vvvv | tee setup.log
+#ansible-playbook -i hosts -v docker-registry.yml --limit albandri --ask-sudo-pass -vvvv | tee setup.log
+
+- hosts: all
+  gather_facts: true
+  tasks:
+    - name: group hosts by distribution
+      group_by: key="{{ ansible_distribution }}-{{ ansible_distribution_version }}"
+
+- hosts: RedHat-7*:RedHat-6*:CentOS-6*:Ubuntu-12.04:Ubuntu-14.04:Ubuntu-16.04
+  gather_facts: false
+  tasks:
+    - name: group hosts for supported distributions
+      group_by: key="supported"
+
+- hosts: "!supported"
+  gather_facts: false
+  tasks:
+    - name: fail for unsupported distribution
+      fail: msg="{{ ansible_distribution }} {{ ansible_distribution_version }}
+                 is not a supported OS for a Tower installation.  Supported
+                 OSes include Red Hat Enterprise Linux 6/7, CentOS 6, or
+                 Ubuntu 12.04/14.04."
+
+- include: docker.yml
+
+#sudo docker logout https://docker.nabla.mobi:5000
+#sudo docker login dtr.nabla.mobi:443
+- hosts: docker
+  become: yes
+
+  pre_tasks:
+    - name: Log into private registry and force re-authorization
+      docker_login:
+        registry: https://dtr.nabla.mobi:443/
+        username: test
+        password: Microsoft
+        reauthorize: yes
+
+  pre_tasks:
+    - name: Inspect multiple images
+      docker_image_facts:
+        name:
+          - nabla/nabla
+          - nabla/java
+
+- hosts: docker
+  become: yes
+
+  tasks:
+    - name: Pull multiple images
+      docker_image:
+        name:
+          - nabla/nabla
+          - nabla/java

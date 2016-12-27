@@ -22,8 +22,11 @@
                  OSes include Red Hat Enterprise Linux 6/7, CentOS 6, or
                  Ubuntu 12.04/14.04."
 
-#- hosts: docker
-#
+- include: certificate.yml
+
+- hosts: docker
+  become: yes
+
 #  pre_tasks:
 #  - name: Log into DockerHub
 #    docker_login:
@@ -31,10 +34,27 @@
 #      password: todo
 #      email: alban.andrieu@free.fr
 
+#https://askubuntu.com/questions/477551/how-can-i-use-docker-without-sudo
+#sudo groupadd docker
+#sudo gpasswd -a ${USER} docker
+#sudo gpasswd -a jenkins docker
+  pre_tasks:
+    - name: Create a docker group
+      group:
+          name=docker
+          state=present
+      become: yes
+
+    - name: Add user(s) to docker group
+      user:
+          name="{{ lookup('env','USER') }}"
+          group=docker
+          state=present
+      become: yes
+
 - name: Install docker
   hosts: docker
-  remote_user: root
-#  connection: local
+  become: yes
 
   roles:
     - docker
@@ -45,32 +65,12 @@
        #--insecure-registry mydtr:443
        pip_version_docker_py: 1.9.0 #Fix issue with https://github.com/angstwad/docker.ubuntu/issues/109#issuecomment-257706232
 
+#curl --unix-socket /var/run/docker.sock http:127.0.0.1:4243/version
+#curl --unix-socket /var/run/docker.sock tcp:10.25.40.139:4243/version
+
 #TODO https://askubuntu.com/questions/477551/how-can-i-use-docker-without-sudo
 #sudo groupadd docker
 #sudo gpasswd -a ${USER} docker
 
 #TODO restart docker after installing docker CA
 #sudo service docker start
-
-#sudo docker logout https://docker:5000
-#sudo docker login docker:443
-- hosts: docker
-  become: yes
-
-  post_tasks:
-    - name: Log into private registry and force re-authorization
-      docker_login:
-        registry: https://docker/
-        username: test
-        password: Microsoft
-        reauthorize: yes
-
-
-- hosts: docker
-  become: yes
-
-  post_tasks:
-    - name: Inspect multiple images
-      docker_image_facts:
-        name:
-          - todo/java

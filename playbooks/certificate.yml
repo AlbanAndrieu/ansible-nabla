@@ -7,30 +7,53 @@
       group_by: key="{{ ansible_distribution }}-{{ ansible_distribution_version }}"
 
 - hosts: workstation
-  connection: local
-#  remote_user: root
+#  connection: local
+  remote_user: root
 #  become: yes
 
   pre_tasks:
     - name: Get the CA root certificate
-      get_url: dest=~/ca.pem url=http://kgrweb/download/certs/UK1VSWCERT01-CA-5.crt
+      get_url: dest=~/ca.pem url=http://home.nabla.mobi:7072/download/certs/{{ansible_fqdn}}.crt
+      become: yes
+      become_user: root
 
     - name: Get the server DER certificate
-      get_url: dest=~/{{ansible_fqdn}}-der.cer url=http://kgrweb/download/certs/servers/{{ansible_fqdn}}-der.cer
+      get_url: dest=~/{{ansible_fqdn}}-der.cer url=http://home.nabla.mobi:7072/download/certs/servers/{{ansible_fqdn}}-der.cer
+      ignore_errors: yes
       become: yes
 
     - name: Convert DER certificate to PEM
       command: openssl x509 -inform DER -outform PEM -in ~/{{ansible_fqdn}}-der.cer -out /etc/ssl/{{ansible_fqdn}}/{{ansible_fqdn}}.pem
+      ignore_errors: yes
       become: yes
 
+    - name: Get the Docker root certificate
+      get_url: dest=~/docker.pem url=http://home.nabla.mobi:7072/download/certs/docker.crt
+      become: yes
+      become_user: root
+
 - name: Install CA root certificate
-  connection: local
   hosts: workstation
+#  connection: local
   remote_user: root
+  ignore_errors: yes
 
   roles:
     - role: ssl.ca-certificate
-      trust_ca_pki_dir: '~'
+#      trust_ca_pki_dir: '~'
+      trust_ca_pki_dir: '/root/'
+
+- name: Install Docker CA root certificate
+  hosts: workstation
+#  connection: local
+  remote_user: root
+  ignore_errors: yes
+
+  roles:
+    - role: ssl.ca-certificate
+      trust_ca_pki_dir: '/root/'
+      trust_ca_pki_prefix: 'docker'
+      trust_ca_cert_prefix: 'docker'
 
 - name: Install server certificate
   connection: local
@@ -53,11 +76,12 @@
       #ssl_certs_path_group: "root"
       ssl_certs_mode: 700
 
-- name: Install java certificate
-  connection: local
+- name: Install java certificate for java 7 and 8
+#  connection: local
   hosts: workstation
   remote_user: root
 #  accelerate: true
+  become: yes
 
   roles:
 #    - role: java.certificate
@@ -82,5 +106,31 @@
       java_certificate_port: 443
 
     - role: java.certificate
+      java_certificate_host: github.com
+      java_certificate_port: 443
+
+#Default standard oracle java 8
+    - role: java.certificate
+      ignore_errors: yes
+      java_path: "/usr/lib/jvm/java-8-oracle/"
+      java_certificate_host: travis-ci.org
+      java_certificate_port: 443
+
+    - role: java.certificate
+      ignore_errors: yes
+      java_path: "/usr/lib/jvm/java-8-oracle/"
+      java_certificate_host: github.com
+      java_certificate_port: 443
+
+#Default standard oracle java 7
+    - role: java.certificate
+      ignore_errors: yes
+      java_path: "/usr/lib/jvm/java-7-oracle/"
+      java_certificate_host: travis-ci.org
+      java_certificate_port: 443
+
+    - role: java.certificate
+      ignore_errors: yes
+      java_path: "/usr/lib/jvm/java-7-oracle/"
       java_certificate_host: github.com
       java_certificate_port: 443

@@ -166,6 +166,7 @@ group=root
 #home=/workspace/users/{{ user }}{{ version }}/
 home=/home/{{ user }}/
 #ansible_sudo_pass=todo
+install_kernel_extras=false
 
 [zone]
 #mgrv062.misys.global.ad
