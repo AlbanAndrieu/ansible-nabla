@@ -26,6 +26,8 @@ cd roles
 #...
 
 #git clone https://github.com/debops/ansible-role-ansible.git ansible
+#git submodule deinit -f ansible
+#rm -rf ../.git/modules/roles/ansible/
 git submodule add -f  https://github.com/debops/ansible-role-ansible.git ansible
 
 #git clone https://github.com/EDITD/ansible-supervisor_task.git supervisor
