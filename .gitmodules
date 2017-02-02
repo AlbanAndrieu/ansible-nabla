@@ -274,3 +274,9 @@
 [submodule "roles/ansible-newrelic"]
 	path = roles/ansible-newrelic
 	url = https://github.com/AlbanAndrieu/ansible-newrelic.git
+[submodule "roles/alban.andrieu.gcc"]
+	path = roles/alban.andrieu.gcc
+	url = https://github.com/AlbanAndrieu/ansible-gcc.git
+[submodule "roles/alban.andrieu.scons"]
+	path = roles/alban.andrieu.scons
+	url = https://github.com/AlbanAndrieu/ansible-scons.git
