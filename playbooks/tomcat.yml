@@ -10,5 +10,6 @@
 
   vars:
        tomcat_started_check_enable: yes
+       tomcat_version: "8"
 #      user: root
 #      home: "/root"

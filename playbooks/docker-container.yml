@@ -1,0 +1,114 @@
+#ansible-playbook -i staging -c local -v docker-container.yml --ask-pass -vvvv | tee setup.log
+#ansible-playbook -i staging -c local -v docker-container.yml --limit albandri.misys.global.ad --ask-sudo-pass -vvvv | tee setup.log
+
+- hosts: all
+  gather_facts: true
+  tasks:
+    - name: group hosts by distribution
+      group_by: key="{{ ansible_distribution }}-{{ ansible_distribution_version }}"
+
+- hosts: RedHat-7*:RedHat-6*:CentOS-6*:Ubuntu-12.04:Ubuntu-14.04:Ubuntu-16.04
+  gather_facts: false
+  tasks:
+    - name: group hosts for supported distributions
+      group_by: key="supported"
+
+- hosts: "!supported"
+  gather_facts: false
+  tasks:
+    - name: fail for unsupported distribution
+      fail: msg="{{ ansible_distribution }} {{ ansible_distribution_version }}
+                 is not a supported OS for a Tower installation.  Supported
+                 OSes include Red Hat Enterprise Linux 6/7, CentOS 6, or
+                 Ubuntu 12.04/14.04."
+
+#- include: docker.yml
+
+#sudo docker logout https://docker.misys.global.ad:5000
+#sudo docker login blrvslalm0025.misys.global.ad:443
+- hosts: docker
+  become: yes
+
+  pre_tasks:
+    - name: Log into private registry and force re-authorization
+      docker_login:
+        registry: https://blrvslalm0025.misys.global.ad:443/
+        username: mgr.jenkins
+        password: Misys2013
+        reauthorize: yes
+      ignore_errors: true
+
+- hosts: docker
+#  become: yes
+
+  tasks:                
+                
+    - name: Create a data container
+      docker_container:
+        name: mydata
+        image: busybox
+        volumes:
+          - /data
+
+    - name: Container present
+      docker_container:
+        name: mycontainer
+        state: present
+        image: ubuntu:16.04
+        command: sleep infinity
+
+#    - name: Set misysboard port
+#      set_fact: misysboard_port=3002
+#
+#    - name: Pull and run the misysboard container
+#      docker_container:
+#          name: "misysboard"
+#          image: blrvslalm0025.misys.global.ad/fusion-risk/misysboard:latest
+#          restart_policy: always
+#          #state: present
+#          #recreate: yes
+#          exposed_ports:
+#            - 3002
+#          volumes_from:
+#            - mydata
+#          #detach: True
+#          #use_tls: encrypt
+#          #env: ENV CARGO_URL=https://frcargo:8444,
+#          #     ENV ARC_URL=https://frcarc:32412
+#          #ports:
+#          #  - "{{ misysboard_port }}:8080"
+#
+#    #- name: Wait a few minutes for the IPs to be set to the container
+#    #  wait_for: timeout=120
+#
+#    - name: Wait for the misysboard server to start
+#      action: command docker logs misysboard
+#      register: misysboard_logs
+#      until: misysboard_logs.stdout.find("Listening on") != -1
+#      retries: 30
+#      delay: 10
+#
+#    - name: Print misysboard's URL
+#      debug: msg="You can connect to misysboard server http://{{ ansible_default_ipv4.address }}:{{ misysboard_port }}"
+
+    - docker_service:
+        project_src: "{{ lookup('env','WORKSPACE') }}/dockerfile-fusionrisk/centos"
+        files: docker-compose-sqlserver-latest.yml
+        build: no
+        restarted: true
+      register: output
+
+    - debug: var=output
+
+    - assert:
+        that:
+          - "els.els.state.running"
+          - "frdb.frdb.state.running"
+          - "framq.framq.state.running"
+          - "frcargo.frcargo.state.running"
+          - "frcmr.frcmr.state.running"
+          - "frarc.frarc.state.running"
+          - "frffc.frffc.state.running"
+          - "frmb.frmb.state.running"
+          - "frpricer.frpricer.state.running"
+

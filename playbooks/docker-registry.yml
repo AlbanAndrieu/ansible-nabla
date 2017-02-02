@@ -1,5 +1,5 @@
-#ansible-playbook -i hosts -c local -v docker-registry.yml --ask-pass -vvvv | tee setup.log
-#ansible-playbook -i hosts -v docker-registry.yml --limit albandri --ask-sudo-pass -vvvv | tee setup.log
+#ansible-playbook -i staging -c local -v docker-registry.yml --ask-pass -vvvv | tee setup.log
+#ansible-playbook -i staging -c local -v docker-registry.yml --limit albandri.misys.global.ad --ask-sudo-pass -vvvv | tee setup.log
 
 - hosts: all
   gather_facts: true
@@ -32,24 +32,96 @@
   pre_tasks:
     - name: Log into private registry and force re-authorization
       docker_login:
-        registry: https://dtr.nabla.mobi:443/
-        username: test
-        password: Microsoft
+        registry: https://docker:443/
+        username: nabla
+        password: microsoft
         reauthorize: yes
 
-  pre_tasks:
     - name: Inspect multiple images
       docker_image_facts:
         name:
-          - nabla/nabla
+          - nabla/centos
+          - nabla/activemq
+          - nabla/cargo
+          - nabla/ffc
+          - nabla/misysboard
+          - nabla/cmr
+          - nabla/fppserver
+          - nabla/oracle
+          - nabla/els
           - nabla/java
 
 - hosts: docker
-  become: yes
+#  become: yes
 
   tasks:
-    - name: Pull multiple images
+    - name: Remove ubuntu image
       docker_image:
-        name:
-          - nabla/nabla
-          - nabla/java
+        state: absent
+        name: ubuntu:14.04
+        
+    - name: Remove hello-world image
+      docker_image:
+        state: absent
+        name: hello-world:latest
+        force: yes
+              
+    - name: Remove test image
+      docker_image:
+        state: absent
+        name: docker/mgr.jenkins/jenkins-slave
+        tag: test
+  
+    - name: Pull centos images
+      docker_container:
+        name: centos
+        image: docker/nabla/centos
+        state: stopped
+        pull: yes
+        #command: sleep infinity
+
+    - name: Pull java images
+      docker_container:
+        name: java
+        image: docker/nabla/java
+        state: stopped
+        pull: yes
+        #command: sleep infinity
+        
+    - name: Pull frdb images
+      docker_container:
+        name: frdb
+        image: docker/nabla/sqlserver:161011ma-mssql_2012-FR-1.5.2-BES
+        state: stopped
+        pull: yes
+        #command: sleep infinity
+
+#    - name: Pull oracle images
+#      docker_container:
+#        name: oracle
+#        image: docker/nabla/oracle
+#        state: stopped
+#        pull: yes
+#        command: sleep infinity
+
+#TODO http://blog.yohanliyanage.com/2015/05/docker-clean-up-after-yourself/
+#TODD must be run on a daily basis
+#Clean 1 week old containers
+#docker ps -a | grep 'weeks ago' | awk '{print $1}' | xargs --no-run-if-empty docker rm
+#Clean all containers
+#docker rm `docker ps --no-trunc -aq`
+
+    - name: Clean all exited containers
+      shell: "docker rm -v $(docker ps -a -q -f status=exited)"
+      ignore_errors: true
+      
+    - name: Remove unwanted dangling images
+      shell: "docker rmi $(docker images -f \"dangling=true\" -q)"
+      ignore_errors: true
+      
+    - name: Remove unwanted ‘dangling’ volumes
+      shell: "docker volume rm $(docker volume ls -qf dangling=true)"
+      ignore_errors: true
+       
+#docker ps -a -s
+#docker images

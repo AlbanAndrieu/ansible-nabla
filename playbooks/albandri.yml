@@ -1,5 +1,6 @@
 #ansible-playbook -i hosts-albandri -v albandri.yml --limit albandri.misys.global.ad --ask-sudo-pass -vvvv | tee setup.log
 # -c local  --ask-pass --ask-sudo-pass --sudo
+#ansible all -m setup -i hosts-albandri --limit albandri.misys.global.ad -vvvv
 
 - name: Assert platform is supported
   hosts: all

@@ -1,4 +1,4 @@
-#ansible-playbook -i hosts-albandri -c local -v docker.yml -vvvv | tee setup.log
+#ansible-galaxy install -r requirements.yml -p ./roles/ --ignore-errors
 #ansible-playbook -i hosts -v docker.yml --limit albandri --ask-sudo-pass -vvvv | tee setup.log
 
 - hosts: all
@@ -26,7 +26,6 @@
 
 - hosts: docker
   become: yes
-
 #  pre_tasks:
 #  - name: Log into DockerHub
 #    docker_login:
@@ -62,15 +61,43 @@
   vars:
 #       docker_opts: "-H tcp://127.0.0.1:4243 -H unix:///var/run/docker.sock --dns 8.8.8.8 --dns 8.8.4.4 --storage-driver=zfs"
        docker_opts: "-H tcp://127.0.0.1:4243 -H unix:///var/run/docker.sock --dns 8.8.8.8 --dns 8.8.4.4 --storage-driver=overlay"
-       #--insecure-registry mydtr:443
-       pip_version_docker_py: 1.9.0 #Fix issue with https://github.com/angstwad/docker.ubuntu/issues/109#issuecomment-257706232
+       docker_opts: "-H tcp://0.0.0.0:4243 -H unix:///var/run/docker.sock --dns 10.25.200.3 --dns 8.8.8.8 --dns 8.8.4.4 --storage-driver overlay --disable-legacy-registry --tlsverify --tlscacert /root/ca.pem --tlscert /etc/ssl/{{ansible_fqdn}}/{{ansible_fqdn}}.pem --tlskey /etc/ssl/{{ansible_fqdn}}/{{ansible_fqdn}}.key --label provider=albandri"
+       #--insecure-registry docker:443       
+       #TODO add 
+       #--userns-remap=default #see https://stackoverflow.com/questions/35291520/docker-and-userns-remap-how-to-manage-volume-permissions-to-share-data-betwee
+       #--tlsverify --tlscacert /etc/docker/ca.pem --tlscert /etc/docker/server.pem --tlskey /etc/docker/server-key.pem --label provider=amazonec2
+       #pip_version_docker_py: 1.9.0 #Fix issue with https://github.com/angstwad/docker.ubuntu/issues/109#issuecomment-257706232
+       # TypeError: create_network() got an unexpected keyword argument 'enable_ipv6' with pip_version_docker_py: 1.9.0
+       #Please upgrade to 1.10.6
 
+#https://stackoverflow.com/questions/37178824/how-to-find-docker-rest-api-url
+#curl -X GET http://10.25.40.139:4243/images/json
 #curl --unix-socket /var/run/docker.sock http:127.0.0.1:4243/version
 #curl --unix-socket /var/run/docker.sock tcp:10.25.40.139:4243/version
-
-#TODO https://askubuntu.com/questions/477551/how-can-i-use-docker-without-sudo
-#sudo groupadd docker
-#sudo gpasswd -a ${USER} docker
+#curl 10.25.40.139:4243/version
 
 #TODO restart docker after installing docker CA
 #sudo service docker start
+
+#sudo docker logout https://docker:5000
+#sudo docker login docker --username=albandri --email=albandri@nabla.mobi
+- hosts: docker
+  become: yes
+
+  post_tasks:
+    - name: Log into private registry and force re-authorization
+      docker_login:
+        registry: https://docker/
+        username: test
+        password: Microsoft
+        reauthorize: yes
+
+
+- hosts: docker
+  become: yes
+
+  post_tasks:
+    - name: Inspect multiple images
+      docker_image_facts:
+        name:
+          - todo/java
