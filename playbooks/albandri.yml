@@ -1130,7 +1130,7 @@
 #  accelerate: true
 
   roles:
-    - role: private-bower
+    - role: alban.andrieu.private-bower
 
 - name: Install OWASP tools
   connection: local

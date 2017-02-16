@@ -6,7 +6,7 @@
     - name: group hosts by distribution
       group_by: key="{{ ansible_distribution }}-{{ ansible_distribution_version }}"
 
-- hosts: Ubuntu-12.04:Ubuntu-14.04
+- hosts: Ubuntu-12.04:Ubuntu-14.04:Ubuntu-16.04
   gather_facts: false
   tasks:
     - name: group hosts for supported distributions
