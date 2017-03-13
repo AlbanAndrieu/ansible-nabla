@@ -27,7 +27,7 @@
 #sudo docker logout https://docker.nabla.mobi:5000
 #sudo docker login dtr.nabla.mobi:443
 - hosts: docker
-  become: yes
+#  become: yes
 
   pre_tasks:
     - name: Log into private registry and force re-authorization
@@ -41,14 +41,6 @@
       docker_image_facts:
         name:
           - nabla/centos
-          - nabla/activemq
-          - nabla/cargo
-          - nabla/ffc
-          - nabla/misysboard
-          - nabla/cmr
-          - nabla/fppserver
-          - nabla/oracle
-          - nabla/els
           - nabla/java
 
 - hosts: docker
@@ -69,13 +61,13 @@
     - name: Remove test image
       docker_image:
         state: absent
-        name: docker/mgr.jenkins/jenkins-slave
+        name: docker/test/jenkins-slave
         tag: test
   
     - name: Pull centos images
       docker_container:
         name: centos
-        image: docker/nabla/centos
+        image: docker/nabla/centos:6.8-latest
         state: stopped
         pull: yes
         #command: sleep infinity
@@ -87,22 +79,6 @@
         state: stopped
         pull: yes
         #command: sleep infinity
-        
-    - name: Pull frdb images
-      docker_container:
-        name: frdb
-        image: docker/nabla/sqlserver:161011ma-mssql_2012-FR-1.5.2-BES
-        state: stopped
-        pull: yes
-        #command: sleep infinity
-
-#    - name: Pull oracle images
-#      docker_container:
-#        name: oracle
-#        image: docker/nabla/oracle
-#        state: stopped
-#        pull: yes
-#        command: sleep infinity
 
 #TODO http://blog.yohanliyanage.com/2015/05/docker-clean-up-after-yourself/
 #TODD must be run on a daily basis
