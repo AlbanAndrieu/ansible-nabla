@@ -22,8 +22,6 @@
                  OSes include Red Hat Enterprise Linux 6/7, CentOS 6, or
                  Ubuntu 12.04/14.04."
 
-#- include: docker.yml
-
 #sudo docker logout https://docker.nabla.mobi:5000
 #sudo docker login registry.nabla.mobi:443
 - hosts: docker
@@ -32,11 +30,35 @@
   pre_tasks:
     - name: Log into private registry and force re-authorization
       docker_login:
-        registry: https://registry.nabla.mobi:443/
+        registry: https://docker.nabla.mobi/
         username: nabla
-        password: todo
+        password: microsoft
         reauthorize: yes
       ignore_errors: true
+
+#See https://docs.ansible.com/ansible/docker_service_module.html
+    - name: Stop all containers
+      docker_service:
+        project_src: "{{ lookup('env','WORKSPACE') }}/dockerfile-nabla/centos"
+        files: docker-compose-nabla.yml
+        build: no
+        recreate: never
+        restarted: no
+        project_name: "TEST"
+        remove_images: local
+        remove_orphans: true
+        remove_volumes: true
+        state: absent
+        stopped: yes
+#        pull: true
+#        timeout: 120
+        debug: true
+      register: output
+#      ignore_errors: true
+      
+    - debug: var=output
+
+- include: docker-registry.yml
 
 - hosts: docker
 #  become: yes
@@ -89,7 +111,6 @@
 #    - name: Print nabla's URL
 #      debug: msg="You can connect to nabla server http://{{ ansible_default_ipv4.address }}:{{ misysboard_port }}"
 
-
     - name: Clean all containers
       shell: "docker rm $(docker ps -qa)"
       ignore_errors: true
@@ -98,17 +119,41 @@
 #      shell: "docker volume prune -f"
 #      ignore_errors: true
 
-    - docker_service:
+    - name: Update all containers          
+      docker_service:
         project_src: "{{ lookup('env','WORKSPACE') }}/dockerfile-nabla/centos"
-        files: docker-compose-sqlserver-latest.yml
-        build: no
-        restarted: true
+        files: docker-compose-nabla.yml
+        pull: yes
+        build: yes
+#        restarted: true
+#        recreate: always
         project_name: "TEST"
         remove_images: local
         remove_orphans: true
         remove_volumes: true
-        stopped: true
-        timeout: 60
+        state: present
+#        stopped: yes
+        timeout: 120
+        debug: true
+      register: output
+#      ignore_errors: true
+      
+    - debug: var=output
+    
+
+    - docker_service:
+        project_src: "{{ lookup('env','WORKSPACE') }}/dockerfile-nabla/centos"
+        files: docker-compose-nabla.yml
+#        build: yes
+        restarted: true
+#        recreate: always
+        project_name: "TEST"
+        remove_images: local
+        remove_orphans: true
+        remove_volumes: true
+        state: present
+#        stopped: yes
+        timeout: 120
         debug: true
       register: output
 

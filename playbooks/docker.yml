@@ -67,7 +67,11 @@
        #--userns-remap=default #see https://stackoverflow.com/questions/35291520/docker-and-userns-remap-how-to-manage-volume-permissions-to-share-data-betwee
        #--tlsverify --tlscacert /etc/docker/ca.pem --tlscert /etc/docker/server.pem --tlskey /etc/docker/server-key.pem --label provider=amazonec2
        #pip_version_docker_py: 1.9.0 #Fix issue with https://github.com/angstwad/docker.ubuntu/issues/109#issuecomment-257706232
+       #pip_version_docker: latest
+       pip_version_docker: 2.2.1
        #pip_version_docker_compose: 1.9.0
+       #pip_version_docker_compose: latest
+       pip_version_docker_compose: 1.12.0
        # TypeError: create_network() got an unexpected keyword argument 'enable_ipv6' with pip_version_docker_py: 1.9.0
        #Please upgrade to 1.10.6
        pip_install_docker_py: false
@@ -82,24 +86,20 @@
 #sudo service docker start
 
 #sudo docker logout https://docker:5000
-#sudo docker login docker --username=albandri --email=albandri@nabla.mobi
+#sudo docker login docker.nabla.mobi --username=albandri --email=albandri@nabla.mobi
+
 - hosts: docker
   become: yes
 
   post_tasks:
     - name: Log into private registry and force re-authorization
       docker_login:
-        registry: https://docker/
+        registry: https://docker.nabla.mobi/
         username: test
         password: Microsoft
         reauthorize: yes
 
-
-- hosts: docker
-  become: yes
-
-  post_tasks:
-    - name: Inspect multiple images
-      docker_image_facts:
-        name:
-          - todo/java
+#    - name: Inspect multiple images
+#      docker_image_facts:
+#        name:
+#          - nabla/java

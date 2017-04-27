@@ -27,12 +27,11 @@
 #sudo docker logout https://docker.nabla.mobi:5000
 #sudo docker login dtr.nabla.mobi:443
 - hosts: docker
-#  become: yes
 
   pre_tasks:
     - name: Log into private registry and force re-authorization
       docker_login:
-        registry: https://docker:443/
+        registry: https://docker.nabla.mobi/
         username: nabla
         password: microsoft
         reauthorize: yes
@@ -89,6 +88,10 @@
 
     - name: Clean all exited containers
       shell: "docker rm -v $(docker ps -a -q -f status=exited)"
+      ignore_errors: true
+
+    - name: Clean all created containers
+      shell: "docker rm -v $(docker ps -a -q -f status=created)"
       ignore_errors: true
       
     - name: Remove unwanted dangling images

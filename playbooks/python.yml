@@ -1,4 +1,4 @@
-#sudo ansible-playbook -i hosts-albandri -c local -v python.yml | tee setup.log
+#sudo ansible-playbook -i hosts-albandri -c local -v python.yml --limit albandri.misys.global.ad --ask-pass | tee setup.log
 
 - name: Install python
   connection: local
@@ -7,6 +7,10 @@
 #  accelerate: true
 
   roles:
-    - { role: python,
-        python_version: 2.7 
-      }    
+    - python
+
+  vars:
+    python_versions: [2.7, 3.5]
+    python_install: [numpy, pandas]
+    python_virtualenvs:
+      - path: /opt/test/env

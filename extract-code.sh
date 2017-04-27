@@ -361,4 +361,4 @@ ansible-galaxy setup --list
 #ansible-galaxy setup --remove ID
 ansible-galaxy search eclipse --author alban.andrieu
 ansible-galaxy install alban.andrieu.jmeter
-ansible-galaxy install AlbanAndrieu.java
+#ansible-galaxy install AlbanAndrieu.java
