@@ -387,6 +387,11 @@
   scm:     'git'
   version: 'master'
 
+- src:     'https://github.com/AlbanAndrieu/ansible-role-maven-color'
+  name:    'maven-color'
+  scm:     'git'
+  version: 'master'
+  
 - src:     'https://github.com/AlbanAndrieu/ansible-monit'
   name:    'monit'
   scm:     'git'

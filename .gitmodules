@@ -280,3 +280,6 @@
 [submodule "roles/alban.andrieu.scons"]
 	path = roles/alban.andrieu.scons
 	url = https://github.com/AlbanAndrieu/ansible-scons.git
+[submodule "roles/maven-color"]
+	path = roles/maven-color
+	url = https://github.com/AlbanAndrieu/ansible-role-maven-color

@@ -168,14 +168,21 @@ home=/home/{{ user }}/
 #ansible_sudo_pass=todo
 install_kernel_extras=false
 
-[zone]
-#mgrv062.misys.global.ad
+[solaris]
+#sun4v is a blade server. Logical Domains LDOM
+sparc-sun4sol-u6-1-sun4v ansible_user=jenkins ansible_python_interpreter="/opt/csw/bin/python"
+#sun4u is a normal rack server.
+sparc-sun4sol-u6-1-sun4u ansible_user=root ansible_python_interpreter="/usr/local/bin/python2.7"
+#x86linux
+x86-sun4sol-u6-1 ansible_user=test group=other home=/todo/home/{{ user }}/ ansible_python_interpreter="/usr/local/bin/python2.7" ansible_sudo_pass=Test_123 ansible_ssh_user="root" ansible_ssh_pass="Test_123"
 
-[zone:vars]
-user=test
-group=other
-home=/todo/home/{{ user }}/
-ansible_sudo_pass=Test_123
-ansible_python_interpreter="/usr/local/bin/python2.7"
-ansible_ssh_user="root"
-ansible_ssh_pass="Test_123"
+[solaris:vars]
+user=jenkins
+group=jenkins
+home=/export/home/{{ user }}/
+#ansible_sudo_pass=jenkins1234
+#ansible_python_interpreter="/opt/csw/bin/python"
+#For x86sol 
+#ansible_python_interpreter="/usr/local/bin/python2.7"
+#ansible_ssh_user="jenkins"
+#ansible_ssh_pass="jenkins1234"

@@ -7,6 +7,19 @@
 #  accelerate: true
 
   roles:
-    - { role: maven}
+     - role: maven
 
+  vars:
+       maven_path_to_lib_role: "{{ playbook_dir + '/../roles' }}"
+    
+- name: Install maven color
+  connection: local
+  hosts: workstation
+#  remote_user: root
+#  accelerate: true
 
+  roles:
+     - role: maven-color
+
+  vars:
+       maven_color_maven_home: /opt/maven/apache-maven-3.3.9 

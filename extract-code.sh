@@ -75,6 +75,7 @@ git submodule add -f  https://github.com/AlbanAndrieu/ansible-lib.git silpion.li
 #git clone https://github.com/silpion/ansible-maven maven
 git submodule add -f  https://github.com/AlbanAndrieu/ansible-maven.git maven
 #TODO rename to silpion.maven
+git submodule add -f  https://github.com/AlbanAndrieu/ansible-role-maven-color maven-color
 
 #git clone https://github.com/silpion/ansible-java java
 git submodule add -f  https://github.com/AlbanAndrieu/ansible-java.git java

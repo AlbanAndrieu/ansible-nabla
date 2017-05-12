@@ -922,8 +922,22 @@
 #  connection: local
 
   roles:
-    - maven
+     - role: maven
 
+  vars:
+       maven_path_to_lib_role: "{{ playbook_dir + '/../roles' }}"
+
+- name: Install maven color
+  hosts: maven
+  remote_user: albandri
+#  connection: local
+
+  roles:
+     - role: maven-color
+
+  vars:
+       maven_color_maven_home: /opt/maven/apache-maven-3.3.9 
+       
 - name: Install css
   hosts: css
   remote_user: albandri
