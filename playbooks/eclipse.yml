@@ -6,7 +6,7 @@
     - name: group hosts by distribution
       group_by: key="{{ ansible_distribution }}-{{ ansible_distribution_version }}"
 
-- hosts: Ubuntu-12.04:Ubuntu-14.04:Ubuntu-16.04
+- hosts: Ubuntu-12*:Ubuntu-13*:Ubuntu-14*:Ubuntu-16*:Ubuntu-17*
   gather_facts: false
   tasks:
     - name: group hosts for supported distributions
@@ -18,7 +18,8 @@
     - name: fail for unsupported distribution
       fail: msg="{{ ansible_distribution }} {{ ansible_distribution_version }}
                  is not a supported OS for a Tower installation.  Supported
-                 OSes include Ubuntu 12.04/14.04."
+                 OSes include Ubuntu 12.04/14.04/16.04/17.04."
+    - debug: msg="Version {{ ansible_distribution }} {{ ansible_distribution_version }} {{ ansible_architecture }}"                 
 
 - name: Install eclipse
 #  connection: local
