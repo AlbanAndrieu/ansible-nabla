@@ -1,6 +1,6 @@
 [all]
 #127.0.0.1
-localhost
+localhost dtap=test comment="Hosting by ???" ext_id="SRV_01" groups="misc"
 
 #below is used only git lamp.yml
 [lamp]
@@ -148,6 +148,14 @@ localhost
 #10.0.2.15
 localhost
 
+[windows:vars]
+#ansible_user = vagrant
+#ansible_password = vagrant
+ansible_port = 5986
+ansible_connection = winrm
+ansible_winrm_server_cert_validation = ignore
+ansible_winrm_transport = ssl
+
 [test-boxes]
 #vagrant local box
 #192.168.33.10
@@ -179,7 +187,7 @@ x86-sun4sol-u6-1 ansible_user=test group=other home=/todo/home/{{ user }}/ ansib
 [solaris:vars]
 user=jenkins
 group=jenkins
-home=/export/home/{{ user }}/
+#home=/export/home/{{ user }}/
 #ansible_sudo_pass=jenkins1234
 #ansible_python_interpreter="/opt/csw/bin/python"
 #For x86sol 

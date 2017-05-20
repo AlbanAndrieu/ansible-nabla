@@ -1,6 +1,6 @@
 [all]
 #127.0.0.1
-albandri-laptop-work
+albandri-laptop-work dtap=prod comment="Hosting by Alban Andrieu" ext_id="SRV_02" groups="paris"
 
 #below is used only git lamp.yml
 [lamp]
@@ -126,7 +126,7 @@ user=albandri
 group=docker
 version=10
 #home=/workspace/users/{{ user }}{{ version }}/
-home=/home/{{ user }}/
+#home=/home/{{ user }}/
 #ansible_sudo_pass=todo
 
 [nexus]
@@ -163,3 +163,11 @@ albandri-laptop-work
 [windows]
 #10.0.2.15
 albandri-laptop-work
+
+[windows:vars]
+#ansible_user = vagrant
+#ansible_password = vagrant
+ansible_port = 5986
+ansible_connection = winrm
+ansible_winrm_server_cert_validation = ignore
+ansible_winrm_transport = ssl
