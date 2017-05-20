@@ -6,7 +6,7 @@
     - name: group hosts by distribution
       group_by: key="{{ ansible_distribution }}-{{ ansible_distribution_version }}"
 
-- hosts: RedHat-7*:RedHat-6*:CentOS-6*:Ubuntu-12.04:Ubuntu-14.04:Ubuntu-16.04
+- hosts: RedHat-7*:RedHat-6*:CentOS-6*:Ubuntu-12.04:Ubuntu-14.04:Ubuntu-16.04:Ubuntu-17.04
   gather_facts: false
   tasks:
     - name: group hosts for supported distributions
@@ -54,7 +54,10 @@
     - alban.andrieu.cpp
 
   vars:
-      cppunit_version: "1.13-0v5"
-      boost_version: "1.58"
-      clang_version: "3.5"
+      #cppunit_version: "-1.13-0"
+      cppunit_version: "-1.13-0v5"
+      #boost_version: "1.54"
+      #boost_version: "1.58"
+      boost_version: "1.61"
+      clang_version: "-4.0"    
       cpp_package_list: []

@@ -1,7 +1,6 @@
 #ansible-playbook -i hosts-albandri -c local -v java.yml -vvvv --ask-sudo-pass | tee setup.log
 
 - name: Install java
-#  connection: local
   hosts: workstation
 #  gather_facts: false
   remote_user: albandri
@@ -10,6 +9,8 @@
   roles:
     - role: java
       java_oracle_version: 7u71
+      util_path_to_lib_role: ../roles
 
     - role: java
       java_oracle_version: 8u66
+      util_path_to_lib_role: ../roles

@@ -1,7 +1,6 @@
 #ansible-playbook -i hosts -v owasp-wte.yml --limit albandri --ask-sudo-pass -vvvv | tee setup.log
 
 - name: Install OWASP tools
-#  connection: local
   hosts: workstation
   remote_user: root
 #  accelerate: true

@@ -1,10 +1,10 @@
 [all]
 #127.0.0.1
-albandri.misys.global.ad
+albandri-laptop-work
 
 #below is used only git lamp.yml
 [lamp]
-albandri.misys.global.ad
+albandri-laptop-work
 
 [ntp]
 #Same as all
@@ -13,65 +13,65 @@ albandri.misys.global.ad
 #Same as all
 
 [administration]
-#albandri.misys.global.ad
+#albandri-laptop-work
 
 [security]
-albandri.misys.global.ad
+albandri-laptop-work
 
 [cmake]
-albandri.misys.global.ad
+albandri-laptop-work
 
 [cpp]
-albandri.misys.global.ad
+albandri-laptop-work
 
 [java]
-albandri.misys.global.ad
+albandri-laptop-work
 
 [maven]
-albandri.misys.global.ad
+albandri-laptop-work
 
 [css]
-albandri.misys.global.ad
+albandri-laptop-work
 
 [chrome]
-albandri.misys.global.ad
+albandri-laptop-work
 
 [tomcat-servers]
-albandri.misys.global.ad
+albandri-laptop-work
 
 [jboss-servers]
-albandri.misys.global.ad
+albandri-laptop-work
 
 [nabla-servers]
-albandri.misys.global.ad
+albandri-laptop-work
 
 [apache-servers]
-albandri.misys.global.ad
+albandri-laptop-work
 
 [mysql-servers]
-albandri.misys.global.ad
+albandri-laptop-work
 
 [locale]
-albandri.misys.global.ad
+albandri-laptop-work
 
 [zabbix-server]
-albandri.misys.global.ad
+albandri-laptop-work
 
 [zabbix-agent]
-albandri.misys.global.ad
+albandri-laptop-work
 
 [webmin]
-albandri.misys.global.ad
+albandri-laptop-work
 
 [zfs]
-albandri.misys.global.ad
-#albandri.misys.global.ad ansible_connection=local
+albandri-laptop-work
+#albandri-laptop-work ansible_connection=local
 
 [xvbf]
-albandri.misys.global.ad
+albandri-laptop-work
 
 [selenium]
-albandri.misys.global.ad
+albandri-laptop-work
 
 [vagrant_hosts:children]
 jenkins-master
@@ -79,14 +79,14 @@ jenkins-slaves
 #sonar
 
 [jenkins-master]
-albandri.misys.global.ad
+albandri-laptop-work
 master ansible_ssh_host=192.168.11.33 ansible_ssh_port=22 ansible_connection=ssh ansible_user=vagrant
 
 [jenkins-master:vars]
 ansible_ssh_common_args='-o StrictHostKeyChecking=no'
 
 [jenkins-slaves]
-albandri.misys.global.ad
+albandri-laptop-work
 slave01 ansible_ssh_host=192.168.11.51 ansible_ssh_port=22 ansible_connection=ssh ansible_user=vagrant
 slave02 ansible_ssh_host=192.168.11.52 ansible_ssh_port=22 ansible_connection=ssh ansible_user=vagrant
 slave03 ansible_ssh_host=192.168.11.53 ansible_ssh_port=22 ansible_connection=ssh ansible_user=vagrant
@@ -96,44 +96,44 @@ slave04 ansible_ssh_host=192.168.11.54 ansible_ssh_port=22 ansible_connection=ss
 ansible_ssh_common_args='-o StrictHostKeyChecking=no'
 
 [jenkins-swarm]
-#albandri.misys.global.ad
+#albandri-laptop-work
 
 [jenkins-swarm:vars]
 ansible_ssh_common_args='-o StrictHostKeyChecking=no'
 
 [supervisors]
-albandri.misys.global.ad
+albandri-laptop-work
 
 [virtualbox]
-albandri.misys.global.ad
+albandri-laptop-work
 
 [vagrant]
-albandri.misys.global.ad
+albandri-laptop-work
 
 [docker]
-albandri.misys.global.ad
+albandri-laptop-work
 #vagrant local box
 #192.168.33.10
 
 [nodejs]
-albandri.misys.global.ad
+albandri-laptop-work
 
 [workstation]
-albandri.misys.global.ad
+albandri-laptop-work
 
 [workstation:vars]
 user=albandri
-group=albandri
+group=docker
 version=10
 #home=/workspace/users/{{ user }}{{ version }}/
 home=/home/{{ user }}/
 #ansible_sudo_pass=todo
 
 [nexus]
-albandri.misys.global.ad
+albandri-laptop-work
 
 [sonar]
-albandri.misys.global.ad
+albandri-laptop-work
 sonar ansible_ssh_host=192.168.11.99 ansible_ssh_port=22 ansible_connection=ssh ansible_user=vagrant
 
 [sonar:vars]
@@ -155,11 +155,11 @@ ansible_ssh_common_args='-o StrictHostKeyChecking=no'
 #see workstation
 
 [logstash]
-albandri.misys.global.ad
+albandri-laptop-work
 
 [collectd]
-albandri.misys.global.ad
+albandri-laptop-work
 
 [windows]
 #10.0.2.15
-albandri.misys.global.ad
+albandri-laptop-work

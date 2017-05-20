@@ -283,3 +283,9 @@
 [submodule "roles/maven-color"]
 	path = roles/maven-color
 	url = https://github.com/AlbanAndrieu/ansible-role-maven-color
+[submodule "roles/geerlingguy.nodejs"]
+	path = roles/geerlingguy.nodejs
+	url = https://github.com/AlbanAndrieu/ansible-role-nodejs.git
+[submodule "roles/ssl.ca-certificate"]
+	path = roles/ssl.ca-certificate
+	url = https://github.com/AlbanAndrieu/ansible-trust-ca.git

@@ -76,7 +76,7 @@
   hosts: jenkins-slaves
 #  sudo: yes
 #  user: vagrant
-  remote_user: root
+  remote_user: albandri
   connection: local
 #  remote_user: vagrant
 

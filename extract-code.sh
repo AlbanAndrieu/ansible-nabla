@@ -108,7 +108,10 @@ git submodule add -f  https://github.com/AlbanAndrieu/ansible-selenium.git alban
 #git submodule deinit -f nodejs
 #rm -rf ../.git/modules/roles/nodejs/
 #git rm --cached nodejs
-git submodule add -f  https://github.com/AlbanAndrieu/ansible-nodejs.git nodejs
+git submodule deinit -f nodejs
+#TO REMOVE
+#git submodule add -f  https://github.com/AlbanAndrieu/ansible-nodejs.git nodejs
+git submodule add -f  https://github.com/AlbanAndrieu/ansible-role-nodejs.git geerlingguy.nodejs
 
 #git submodule deinit -f conky
 git submodule add -f  https://github.com/AlbanAndrieu/ansible-conky.git alban.andrieu.conky
@@ -326,7 +329,6 @@ git submodule add -f  https://github.com/AlbanAndrieu/ansible-trust-ca.git ssl.c
 #https://github.com/bennojoy/memcached
 #https://github.com/nickjj/ansible-security #for firewall
 
-#https://github.com/AnsibleShipyard/ansible-nodejs
 #https://github.com/Stouts/Stouts.backup
 
 #Below it can be usefull for maintenance purpose
@@ -353,7 +355,7 @@ mkdir out
 #Add missing python-simplejson
 ansible myserver -i hosts-production -m raw -a "sudo yum install -y python-simplejson"  -k -u root -vvvv
 ansible -i hosts-production -m setup --user=root --tree out/ all
-ansible-cmdb out/ > overview.html
+ansible-cmdb -i hosts-production out/ > overview.html
 
 ansible-galaxy login
 ansible-galaxy setup travis AlbanAndrieu ansible-jmeter Mc7ofHYG4bP5zSbuxEdQ

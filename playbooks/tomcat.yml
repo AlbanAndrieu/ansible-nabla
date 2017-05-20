@@ -2,7 +2,7 @@
 
 - name: Install tomcat
   hosts: workstation
-  remote_user: root
+  remote_user: albandri
 #  connection: local
 
   roles:

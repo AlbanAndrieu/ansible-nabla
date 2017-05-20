@@ -1,7 +1,6 @@
 #ansible-playbook -i hosts-albandri -c local -v maven.yml -vvvv --ask-sudo-pass | tee setup.log
 
 - name: Install maven
-  connection: local
   hosts: workstation
 #  remote_user: root
 #  accelerate: true
@@ -13,7 +12,6 @@
        maven_path_to_lib_role: "{{ playbook_dir + '/../roles' }}"
     
 - name: Install maven color
-  connection: local
   hosts: workstation
 #  remote_user: root
 #  accelerate: true

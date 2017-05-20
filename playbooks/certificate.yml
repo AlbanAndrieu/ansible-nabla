@@ -1,4 +1,4 @@
-#ansible-playbook -i hosts-albandri -c local -v certificate.yml -vvvv --ask-sudo-pass | tee setup.log
+#ansible-playbook -i hosts-albandri -v certificate.yml -c local --limit albandri-laptop-work --ask-sudo-pass -vvvv | tee setup.log
 
 - hosts: all
   gather_facts: true
@@ -7,13 +7,20 @@
       group_by: key="{{ ansible_distribution }}-{{ ansible_distribution_version }}"
 
 - hosts: workstation
-#  connection: local
-  remote_user: root
+  remote_user: albandri
 #  become: yes
 
-  pre_tasks:
+  pre_tasks:  
+  
+    #- name: Create private key
+    #  shell: ssh-keygen -t rsa -C "alban.andrieu@free.fr"
+    #  ignore_errors: yes      
+    #  become: yes
+    #  become_user: albandri
+        
     - name: Get the CA root certificate
       get_url: dest=~/ca.pem url=http://home.nabla.mobi:7072/download/certs/{{ansible_fqdn}}.crt
+      ignore_errors: yes      
       become: yes
       become_user: root
 
@@ -29,6 +36,7 @@
 
     - name: Get the Docker root certificate
       get_url: dest=~/docker.pem url=http://home.nabla.mobi:7072/download/certs/docker.crt
+      ignore_errors: yes
       become: yes
       become_user: root
 
@@ -39,8 +47,7 @@
       
 - name: Install CA root certificate
   hosts: workstation
-#  connection: local
-  remote_user: root
+  remote_user: albandri
   ignore_errors: yes
 
   roles:
@@ -50,7 +57,6 @@
 
 - name: Install Docker CA root certificate
   hosts: workstation
-#  connection: local
   remote_user: root
   ignore_errors: yes
 
@@ -61,9 +67,8 @@
       trust_ca_cert_prefix: 'docker'
 
 - name: Install server certificate
-  connection: local
   hosts: workstation
-  remote_user: root
+  remote_user: albandri
   become: yes
 
   roles:
@@ -77,14 +82,13 @@
       ssl_certs_days: "365"
       #ssl_certs_fields: "/C={{ssl_certs_country}}/ST={{ssl_certs_state}}/L={{ssl_certs_locality}}/O={{ssl_certs_organization}}/CN={{ssl_certs_common_name}}"
       ssl_certs_fields: "/C={{ssl_certs_country}}/ST={{ssl_certs_state}}/L={{ssl_certs_locality}}/O={{ssl_certs_organization}}/CN={{ssl_certs_common_name}}/emailAddress=alban.andrieu@fre.fr/subjectAltName=DNS.1={{ssl_certs_common_name}},DNS.2=nabla.mobi,DNS.3=localhost"
-      ssl_certs_path_owner: "root"
+      #ssl_certs_path_owner: "root"
       #ssl_certs_path_group: "root"
       ssl_certs_mode: 700
 
 - name: Install java certificate for java 7 and 8
-#  connection: local
   hosts: workstation
-  remote_user: root
+  remote_user: albandri
 #  accelerate: true
   become: yes
 
@@ -107,7 +111,7 @@
 #      java_certificate_port: 8999
 
     - role: java.certificate
-      java_certificate_host: travis-ci.org
+      java_certificate_host: google.com
       java_certificate_port: 443
 
     - role: java.certificate
@@ -118,7 +122,7 @@
     - role: java.certificate
       ignore_errors: yes
       java_path: "/usr/lib/jvm/java-8-oracle/"
-      java_certificate_host: travis-ci.org
+      java_certificate_host: google.com
       java_certificate_port: 443
 
     - role: java.certificate
@@ -131,7 +135,7 @@
     - role: java.certificate
       ignore_errors: yes
       java_path: "/usr/lib/jvm/java-7-oracle/"
-      java_certificate_host: travis-ci.org
+      java_certificate_host: google.com
       java_certificate_port: 443
 
     - role: java.certificate

@@ -1,6 +1,6 @@
-#ansible-playbook -i hosts-albandri -v albandri.yml --limit albandri.misys.global.ad --ask-sudo-pass -vvvv | tee setup.log
+#ansible-playbook -i hosts-albandri -v albandri.yml --limit albandri-laptop-work -c local --ask-sudo-pass -vvvv | tee setup.log
 # -c local  --ask-pass --ask-sudo-pass --sudo
-#ansible all -m setup -i hosts-albandri --limit albandri.misys.global.ad -vvvv
+#ansible all -m setup -i hosts-albandri --limit albandri-laptop-work -vvvv
 
 - name: Assert platform is supported
   hosts: all
@@ -52,7 +52,7 @@
     - name: group hosts by distribution
       group_by: key="{{ ansible_distribution }}-{{ ansible_distribution_version }}"
 
-- hosts: RedHat-7*:RedHat-6*:CentOS-7*:CentOS-6*:Ubuntu-16.04:Ubuntu-14.04:Ubuntu-12.04
+- hosts: RedHat-7*:RedHat-6*:CentOS-7*:CentOS-6*:Ubuntu-17.04:Ubuntu-16.04:Ubuntu-14.04:Ubuntu-12.04
   gather_facts: false
   remote_user: albandri
   tasks:
@@ -67,7 +67,7 @@
       fail: msg="{{ ansible_distribution }} {{ ansible_distribution_version }}
                  is not a supported OS for a Nabla installation.  Supported
                  OSes include Red Hat Enterprise Linux 6/7, CentOS 6/7, or
-                 Ubuntu 16.04/14.04/12.04."
+                 Ubuntu 17.04/16.04/14.04/12.04."
 
 #- hosts: localhost
 #
@@ -79,7 +79,7 @@
   hosts: RedHat-7*:RedHat-6*:CentOS-7*:CentOS-6*
   gather_facts: false
   remote_user: albandri
-#  connection: local
+
 
   roles:
     - geerlingguy.repo-epel
@@ -88,7 +88,7 @@
 #- name: Apply hostname configuration
 #  hosts: all
 #  remote_user: albandri
-##  connection: local
+#
 #
 #  roles:
 #    - alban.andrieu.hostname
@@ -97,10 +97,10 @@
 #       hostname_hostname_loopback: "{{ ansible_hostname }} nabla"
        
 - name: Apply common configuration to all nodes
-  hosts: Ubuntu-16*:Ubuntu-14*:Ubuntu-12*
+  hosts: Ubuntu-17*:Ubuntu-16*:Ubuntu-14*:Ubuntu-12*
   gather_facts: false
   remote_user: albandri
-#  connection: local
+
 
   roles:
     - alban.andrieu.common
@@ -110,10 +110,10 @@
        apt_upgrade_system_enabled: no
 
 - name: Apply dns configuration to all nodes
-  hosts: Ubuntu-16*:Ubuntu-14*:Ubuntu-12*
+  hosts: Ubuntu-17*:Ubuntu-16*:Ubuntu-14*:Ubuntu-12*
   gather_facts: false
   remote_user: albandri
-#  connection: local
+
 
   roles:
     - alban.andrieu.dns
@@ -139,19 +139,22 @@
 #      nameserver1: 10.7.109.27
 #      nameserver2: 10.7.111.244
 
-#Below ntp role is included in administration role
 - name: Apply python configuration to all nodes
   hosts: all
   gather_facts: false
   remote_user: albandri
   become: yes
-#  connection: local
+
 
   roles:
     - python
 
-#  vars:
-#       ntp_timezone: Europe/Paris
+  vars:
+    python_ppa: no
+    python_versions: [2.7, 3.5]
+    python_install: [pylint, pandas]
+    python_virtualenvs:
+      - path: /opt/test/env
 
 #Below ntp role is included in administration role
 - name: Apply ntp configuration to all nodes
@@ -159,7 +162,7 @@
   gather_facts: false
   remote_user: albandri
   become: yes
-#  connection: local
+
 
   roles:
     - geerlingguy.ntp
@@ -169,20 +172,20 @@
 
 #Use below only if you want your servers to be part of build farm
 - name: Apply administration configuration to all nodes
-  hosts: Ubuntu-16*:Ubuntu-14*:Ubuntu-12*
+  hosts: Ubuntu-17*:Ubuntu-16*:Ubuntu-14*:Ubuntu-12*
   gather_facts: false
   remote_user: albandri
-#  connection: local
+
 
   roles:
     - alban.andrieu.administration
 
 #Below firewall role is included in administration role
 #- name: Apply firewall configuration to all nodes
-#  hosts: Ubuntu-16*:Ubuntu-14*:Ubuntu-12*
+#  hosts: Ubuntu-17*:Ubuntu-16*:Ubuntu-14*:Ubuntu-12*
 #  gather_facts: false
 #  remote_user: albandri
-##  connection: local
+#
 #
 #  roles:
 #    - geerlingguy.firewall
@@ -272,7 +275,7 @@
   hosts: security
   remote_user: albandri
   become: yes
-#  connection: local
+
 
   roles:
     - security
@@ -290,7 +293,7 @@
 #- name: Install cmake
 #  hosts: cmake
 #  remote_user: albandri
-##  connection: local
+#
 #
 #  roles:
 #    - alban.andrieu.cmake
@@ -299,99 +302,21 @@
 #- name: Install scons
 #  hosts: scons
 #  remote_user: albandri
-##  connection: local
+#
 #
 #  roles:
 #    - alban.andrieu.scons
 
-#Below gcc role is included in cpp role
-- name: Install gcc
-  hosts: gcc
-  remote_user: albandri
-#  connection: local
+- include: cpp.yml
 
-  roles:
-#    - role: alban.andrieu.gcc
-#      gcc_version: "=4:4.8.2-1ubuntu6"
-#      gcc_priority: 10
+- include: java.yml
 
-    - role: alban.andrieu.gcc
-      gcc_version: "-4.8"
-      gcc_priority: 10
-
-    - role: alban.andrieu.gcc
-      gcc_version: "-4.9"
-      gcc_priority: 20
-
-    - role: alban.andrieu.gcc
-      gcc_version: "-5"
-      gcc_priority: 50
-
-
-- name: Install cpp
-  hosts: cpp
-  remote_user: albandri
-#  connection: local
-
-  roles:
-    - alban.andrieu.cpp
-
-  vars:
-      #cppunit_version: "1.13-0"
-      cppunit_version: "1.13-0v5"
-      #boost_version: "1.54"
-      boost_version: "1.58"
-
-- name: Install java
-  hosts: java
-  remote_user: albandri
-#  connection: local
-
-  roles:
-    - role: java
-      java_oracle_version: 7u71
-
-    - role: java
-      java_oracle_version: 8u66
-
-- name: Apply ssl configuration to all nodes
-  #hosts: Ubuntu-16*:Ubuntu-14*:Ubuntu-12*
-  hosts: java
-  gather_facts: false
-  remote_user: albandri
-  become: yes
-
-  roles:
-    - role: ssl.certificate
-      ssl_certs_country: "FR"
-      ssl_certs_locality: "Paris"
-      ssl_certs_organization: "Nabla"
-      ssl_certs_state: "Ile de France"
-      #ssl_certs_common_name: "{{ansible_fqdn}}"
-      ssl_certs_common_name: "nabla.freeboxos.fr"
-      ssl_certs_days: "365"
-      #ssl_certs_fields: "/C={{ssl_certs_country}}/ST={{ssl_certs_state}}/L={{ssl_certs_locality}}/O={{ssl_certs_organization}}/CN={{ssl_certs_common_name}}"
-      ssl_certs_path_owner: "root"
-      #ssl_certs_path_group: "root"
-      ssl_certs_mode: 700
-
-- name: Install java certificate
-  hosts: java
-  remote_user: albandri
-#  connection: local
-  become: yes
-
-  roles:
-    - java.certificate
-
-  vars:
-      java_certificate_host: mail.google.com
-      java_certificate_port: 443
+- include: certificate.yml
 
 #- name: Install virtualbox
 #  hosts: virtualbox
 #  remote_user: albandri
-##  connection: local
+#
 #
 #  roles:
 #    - virtualbox
@@ -400,36 +325,18 @@
 #      virtualbox_package_name: virtualbox
 #      virtualbox_dkms_enable: no
 
-- name: Install vagrant
-  hosts: vagrant
-  remote_user: albandri
-#  connection: local
-  become: yes
+- include: vagrant.yml
 
-  roles:
-    - vagrant
+#  vars:
+#       vagrant_libvirt_enabled: false
+#       vagrant_windows_enabled: false
+##      vagrant_url: https://dl.bintray.com/mitchellh/vagrant/vagrant_1.6.3_x86_64.deb
 
-  vars:
-       vagrant_libvirt_enabled: false
-       vagrant_windows_enabled: false
-#      vagrant_url: https://dl.bintray.com/mitchellh/vagrant/vagrant_1.6.3_x86_64.deb
-
-- name: Install docker
-  hosts: docker
-  remote_user: albandri
-#  connection: local
-  become: yes
-
-  roles:
-    - docker
-
-  vars:
-       docker_opts: "-H tcp://127.0.0.1:4243 -H unix:///var/run/docker.sock --dns 8.8.8.8 --dns 8.8.4.4 --storage-driver=overlay"
+- include: docker.yml
 
 - name: Install locale
   hosts: locale
   remote_user: albandri
-#  connection: local
 
   roles:
     - locale
@@ -437,7 +344,7 @@
 #- name: Install zabbix-agent
 #  hosts: zabbix-agent
 #  remote_user: albandri
-##  connection: local
+#
 #  become: yes
 #
 #  roles:
@@ -450,34 +357,10 @@
 #      zabbix_agent_ubuntu: "1:{{zabbix_agent_version}}-1+trusty"
 #      #zabbix_agent_Server: 127.0.0.1
 
-- name: Install webmin
-  hosts: webmin
-  remote_user: albandri
-#  connection: local
-
-  roles:
-    - alban.andrieu.webmin
-
-  vars:
-      docker_files_enable: no
-      docker_files_generated_directory: "../roles/alban.andrieu.webmin"
-
-- name: Install nexus
-  hosts: nexus
-  remote_user: albandri
-#  connection: local
-  become: yes
-
-  roles:
-    - nexus
-
-  vars:
-      nexus_home: "/usr/local/{{nexus_user}}"
-
 - name: Install xvbf
   hosts: xvbf
   remote_user: albandri
-#  connection: local
+
 
   roles:
     - alban.andrieu.xvbf
@@ -485,7 +368,7 @@
 - name: Install selenium
   hosts: selenium
   remote_user: albandri
-#  connection: local
+
 
   roles:
      - alban.andrieu.selenium
@@ -494,7 +377,7 @@
 #- name: Install zfs
 #  hosts: zfs
 #  remote_user: albandri
-##  connection: local
+#
 #
 #  roles:
 #    - alban.andrieu.zfs
@@ -505,7 +388,7 @@
 #  remote_user: albandri
 ##  sudo: yes
 ##  sudo_user: "{{ user }}"
-##  connection: local
+#
 #
 #  roles:
 #    - dropbox
@@ -517,7 +400,7 @@
 - name: Install workstation add-on
   hosts: workstation
   remote_user: albandri
-#  connection: local
+
 
   roles:
     - alban.andrieu.workstation
@@ -534,7 +417,7 @@
 #- name: Apply swarm configuration to all jenkins slaves
 #  hosts: jenkins-swarm
 #  remote_user: albandri
-##  connection: local
+#
 #
 #  vars_prompt:
 #  - name: jenkins_username
@@ -551,30 +434,31 @@
 #       docker_files_enable: yes,
 #       docker_files_generated_directory: "../roles/alban.andrieu.jenkins-swarm",
 
-# This playbook deploys a simple standalone Tomcat 7 server.
-- name: Deploy Tomcat
-  hosts: tomcat-servers
+- name: Install webmin
+  hosts: webmin
   remote_user: albandri
-#  connection: local
+
 
   roles:
-    - alban.andrieu.tomcat
+    - alban.andrieu.webmin
+
+  vars:
+      docker_files_enable: no
+      docker_files_generated_directory: "../roles/alban.andrieu.webmin"
+
+- include: nexus.yml
+
+- include: tomcat.yml
 
 # This playbook deploys a simple standalone JBoss server.
 
-- name: Deploy Jboss
-  hosts: jboss-servers
-  remote_user: albandri
-#  connection: local
-
-  roles:
-    - alban.andrieu.jboss
+#- include: jboss.yml
 
 ## This playbook deploys a MySQL database.
 #- name: Deploy MySQL and configure the databases
 #  hosts: mysql-servers
 #  remote_user: albandri
-##  connection: local
+#
 #
 #  roles:
 #    - geerlingguy.mysql
@@ -588,7 +472,7 @@
 #- name: Deploy Apache and configure the server
 #  hosts: apache-servers
 #  remote_user: albandri
-##  connection: local
+#
 #
 #  roles:
 #    - geerlingguy.apache
@@ -599,7 +483,7 @@
 #- name: Add dependencies for Apache like PHP
 #  hosts: apache-servers
 #  remote_user: albandri
-##  connection: local
+#
 #
 #  roles:
 #    - geerlingguy.php
@@ -611,7 +495,7 @@
 #- name: Add admin tool for Apache like PHPmyAdmin
 #  hosts: apache-servers
 #  remote_user: albandri
-##  connection: local
+#
 #
 #  roles:
 #    - geerlingguy.phpmyadmin
@@ -630,7 +514,7 @@
 - name: Configure and deploy the nabla php sample application code to apache
   hosts: nabla-servers
   remote_user: albandri
-#  connection: local
+
 
   roles:
     - alban.andrieu.web
@@ -651,7 +535,7 @@
 - name: Install pagespeed
   hosts: apache-servers
   remote_user: albandri
-#  connection: local
+
   roles:
     - role: alban.andrieu.pagespeed
 
@@ -662,7 +546,7 @@
 - name: Install evasive
   hosts: apache-servers
   remote_user: albandri
-#  connection: local
+
   roles:
     - role: alban.andrieu.evasive
 
@@ -672,276 +556,23 @@
 - name: Install awstats
   hosts: apache-servers
   remote_user: albandri
-#  connection: local
+
   roles:
     - role: alban.andrieu.awstats
 
   vars:
        apache_listen_port: 7070
 
-- name: Apply configuration to jenkins master
-  hosts: jenkins-master
-  remote_user: albandri
-#  connection: local
+- include: jenkins-master.yml
 
-  roles:
-    - role: jenkins-master
+- include: jenkins-slave.yml
 
-  vars:
-      docker_files_generated_directory: "../roles/jenkins-master"
-      docker_files_enable: yes
-      jenkins_proxy: apache
-      jenkins_proxy_hostname: jenkins.myhost.com
-#      jenkins_ssh_key_file: "~/.ssh/id_rsa.pub"
-      jenkins_http_port: 8380
-      jenkins_proxy_port: 7070
-#      jenkins_home: /jenkins
-      jenkins_java_args:
-        - "-Xmx1024m"
-        - "-XX:MaxPermSize=512m"
-        - "-Djava.awt.headless=true"
-      jenkins_prefix: "/jenkins"
-      jenkins_plugins:
-        - "ws-cleanup"
-        - "envinject"
-        - "artifactdeployer"
-        - "nodenamecolumn"
-        - "summary_report"
-        - "publish-over-cifs"
-        - "progress-bar-column-plugin"
-        - "thinBackup"
-        - "token-macro"
-        - "jobConfigHistory"
-        - "scons"
-        - "downstream-buildview"
-        - "scm-sync-configuration"
-        - "deploy"
-        - "docker-plugin"
-        - "build-publisher"
-        - "sonar"
-        - "xvfb"
-        - "windows-slaves"
-        - "m2release"
-        - "git"
-        - "scm-api"
-        - "maven-repo-cleaner"
-        - "ssh-agent"
-        - "clover"
-        - "environment-script"
-        - "stepcounter"
-        - "plugin-usage-plugin"
-        - "jenkins-cloudformation-plugin"
-        - "cvs"
-        - "jira"
-        - "JiraTestResultReporter"
-        - "checkmarx"
-        - "selenium"
-        - "sonatype-ci"
-        - "jobtype-column"
-        - "findbugs"
-        - "batch-task"
-        - "warnings"
-        - "violation-columns"
-        - "configurationslicing"
-        - "parameterized-trigger"
-        - "sounds"
-        - "job-exporter"
-        - "preSCMbuildstep"
-        - "fitnesse"
-        - "dashboard-view"
-        - "gearman-plugin"
-        - "jquery-ui"
-        - "gatling"
-        - "job-node-stalker"
-        - "favorite"
-        - "build-pipeline-plugin"
-        - "postbuild-task"
-        - "skip-certificate-check"
-        - "maven-info"
-        - "crowd2"
-        - "disk-usage"
-        - "node-iterator-api"
-        - "ssh"
-        - "stashNotifier"
-        - "publish-over-ssh"
-        - "sitemonitor"
-        - "build-metrics"
-        - "promoted-builds"
-        - "flexible-publish"
-        - "selenium-builder"
-        - "tasks"
-        - "computer-queue-plugin"
-        - "saferestart"
-        - "throttle-concurrents"
-        - "ant"
-        - "countjobs-viewstabbar"
-        - "email-ext"
-        - "credentials"
-        - "cobertura"
-        - "nodejs"
-        - "audit-trail"
-        - "svnpublisher"
-        - "text-finder-run-condition"
-        - "versioncolumn"
-        - "global-build-stats"
-        - "plot"
-        - "jquery"
-        - "svn-tag"
-        - "show-build-parameters"
-        - "conditional-buildstep"
-        - "copy-to-slave"
-        - "maven-plugin"
-        - "view-job-filters"
-        - "jshint-checkstyle"
-        - "rebuild"
-        - "matrix-project"
-        - "performance"
-        - "copyartifact"
-        - "speaks"
-        - "groovy"
-        - "svn-revert-plugin"
-        - "ldap"
-        - "claim"
-        - "docker-build-step"
-        - "hudson-jirareporter-plugin"
-        - "nodelabelparameter"
-        - "ansicolor"
-        - "translation"
-        - "sidebar-link"
-        - "bulk-builder"
-        - "jenkins-jira-issue-updater"
-        - "checkstyle"
-        - "mttr"
-        - "ssh-slaves"
-        - "swarm"
-        - "ssh-credentials"
-        - "subversion"
-        - "antisamy-markup-formatter"
-        - "covcomplplot"
-        - "trac"
-        - "testng-plugin"
-        - "greenballs"
-        - "test-stability"
-        - "external-monitor-job"
-        - "docker-build-publish"
-        - "any-buildstep"
-        - "project-stats-plugin"
-        - "timestamper"
-        - "build-name-setter"
-        - "build-timeout"
-        - "prereq-buildstep"
-        - "caliper-ci"
-        - "pmd"
-        - "lastsuccessversioncolumn"
-        - "ec2"
-        - "dry"
-        - "analysis-collector"
-        - "analysis-core"
-        - "insight-ci"
-        - "description-setter"
-        - "publish-over-ftp"
-        - "groovy-postbuild"
-        - "hudson-apiv2-plugin"
-        - "build-environment"
-        - "seleniumrc-plugin"
-        - "git-client"
-        - "monitoring"
-        - "text-finder"
-        - "ftppublisher"
-        - "built-on-column"
-        - "run-condition"
-        - "lastfailureversioncolumn"
-        - "mask-passwords"
-        - "hp-application-automation-tools-plugin"
-        - "project-description-setter"
-        - "build-with-parameters"
-        - "svnmerge"
-        - "git-parameter"
-        - "javadoc"
-        - "build-failure-analyzer"
-        - "confluence-publisher"
-        - "html5-notifier-plugin"
-        - "violations"
-        - "next-executions"
-        - "matrix-auth"
-        - "testInProgress"
-        - "copy-data-to-workspace-plugin"
-        - "mailer"
-        - "next-build-number"
-        - "qc"
-        - "multiple-scms"
-        - "job-import-plugin"
-        - "files-found-trigger"
-        - "compact-columns"
-        - "build-keeper-plugin"
-        - "pam-auth"
-        - "log-parser"
-        - "locale"
-        - "all-changes"
-        - "dependencyanalyzer"
-        - "WebSVN2"
-        - "SquishPlugin"
-        - "slave-status"
-#      jenkins_jobs:
-#        - name: test
-#          action: delete
-
-- name: Apply common configuration to all jenkins slaves
-  hosts: jenkins-slaves
-  remote_user: albandri
-#  connection: local
-
-#  vars_files:
-#  - [ "roles/alban.andrieu.jenkins-slave/vars/{{ ansible_distribution }}-{{ ansible_architecture }}.yml", "roles/alban.andrieu.jenkins-slave/vars/{{ ansible_distribution }}.yml" ]
-
-  roles:
-    - alban.andrieu.jenkins-slave
-
-  vars:
-    docker_files_enable: yes
-    docker_files_generated_directory: "../roles/alban.andrieu.jenkins-slave"
-#    jenkins_home: "/jenkins"
-#    jenkins_slave_home: "/kgr-mvn"
-    jenkins_jdk7_enable: yes
-    shell_git:
-      # Additional properties: 'shell_git_machine, shell_git_login, shell_git_email, shell_git_password, shell_git_name, shell_git_path, shell_git_ssl'.
-       - {
-         shell_git_machine: '82.231.208.223',
-         shell_git_login: 'AlbanAndrieu',
-         shell_git_email: 'alban.andrieu@free.fr',
-         shell_git_password: 'microsoft',
-         # Optional.
-         shell_git_name: 'AlbanAndrieu',
-         shell_git_path: '/usr/bin',
-         shell_git_ssl: false
-         }
-
-- name: Install maven
-  hosts: maven
-  remote_user: albandri
-#  connection: local
-
-  roles:
-     - role: maven
-
-  vars:
-       maven_path_to_lib_role: "{{ playbook_dir + '/../roles' }}"
-
-- name: Install maven color
-  hosts: maven
-  remote_user: albandri
-#  connection: local
-
-  roles:
-     - role: maven-color
-
-  vars:
-       maven_color_maven_home: /opt/maven/apache-maven-3.3.9 
+- include: maven.yml
        
 - name: Install css
   hosts: css
   remote_user: albandri
-#  connection: local
+
 
   roles:
     - alban.andrieu.css
@@ -953,7 +584,7 @@
 - name: Install chrome
   hosts: chrome
   remote_user: albandri
-#  connection: local
+
 
   roles:
      - role: chrome
@@ -965,7 +596,7 @@
 - name: Install nodejs
   hosts: nodejs
   remote_user: albandri
-#  connection: local
+
 
   roles:
     - nodejs
@@ -977,7 +608,7 @@
 - name: configure supervisor
   hosts: supervisors
   remote_user: albandri
-#  connection: local
+
   roles:
     - role: supervisor
 
@@ -993,7 +624,7 @@
 #- name: configure supervisor
 #  hosts: supervisors
 #  remote_user: albandri
-##  connection: local
+#
 #  roles:
 #    - role: supervisor
 #      name: fitness
@@ -1002,40 +633,20 @@
 ## user is the same as base_admin_username
 #      user: ubuntu
 
-- name: Install sonar
-  hosts: sonar
-  remote_user: albandri
-#  connection: local
-  roles:
-    - role: sonar
-
-  vars:
-#TODO merge sonar-runner.properties.j2 file from jenkins_slave role
-      sonar_analyzer_runner_install: false
-#Handle by jenkins_slave role, Warning it will override settings.xml.j2 from jenkins_slave role
-      maven_install: false
-      sonar_mysql_install: true
-      sonar_jdbc_driver: "mysql"
-      sonar_jdbc_port: 3306
-      mysql_root_username: root
-      mysql_root_password: microsoft
-      sonar_jdbc_pass: "{{ mysql_root_password }}"
-      sonar_login_user: "{{ mysql_root_username }}"
-      sonar_login_password: "{{ mysql_root_password }}"
-      sonar_shell: "/bin/false"
+- include: sonar.yml
 
 #Below cmake conky is included in workstation role
 #- name: Install conky
 #  hosts: workstation
 #  remote_user: albandri
-##  connection: local
+#
 #  roles:
 #    - role: alban.andrieu.conky
 
 - name: Install git
   hosts: workstation
   remote_user: albandri
-#  connection: local
+
 
   roles:
     - role: geerlingguy.git
@@ -1043,7 +654,7 @@
 - name: Install subversion
   hosts: workstation
   remote_user: albandri
-#  connection: local
+
 
   roles:
     - role: alban.andrieu.subversion
@@ -1052,32 +663,62 @@
       subversion_owner: "{{ user }}"
       subversion_group: "{{ group }}"
 
-#- name: Apply user shell configuration
-#  hosts: workstation
-#  remote_user: albandri
-##  connection: local
-#
-#  vars_files:
-#  - [ "roles/alban.andrieu.shell/defaults/main.yml" ]
-#  - [ "roles/alban.andrieu.shell/vars/default.yml" ]
-#  - [ "roles/alban.andrieu.shell/vars/version.yml" ]
-#  - [ "roles/alban.andrieu.shell/vars/custom-{{ ansible_distribution }}-{{ ansible_architecture }}.yml", "roles/alban.andrieu.shell/vars/custom-{{ ansible_distribution }}.yml" ]
-#
-#  roles:
-#    - role: alban.andrieu.shell
-#
-#  vars:
-#      docker_files_generated_directory: "../roles/alban.andrieu.shell"
-#      docker_files_enable: yes
-#      newrelic_license_key: de35bf5d191ebb208d359b2cd24a60616a02b1f3
-#      shell_owner: "{{ user }}"
-#      shell_group: "{{ group }}"
-##      shell_owner_home: "{{ home }}"
-##      shell_env_directory: "{{ home }}/env/tmp"
-##      rhosts_hosts: []
+- name: Apply common shell configuration
+  hosts: workstation
+#  remote_user: root
+  remote_user: albandri
+
+#  become: yes
+
+  roles:
+    - role: alban.andrieu.shell
+
+  vars:
+    shell_default_version: "30"
+    shell_git_configure_enabled: yes
+    shell_git:
+      # Additional properties: 'shell_git_machine, shell_git_login, shell_git_email, shell_git_password, shell_git_name, shell_git_path, shell_git_ssl'.
+         - {
+           shell_git_machine: '82.231.208.223',
+           shell_git_login: 'AlbanAndrieu',
+           shell_git_email: 'alban.andrieu@free.fr',
+           shell_git_password: 'microsoft',
+           shell_git_name: "Andrieu, Alban",
+           shell_git_path: '/usr/bin',
+           shell_git_ssl: false,
+           shell_git_meld_enabled: yes,
+           shell_git_editor: "gedit"
+           }
+#         - {
+#           shell_git_machine: 'https://github.com',
+#           shell_git_login: 'AlbanAndrieu',
+#           shell_git_email: 'alban.andrieu@free.fr',
+#           shell_git_password: 'microsoft',
+#           shell_git_name: "Andrieu, Alban",
+#           shell_git_path: '/usr/bin',
+#           shell_git_ssl: false,
+#           shell_git_meld_enabled: yes,
+#           shell_git_editor: "gedit"
+#           }
+#         - {
+#           shell_git_machine: 'https://bitbucket.org',
+#           shell_git_login: 'AlbanAndrieu',
+#           shell_git_email: 'alban.andrieu@free.fr',
+#           shell_git_password: 'microsoft',
+#           shell_git_name: "Andrieu, Alban",
+#           shell_git_path: '/usr/bin',
+#           shell_git_ssl: false,
+#           shell_git_meld_enabled: yes,
+#           shell_git_editor: "gedit"
+#           }
+#      shell_rlogin_enabled: no
+    shell_maven_enabled: no
+    newrelic_license_key: de35bf5d191ebb208d359b2cd24a60616a02b1f3
+    docker_files_enable: no
+#    docker_files_generated_directory: "../roles/alban.andrieu.shell"
 
 #- name: Install eclipse
-#  connection: local
+
 #  hosts: workstation
 #  remote_user: albandri
 #
@@ -1091,66 +732,29 @@
 #      #user: "albandri"
 #      #home: "/workspace/users/albandri10"
 
-- name: Install zap
-  connection: local
+- include: zap.yml
+
+- include: jmeter.yml
+
+- name: Install mon
   hosts: workstation
   remote_user: albandri
-#  connection: local
+
+
   roles:
-    - role: alban.andrieu.zap
+    - alban.andrieu.mon
 
   vars:
-      docker_files_generated_directory: "../roles/alban.andrieu.zap"
-      docker_files_enable: yes
+      apache_listen_port: 7070
+      mon_localhost : "albandri"
+      mon_custom_group: "nabla"
+      mon_admin_email: "alban.andrieu@free.fr"
+      mon_weekly_email: "team@free.fr"
+      user: root
+      home: "/root"
 
-- name: Install jmeter
-  hosts: workstation
-  remote_user: albandri
-#  connection: local
-  roles:
-    - role: alban.andrieu.jmeter
+- include: jdiskreport.yml
 
-#- name: Install mon
-#  hosts: workstation
-#  remote_user: albandri
-##  connection: local
-#
-#  roles:
-#    - alban.andrieu.mon
-#
-#  vars:
-#      apache_listen_port: 7070
-#      mon_localhost : "albandri"
-#      mon_custom_group: "nabla"
-#      mon_admin_email: "alban.andrieu@free.fr"
-#      mon_weekly_email: "team@free.fr"
-#      user: root
-#      home: "/root"
+- include: private-bower.yml
 
-- name: Install jdiskreport
-  connection: local
-  hosts: workstation
-  remote_user: albandri
-#  accelerate: true
-
-  roles:
-    - { role: alban.andrieu.jdiskreport,
-      }
-
-- name: Install private-bower
-  connection: local
-  hosts: workstation
-  remote_user: albandri
-#  accelerate: true
-
-  roles:
-    - role: alban.andrieu.private-bower
-
-- name: Install OWASP tools
-  connection: local
-  hosts: workstation
-  remote_user: albandri
-#  accelerate: true
-  roles:
-    - { role: alban.andrieu.owasp-wte,
-      }
+- include: owasp-wte.yml

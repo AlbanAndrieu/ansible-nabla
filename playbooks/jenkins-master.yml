@@ -1,5 +1,5 @@
 #for testing purpose
-#ansible-playbook -i hosts-albandri -c local -v jenkins-master.yml -vvvv --ask-sudo-pass | tee setup.log
+#ansible-playbook -i hosts-albandri -v jenkins-master.yml -c local --limit albandri-laptop-work --ask-sudo-pass -vvvv | tee setup.log
 
 #as root
 #ansible-playbook jenkins-master.yml -i hosts-albandri -vvvv
@@ -7,18 +7,9 @@
 #ansible-playbook jenkins-master.yml -i hosts-albandri -vvvv --ask-sudo-pass --sudo
 # --extra-vars "jenkins_username=aandrieu jenkins_password=tbd"
 
-- hosts: jenkins-master
-  tasks:
-    - name: gather facts from db servers
-      setup:
-      delegate_to: "{{item}}"
-      delegate_facts: True
-      with_items: "{{groups['jenkins-master']}}"
-
 - name: Apply configuration to jenkins master
   hosts: jenkins-master
-  remote_user: root
-#  connection: local
+  remote_user: albandri
 
   roles:
     - { role: jenkins-master,
