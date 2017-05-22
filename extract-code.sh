@@ -365,3 +365,7 @@ ansible-galaxy setup --list
 ansible-galaxy search eclipse --author alban.andrieu
 ansible-galaxy install alban.andrieu.jmeter
 #ansible-galaxy install AlbanAndrieu.java
+
+find ./ -type f -name "*.yml" -exec chmod 644 {} +
+find ./ -type f -name "*.j2" -exec chmod 644 {} +
+
