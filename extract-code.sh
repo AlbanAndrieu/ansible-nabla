@@ -340,7 +340,9 @@ git submodule add -f  https://github.com/AlbanAndrieu/ansible-trust-ca.git ssl.c
 #See https://github.com/ypid/ypid-ansible-common/tree/master/template_READMEs
 TODO https://github.com/ypid/ypid-ansible-common
 
-sudo pip install ansigenome --upgrade
+#sudo pip install ansigenome --upgrade
+cd ansigenome ; sudo python setup.py develop
+
 ./misc/ansigenome/bin/ansigenome scan
 ./misc/ansigenome/bin/ansigenome gendoc -f md
 ansigenome export -t reqs -o ./test.yml -f yml ./roles
