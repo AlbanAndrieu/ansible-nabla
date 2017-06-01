@@ -19,12 +19,33 @@ else
   export DRY_RUN="--check"
 fi
 
+if [ -n "${TARGET_USER}" ]; then
+  echo -e "TARGET_USER is defined \u263A"
+else
+  echo -e "${red} \u00BB Undefined build parameter: TARGET_USER, use the default one ${NC}"
+  export TARGET_USER="kgr_mvn"
+fi
+
 lsb_release -a
 
 echo -e " ======= Running on ${TARGET_SLAVE} \u00A1 ${NC}"
 echo "USER : $USER"
 echo "HOME : $HOME"
 echo "WORKSPACE : $WORKSPACE"
+
+echo -e "${red} Find stale processes ${NC}"
+
+find /proc -maxdepth 1 -user ${TARGET_USER} -type d -mmin +200 -exec basename {} \; | xargs ps -edf
+echo -e "${red} Killing stale grunt processes ${NC}"
+find /proc -maxdepth 1 -user ${TARGET_USER} -type d -mmin +200 -exec basename {} \; | xargs ps | grep grunt | awk '{ print $1 }' | sudo xargs kill
+echo -e "${red} Killing stale google/chrome processes ${NC}"
+find /proc -maxdepth 1 -user ${TARGET_USER} -type d -mmin +200 -exec basename {} \; | xargs ps | grep google/chrome | awk '{ print $1 }' | sudo xargs kill
+echo -e "${red} Killing stale chromedriver processes ${NC}"
+find /proc -maxdepth 1 -user ${TARGET_USER} -type d -mmin +200 -exec basename {} \; | xargs ps | grep chromedriver | awk '{ print $1 }' | sudo xargs kill
+echo -e "${red} Killing stale selenium processes ${NC}"
+find /proc -maxdepth 1 -user ${TARGET_USER} -type d -mmin +200 -exec basename {} \; | xargs ps | grep selenium | awk '{ print $1 }' | sudo xargs kill
+echo -e "${red} Killing stale zaproxy processes ${NC}"
+find /proc -maxdepth 1 -user ${TARGET_USER} -type d -mmin +200 -exec basename {} \; | xargs ps | grep ZAPROXY | awk '{ print $1 }' | sudo xargs kill
 
 echo -e "${red} Configure workstation ${NC}"
 
@@ -128,5 +149,8 @@ cd ${WORKSPACE}/
 
 shellcheck *.sh -f checkstyle > checkstyle-result.xml || true
 echo -e "${green} shell check for release done. $? ${NC}"
+
+pylint **/*.py
+echo -e "${green} pyhton check for shell done. $? ${NC}"
 
 exit 0

@@ -1,9 +1,51 @@
 #!/bin/bash
-set -xv
+#set -xv
 
+red='\e[0;31m'
+green='\e[0;32m'
+NC='\e[0m' # No Color
+
+if [ -n "${TARGET_SLAVE}" ]; then
+  echo -e "TARGET_SLAVE is defined \u061F"
+else
+  echo -e "${red} \u00BB Undefined build parameter: TARGET_SLAVE, use the default one ${NC}"
+  export TARGET_SLAVE=localhost
+fi
+
+if [ -n "${DRY_RUN}" ]; then
+  echo -e "DRY_RUN is defined \u061F"
+else
+  echo -e "${red} \u00BB Undefined build parameter: DRY_RUN, use the default one ${NC}"
+  export DRY_RUN="--check"
+fi
+
+if [ -n "${TARGET_USER}" ]; then
+  echo -e "TARGET_USER is defined \u263A"
+else
+  echo -e "${red} \u00BB Undefined build parameter: TARGET_USER, use the default one ${NC}"
+  export TARGET_USER="kgr_mvn"
+fi
+
+lsb_release -a
+
+echo -e " ======= Running on ${TARGET_SLAVE} \u00A1 ${NC}"
 echo "USER : $USER"
 echo "HOME : $HOME"
 echo "WORKSPACE : $WORKSPACE"
+
+echo -e "${red} Find stale processes ${NC}"
+
+find /proc -maxdepth 1 -user ${TARGET_USER} -type d -mmin +200 -exec basename {} \; | xargs ps -edf
+echo -e "${red} Killing stale grunt processes ${NC}"
+find /proc -maxdepth 1 -user ${TARGET_USER} -type d -mmin +200 -exec basename {} \; | xargs ps | grep grunt | awk '{ print $1 }' | sudo xargs kill
+echo -e "${red} Killing stale google/chrome processes ${NC}"
+find /proc -maxdepth 1 -user ${TARGET_USER} -type d -mmin +200 -exec basename {} \; | xargs ps | grep google/chrome | awk '{ print $1 }' | sudo xargs kill
+echo -e "${red} Killing stale selenium processes ${NC}"
+find /proc -maxdepth 1 -user ${TARGET_USER} -type d -mmin +200 -exec basename {} \; | xargs ps | grep selenium | awk '{ print $1 }' | sudo xargs kill
+echo -e "${red} Killing stale zaproxy processes ${NC}"
+find /proc -maxdepth 1 -user ${TARGET_USER} -type d -mmin +200 -exec basename {} \; | xargs ps | grep ZAPROXY | awk '{ print $1 }' | sudo xargs kill
+
+echo -e "${red} Configure workstation ${NC}"
 
 if [ -t 0 ]; then
    echo interactive
@@ -127,3 +169,5 @@ ssh -p 2233 vagrant@10.21.22.69 "echo \"DONE\""
 echo "Connecting to slave"
 #vagrant ssh-config
 ssh -p 2251 vagrant@10.21.22.69 "echo \"DONE\""
+
+exit 0
