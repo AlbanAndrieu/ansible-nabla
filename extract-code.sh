@@ -345,6 +345,9 @@ cd ansigenome ; sudo python setup.py develop
 
 ./misc/ansigenome/bin/ansigenome scan
 ./misc/ansigenome/bin/ansigenome gendoc -f md
+
+#[![test-suite](https://img.shields.io/badge/test--suite-{{ scm.repo_prefix | replace("-","--") | replace("_","__") + role.name | replace("-","--") | replace("_","__") }}-blue.svg?style=flat)](https://github.com/{{ scm.user }}/test-suite/tree/master/{{ scm.repo_prefix + role.name }}/)
+
 ansigenome export -t reqs -o ./test.yml -f yml ./roles
 ansigenome export -o ./test.dot -f dot ./roles
 ansigenome export -o ./test.png ./roles --size=20,20 -dpi=300

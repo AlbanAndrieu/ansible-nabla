@@ -1041,7 +1041,7 @@
         shell_git_email: 'alban.andrieu@free.fr',
         shell_git_password: 'microsoft',
         # Optional.
-        shell_git_name: 'AlbanAndrieu',
+        shell_git_name: 'Andrieu, Alban',
         shell_git_path: '/usr/bin',
         shell_git_ssl: false
         }
