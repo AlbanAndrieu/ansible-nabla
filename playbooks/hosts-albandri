@@ -134,7 +134,7 @@ albandri-laptop-work
 
 [sonar]
 albandri-laptop-work
-sonar ansible_ssh_host=192.168.11.99 ansible_ssh_port=22 ansible_connection=ssh ansible_user=vagrant
+sonarqube ansible_ssh_host=192.168.11.99 ansible_ssh_port=22 ansible_connection=ssh ansible_user=vagrant
 
 [sonar:vars]
 ansible_ssh_common_args='-o StrictHostKeyChecking=no'
@@ -162,7 +162,7 @@ albandri-laptop-work
 
 [windows]
 #10.0.2.15
-albandri-laptop-work
+#albandri-laptop-work
 
 [windows:vars]
 #ansible_user = vagrant

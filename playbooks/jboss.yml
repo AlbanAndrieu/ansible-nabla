@@ -1,4 +1,4 @@
-#sudo ansible-playbook -i hosts-albandri -c local -v jboss.yml | tee setup.log
+#ansible-playbook -i hosts-albandri -v jboss.yml --limit albandri-laptop-work -c local --ask-sudo-pass -vvvv | tee setup.log
 
 - name: Install subversion
   hosts: workstation

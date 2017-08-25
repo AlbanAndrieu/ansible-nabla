@@ -89,16 +89,16 @@
 #sudo docker logout https://docker:5000
 #sudo docker login docker.nabla.mobi --username=albandri --email=albandri@nabla.mobi
 
-- hosts: docker
-  become: yes
-
-  post_tasks:
-    - name: Log into private registry and force re-authorization
-      docker_login:
-        registry: https://docker.nabla.mobi/
-        username: test
-        password: Microsoft
-        reauthorize: yes
+#- hosts: docker
+#  become: yes
+#
+#  post_tasks:
+#    - name: Log into private registry and force re-authorization
+#      docker_login:
+#        registry: https://docker.nabla.mobi/
+#        username: test
+#        password: Microsoft
+#        reauthorize: yes
 
 #    - name: Inspect multiple images
 #      docker_image_facts:

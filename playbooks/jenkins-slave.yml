@@ -91,11 +91,11 @@
       # Additional properties: 'shell_git_machine, shell_git_login, shell_git_email, shell_git_password, shell_git_name, shell_git_path, shell_git_ssl'.
        - {
          shell_git_machine: '82.231.208.223',
-         shell_git_login: 'jenkins',
+         shell_git_login: 'AlbanAndrieu',
          shell_git_email: 'alban.andrieu@free.fr',
          shell_git_password: 'microsoft',
          # Optional.
-         shell_git_name: '{{ shell_git_login }}',
+         shell_git_name: 'Andrieu, Alban',
          shell_git_path: '/usr/bin',
          shell_git_ssl: false
        }
@@ -103,7 +103,7 @@
     jenkins_prefix: "/jenkins"
     jenkins_url: http://localhost:8380{{ jenkins_prefix }}
     home_url: "http://home.nabla.mobi"
-    nexus_url: "{{ home_url }}"
+    nexus_url: "{{ home_url }}:8081"
     bower_url: "http://localhost:5678"
     #npm_nexus_npm_url: "{{ nexus_url }}/maven/content/groups/npmjs-all/"
     npm_phantomjs_cdnurl: "{{ home_url }}:7070/download/phantomjs"

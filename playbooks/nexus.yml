@@ -30,7 +30,7 @@
 
   vars:
       nexus_home: "/usr/local/{{nexus_user}}"
-      nexus_version: "2.7.1"
+      #nexus_version: "2.7.1"
 
       ## Repositories Section
       nexus_repositories :
