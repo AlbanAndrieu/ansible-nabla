@@ -143,3 +143,10 @@
       java_path: "/usr/lib/jvm/java-7-oracle/"
       java_certificate_host: github.com
       java_certificate_port: 443
+
+#Dependency check      
+    - role: java.certificate
+      ignore_errors: yes
+      java_path: "/usr/lib/jvm/java-8-oracle/"
+      java_certificate_host: api.nodesecurity.io
+      java_certificate_port: 443
