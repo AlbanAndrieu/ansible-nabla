@@ -1,0 +1,79 @@
+#ansible -m setup almonde-jenkins.misys.global.add -vvvv -i production -vvvv
+#ansible-playbook -i production  -v mac.yml --limit almonde-jenkins.misys.global.add --ask-sudo-pass
+#ansible-playbook -i production -v jenkins-master.yml -vvvv --ask-sudo-pass --limit almonde-jenkins.misys.global.ad
+
+- hosts: all
+  gather_facts: true
+  tasks:
+    - name: group hosts by distribution
+      group_by: key="{{ ansible_distribution }}-{{ ansible_distribution_version }}-{{ ansible_architecture }}"
+
+#Solaris-10-sun4u not managed via ansible on purpose
+- hosts: MacOSX-10.12*
+  gather_facts: false
+  tasks:
+    - name: group hosts for supported distributions
+      group_by: key="supported"
+
+- hosts: "!supported"
+  gather_facts: false
+  tasks:
+    - name: fail for unsupported distribution
+      fail: msg="{{ ansible_distribution }} {{ ansible_distribution_version }}
+                 is not a supported OS for a Tower installation.  Supported
+                 OSes include MacOSX 10
+
+- name: Apply common configuration to mac nodes
+  hosts: mac
+  become: yes
+  #connection: local
+
+  roles:
+    - mac-dev-playbook
+
+  vars:     
+    homebrew_installed_packages:
+      # - ansible # Installed via Pip.
+      - autoconf
+      - bash-completion
+      - chromedriver
+      - doxygen
+      - gettext
+      - gifsicle
+      - git
+      - go
+      - gpg
+      - hub
+      - httpie
+      - iperf
+      - libevent
+      - sqlite
+      - mcrypt
+      - nmap
+      - node
+      - nvm
+      - ssh-copy-id
+      - cowsay
+      - readline
+      - openssl
+      - pv
+      - wget
+      - wrk
+      #- cmake
+      - scons
+      - gcc
+      - lcov
+      - gperf
+      - llvm
+      - clang-format
+      - mingw-w64
+      - gnustep-make
+      - cppcheck
+      - flawfinder
+      - rats
+      - gperf      
+      - findbugs
+      - bison
+      - flex
+
+#- include: jenkins-master.yml

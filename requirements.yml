@@ -466,3 +466,18 @@
   name:    'opencl'
   scm:     'git'
   version: 'master'
+
+- src:     'https://github.com/elliotweiser/ansible-osx-command-line-tools'
+  name:    'elliotweiser.osx-command-line-tools'
+  scm:     'git'
+  version: 'master'
+    
+- src:     'https://github.com/geerlingguy/ansible-role-homebrew.git'
+  name:    'geerlingguy.homebrew'
+  scm:     'git'
+  version: 'master'
+  
+#- src:     'https://github.com/geerlingguy/mac-dev-playbook.git'
+#  name:    'mac-dev-playbook'
+#  scm:     'git'
+#  version: 'master'
