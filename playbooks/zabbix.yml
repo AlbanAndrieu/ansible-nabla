@@ -39,5 +39,3 @@
       zabbix_agent_revision: '9'
       zabbix_agent_ubuntu: "1:{{zabbix_agent_version}}-1+trusty"
       #zabbix_agent_Server: 127.0.0.1
-
-

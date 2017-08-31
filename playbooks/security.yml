@@ -3,10 +3,10 @@
 - name: Apply common security configuration
   hosts: workstation
   remote_user: root
-  connection: local   
+  connection: local
 #  sudo: yes
 
   roles:
-    - { role: security, 
+    - { role: security,
         sudoers_enabled: no
       }

@@ -318,4 +318,3 @@
            externalConfiguration_downloadRemoteIndex       : "false"
            externalConfiguration_checksumPolicy            : "WARN"
            externalConfiguration_repositoryPolicy          : "RELEASE"
-

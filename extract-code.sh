@@ -373,4 +373,3 @@ ansible-galaxy install alban.andrieu.jmeter
 
 find ./ -type f -name "*.yml" -exec chmod 644 {} +
 find ./ -type f -name "*.j2" -exec chmod 644 {} +
-

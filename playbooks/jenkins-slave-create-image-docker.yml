@@ -16,11 +16,11 @@
 
 - name: Apply common configuration to all nodes
 #  hosts: Ubuntu-12*:Ubuntu-14*
-  hosts: jenkins-slave-create-image-docker  
+  hosts: jenkins-slave-create-image-docker
   gather_facts: false
   remote_user: root
 #  connection: local
-  
+
   roles:
     - alban.andrieu.common
 
@@ -28,7 +28,7 @@
      apt_install_packages_list  :
      stats_enabled              : false
      utilities_enabled          : false
-     editors_enabled            : true     
+     editors_enabled            : true
      cowsay_enabled             : true
      perl_enabled               : false
      python_enabled             : true
@@ -51,7 +51,7 @@
   sudo: yes
   tasks:
   - name: copy build.sh
-    copy: src=roles/alban.andrieu.jenkins-slave/ dest=./ 
+    copy: src=roles/alban.andrieu.jenkins-slave/ dest=./
     #mode=0777
 
 #- name: Copy Dockerfile to build image
@@ -93,7 +93,7 @@
 
 - name: Run docker containers
   hosts: jenkins-slave-create-image-docker
-  sudo: yes  
+  sudo: yes
   tasks:
   - name: Run docker containers
     local_action:
@@ -111,4 +111,3 @@
 #  tasks:
 #  - name: remove image
 #    docker_image: name="my/app" state=absent
-

@@ -19,14 +19,12 @@
       fail: msg="{{ ansible_distribution }} {{ ansible_distribution_version }}
                  is not a supported OS for a Tower installation.  Supported
                  OSes include Ubuntu 12.04/14.04."
-                 
+
 - name: Install sublimetext
   connection: local
   hosts: workstation
 #  remote_user: root
 #  accelerate: true
   roles:
-    - { role: alban.andrieu.sublimetext,   
+    - { role: alban.andrieu.sublimetext,
       }
-
-

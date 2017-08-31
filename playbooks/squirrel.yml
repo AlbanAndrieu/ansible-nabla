@@ -28,5 +28,3 @@
   roles:
     - { role: alban.andrieu.squirrel,
       }
-
-

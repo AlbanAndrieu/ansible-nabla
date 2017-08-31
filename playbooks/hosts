@@ -190,7 +190,7 @@ group=jenkins
 #home=/export/home/{{ user }}/
 #ansible_sudo_pass=jenkins1234
 #ansible_python_interpreter="/opt/csw/bin/python"
-#For x86sol 
+#For x86sol
 #ansible_python_interpreter="/usr/local/bin/python2.7"
 #ansible_ssh_user="jenkins"
 #ansible_ssh_pass="jenkins1234"

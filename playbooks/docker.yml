@@ -21,7 +21,7 @@
                  is not a supported OS for a Tower installation.  Supported
                  OSes include Red Hat Enterprise Linux 6/7, CentOS 6, or
                  Ubuntu 12.04/14.04/16.04/17.04."
-    - debug: msg="Version {{ ansible_distribution }} {{ ansible_distribution_version }} {{ ansible_architecture }}"                 
+    - debug: msg="Version {{ ansible_distribution }} {{ ansible_distribution_version }} {{ ansible_architecture }}"
 
 - include: certificate.yml
 
@@ -63,8 +63,8 @@
 #       docker_opts: "-H tcp://127.0.0.1:4243 -H unix:///var/run/docker.sock --dns 8.8.8.8 --dns 8.8.4.4 --storage-driver=zfs"
 #       docker_opts: "-H tcp://127.0.0.1:4243 -H unix:///var/run/docker.sock --dns 8.8.8.8 --dns 8.8.4.4 --storage-driver=overlay"
        docker_opts: "-H tcp://0.0.0.0:4243 -H unix:///var/run/docker.sock --dns 10.25.200.3 --dns 8.8.8.8 --dns 8.8.4.4 --storage-driver overlay --disable-legacy-registry --tlsverify --tlscacert /root/ca.pem --tlscert /etc/ssl/{{ansible_fqdn}}/{{ansible_fqdn}}.pem --tlskey /etc/ssl/{{ansible_fqdn}}/{{ansible_fqdn}}.key --label provider=albandri"
-       #--insecure-registry docker:443       
-       #TODO add 
+       #--insecure-registry docker:443
+       #TODO add
        #--userns-remap=default #see https://stackoverflow.com/questions/35291520/docker-and-userns-remap-how-to-manage-volume-permissions-to-share-data-betwee
        #--tlsverify --tlscacert /etc/docker/ca.pem --tlscert /etc/docker/server.pem --tlskey /etc/docker/server-key.pem --label provider=amazonec2
        #pip_version_docker_py: 1.9.0 #Fix issue with https://github.com/angstwad/docker.ubuntu/issues/109#issuecomment-257706232

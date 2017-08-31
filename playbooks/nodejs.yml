@@ -27,7 +27,6 @@
 #  connection: local
 
   roles:
-    - { role: nodejs, 
+    - { role: nodejs,
         nodejs_install_packages: false,
         nodejs_global_packages: [] }
- 

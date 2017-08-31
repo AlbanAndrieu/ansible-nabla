@@ -116,7 +116,7 @@ ansible-playbook -i hosts -v nabla.yml --list-hosts || exit 3
 ansible-playbook -i hosts -v nabla.yml --limit ${TARGET_SLAVE} --list-tasks || exit 4
 
 #Check syntax
-# check syntax 
+# check syntax
 ansible-playbook -i hosts -c local -v nabla.yml --limit ${TARGET_SLAVE} -vvvv --syntax-check
 RC=$?
 if [ ${RC} -ne 0 ]; then
@@ -140,7 +140,7 @@ else
   #--extra-vars "jenkins_username=${JENKINS_USERNAME} jenkins_password=${JENKINS_PASSWORD}"
   #./setup.sh | grep -q 'changed=0.*failed=0' && (echo 'Idempotence test: pass' && exit 0) || (echo 'Idempotence test: fail' && exit 1)
 
-  echo -e "${green} Ansible done. $? ${NC}"  
+  echo -e "${green} Ansible done. $? ${NC}"
 fi
 
 #sudo chkrootkit

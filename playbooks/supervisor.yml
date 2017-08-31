@@ -21,7 +21,7 @@
                  OSes include Red Hat Enterprise Linux 6/7, CentOS 6, or
                  Ubuntu 12.04/14.04."
 
-# This playbook can be run using vagrant (on virtual box). 
+# This playbook can be run using vagrant (on virtual box).
 - name: configure supervisor
   hosts: supervisors
   remote_user: root
@@ -31,5 +31,5 @@
       name: webserver
       command: python -m SimpleHTTPServer
       directory: /opt/web
-# user is the same as base_admin_username      
+# user is the same as base_admin_username
       user: ubuntu

@@ -11,4 +11,3 @@
         docker_files_enable: yes,
         docker_files_generated_directory: "../roles/alban.andrieu.webmin"
       }
-

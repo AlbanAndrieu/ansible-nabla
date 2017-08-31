@@ -31,7 +31,7 @@
   roles:
     - mac-dev-playbook
 
-  vars:     
+  vars:
     homebrew_installed_packages:
       # - ansible # Installed via Pip.
       - autoconf
@@ -71,7 +71,7 @@
       - cppcheck
       - flawfinder
       - rats
-      - gperf      
+      - gperf
       - findbugs
       - bison
       - flex

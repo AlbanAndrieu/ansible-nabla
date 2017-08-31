@@ -24,7 +24,7 @@
 - name: Install sonar
   hosts: sonar
   remote_user: albandri
-  
+
   roles:
     - role: sonar
 

@@ -15,5 +15,3 @@
         jmeter_plugins_hadoop_enabled: no,
         jmeter_serveragent_enabled: yes,
       }
-
-
