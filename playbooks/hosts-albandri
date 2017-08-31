@@ -1,6 +1,6 @@
 [all]
 #127.0.0.1
-albandri-laptop-work dtap=prod comment="Hosting by Alban Andrieu" ext_id="SRV_02" groups="paris"
+albandri-laptop-work dtap=prod comment="Hosting by Alban Andrieu" ext_id="SRV_02" groups="paris misc"
 
 #below is used only git lamp.yml
 [lamp]
@@ -125,8 +125,6 @@ albandri-laptop-work
 user=albandri
 group=docker
 version=10
-#home=/workspace/users/{{ user }}{{ version }}/
-#home=/home/{{ user }}/
 #ansible_sudo_pass=todo
 
 [nexus]

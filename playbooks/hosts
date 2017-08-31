@@ -1,6 +1,6 @@
 [all]
 #127.0.0.1
-localhost dtap=test comment="Hosting by ???" ext_id="SRV_01" groups="misc"
+localhost dtap=test comment="Hosting by Alban Andrieu" ext_id="SRV_01" groups="paris misc"
 
 #below is used only git lamp.yml
 [lamp]
@@ -153,7 +153,7 @@ localhost
 #ansible_password = vagrant
 ansible_port = 5986
 ansible_connection = winrm
-ansible_winrm_server_cert_validation = ignore
+#ansible_winrm_server_cert_validation = ignore
 ansible_winrm_transport = ssl
 
 [test-boxes]
@@ -171,8 +171,6 @@ localhost ansible_connection=local
 user=root
 group=root
 #version=10
-#home=/workspace/users/{{ user }}{{ version }}/
-home=/home/{{ user }}/
 #ansible_sudo_pass=todo
 install_kernel_extras=false
 
@@ -182,12 +180,11 @@ sparc-sun4sol-u6-1-sun4v ansible_user=jenkins ansible_python_interpreter="/opt/c
 #sun4u is a normal rack server.
 sparc-sun4sol-u6-1-sun4u ansible_user=root ansible_python_interpreter="/usr/local/bin/python2.7"
 #x86linux
-x86-sun4sol-u6-1 ansible_user=test group=other home=/todo/home/{{ user }}/ ansible_python_interpreter="/usr/local/bin/python2.7" ansible_sudo_pass=Test_123 ansible_ssh_user="root" ansible_ssh_pass="Test_123"
+x86-sun4sol-u6-1 ansible_user=test group=other ansible_python_interpreter="/usr/local/bin/python2.7" ansible_sudo_pass=Test_123 ansible_ssh_user="root" ansible_ssh_pass="Test_123"
 
 [solaris:vars]
 user=jenkins
 group=jenkins
-#home=/export/home/{{ user }}/
 #ansible_sudo_pass=jenkins1234
 #ansible_python_interpreter="/opt/csw/bin/python"
 #For x86sol
