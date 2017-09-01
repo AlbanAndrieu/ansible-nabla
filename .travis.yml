@@ -1,8 +1,15 @@
 ---
 language: python
-python: "2.7"
+python:
+  - 2.7
+#  - 3.3
+#  - 3.4
+#  - 3.5
+cache:
+  directories:
+    - $HOME/.cache/pip
 env:
-  - ANSIBLE_VERSION=2.1.1
+  - ANSIBLE_VERSION=2.3.1.0
 cache: bundler
 #sudo: false
 sudo: required
@@ -61,16 +68,16 @@ script:
 
   # Check syntax
   # Check the role/playbook's syntax.
-  - sudo ansible-playbook --syntax-check -i ./playbooks/hosts ./playbooks/nabla.yml --connection=local
+  - sudo ansible-playbook --syntax-check -i ./playbooks/hosts ./playbooks/nabla.yml --connection=local -e "python_versions=[2.7]"
 
   # First run
   # Run the role/playbook with ansible-playbook.
-  - sudo ansible-playbook -i ./playbooks/hosts ./playbooks/nabla.yml --connection=local --sudo
+  - sudo ansible-playbook -i ./playbooks/hosts ./playbooks/nabla.yml --connection=local --sudo -e "python_versions=[2.7]"
 
   # Second run Idempotence test
   # Run the role/playbook again, checking to make sure it's idempotent.
 #  - >
-#    ansible-playbook -i ./playbooks/hosts ./playbooks/nabla.yml --connection=local --sudo
+#    ansible-playbook -i ./playbooks/hosts ./playbooks/nabla.yml --connection=local --sudo  -e "python_versions=[2.7]"
 #    | grep -q 'changed=0.*failed=0'
 #    && (echo 'Idempotence test: pass' && exit 0)
 #    || (echo 'Idempotence test: fail' && exit 1)
@@ -81,3 +88,11 @@ script:
 
   # Test whether kibana is running correctly.
   - curl http://localhost/
+
+notifications:
+  email:
+    recipients:
+      - alban.andrieu@nabla.mobi
+#      - other@example.com
+    on_success: [always|never|change] # default: change
+    on_failure: [always|never|change] # default: always
