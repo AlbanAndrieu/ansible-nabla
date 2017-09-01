@@ -9,7 +9,7 @@
   roles:
     - { role: ansible-newrelic,
         newrelic_license_key: de35bf5d191ebb208d359b2cd24a60616a02b1f3
-      }    
+      }
 
 
 #- name: Install newrelic java
@@ -24,6 +24,4 @@
 #        newrelic_version: '3.9.0',
 #        newrelic_app_name: "nabla",
 #        tomcat_dir: "/var/lib/tomcat7"
-#      }    
-
-
+#      }

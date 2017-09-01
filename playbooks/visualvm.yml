@@ -9,10 +9,10 @@
   roles:
     - { role: alban.andrieu.visualvm,
         visualvm_remote_hosts_enable: yes,
-      }    
-      
+      }
+
   vars:
-      visualvm_remote_hosts: 
+      visualvm_remote_hosts:
         - { name  : "Zone",
             serverip: "10.21.11.62",
             serverhostname: "mgrv062.misys.global.ad",

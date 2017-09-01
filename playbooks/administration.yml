@@ -20,15 +20,14 @@
                  is not a supported OS for a Tower installation.  Supported
                  OSes include Red Hat Enterprise Linux 6/7, CentOS 6, or
                  Ubuntu 12.04/14.04."
-                 
-#Use below only if you want your servers to be part of MGR build farm                 
+
+#Use below only if you want your servers to be part of MGR build farm
 - name: apply administration configuration to all nodes
   hosts: RedHat-7*:RedHat-6*:RedHat-5*:CentOS-6*:Ubuntu-12*:Ubuntu-13*:Ubuntu-14*
-#  hosts: all  
+#  hosts: all
   gather_facts: false
   remote_user: root
 #  connection: local
-  
+
   roles:
     - alban.andrieu.administration
-    

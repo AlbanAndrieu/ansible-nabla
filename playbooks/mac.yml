@@ -31,7 +31,7 @@
   roles:
     - mac-dev-playbook
 
-  vars:     
+  vars:
     homebrew_installed_packages:
       # - ansible # Installed via Pip.
       - autoconf
@@ -69,17 +69,18 @@
       - mingw-w64
       - gnustep-make
       - cppcheck
-      - shellcheck      
+      - shellcheck
       - flawfinder
-      - rats     
+      - rats
+      - rats
       - findbugs
       - bison
       - flex
-      - openssl      
+      - openssl
       - ant
-      - maven      
+      - maven
       - svn
-      
-#macport      
-      
+
+#macport
+
 #- include: jenkins-master.yml

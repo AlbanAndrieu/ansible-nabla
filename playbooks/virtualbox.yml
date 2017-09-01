@@ -34,4 +34,3 @@
       #virtualbox_version: 4.3
       virtualbox_dkms_enable: no
       virtualbox_extension_enable: yes
-

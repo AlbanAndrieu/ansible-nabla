@@ -20,7 +20,7 @@
                  is not a supported OS for a Tower installation.  Supported
                  OSes include Red Hat Enterprise Linux 6/7, CentOS 6, or
                  Ubuntu 12.04/14.04/16.04/17.04."
-    - debug: msg="Version {{ ansible_distribution }} {{ ansible_distribution_version }} {{ ansible_architecture }}"                 
+    - debug: msg="Version {{ ansible_distribution }} {{ ansible_distribution_version }} {{ ansible_architecture }}"
 
 # This playbook can be run using vagrant (on virtual box).
 - name: Install gcc
@@ -60,5 +60,5 @@
       #boost_version: "1.54"
       #boost_version: "1.58"
       boost_version: "1.61"
-      clang_version: "-4.0"    
+      clang_version: "-4.0"
       cpp_package_list: []

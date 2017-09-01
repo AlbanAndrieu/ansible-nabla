@@ -21,7 +21,7 @@
                  is not a supported OS for a Tower installation.  Supported
                  OSes include Red Hat Enterprise Linux 6/7, CentOS 6, or
                  Ubuntu 12.04/14.04/16.04/17.04."
-    - debug: msg="Version {{ ansible_distribution }} {{ ansible_distribution_version }} {{ ansible_architecture }}"                 
+    - debug: msg="Version {{ ansible_distribution }} {{ ansible_distribution_version }} {{ ansible_architecture }}"
 
 #sudo docker logout https://docker.nabla.mobi:5000
 #sudo docker login registry.nabla.mobi:443
@@ -56,7 +56,7 @@
         debug: true
       register: output
 #      ignore_errors: true
-      
+
     - debug: var=output
 
 - include: docker-registry.yml
@@ -64,8 +64,8 @@
 - hosts: docker
 #  become: yes
 
-  tasks:                
-                
+  tasks:
+
     - name: Create a data container
       docker_container:
         name: mydata
@@ -120,7 +120,7 @@
 #      shell: "docker volume prune -f"
 #      ignore_errors: true
 
-    - name: Update all containers          
+    - name: Update all containers
       docker_service:
         project_src: "{{ lookup('env','WORKSPACE') }}/dockerfile-nabla/centos"
         files: docker-compose-nabla.yml
@@ -138,9 +138,9 @@
         debug: true
       register: output
 #      ignore_errors: true
-      
+
     - debug: var=output
-    
+
 
     - docker_service:
         project_src: "{{ lookup('env','WORKSPACE') }}/dockerfile-nabla/centos"

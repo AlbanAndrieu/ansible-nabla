@@ -10,4 +10,4 @@
     - { role: chrome,
         google_talkplugin_enabled: yes,
         google_agent_pkg_state: installed # Package states: present or installed or latest
-      }    
+      }

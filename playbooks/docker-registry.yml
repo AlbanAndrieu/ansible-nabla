@@ -21,7 +21,7 @@
                  is not a supported OS for a Tower installation.  Supported
                  OSes include Red Hat Enterprise Linux 6/7, CentOS 6, or
                  Ubuntu 12.04/14.04/16.04/17.04."
-    - debug: msg="Version {{ ansible_distribution }} {{ ansible_distribution_version }} {{ ansible_architecture }}"                 
+    - debug: msg="Version {{ ansible_distribution }} {{ ansible_distribution_version }} {{ ansible_architecture }}"
 
 - include: docker.yml
 
@@ -51,19 +51,19 @@
       docker_image:
         state: absent
         name: ubuntu:14.04
-        
+
     - name: Remove hello-world image
       docker_image:
         state: absent
         name: hello-world:latest
         force: yes
-              
+
     - name: Remove test image
       docker_image:
         state: absent
         name: docker/test/jenkins-slave
         tag: test
-  
+
     - name: Pull centos images
       docker_container:
         name: centos
@@ -94,14 +94,14 @@
     - name: Clean all created containers
       shell: "docker rm -v $(docker ps -a -q -f status=created)"
       ignore_errors: true
-      
+
     - name: Remove unwanted dangling images
       shell: "docker rmi $(docker images -f \"dangling=true\" -q)"
       ignore_errors: true
-      
+
     - name: Remove unwanted ‘dangling’ volumes
       shell: "docker volume rm $(docker volume ls -qf dangling=true)"
       ignore_errors: true
-       
+
 #docker ps -a -s
 #docker images

@@ -69,7 +69,7 @@
                  OSes include Red Hat Enterprise Linux 6/7, CentOS 6/7, or
                  Ubuntu 12.04/13.04/14.04/16.04/17.04."
     - debug: msg="Version {{ ansible_distribution }} {{ ansible_distribution_version }} {{ ansible_architecture }}"
-    
+
 #- hosts: localhost
 #
 #  pre_tasks:
@@ -96,7 +96,7 @@
 #
 #  vars:
 #       hostname_hostname_loopback: "{{ ansible_hostname }} nabla"
-       
+
 - name: Apply common configuration to all nodes
   hosts: Ubuntu-17*:Ubuntu-16*:Ubuntu-14*:Ubuntu-12*
   gather_facts: false
@@ -569,7 +569,7 @@
 - include: jenkins-slave.yml
 
 - include: maven.yml
-       
+
 - name: Install css
   hosts: css
   remote_user: albandri

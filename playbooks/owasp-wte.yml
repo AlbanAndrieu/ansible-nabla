@@ -10,4 +10,3 @@
         docker_files_enable: no,
         docker_files_generated_directory: "../roles/alban.andrieu.owasp-wte"
       }
-

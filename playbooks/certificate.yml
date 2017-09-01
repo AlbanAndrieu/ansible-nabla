@@ -10,17 +10,17 @@
   remote_user: albandri
 #  become: yes
 
-  pre_tasks:  
-  
+  pre_tasks:
+
     #- name: Create private key
     #  shell: ssh-keygen -t rsa -C "alban.andrieu@free.fr"
-    #  ignore_errors: yes      
+    #  ignore_errors: yes
     #  become: yes
     #  become_user: albandri
-        
+
     - name: Get the CA root certificate
       get_url: dest=~/ca.pem url=http://home.nabla.mobi:7072/download/certs/{{ansible_fqdn}}.crt
-      ignore_errors: yes      
+      ignore_errors: yes
       become: yes
       become_user: root
 
@@ -42,9 +42,9 @@
 
     - name: Get the Docker root certificate
       shell: 'openssl s_client -showcerts -connect nabla.freeboxos.fr:20726 </dev/null 2>/dev/null |openssl x509 -outform PEM | tee ~/nabla.freeboxos.fr.pem'
-      become: yes      
-      become_user: root  
-      
+      become: yes
+      become_user: root
+
 - name: Install CA root certificate
   hosts: workstation
   remote_user: albandri
@@ -144,7 +144,7 @@
       java_certificate_host: github.com
       java_certificate_port: 443
 
-#Dependency check      
+#Dependency check
     - role: java.certificate
       ignore_errors: yes
       java_path: "/usr/lib/jvm/java-8-oracle/"

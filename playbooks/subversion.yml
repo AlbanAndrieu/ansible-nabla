@@ -41,4 +41,3 @@
       subversion_ubuntu: '{{ subversion_version }}-1ubuntu3.2'
       subversion_owner: "{{ user }}"
       subversion_group: "{{ group }}"
-

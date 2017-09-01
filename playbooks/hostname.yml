@@ -1,11 +1,11 @@
-#as root 
+#as root
 #ansible-playbook -i hosts-albandri -c local -v hostname.yml -vvvv | tee setup.log
-#as albandri 
+#as albandri
 #sudo ansible-playbook -i hosts-albandri -c local -v hostname.yml -vvvv | tee setup.log
 #ansible-playbook hostname.yml -i hosts-albandri -vvvv --ask-sudo-pass --sudo
 
-- name: Apply common hostname 
-  connection: local  
+- name: Apply common hostname
+  connection: local
   hosts: workstation
   sudo: yes
 

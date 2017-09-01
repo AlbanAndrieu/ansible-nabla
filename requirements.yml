@@ -391,7 +391,7 @@
   name:    'maven-color'
   scm:     'git'
   version: 'master'
-  
+
 - src:     'https://github.com/AlbanAndrieu/ansible-monit'
   name:    'monit'
   scm:     'git'
@@ -471,12 +471,12 @@
   name:    'elliotweiser.osx-command-line-tools'
   scm:     'git'
   version: 'master'
-    
+
 - src:     'https://github.com/geerlingguy/ansible-role-homebrew.git'
   name:    'geerlingguy.homebrew'
   scm:     'git'
   version: 'master'
-  
+
 #- src:     'https://github.com/geerlingguy/mac-dev-playbook.git'
 #  name:    'mac-dev-playbook'
 #  scm:     'git'

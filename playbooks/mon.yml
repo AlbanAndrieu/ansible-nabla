@@ -6,11 +6,11 @@
 #  connection: local
 
   roles:
-    - mon      
-    
-  vars:      
+    - mon
+
+  vars:
       mon_localhost : "albandri"
-      mon_custom_group: "nabla"        
+      mon_custom_group: "nabla"
       mon_hostgroup_fs: "freenas"
       mon_hostgroup_gw: "freebox"
       mon_user_enabled: yes

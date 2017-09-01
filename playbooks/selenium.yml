@@ -4,9 +4,9 @@
   hosts: workstation
 #  remote_user: root
   user: albandri
-  connection: local   
+  connection: local
 #  sudo: yes
 
   roles:
-    - { role: alban.andrieu.selenium, 
+    - { role: alban.andrieu.selenium,
         docker_files_enable: no, }

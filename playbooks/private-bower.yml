@@ -9,4 +9,3 @@
   roles:
     - { role: alban.andrieu.private-bower,
       }
-

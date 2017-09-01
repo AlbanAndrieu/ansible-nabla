@@ -6,21 +6,21 @@
   gather_facts: false
   remote_user: root
 #  connection: local
-  
+
   roles:
     - alban.andrieu.dns
-        
+
   vars:
        defaultdomain: france.effix.fr
        search: misys.global.ad misys.global.ad. nt.france.effix.fr. france.effix.fr. effix.fr.
        dns_nameservers:
          - "10.25.200.3" # work dns
-         - "10.21.200.3" # work dns 
+         - "10.21.200.3" # work dns
          - "8.8.8.8" # google dns
-         - "8.8.4.4" # google dns       
-#paris  
+         - "8.8.4.4" # google dns
+#paris
 #      nameserver1: 10.21.200.3
 #      nameserver2: 10.25.200.3
-#gdynia      
+#gdynia
 #      nameserver1: 10.7.109.27
 #      nameserver2: 10.7.111.244

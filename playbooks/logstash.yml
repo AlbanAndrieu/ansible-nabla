@@ -125,4 +125,3 @@
 #       kibana_domain: home.nabla.mobi
 #       kibana_server_name: home.nabla.mobi
 #       es_address: http://{{ kibana_domain}}/es/
-
