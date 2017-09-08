@@ -395,8 +395,8 @@
   scm:     'git'
   version: 'master'
 
-- src:     'https://github.com/AlbanAndrieu/ansible-nodejs'
-  name:    'nodejs'
+- src:     'https://github.com/AlbanAndrieu/ansible-role-nodejs'
+  name:    'geerlingguy.nodejs'
   scm:     'git'
   version: 'master'
 

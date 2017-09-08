@@ -600,7 +600,7 @@
 
 
   roles:
-    - nodejs
+    - geerlingguy.nodejs
 
   vars:
        nodejs_install_packages: false

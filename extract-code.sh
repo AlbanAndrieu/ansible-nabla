@@ -51,7 +51,8 @@ git submodule add -f  https://github.com/AlbanAndrieu/ansible-zabbix_server.git 
 
 #git submodule deinit -f locale
 #git submodule add -f  https://github.com/knopki/ansible-locale locale
-git submodule add -f  https://github.com/AlbanAndrieu/ansible-locale.git locale
+#TODO REMOVE git submodule add -f  https://github.com/AlbanAndrieu/ansible-locale.git locale
+git submodule add -f  https://github.com/Oefenweb/ansible-locales locale
 #TODO maybe switch to https://github.com/nickjj/ansible-locale
 
 #git clone https://github.com/kost/ansible-galaxy.ubuntu.virtualbox.git virtualbox

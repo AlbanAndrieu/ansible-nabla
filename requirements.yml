@@ -377,7 +377,7 @@
   scm:     'git'
   version: 'master'
 
-- src:     'https://github.com/AlbanAndrieu/ansible-locale'
+- src:     'https://github.com/Oefenweb/ansible-locales'
   name:    'locale'
   scm:     'git'
   version: 'master'

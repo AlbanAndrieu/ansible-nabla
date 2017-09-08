@@ -191,3 +191,8 @@ group=jenkins
 #ansible_python_interpreter="/usr/local/bin/python2.7"
 #ansible_ssh_user="jenkins"
 #ansible_ssh_pass="jenkins1234"
+
+[mac]
+
+[mac:vars]
+become_method=su
