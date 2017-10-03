@@ -11,13 +11,16 @@
     - alban.andrieu.dns
 
   vars:
-       defaultdomain: france.effix.fr
-       search: misys.global.ad misys.global.ad. nt.france.effix.fr. france.effix.fr. effix.fr.
+       defaultdomain: nabla.global.ad
+       search: nabla.global.ad nabla.freeboxos.fr freeboxos.fr home.nabla.mobi nabla.mobi
        dns_nameservers:
-         - "10.25.200.3" # work dns
-         - "10.21.200.3" # work dns
          - "8.8.8.8" # google dns
          - "8.8.4.4" # google dns
+         - "192.168.1.254" #freebox
+         - "212.27.40.240" #free
+         - "212.27.40.241" #free   
+         - "10.25.200.3" # work dns
+         - "10.21.200.3" # work dns
 #paris
 #      nameserver1: 10.21.200.3
 #      nameserver2: 10.25.200.3
