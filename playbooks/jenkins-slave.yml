@@ -104,7 +104,7 @@
     jenkins_url: http://localhost:8380{{ jenkins_prefix }}
     home_url: "http://home.nabla.mobi"
     nexus_url: "{{ home_url }}:8081"
-    bower_url: "http://localhost:5678"
+    bower_url: "http://home.nabla.mobi:5678"
     #npm_nexus_npm_url: "{{ nexus_url }}/maven/content/groups/npmjs-all/"
     npm_phantomjs_cdnurl: "{{ home_url }}:7070/download/phantomjs"
     jenkins_ssh_key_file: "~/.ssh/id_rsa"

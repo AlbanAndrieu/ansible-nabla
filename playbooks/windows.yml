@@ -1,12 +1,11 @@
 ---
 #This script is used to configure your workstation (for developer)
 
-#ansible windows -i production -m win_ping -vvvvv
-#sudo ansible-playbook -i production -v windows.yml | tee setup.log
+#ansible windows -i hosts-albandri -m win_ping -vvvvv
+#sudo ansible-playbook -i hosts-albandri -v windows.yml | tee setup.log
 
 - name: Install Windows
   hosts: windows
   user: root
-#  connection: local
   roles:
     - role: alban.andrieu.windows
