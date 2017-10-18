@@ -122,8 +122,8 @@
   vars:
 #       defaultdomain: nabla.freeboxos.fr
 #       defaultsearch: nabla.freeboxos.fr. freeboxos.fr. home.nabla.mobi. nabla.mobi.
-       defaultdomain: misys.global.ad
-       defaultsearch: misys.global.ad
+       defaultdomain: nabla.global.ad
+       defaultsearch: nabla.global.ad nabla.freeboxos.fr freeboxos.fr home.nabla.mobi nabla.mobi
        dns_nameservers:
          - "10.0.2.3" # work dns
          - "10.25.200.3" # work dns
@@ -131,6 +131,8 @@
          - "8.8.8.8" # google dns
          - "8.8.4.4" # google dns
          - "192.168.0.254" # freebox dns
+         - "212.27.40.240" #free
+         - "212.27.40.241" #free            
          - "192.168.1.1" #debian
          - "192.168.1.2" #debian
 #paris

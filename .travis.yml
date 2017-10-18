@@ -65,6 +65,9 @@ script:
   - sudo ansible --version
   #- export ANSIBLE_ROLES_PATH="../"
 
+  # Add ansible.cfg to pick up roles path.
+  - "{ echo '[defaults]'; echo 'roles_path = ./roles'; } >> ansible.cfg"
+  
   # Prepare tests
 #  - echo localhost > inventory
 
