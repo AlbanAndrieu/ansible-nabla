@@ -22,9 +22,6 @@ mkdir roles
 
 cd roles
 
-#git submodule add -f  https://github.com/AlbanAndrieu/devbox.chrome.git chrome
-#...
-
 #git clone https://github.com/debops/ansible-role-ansible.git ansible
 #git submodule deinit -f ansible
 #rm -rf ../.git/modules/roles/ansible/
@@ -79,10 +76,12 @@ git submodule add -f  https://github.com/AlbanAndrieu/ansible-maven.git maven
 git submodule add -f  https://github.com/AlbanAndrieu/ansible-role-maven-color maven-color
 
 #git clone https://github.com/silpion/ansible-java java
+#git submodule deinit -f java
 git submodule add -f  https://github.com/AlbanAndrieu/ansible-java.git java
 #TODO rename to silpion.maven
 #pull request pending
 
+#git submodule deinit -f chrome
 #git clone https://github.com/alourie/devbox.chrome.git chrome
 git submodule add -f  https://github.com/AlbanAndrieu/devbox.chrome.git chrome
 
