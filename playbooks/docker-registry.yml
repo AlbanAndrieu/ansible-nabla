@@ -23,7 +23,7 @@
                  Ubuntu 12.04/14.04/16.04/17.04."
     - debug: msg="Version {{ ansible_distribution }} {{ ansible_distribution_version }} {{ ansible_architecture }}"
 
-- include: docker.yml
+- import_playbook: docker.yml
 
 #sudo docker logout https://docker.nabla.mobi:5000
 #sudo docker login dtr.nabla.mobi:443

@@ -59,7 +59,7 @@
 
     - debug: var=output
 
-- include: docker-registry.yml
+- import_playbook: docker-registry.yml
 
 - hosts: docker
 #  become: yes
