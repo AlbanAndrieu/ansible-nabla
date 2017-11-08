@@ -163,12 +163,12 @@ albandri-laptop-work
 #albandri-laptop-work
 
 [windows:vars]
-#ansible_user = vagrant
-#ansible_password = vagrant
-ansible_port = 5986
-ansible_connection = winrm
-ansible_winrm_server_cert_validation = ignore
-ansible_winrm_transport = ssl
+#ansible_user=vagrant
+#ansible_password=vagrant
+ansible_port=5986
+ansible_connection=winrm
+ansible_winrm_server_cert_validation=ignore
+ansible_winrm_transport=ssl
 
 [mac]
 

@@ -1,26 +1,30 @@
 ---
-#sudo ansible-playbook -i hosts-albandri -c local -v nabla.yml -vvvv | tee setup.log
+#sudo ansible-playbook -i hosts-albandri -c local -v nabla.yml -vvvv --ask-sudo-pass | tee setup.log
 
 - hosts: all
   gather_facts: true
+  remote_user: albandri
   tasks:
     - name: group hosts by distribution
       group_by: key="{{ ansible_distribution }}-{{ ansible_distribution_version }}"
 
-- hosts: RedHat-7*:RedHat-6*:CentOS-6*:Ubuntu-12.04:Ubuntu-14.04
+- hosts: RedHat-7*:RedHat-6*:CentOS-7*:CentOS-6*:Ubuntu-12*:Ubuntu-13*:Ubuntu-14*:Ubuntu-16*:Ubuntu-17*
   gather_facts: false
+  remote_user: albandri
   tasks:
     - name: group hosts for supported distributions
       group_by: key="supported"
 
 - hosts: "!supported"
   gather_facts: false
+  remote_user: albandri
   tasks:
     - name: fail for unsupported distribution
       fail: msg="{{ ansible_distribution }} {{ ansible_distribution_version }}
-                 is not a supported OS for a Tower installation.  Supported
-                 OSes include Red Hat Enterprise Linux 6/7, CentOS 6, or
-                 Ubuntu 12.04/14.04."
+                 is not a supported OS for a Nabla installation.  Supported
+                 OSes include Red Hat Enterprise Linux 6/7, CentOS 6/7, or
+                 Ubuntu 12.04/13.04/14.04/16.04/17.04."
+    - debug: msg="Version {{ ansible_distribution }} {{ ansible_distribution_version }} {{ ansible_architecture }}"
 
 - name: Add repo configuration to all nodes
   hosts: RedHat-7*:RedHat-6*:CentOS-6*
@@ -41,7 +45,7 @@
 #    - alban.andrieu.hostname
 
 - name: Apply common configuration to all nodes
-  hosts: Ubuntu-12*:Ubuntu-14*
+  hosts: Ubuntu-12*:Ubuntu-14*:Ubuntu-16*:Ubuntu-17*
   gather_facts: false
   remote_user: root
 #  connection: local
@@ -53,27 +57,7 @@
        apt_notification_email: "alban.andrieu@misys.com"
        apt_upgrade_system_enabled: no
 
-#- name: Apply dns configuration to all nodes
-#  hosts: Ubuntu-12*:Ubuntu-14*
-#  gather_facts: false
-#  remote_user: root
-##  connection: local
-#
-#  roles:
-#    - alban.andrieu.dns
-#
-#  vars:
-#       defaultsearch:
-#       nameserver: "8.8.8.8"
-#       dns_nameservers:
-#         - "8.8.8.8" # google dns
-#         - "8.8.4.4" # google dns
-#paris
-#      nameserver1: 10.21.200.3
-#      nameserver2: 10.25.200.3
-#gdynia
-#      nameserver1: 10.7.109.27
-#      nameserver2: 10.7.111.244
+- include: dns.yml
 
 #Below ntp role is included in administration role
 #- name: Apply ntp configuration to all nodes
@@ -90,7 +74,7 @@
 
 #Below firewall role is included in administration role
 #- name: Apply firewall configuration to all nodes
-#  hosts: Ubuntu-12*:Ubuntu-14*
+#  hosts: Ubuntu-12*:Ubuntu-14*:Ubuntu-16*:Ubuntu-17*
 #  gather_facts: false
 #  remote_user: root
 ##  connection: local
@@ -611,7 +595,7 @@
 
 #Use below only if you want your servers to be part of build farm
 - name: Apply administration configuration to all nodes
-  hosts: Ubuntu-12*:Ubuntu-14*
+  hosts: Ubuntu-12*:Ubuntu-14*:Ubuntu-16*:Ubuntu-17*
   gather_facts: false
   remote_user: root
   connection: local

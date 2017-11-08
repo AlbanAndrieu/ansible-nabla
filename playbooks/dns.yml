@@ -1,7 +1,31 @@
 #sudo ansible-playbook -i hosts-albandri -c local -v dns.yml | tee setup.log
 
+- hosts: all
+  gather_facts: true
+  remote_user: root
+  tasks:
+    - name: group hosts by distribution
+      group_by: key="{{ ansible_distribution }}-{{ ansible_distribution_version }}"
+
+- hosts: RedHat-7*:RedHat-6*:CentOS-7*:CentOS-6*:Ubuntu-12*:Ubuntu-13*:Ubuntu-14*:Ubuntu-16*:Ubuntu-17*
+  gather_facts: false
+  remote_user: albandri
+  tasks:
+    - name: group hosts for supported distributions
+      group_by: key="supported"
+
+- hosts: "!supported"
+  gather_facts: false
+  remote_user: albandri
+  tasks:
+    - name: fail for unsupported distribution
+      fail: msg="{{ ansible_distribution }} {{ ansible_distribution_version }}
+                 is not a supported OS for a Nabla installation.  Supported
+                 OSes include Red Hat Enterprise Linux 6/7, CentOS 6/7, or
+                 Ubuntu 12.04/13.04/14.04/16.04/17.04."
+    - debug: msg="Version {{ ansible_distribution }} {{ ansible_distribution_version }} {{ ansible_architecture }}"
+
 - name: Apply dns configuration to all nodes
-#  hosts: Ubuntu-12*:Ubuntu-14*
   hosts: workstation
   gather_facts: false
   remote_user: root
@@ -12,15 +36,18 @@
 
   vars:
        defaultdomain: nabla.global.ad
-       search: nabla.global.ad nabla.freeboxos.fr freeboxos.fr home.nabla.mobi nabla.mobi
+       defaultsearch: nabla.global.ad nabla.freeboxos.fr freeboxos.fr home.nabla.mobi nabla.mobi
        dns_nameservers:
-         - "8.8.8.8" # google dns
-         - "8.8.4.4" # google dns
-         - "192.168.1.254" #freebox
-         - "212.27.40.240" #free
-         - "212.27.40.241" #free   
+         - "10.0.2.3" # work dns
          - "10.25.200.3" # work dns
          - "10.21.200.3" # work dns
+         - "8.8.8.8" # google dns
+         - "8.8.4.4" # google dns
+         - "192.168.0.254" # freebox dns
+         - "212.27.40.240" #free
+         - "212.27.40.241" #free
+         - "192.168.1.1" #debian
+         - "192.168.1.2" #debian
 #paris
 #      nameserver1: 10.21.200.3
 #      nameserver2: 10.25.200.3
