@@ -7,7 +7,7 @@
     - name: group hosts by distribution
       group_by: key="{{ ansible_distribution }}-{{ ansible_distribution_version }}"
 
-- hosts: RedHat-7*:RedHat-6*:CentOS-6*:Ubuntu-12*:Ubuntu-13*:Ubuntu-14*:Ubuntu-16*:Ubuntu-17*
+- hosts: RedHat-7*:RedHat-6*:CentOS-7*:CentOS-6*:Ubuntu-12*:Ubuntu-13*:Ubuntu-14*:Ubuntu-16*:Ubuntu-17*
   gather_facts: false
   tasks:
     - name: group hosts for supported distributions
@@ -19,23 +19,22 @@
     - name: fail for unsupported distribution
       fail: msg="{{ ansible_distribution }} {{ ansible_distribution_version }}
                  is not a supported OS for a Tower installation.  Supported
-                 OSes include Red Hat Enterprise Linux 6/7, CentOS 6, or
-                 Ubuntu 12.04/14.04/16.04/17.04."
+                 OSes include Red Hat Enterprise Linux 6/7, CentOS 6/7, or
+                 Ubuntu 12.04/13.04/14.04/16.04/17.04."
     - debug: msg="Version {{ ansible_distribution }} {{ ansible_distribution_version }} {{ ansible_architecture }}"
 
 #sudo docker logout https://docker.nabla.mobi:5000
 #sudo docker login registry.nabla.mobi:443
 - hosts: docker
   become: yes
-
-  pre_tasks:
+  tasks:
     - name: Log into private registry and force re-authorization
       docker_login:
         registry: https://docker.nabla.mobi/
         username: nabla
         password: microsoft
         reauthorize: yes
-      ignore_errors: true
+        ignore_errors: true
 
 #See https://docs.ansible.com/ansible/docker_service_module.html
     - name: Stop all containers
@@ -59,13 +58,11 @@
 
     - debug: var=output
 
-- include: docker-registry.yml
+- import_playbook: docker-registry.yml
 
 - hosts: docker
-#  become: yes
-
+  become: yes
   tasks:
-
     - name: Create a data container
       docker_container:
         name: mydata
@@ -141,8 +138,13 @@
 
     - debug: var=output
 
+    - name: Sync .env file
+      synchronize:
+        src: "{{ lookup('env','WORKSPACE') }}/dockerfile-nabla/centos/.env"
+        dest: "{{ lookup('env','WORKSPACE') }}/.env"
 
-    - docker_service:
+    - name: Restart all containers
+      docker_service:
         project_src: "{{ lookup('env','WORKSPACE') }}/dockerfile-nabla/centos"
         files: docker-compose-nabla.yml
 #        build: yes
@@ -164,3 +166,34 @@
         that:
           - "test.test.state.running"
           - "nabla.nabla.state.running"
+
+#    - name: "Wait for services to start"
+#      pause: minutes=15
+
+    - name: sleep for 900 seconds (15 minutes) and continue with play
+      wait_for: timeout=900
+      delegate_to: localhost
+
+#curl -XGET http://localhost:5601/
+
+    - name: "Check the status of kibana UI"
+      command: curl localhost:5601/
+      register: curl_result
+
+    - name: "Ensure that proper data is present in stdout"
+      assert:
+        that:
+          - "'Kibana 4' in curl_result.stdout"
+      ignore_errors: true
+
+#TODO
+#curl -XGET http://localhost:9200/_cluster/health?pretty
+
+#curl -XGET https://localhost:9443/#/
+#curl -XGET http://localhost:9190/#/
+
+    - name: Wait 300 seconds for port 9090 to become open on the host, don't start checking for 10 seconds
+      wait_for:
+        port: 9190
+        timeout: 300
+        delay: 10

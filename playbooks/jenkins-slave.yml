@@ -1,20 +1,50 @@
 #see https://blog.trifork.com/2013/04/02/ansible-example-playbook-to-setup-jenkins-slave/
 
 #for testing purpose
-#ansible-playbook -i hosts-albandri -c local -v jenkins-slave.yml -vvvv --ask-sudo-pass | tee setup.log
+#ansible-playbook -i hosts-albandri -c local -v jenkins-slave.yml --limit albandri.misys.global.ad -vvvv --ask-sudo-pass | tee setup.log
 
 #as root
-#ansible-playbook jenkins-slave.yml -i hosts-albandri -vvvv
+#ansible-playbook jenkins-slave.yml -i hosts-albandri --limit albandri.misys.global.ad -vvvv
 #as albandri
-#ansible-playbook jenkins-slave.yml -i hosts-albandri -vvvv --ask-sudo-pass --sudo
+#ansible-playbook jenkins-slave.yml -i hosts-albandri --limit albandri.misys.global.ad -vvvv --ask-sudo-pass --sudo
 # --extra-vars "jenkins_username=aandrieu jenkins_password=tbd"
+
+- hosts: all
+  gather_facts: true
+  tasks:
+    - name: group hosts by distribution
+      group_by: key="{{ ansible_distribution }}-{{ ansible_distribution_version }}"
+
+- hosts: RedHat-7*:RedHat-6*:RedHat-5*:CentOS-7*:CentOS-6*:Ubuntu-12*:Ubuntu-13*:Ubuntu-14*:Ubuntu-16*:Ubuntu-17*
+  gather_facts: false
+  tasks:
+    - name: group hosts for supported distributions
+      group_by: key="supported"
+
+- hosts: "!supported"
+  gather_facts: false
+  tasks:
+    - name: fail for unsupported distribution
+      fail: msg="{{ ansible_distribution }} {{ ansible_distribution_version }}
+                 is not a supported OS for a Tower installation.  Supported
+                 OSes include Red Hat Enterprise Linux 5/6/7, CentOS 6/7, or
+                 Ubuntu 12.04/13.04/14.04/16.04/17.04."
+    - debug: msg="Version {{ ansible_distribution }} {{ ansible_distribution_version }} {{ ansible_architecture }}"
+
+- hosts: localhost
+  tasks:
+    - name: Install Ansible-Galaxy dependencies
+      shell: ansible-galaxy install -r requirements.yml -p ./roles/ --ignore-errors
+      #shell: ansible-galaxy install -r requirements.yml -p ./roles/ --ignore-errors --force
 
 #Below is too make sure we can ssh all required hosts
 - name: determine ssh port
-  hosts: jenkins-slaves
+  hosts: all
   gather_facts: false
+
   vars:
     custom_ssh_port: 23
+
   tasks:
     - name: test default ssh port
       local_action: wait_for port=22 timeout=5 host={{inventory_hostname}}
@@ -32,21 +62,39 @@
       set_fact: ansible_ssh_port={{custom_ssh_port}}
       when: default_ssh.elapsed >= 5 and high_ssh.elapsed < 5
 
-- name: Add repo configuration to all nodes
-  hosts: RedHat-7*:RedHat-6*:CentOS-7*:CentOS-6*
-  gather_facts: false
-  remote_user: root
-#  connection: local
+#TODO ansible myhost --sudo -m raw -a "yum install -y python2 python-simplejson"
 
-  roles:
-    - geerlingguy.repo-epel
-    - geerlingguy.repo-remi
+- name: Bootstrap python onto server
+  hosts: Ubuntu-17*:Ubuntu-16*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
+#  become: yes
+
+  pre_tasks:
+  - name: Install python 2 if not there
+    raw: |
+      test -e /usr/bin/python || \
+      (apt -y update && apt install -y python-simplejson)
+    register: output
+    changed_when: output.stdout|trim() != ""
+
+  - name: Install sudo if not there
+    hosts: Ubuntu-12*:Ubuntu-13*:Ubuntu-14*:Ubuntu-16*
+    become: yes
+    raw: |
+      test -e /usr/bin/sudo || apt install -y sudo
+    register: output
+    changed_when: output.stdout|trim() != ""
+
+  - name: Add repo configuration to all nodes
+    hosts: RedHat-7*:RedHat-6*:CentOS-7*:CentOS-6*
+    become: yes
+
+    roles:
+      - geerlingguy.repo-epel
+      - geerlingguy.repo-remi
 
 - name: Apply hostname configuration
-#  hosts: test-boxes
   hosts: jenkins-slaves
-  remote_user: root
-#  connection: local
+  become: yes
 
   roles:
     - alban.andrieu.hostname

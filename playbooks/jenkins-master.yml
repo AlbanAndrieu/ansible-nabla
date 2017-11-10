@@ -29,9 +29,23 @@
 #      jenkins_home: /jenkins
       jenkins_java_args:
         - "-Xmx1024m"
-        - "-XX:MaxPermSize=512m"
         - "-Djava.awt.headless=true"
+        - "-Djenkins.install.runSetupWizard=false"
+#0        - "-Xloggc:$JENKINS_HOME/gc-%t.log -XX:NumberOfGCLogFiles=5 -XX:+UseGCLogFileRotation -XX:GCLogFileSize=20m -XX:+PrintGC -XX:+PrintGCDateStamps -XX:+PrintGCDetails -XX:+PrintHeapAtGC -XX:+PrintGCCause -XX:+PrintTenuringDistribution -XX:+PrintReferenceGC -XX:+PrintAdaptiveSizePolicy" #GC Logging
+        - "-server -XX:+AlwaysPreTouch"
+        - "-Dorg.jenkinsci.plugins.gitclient.Git.timeOut=120" #For robot framework
+        - "-Dhudson.model.DirectoryBrowserSupport.CSP=\"\""
+        - "-Dhudson.slaves.WorkspaceList=_"
+#below is default for secure jenkins
+#      - "--httpPort=-1 --httpsPort=8383 --httpsKeyStore=/etc/ssl/{{ jenkins_http_host }}/{{ jenkins_http_host }}.jks --httpsKeyStorePassword=changeit"
+#        - "-Dhudson.model.ParametersAction.keepUndefinedParameters=false"
+#1        - "-XX:-BytecodeVerificationLocal -XX:-BytecodeVerificationRemote -XX:+ReduceSignalUsage -XX:+UseCompressedClassPointers -XX:+UseCompressedOops -XX:-UseLargePagesIndividualAllocation"
+#2        - "-XX:+UseG1GC -XX:+UseCompressedClassPointers -XX:+UseCompressedOops"
+#3        - "-XX:+UseG1GC -XX:+AlwaysPreTouch -XX:+UseStringDeduplication -XX:+UseCompressedClassPointers -XX:+UseCompressedOops"
+#4        - "-XX:+UseG1GC -XX:+ExplicitGCInvokesConcurrent -XX:+ParallelRefProcEnabled -XX:+UseStringDeduplication -XX:+UnlockExperimentalVMOptions -XX:G1NewSizePercent=20 -XX:+UnlockDiagnosticVMOptions -XX:G1SummarizeRSetStatsPeriod=1" #G1 GC settings
       jenkins_prefix: "/jenkins"
+      jenkins_system_config:
+        admin_email: alban.andrieu@free.fr
       jenkins_plugins:
         - "swarm"
         - "ws-cleanup"
@@ -245,6 +259,18 @@
         - "SquishPlugin"
         - "slave-status"
       jenkins_disabled_plugins: [ 'versioncolumn', 'scm-sync-configuration', 'clamav', 'selenium', 'seleniumrc-plugin', 'selenium-builder', 'svnmerge', 'WebSVN2', 'svn-revert-plugin', 'subversion', 'ec2', 'scons', 'gearman-plugin', 'findbugs', 'checkstyle', 'pmd', 'clover', 'fitnesse' ]
-#     jenkins_jobs:
-#       - name: test
-#         action: delete
+      jenkins_jobs:
+          - name: Delete_workspaces_on_nodes
+            action: disable
+      shell_git:
+        - {
+          shell_git_machine: "github.com",
+          shell_git_login: "AlbanAndrieu",
+          shell_git_email: "alban.andrieu@free.fr",
+          shell_git_password: "Misys2013",
+          shell_git_name: "Andrieu, Alban",
+          shell_git_path: "/usr/bin",
+          shell_git_ssl: false,
+          shell_git_meld_enabled: yes,
+          shell_git_editor: "gedit"
+          }
