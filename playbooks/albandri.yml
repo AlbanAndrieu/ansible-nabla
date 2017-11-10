@@ -284,11 +284,11 @@
 #  roles:
 #    - alban.andrieu.scons
 
-- include: cpp.yml
+- import_playbook: cpp.yml
 
-#- include: java.yml
+#- import_playbook: java.yml
 
-- include: certificate.yml
+- import_playbook: certificate.yml
 
 #- name: Install virtualbox
 #  hosts: virtualbox
@@ -302,14 +302,14 @@
 #      virtualbox_package_name: virtualbox
 #      virtualbox_dkms_enable: no
 
-- include: vagrant.yml
+- import_playbook: vagrant.yml
 
 #  vars:
 #       vagrant_libvirt_enabled: false
 #       vagrant_windows_enabled: false
 ##      vagrant_url: https://dl.bintray.com/mitchellh/vagrant/vagrant_1.6.3_x86_64.deb
 
-- include: docker.yml
+- import_playbook: docker.yml
 
 - name: Install locale
   hosts: locale
@@ -423,13 +423,13 @@
       docker_files_enable: no
       docker_files_generated_directory: "../roles/alban.andrieu.webmin"
 
-- include: nexus.yml
+- import_playbook: nexus.yml
 
-- include: tomcat.yml
+- import_playbook: tomcat.yml
 
 # This playbook deploys a simple standalone JBoss server.
 
-#- include: jboss.yml
+#- import_playbook: jboss.yml
 
 ## This playbook deploys a MySQL database.
 #- name: Deploy MySQL and configure the databases
@@ -540,11 +540,11 @@
   vars:
        apache_listen_port: 7070
 
-- include: jenkins-master.yml
+- import_playbook: jenkins-master.yml
 
-- include: jenkins-slave.yml
+- import_playbook: jenkins-slave.yml
 
-- include: maven.yml
+- import_playbook: maven.yml
 
 - name: Install css
   hosts: css
@@ -610,7 +610,7 @@
 ## user is the same as base_admin_username
 #      user: ubuntu
 
-- include: sonar.yml
+- import_playbook: sonar.yml
 
 #Below cmake conky is included in workstation role
 #- name: Install conky
@@ -709,9 +709,9 @@
 #      #user: "albandri"
 #      #home: "/workspace/users/albandri10"
 
-- include: zap.yml
+- import_playbook: zap.yml
 
-- include: jmeter.yml
+- import_playbook: jmeter.yml
 
 - name: Install mon
   hosts: workstation
@@ -730,8 +730,8 @@
       user: root
       home: "/root"
 
-- include: jdiskreport.yml
+- import_playbook: jdiskreport.yml
 
-- include: private-bower.yml
+- import_playbook: private-bower.yml
 
-- include: owasp-wte.yml
+- import_playbook: owasp-wte.yml
