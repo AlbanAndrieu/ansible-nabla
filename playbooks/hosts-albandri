@@ -161,6 +161,10 @@ albandri-laptop-work
 [windows]
 #10.0.2.15
 #albandri-laptop-work
+#PARD011996.misys.global.ad ansible_host=10.41.40.121 ansible_user="fru" ansible_password="Kondor_123" dtap=acc comment="Hosting by Alban Andrieu" ext_id="SRV_029" groups="workstation"
+#.\fru Kondor_123
+#FR1CSWFRBM0005.misys.global.ad ansible_host=10.21.185.152 ansible_python_interpreter="/usr/bin/python2.7" ansible_user="fru" ansible_password="Kondor_123" dtap=acc comment="Hosting by Alban Andrieu" ext_id="SRV_029" groups="micloud paris"
+#GDNCSWFRDEV0009.misys.global.ad ansible_host=10.22.64.181 ansible_python_interpreter="/usr/bin/python2.7" ansible_user="fru" ansible_password="Kondor_123" dtap=acc comment="Hosting by Alban Andrieu" ext_id="SRV_029" groups="micloud paris"
 
 [windows:vars]
 #ansible_user=vagrant

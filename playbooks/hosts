@@ -79,14 +79,14 @@ localhost
 localhost
 
 [jenkins-UAT-master]
-master ansible_ssh_host=192.168.11.33 ansible_ssh_port=22 ansible_connection=ssh ansible_user=vagrant
+#master ansible_ssh_host=192.168.11.33 ansible_ssh_port=22 ansible_connection=ssh ansible_user=vagrant
 
 [jenkins-UAT-master:vars]
 ansible_ssh_common_args='-o StrictHostKeyChecking=no'
 
 [jenkins-UAT-slaves]
 #192.168.11.[51:56]
-slave01 ansible_ssh_host=192.168.11.51 ansible_ssh_port=22 ansible_connection=ssh ansible_user=vagrant
+#slave01 ansible_ssh_host=192.168.11.51 ansible_ssh_port=22 ansible_connection=ssh ansible_user=vagrant
 #slave02 ansible_ssh_host=192.168.11.52 ansible_ssh_port=22 ansible_connection=ssh ansible_user=vagrant
 #slave03 ansible_ssh_host=192.168.11.53 ansible_ssh_port=22 ansible_connection=ssh ansible_user=vagrant
 #slave04 ansible_ssh_host=192.168.11.54 ansible_ssh_port=22 ansible_connection=ssh ansible_user=vagrant
@@ -176,11 +176,11 @@ install_kernel_extras=false
 
 [solaris]
 #sun4v is a blade server. Logical Domains LDOM
-sparc-sun4sol-u6-1-sun4v ansible_user=jenkins ansible_python_interpreter="/opt/csw/bin/python"
+#sparc-sun4sol-u6-1-sun4v ansible_user=jenkins ansible_python_interpreter="/opt/csw/bin/python"
 #sun4u is a normal rack server.
-sparc-sun4sol-u6-1-sun4u ansible_user=root ansible_python_interpreter="/usr/local/bin/python2.7"
+#sparc-sun4sol-u6-1-sun4u ansible_user=root ansible_python_interpreter="/usr/local/bin/python2.7"
 #x86linux
-x86-sun4sol-u6-1 ansible_user=test group=other ansible_python_interpreter="/usr/local/bin/python2.7" ansible_sudo_pass=Test_123 ansible_ssh_user="root" ansible_ssh_pass="Test_123"
+#x86-sun4sol-u6-1 ansible_user=test group=other ansible_python_interpreter="/usr/local/bin/python2.7" ansible_sudo_pass=Test_123 ansible_ssh_user="root" ansible_ssh_pass="Test_123"
 
 [solaris:vars]
 user=jenkins
