@@ -77,20 +77,19 @@
     changed_when: output.stdout|trim() != ""
 
   - name: Install sudo if not there
-    hosts: Ubuntu-12*:Ubuntu-13*:Ubuntu-14*:Ubuntu-16*
     become: yes
     raw: |
       test -e /usr/bin/sudo || apt install -y sudo
     register: output
     changed_when: output.stdout|trim() != ""
 
-  - name: Add repo configuration to all nodes
-    hosts: RedHat-7*:RedHat-6*:CentOS-7*:CentOS-6*
-    become: yes
+- name: Add repo configuration to all nodes
+  hosts: RedHat-7*:RedHat-6*:CentOS-7*:CentOS-6*
+  become: yes
 
-    roles:
-      - geerlingguy.repo-epel
-      - geerlingguy.repo-remi
+  roles:
+    - geerlingguy.repo-epel
+    - geerlingguy.repo-remi
 
 - name: Apply hostname configuration
   hosts: jenkins-slaves
@@ -102,7 +101,6 @@
 - name: Install git
   hosts: jenkins-slaves
   remote_user: root
-#  connection: local
 
   roles:
     - role: geerlingguy.git
@@ -149,6 +147,8 @@
        }
     jenkins_http_port: 8380
     jenkins_prefix: "/jenkins"
+    jenkins_home: "/home/jenkins"
+    jenkins_group: docker
     jenkins_url: http://localhost:8380{{ jenkins_prefix }}
     home_url: "http://home.nabla.mobi"
     nexus_url: "{{ home_url }}:8081"
@@ -166,9 +166,6 @@
     #jenkins_jdk7_enable: yes
     #user: "albandri"
     #home: "/workspace/users/albandri10"
-
-#    jenkins_home: "/jenkins"
-#    jenkins_slave_home: "/kgr-mvn"
 
 #- name: Apply swarm configuration to all jenkins slaves
 #  hosts: test-boxes
