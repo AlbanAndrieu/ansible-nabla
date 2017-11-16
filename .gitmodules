@@ -13,9 +13,6 @@
 [submodule "roles/zabbix-agent"]
 	path = roles/zabbix-agent
 	url = https://github.com/AlbanAndrieu/ansible-zabbix_agent.git
-[submodule "roles/zabbix-server"]
-	path = roles/zabbix-server
-	url = https://github.com/AlbanAndrieu/ansible-zabbix_server.git
 [submodule "roles/virtualbox"]
 	path = roles/virtualbox
 	url = https://github.com/AlbanAndrieu/ansible-galaxy.ubuntu.virtualbox.git
