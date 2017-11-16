@@ -35,6 +35,7 @@ git remote add upstream https://github.com/geerlingguy/ansible-role-mysql.git
 git remote add upstream https://github.com/geerlingguy/ansible-role-git.git
 git remote add upstream https://github.com/geerlingguy/ansible-role-ntp.git
 git remote add upstream https://github.com/geerlingguy/ansible-role-nginx.git
+git remote add upstream https://github.com/geerlingguy/ansible-role-nodejs.git
 
 git remote add upstream https://github.com/alourie/devbox.chrome.git
 git remote add upstream https://github.com/jdauphant/ansible-role-ssl-certs.git

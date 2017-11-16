@@ -109,6 +109,7 @@ git submodule add -f  https://github.com/AlbanAndrieu/ansible-selenium.git alban
 #rm -rf ../.git/modules/roles/nodejs/
 #git rm --cached nodejs
 git submodule deinit -f nodejs
+git submodule deinit -f geerlingguy.nodejs
 #TO REMOVE
 #git submodule add -f  https://github.com/AlbanAndrieu/ansible-nodejs.git nodejs
 git submodule add -f  https://github.com/AlbanAndrieu/ansible-role-nodejs.git geerlingguy.nodejs
