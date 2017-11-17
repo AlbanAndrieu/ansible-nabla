@@ -71,14 +71,16 @@ git submodule add -f  https://github.com/AlbanAndrieu/ansible-util.git silpion.u
 git submodule add -f  https://github.com/AlbanAndrieu/ansible-lib.git silpion.lib
 
 #git clone https://github.com/silpion/ansible-maven maven
+git submodule deinit -f maven
+git rm --cached maven
 git submodule add -f  https://github.com/AlbanAndrieu/ansible-maven.git maven
 #TODO rename to silpion.maven
+git submodule add -f  https://github.com/AlbanAndrieu/ansible-role-maven maven
 git submodule add -f  https://github.com/AlbanAndrieu/ansible-role-maven-color maven-color
 
 #git clone https://github.com/silpion/ansible-java java
 #git submodule deinit -f java
 git submodule add -f  https://github.com/AlbanAndrieu/ansible-java.git java
-#TODO rename to silpion.maven
 #pull request pending
 
 #git submodule deinit -f chrome
@@ -109,6 +111,7 @@ git submodule add -f  https://github.com/AlbanAndrieu/ansible-selenium.git alban
 #rm -rf ../.git/modules/roles/nodejs/
 #git rm --cached nodejs
 git submodule deinit -f nodejs
+git submodule deinit -f geerlingguy.nodejs
 #TO REMOVE
 #git submodule add -f  https://github.com/AlbanAndrieu/ansible-nodejs.git nodejs
 git submodule add -f  https://github.com/AlbanAndrieu/ansible-role-nodejs.git geerlingguy.nodejs

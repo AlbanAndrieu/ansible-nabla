@@ -54,12 +54,13 @@ install:
 #  - ansible-galaxy install alban.andrieu.tomcat
 #  - ansible-galaxy install alban.andrieu.synergy
 
-#  - ansible-galaxy install -r requirements.yml -p ./roles/ --ignore-errors
-
   # Update Ansible submodule.
   - git pull && git submodule init
   #- git submodule update && git submodule status
   - git submodule foreach git checkout master
+  
+  - ansible-galaxy install -r requirements.yml -p ./roles/ --ignore-errors
+  
 script:
   # Check ansible version
   - sudo ansible --version
