@@ -75,12 +75,13 @@ git submodule deinit -f maven
 git rm --cached maven
 git submodule add -f  https://github.com/AlbanAndrieu/ansible-maven.git maven
 #TODO rename to silpion.maven
-git submodule add -f  https://github.com/AlbanAndrieu/ansible-role-maven maven
-git submodule add -f  https://github.com/AlbanAndrieu/ansible-role-maven-color maven-color
+git submodule add -f  https://github.com/AlbanAndrieu/ansible-role-maven.git maven
+git submodule add -f  https://github.com/AlbanAndrieu/ansible-role-maven-color.git maven-color
 
-#git clone https://github.com/silpion/ansible-java java
 #git submodule deinit -f java
-git submodule add -f  https://github.com/AlbanAndrieu/ansible-java.git java
+#rm -rf ../.git/modules/roles/java/
+#git submodule add -f  https://github.com/AlbanAndrieu/ansible-java.git java
+git submodule add -f  https://github.com/ansiblebit/oracle-java java
 #pull request pending
 
 #git submodule deinit -f chrome

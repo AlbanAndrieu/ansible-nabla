@@ -541,9 +541,9 @@
 
 - import_playbook: jenkins-master.yml
 
-- import_playbook: jenkins-slave.yml
-
 - import_playbook: maven.yml
+
+- import_playbook: jenkins-slave.yml
 
 - name: Install css
   hosts: css
