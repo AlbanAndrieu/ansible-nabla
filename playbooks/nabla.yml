@@ -261,17 +261,7 @@
       cppunit_version: "1.13-0"
       boost_version: "1.54"
 
-- name: Install java
-  hosts: java
-  remote_user: root
-#  connection: local
-
-  roles:
-    - java
-
-  vars:
-      java_openjdk_when: false
-      java_oracle_when: false #Download is too long for travis build
+- import_playbook: java.yml
 
 #- name: Install virtualbox
 #  hosts: virtualbox
