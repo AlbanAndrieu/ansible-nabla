@@ -54,9 +54,8 @@ localhost
 [locale]
 localhost
 
-[zabbix-server]
-
-[zabbix-agent]
+[zabbix]
+localhost
 
 [webmin]
 localhost
