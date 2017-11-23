@@ -303,9 +303,9 @@ git submodule add -f  https://github.com/AlbanAndrieu/ansible-role-sass.git elao
 #git submodule deinit -f java.certificate
 #git rm java.certificate
 #rm -rf ../.git/modules/roles/java.certificate/
-git submodule add -f  https://github.com/AlbanAndrieu/ansible-java-certificate.git java.certificate
-git submodule add -f  https://github.com/AlbanAndrieu/ansible-role-ssl-certs.git ssl.certificate
-git submodule add -f  https://github.com/AlbanAndrieu/ansible-trust-ca.git ssl.ca-certificate
+git submodule add -f  https://github.com/AlbanAndrieu/ansible-java-certificate.git java-certificate
+git submodule add -f  https://github.com/AlbanAndrieu/ansible-role-ssl-certs.git ssl-certificate
+git submodule add -f  https://github.com/AlbanAndrieu/ansible-trust-ca.git ssl-ca-certificate
 
 #SEE
 #https://github.com/docker/docker-registry

@@ -232,9 +232,6 @@
 [submodule "roles/geerlingguy.elasticsearch-curator"]
 	path = roles/geerlingguy.elasticsearch-curator
 	url = https://github.com/AlbanAndrieu/ansible-role-elasticsearch-curator.git
-[submodule "roles/silpion.util"]
-	path = roles/silpion.util
-	url = https://github.com/AlbanAndrieu/ansible-util.git
 [submodule "roles/elao.ruby"]
 	path = roles/elao.ruby
 	url = https://github.com/AlbanAndrieu/ansible-role-ruby.git
@@ -247,15 +244,6 @@
 [submodule "roles/alban.andrieu.owasp-wte"]
 	path = roles/alban.andrieu.owasp-wte
 	url = https://github.com/AlbanAndrieu/ansible-owasp-wte.git
-[submodule "roles/java.certificate"]
-	path = roles/java.certificate
-	url = https://github.com/AlbanAndrieu/ansible-java-certificate.git
-[submodule "roles/ssl.certificate"]
-	path = roles/ssl.certificate
-	url = https://github.com/AlbanAndrieu/ansible-role-ssl-certs.git
-[submodule "roles/silpion.lib"]
-	path = roles/silpion.lib
-	url = https://github.com/AlbanAndrieu/ansible-lib
 [submodule "roles/python"]
 	path = roles/python
 	url = https://github.com/AlbanAndrieu/Stouts.python.git
@@ -280,6 +268,3 @@
 [submodule "roles/geerlingguy.nodejs"]
 	path = roles/geerlingguy.nodejs
 	url = https://github.com/AlbanAndrieu/ansible-role-nodejs.git
-[submodule "roles/ssl.ca-certificate"]
-	path = roles/ssl.ca-certificate
-	url = https://github.com/AlbanAndrieu/ansible-trust-ca.git
