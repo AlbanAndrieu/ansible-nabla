@@ -7,7 +7,7 @@
     - name: group hosts by distribution
       group_by: key="{{ ansible_distribution }}-{{ ansible_distribution_version }}"
 
-- hosts: RedHat-7*:RedHat-6*:CentOS-7*:CentOS-6*:Ubuntu-12*:Ubuntu-13*:Ubuntu-14*:Ubuntu-16*:Ubuntu-17*
+- hosts: RedHat-7*:RedHat-6*:RedHat-5*:CentOS-7*:CentOS-6*:Ubuntu-17*:Ubuntu-16*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
   gather_facts: false
   tasks:
     - name: group hosts for supported distributions
@@ -25,8 +25,8 @@
 
 #- import_playbook: certificate.yml
 
-- hosts: docker
-  become: yes
+#- hosts: docker
+#  become: yes
 #  pre_tasks:
 #  - name: Log into DockerHub
 #    docker_login:
@@ -38,12 +38,17 @@
 #sudo groupadd docker
 #sudo gpasswd -a ${USER} docker
 #sudo gpasswd -a jenkins docker
-  pre_tasks:
+
+- hosts: docker
+  become: yes
+
+  tasks:
     - name: Create a docker group
       group:
           name=docker
           state=present
       become: yes
+      ignore_errors: true
 
     - name: Add user(s) to docker group
       user:
@@ -51,9 +56,11 @@
           group=docker
           state=present
       become: yes
+      ignore_errors: true
 
 - name: Install docker
   hosts: docker
+#  hosts: Ubuntu-17*:Ubuntu-16:*Ubuntu-14*
   become: yes
 
   roles:
@@ -62,7 +69,7 @@
   vars:
 #       docker_opts: "-H tcp://127.0.0.1:4243 -H unix:///var/run/docker.sock --dns 8.8.8.8 --dns 8.8.4.4 --storage-driver=zfs"
 #       docker_opts: "-H tcp://127.0.0.1:4243 -H unix:///var/run/docker.sock --dns 8.8.8.8 --dns 8.8.4.4 --storage-driver=overlay"
-       docker_opts: "-H tcp://0.0.0.0:4243 -H unix:///var/run/docker.sock --dns 10.21.200.3 --dns 10.41.200.3 --dns 8.8.8.8 --dns 8.8.4.4 --storage-driver overlay --disable-legacy-registry --tlsverify --tlscacert /root/ca.pem --tlscert /etc/ssl/{{ansible_fqdn}}/{{ansible_fqdn}}.pem --tlskey /etc/ssl/{{ansible_fqdn}}/{{ansible_fqdn}}.key --label provider=albandri"
+       docker_opts: "-H tcp://0.0.0.0:4243 -H unix:///var/run/docker.sock --dns 10.21.200.3 --dns 10.41.200.3 --dns 8.8.8.8 --dns 8.8.4.4 --data-root /docker --storage-driver overlay --disable-legacy-registry --tlsverify --tlscacert /root/pki/ca.pem --tlscert /etc/ssl/{{ansible_fqdn}}/{{ansible_fqdn}}.pem --tlskey /etc/ssl/{{ansible_fqdn}}/{{ansible_fqdn}}.key --label provider=albandri"
        #--insecure-registry docker:443
        #TODO add
        #--userns-remap=default #see https://stackoverflow.com/questions/35291520/docker-and-userns-remap-how-to-manage-volume-permissions-to-share-data-betwee
