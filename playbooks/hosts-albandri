@@ -54,10 +54,7 @@ albandri-laptop-work
 [locale]
 albandri-laptop-work
 
-[zabbix-server]
-albandri-laptop-work
-
-[zabbix-agent]
+[zabbix]
 albandri-laptop-work
 
 [webmin]
