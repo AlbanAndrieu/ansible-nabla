@@ -25,7 +25,7 @@ git remote add upstream https://github.com/AnsibleShipyard/ansible-nodejs.git
 git remote add upstream https://github.com/silpion/ansible-util.git
 git remote add upstream https://github.com/silpion/ansible-lib.git
 
-git remote add upstream https://github.com/geerlingguy/ansible-role-logstash
+git remote add upstream https://github.com/geerlingguy/ansible-role-logstash.git
 git remote add upstream https://github.com/geerlingguy/ansible-role-security.git
 git remote add upstream https://github.com/geerlingguy/ansible-role-phpmyadmin.git
 git remote add upstream https://github.com/geerlingguy/ansible-role-kibana.git
@@ -40,6 +40,7 @@ git remote add upstream https://github.com/geerlingguy/ansible-role-nodejs.git
 git remote add upstream https://github.com/alourie/devbox.chrome.git
 git remote add upstream https://github.com/jdauphant/ansible-role-ssl-certs.git
 git remote add upstream https://github.com/andrewrothstein/ansible-trust-ca.git
+git remote add upstream https://github.com/geerlingguy/ansible-role-apache.git
 
 #git remote rm origin
 #git remote add origin https://github.com/AlbanAndrieu/ansible-role-elasticsearch-curator.git
