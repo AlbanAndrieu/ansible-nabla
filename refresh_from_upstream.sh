@@ -67,6 +67,7 @@ git rebase --continue
 
 #Clean and restart from scratch
 #git reset --hard upstream/master
+#git reset --hard origin/master
 
 git push origin master --force
 
