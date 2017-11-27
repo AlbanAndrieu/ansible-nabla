@@ -528,7 +528,7 @@
   vars:
        apache_listen_port: 7070
 
-- import_playbook: jenkins-master.yml
+#- import_playbook: jenkins-master.yml
 
 - import_playbook: maven.yml
 

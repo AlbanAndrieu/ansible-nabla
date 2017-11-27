@@ -34,14 +34,11 @@
   remote_user: albandri
 
   roles:
-    - { role: jenkins-master,
-        docker_files_enable: yes,
-        docker_files_generated_directory: "../roles/jenkins-master",
-        #user: "albandri",
-        #home: "/workspace/users/albandri10",
-      }
+    - jenkins-master
 
   vars:
+      docker_files_enable: yes
+      docker_files_generated_directory: "../roles/jenkins-master"
       jenkins_proxy: apache
       jenkins_proxy_hostname: localhost
 #      jenkins_ssh_key_file: "{{resources_to}}/resources/jenkins/ssh_key"    # (you can manage remote files with Stouts.resources role)
