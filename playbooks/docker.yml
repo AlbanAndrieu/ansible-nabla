@@ -1,4 +1,3 @@
-#ansible-galaxy install -r requirements.yml -p ./roles/ --ignore-errors
 #ansible-playbook -i hosts -v docker.yml --limit albandri --ask-sudo-pass -vvvv | tee setup.log
 
 - hosts: all
