@@ -630,7 +630,7 @@
 - name: Install subversion
   hosts: workstation
   remote_user: albandri
-
+  ignore_errors: true
 
   roles:
     - role: alban.andrieu.subversion
