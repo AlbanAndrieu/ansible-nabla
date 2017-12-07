@@ -1,11 +1,11 @@
 
 #for testing purpose
-#ansible-playbook -i hosts-albandri -c local -v workstation.yml --limit albandri.misys.global.ad -vvvv --ask-sudo-pass | tee setup.log
+#ansible-playbook -i hosts-albandri -c local -v workstation.yml --limit localhost -vvvv --ask-sudo-pass | tee setup.log
 
 #as root
-#ansible-playbook workstation.yml -i hosts-albandri --limit albandri.misys.global.ad -vvvv
+#ansible-playbook workstation.yml -i hosts-albandri --limit localhost -vvvv
 #as albandri
-#ansible-playbook workstation.yml -i hosts-albandri --limit albandri.misys.global.ad -vvvv --ask-sudo-pass --sudo
+#ansible-playbook workstation.yml -i hosts-albandri --limit localhost -vvvv --ask-sudo-pass --sudo
 # --extra-vars "jenkins_username=aandrieu jenkins_password=tbd"
 
 - hosts: all

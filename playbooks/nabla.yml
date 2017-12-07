@@ -78,7 +78,7 @@
     - alban.andrieu.common
 
   vars:
-       apt_notification_email: "alban.andrieu@misys.com"
+       apt_notification_email: "alban.andrieu@free.fr"
        apt_upgrade_system_enabled: no
 
 - include: dns.yml

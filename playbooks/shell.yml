@@ -1,4 +1,4 @@
-#ansible-playbook -i hosts-albandri -v shell.yml --limit albandri.misys.global.ad --ask-sudo-pass -vvvv | tee setup.log
+#ansible-playbook -i hosts-albandri -v shell.yml --limit localhost --ask-sudo-pass -vvvv | tee setup.log
 # -c local  --ask-pass --ask-sudo-pass --sudo
 
 - name: Apply common shell configuration

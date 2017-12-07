@@ -1,4 +1,4 @@
-#ansible-playbook -i hosts-albandri -c local -v eclipse.yml -vvvv --limit albandri.misys.global.ad --ask-sudo-pass | tee setup.log
+#ansible-playbook -i hosts -c local -v eclipse.yml -vvvv --limit localhost --ask-sudo-pass | tee setup.log
 
 - hosts: all
   gather_facts: true

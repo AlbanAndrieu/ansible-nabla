@@ -1,5 +1,5 @@
 #ansible-playbook -i staging -c local -v docker-registry.yml --ask-pass -vvvv | tee setup.log
-#ansible-playbook -i staging -c local -v docker-registry.yml --limit albandri.misys.global.ad --ask-sudo-pass -vvvv | tee setup.log
+#ansible-playbook -i staging -c local -v docker-registry.yml --limit albandri --ask-sudo-pass -vvvv | tee setup.log
 
 - hosts: all
   gather_facts: true
@@ -28,8 +28,9 @@
 #sudo docker logout https://docker.nabla.mobi:5000
 #sudo docker login dtr.nabla.mobi:443
 - hosts: docker
+  become: yes
 
-  pre_tasks:
+  tasks:
     - name: Log into private registry and force re-authorization
       docker_login:
         registry: https://docker.nabla.mobi/
@@ -47,22 +48,14 @@
 #  become: yes
 
   tasks:
-    - name: Remove ubuntu image
-      docker_image:
-        state: absent
-        name: ubuntu:14.04
 
-    - name: Remove hello-world image
-      docker_image:
-        state: absent
-        name: hello-world:latest
-        force: yes
-
-    - name: Remove test image
-      docker_image:
-        state: absent
-        name: docker/test/jenkins-slave
-        tag: test
+    - name: Pull ansible-jenkins-slave images
+      docker_container:
+        name: ansible-jenkins-slave
+        image: registry.nabla.mobi/fusion-risk/ansible-jenkins-slave
+        state: stopped
+        pull: yes
+        #command: sleep infinity
 
     - name: Pull centos images
       docker_container:
@@ -72,36 +65,36 @@
         pull: yes
         #command: sleep infinity
 
-    - name: Pull java images
+    - name: Pull selenium hub images
       docker_container:
-        name: java
-        image: docker/nabla/java
+        name: selenium-hub
+        image: selenium/hub
+        #state: stopped
+        pull: yes
+        #command: sleep infinity
+
+    - name: Pull selenium chrome images
+      docker_container:
+        name: selenium-node-chrome
+        image: selenium/node-chrome
         state: stopped
         pull: yes
         #command: sleep infinity
 
-#TODO http://blog.yohanliyanage.com/2015/05/docker-clean-up-after-yourself/
-#TODD must be run on a daily basis
-#Clean 1 week old containers
-#docker ps -a | grep 'weeks ago' | awk '{print $1}' | xargs --no-run-if-empty docker rm
-#Clean all containers
-#docker rm `docker ps --no-trunc -aq`
+    - name: Pull selenium standalone chrome images
+      docker_container:
+        name: selenium-standalone-chrome-debug
+        image: selenium/standalone-chrome-debug
+        state: stopped
+        pull: yes
+        #command: sleep infinity
 
-    - name: Clean all exited containers
-      shell: "docker rm -v $(docker ps -a -q -f status=exited)"
-      ignore_errors: true
+    - name: Pull selenium standalone firefox images
+      docker_container:
+        name: selenium-standalone-firefox-debug
+        image: selenium/standalone-firefox-debug
+        state: stopped
+        pull: yes
+        #command: sleep infinity
 
-    - name: Clean all created containers
-      shell: "docker rm -v $(docker ps -a -q -f status=created)"
-      ignore_errors: true
-
-    - name: Remove unwanted dangling images
-      shell: "docker rmi $(docker images -f \"dangling=true\" -q)"
-      ignore_errors: true
-
-    - name: Remove unwanted ‘dangling’ volumes
-      shell: "docker volume rm $(docker volume ls -qf dangling=true)"
-      ignore_errors: true
-
-#docker ps -a -s
-#docker images
+- import_playbook: docker-cleaning.yml

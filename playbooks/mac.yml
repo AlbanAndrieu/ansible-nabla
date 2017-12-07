@@ -1,6 +1,6 @@
-#ansible -m setup almonde-jenkins.misys.global.add -vvvv -i production -vvvv
-#ansible-playbook -i production  -v mac.yml --limit almonde-jenkins.misys.global.add --ask-sudo-pass
-#ansible-playbook -i production -v jenkins-master.yml -vvvv --ask-sudo-pass --limit almonde-jenkins.misys.global.ad
+#ansible -m setup mac-jenkins.nabla.mobi -vvvv -i production -vvvv
+#ansible-playbook -i production  -v mac.yml --limit mac-jenkins.nabla.mobi --ask-sudo-pass
+#ansible-playbook -i production -v jenkins-master.yml -vvvv --ask-sudo-pass --limit mac-jenkins.nabla.mobi
 
 - hosts: all
   gather_facts: true

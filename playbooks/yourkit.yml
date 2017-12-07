@@ -31,8 +31,8 @@
         yourkit_arch: "solaris-x86-32",
         yourkit_arch_64: "solaris-x86-64",
         yourkit_arch: "{{ yourkit_arch_64 }}",
-        tomcat_catalina_home_dir: "/thomsonreuters/home/kgr/dist/3rdparty/J2EE/tomcat_dist",
-        yourkit_base_dir: "/thomsonreuters/home/kgr/dist/3rdparty/yourkit"
+        tomcat_catalina_home_dir: "/usr/share/tomcat7",
+        yourkit_base_dir: "/opt/yourkit"
       }
 
 #  vars:

@@ -1,10 +1,10 @@
 [all]
 #127.0.0.1
-albandri-laptop-work dtap=prod comment="Hosting by Alban Andrieu" ext_id="SRV_02" groups="paris misc"
+albandri dtap=prod comment="Hosting by Alban Andrieu" ext_id="SRV_02" groups="paris misc"
 
 #below is used only git lamp.yml
 [lamp]
-albandri-laptop-work
+albandri
 
 [ntp]
 #Same as all
@@ -13,62 +13,62 @@ albandri-laptop-work
 #Same as all
 
 [administration]
-#albandri-laptop-work
+#albandri
 
 [security]
-albandri-laptop-work
+albandri
 
 [cmake]
-albandri-laptop-work
+albandri
 
 [cpp]
-albandri-laptop-work
+albandri
 
 [java]
-albandri-laptop-work
+albandri
 
 [maven]
-albandri-laptop-work
+albandri
 
 [css]
-albandri-laptop-work
+albandri
 
 [chrome]
-albandri-laptop-work
+albandri
 
 [tomcat-servers]
-albandri-laptop-work
+albandri
 
 [jboss-servers]
-albandri-laptop-work
+albandri
 
 [nabla-servers]
-albandri-laptop-work
+albandri
 
 [apache-servers]
-albandri-laptop-work
+albandri
 
 [mysql-servers]
-albandri-laptop-work
+albandri
 
 [locale]
-albandri-laptop-work
+albandri
 
 [zabbix]
-albandri-laptop-work
+albandri
 
 [webmin]
-albandri-laptop-work
+albandri
 
 [zfs]
-albandri-laptop-work
-#albandri-laptop-work ansible_connection=local
+albandri
+#albandri ansible_connection=local
 
 [xvbf]
-albandri-laptop-work
+albandri
 
 [selenium]
-albandri-laptop-work
+albandri
 
 [vagrant_hosts:children]
 jenkins-master
@@ -76,14 +76,14 @@ jenkins-slaves
 #sonar
 
 [jenkins-master]
-albandri-laptop-work
+albandri
 master ansible_ssh_host=192.168.11.33 ansible_ssh_port=22 ansible_connection=ssh ansible_user=vagrant
 
 [jenkins-master:vars]
 ansible_ssh_common_args='-o StrictHostKeyChecking=no'
 
 [jenkins-slaves]
-albandri-laptop-work
+albandri
 slave01 ansible_ssh_host=192.168.11.51 ansible_ssh_port=22 ansible_connection=ssh ansible_user=vagrant
 slave02 ansible_ssh_host=192.168.11.52 ansible_ssh_port=22 ansible_connection=ssh ansible_user=vagrant
 slave03 ansible_ssh_host=192.168.11.53 ansible_ssh_port=22 ansible_connection=ssh ansible_user=vagrant
@@ -93,30 +93,30 @@ slave04 ansible_ssh_host=192.168.11.54 ansible_ssh_port=22 ansible_connection=ss
 ansible_ssh_common_args='-o StrictHostKeyChecking=no'
 
 [jenkins-swarm]
-#albandri-laptop-work
+#albandri
 
 [jenkins-swarm:vars]
 ansible_ssh_common_args='-o StrictHostKeyChecking=no'
 
 [supervisors]
-albandri-laptop-work
+albandri
 
 [virtualbox]
-albandri-laptop-work
+albandri
 
 [vagrant]
-albandri-laptop-work
+albandri
 
 [docker]
-albandri-laptop-work
+albandri
 #vagrant local box
 #192.168.33.10
 
 [nodejs]
-albandri-laptop-work
+albandri
 
 [workstation]
-albandri-laptop-work
+albandri
 
 [workstation:vars]
 user=albandri
@@ -125,10 +125,10 @@ version=10
 #ansible_sudo_pass=todo
 
 [nexus]
-albandri-laptop-work
+albandri
 
 [sonar]
-albandri-laptop-work
+albandri
 sonarqube ansible_ssh_host=192.168.11.99 ansible_ssh_port=22 ansible_connection=ssh ansible_user=vagrant
 
 [sonar:vars]
@@ -150,18 +150,18 @@ ansible_ssh_common_args='-o StrictHostKeyChecking=no'
 #see workstation
 
 [logstash]
-albandri-laptop-work
+albandri
 
 [collectd]
-albandri-laptop-work
+albandri
 
 [windows]
 #10.0.2.15
-#albandri-laptop-work
-#PARD011996.misys.global.ad ansible_host=10.41.40.121 ansible_user="fru" ansible_password="Kondor_123" dtap=acc comment="Hosting by Alban Andrieu" ext_id="SRV_029" groups="workstation"
+#albandri
+#PARD011996.nabla.global.ad ansible_host=10.41.40.121 ansible_user="fru" ansible_password="Kondor_123" dtap=acc comment="Hosting by Alban Andrieu" ext_id="SRV_029" groups="workstation"
 #.\fru Kondor_123
-#FR1CSWFRBM0005.misys.global.ad ansible_host=10.21.185.152 ansible_python_interpreter="/usr/bin/python2.7" ansible_user="todo" ansible_password="todo" dtap=acc comment="Hosting by Alban Andrieu" ext_id="SRV_029" groups="micloud paris"
-#GDNCSWFRDEV0009.misys.global.ad ansible_host=10.22.64.181 ansible_python_interpreter="/usr/bin/python2.7" ansible_user="todo" ansible_password="todo" dtap=acc comment="Hosting by Alban Andrieu" ext_id="SRV_029" groups="micloud paris"
+#FR1CSWFRBM0005.nabla.global.ad ansible_host=10.21.185.152 ansible_python_interpreter="/usr/bin/python2.7" ansible_user="todo" ansible_password="todo" dtap=acc comment="Hosting by Alban Andrieu" ext_id="SRV_029" groups="micloud paris"
+#GDNCSWFRDEV0009.nabla.global.ad ansible_host=10.22.64.181 ansible_python_interpreter="/usr/bin/python2.7" ansible_user="todo" ansible_password="todo" dtap=acc comment="Hosting by Alban Andrieu" ext_id="SRV_029" groups="micloud paris"
 
 [windows:vars]
 #ansible_user=vagrant

@@ -14,9 +14,9 @@
   vars:
       visualvm_remote_hosts:
         - { name  : "Zone",
-            serverip: "10.21.11.62",
-            serverhostname: "mgrv062.misys.global.ad",
-            servername: "mgrv062",
-            serverjstatdport: "2020",
+            serverip: "192.168.0.29",
+            serverhostname: "albandri.nabla.mobi",
+            servername: "albandri",
+            serverjstatdport: "albandri",
             serverposition: "4"
             }
