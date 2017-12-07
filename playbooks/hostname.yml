@@ -13,5 +13,5 @@
     - { role: alban.andrieu.hostname,
        hostname_enabled: yes,
 #force inventory_hostname
-      inventory_hostname: albandri-laptop-misys.misys.global.ad
+      inventory_hostname: albandri.nabla.mobi
        }

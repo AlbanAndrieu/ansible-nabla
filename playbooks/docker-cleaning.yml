@@ -1,0 +1,95 @@
+#ansible-playbook -i production -c local -v docker-cleaning.yml --ask-pass -vvvv | tee setup.log
+#ansible-playbook -i production -c local -v docker-cleaning.yml --limit albandri --ask-sudo-pass -vvvv | tee setup.log
+
+- hosts: all
+  gather_facts: true
+  tasks:
+    - name: group hosts by distribution
+      group_by: key="{{ ansible_distribution }}-{{ ansible_distribution_version }}"
+
+- hosts: RedHat-7*:RedHat-6*:RedHat-5*:CentOS-7*:CentOS-6*:Ubuntu-17*:Ubuntu-16*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
+  gather_facts: false
+  tasks:
+    - name: group hosts for supported distributions
+      group_by: key="supported"
+
+- hosts: "!supported"
+  gather_facts: false
+  tasks:
+    - name: fail for unsupported distribution
+      fail: msg="{{ ansible_distribution }} {{ ansible_distribution_version }}
+                 is not a supported OS for a Tower installation.  Supported
+                 OSes include Red Hat Enterprise Linux 6/7, CentOS 6, or
+                 Ubuntu 12.04/13.04/14.04/16.04/17.04."
+    - debug: msg="Version {{ ansible_distribution }} {{ ansible_distribution_version }} {{ ansible_architecture }}"
+
+- hosts: docker
+  become: yes
+
+  tasks:
+    - name: Log into private registry and force re-authorization
+      docker_login:
+        registry: https://docker.nabla.mobi/
+        username: nabla
+        password: microsoft
+        reauthorize: yes
+
+- hosts: docker
+  become: yes
+
+  tasks:
+    - name: Remove ubuntu image
+      docker_image:
+        state: absent
+        name: ubuntu:14.04
+
+    - name: Remove hello-world image
+      docker_image:
+        state: absent
+        name: hello-world:latest
+        force: yes
+
+#    - name: Remove test image
+#      docker_image:
+#        state: absent
+#        name: nabla/ansible-jenkins-slave-docker:latest
+#        tag: test
+
+#For issue : Error pulling: too many links
+    - name: Remove untagged images
+      shell: "docker rmi $(docker images | grep \"<none>\" | awk ' { print $3} ')"
+      ignore_errors: true
+
+#TODO http://blog.yohanliyanage.com/2015/05/docker-clean-up-after-yourself/
+#TODD must be run on a daily basis
+#Clean 1 week old containers
+#docker ps -a | grep 'weeks ago' | awk '{print $1}' | xargs --no-run-if-empty docker rm
+#Clean all containers
+#docker rm `docker ps --no-trunc -aq`
+
+    - name: Clean all stopped containers
+      shell: "docker rm -v $(docker ps -a -q)"
+      ignore_errors: true
+
+    - name: Clean all exited containers
+      shell: "docker rm -v $(docker ps -a -q -f status=exited)"
+      ignore_errors: true
+
+    - name: Clean all created containers
+      shell: "docker rm -v $(docker ps -a -q -f status=created)"
+      ignore_errors: true
+
+    #- name: Remove unwanted untagged  images
+    #  shell: "docker rmi $(docker images | grep "^<none>" | awk "{print $3}")"
+    #  ignore_errors: true
+
+    - name: Remove unwanted dangling images
+      shell: "docker rmi $(docker images -f \"dangling=true\" -q)"
+      ignore_errors: true
+
+    - name: Remove unwanted ‘dangling’ volumes
+      shell: "docker volume rm $(docker volume ls -qf dangling=true)"
+      ignore_errors: true
+
+#docker ps -a -s
+#docker images

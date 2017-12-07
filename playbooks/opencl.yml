@@ -1,5 +1,5 @@
 #as albandri
-#ansible-playbook opencl.yml -i hosts-production --limit mgrpricer.misys.global.ad -vvvv --ask-sudo-pass --sudo
+#ansible-playbook opencl.yml -i hosts-production --limit pricer.nabla.mobi -vvvv --ask-sudo-pass --sudo
 
 #TODO service lightdm stop
 # pkill -u jenkins
@@ -35,7 +35,7 @@
   vars:
     nvidia_driver_version: 352.41
     #nvidia_driver_version: 304.132
-    base_url: "http://kgrweb/download/opencl"
+    base_url: "http://home.nabl.mobi/download/opencl"
     kmod_install: true
 
     #modprobe -v nvidia-uvm
