@@ -21,3 +21,8 @@
     hooks:
     -   id: reorder-python-imports
         language_version: python2.7
+-   repo: https://github.com/willthames/ansible-lint.git
+    sha: v3.4.17
+    hooks:
+    -   id: ansible-lint
+        files: \.(yaml|yml)$
