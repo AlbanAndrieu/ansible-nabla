@@ -1,0 +1,40 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+import re
+import sys
+from subprocess import check_output
+# Collect the parameters
+commit_msg_filepath = sys.argv[1]
+# Figure out which branch we're on
+branch = check_output(['git', 'symbolic-ref', '--short', 'HEAD']).strip()
+print("commit-msg: On branch '%s'") % branch
+regex = re.compile('^feature|^bugfix')
+# Check the commit message if we're on an issue branch
+if re.match(regex, branch):
+    print("commit-msg: Oh hey, it's an issue branch.")
+
+    pattern = re.compile(r'[A-Z]{3,5}-[0-9]+')  # Matches any unique issue code
+    issue = re.search(pattern, branch).group(0)  # Extract issue code
+
+    with open(commit_msg_filepath, 'r') as f:
+
+        # from jira import JIRA
+        # options = {'server': 'https://home.nabla.mobi/jira'}
+        # jira = JIRA(options, basic_auth=('test', 'TODO'))
+        # issue_to_check = jira.issue(issue)
+        # print issue_to_check.fields.project.key             # 'JRA'
+        # print issue_to_check.fields.issuetype.name          # 'New Feature'
+        # # 'Mike Cannon-Brookes [Atlassian]'
+        # print issue_to_check.fields.reporter.displayName
+
+        required_message = "%s" % (issue_to_check)
+
+        result = re.match('feature/NABLA-(.*)', branch)
+        issue_number = result.group(1)
+        required_message = 'NABLA-%s' % issue_number
+
+        content = f.read()
+        if not content.startswith(required_message):
+            print(
+                "commit-msg: ERROR! The commit message must start with '%s'") % required_message
+            sys.exit(1)
