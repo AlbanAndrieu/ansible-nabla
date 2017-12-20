@@ -18,8 +18,6 @@ git remote add upstream https://github.com/Stouts/Stouts.jenkins.git
 git remote add upstream https://github.com/Stouts/Stouts.collectd.git
 git remote add upstream https://github.com/Stouts/Stouts.python.git
 
-git remote add upstream https://github.com/cpritchett/ansible-zabbix_agent.git
-#TODO MOVED so NOK : git remote add upstream https://github.com/ahelal/ansible-zabbix_agent.git
 git remote add upstream https://github.com/EDITD/ansible-supervisor_task.git
 git remote add upstream https://github.com/AnsibleShipyard/ansible-nodejs.git
 git remote add upstream https://github.com/silpion/ansible-util.git

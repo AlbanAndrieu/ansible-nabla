@@ -317,21 +317,7 @@
   roles:
     - locale
 
-#- name: Install zabbix-agent
-#  hosts: zabbix-agent
-#  remote_user: albandri
-#
-#  become: yes
-#
-#  roles:
-#    - zabbix-agent
-#
-#  vars:
-#      zabbix_agent_major: '2'
-#      zabbix_agent_minor: '2'
-#      zabbix_agent_revision: '7'
-#      zabbix_agent_ubuntu: "1:{{zabbix_agent_version}}-1+trusty"
-#      #zabbix_agent_Server: 127.0.0.1
+- import_playbook: zabbix-agent.yml
 
 - name: Install xvbf
   hosts: xvbf

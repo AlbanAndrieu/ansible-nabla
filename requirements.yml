@@ -458,10 +458,10 @@
   scm:     'git'
   version: 'master'
 
-#- src:     'https://github.com/AlbanAndrieu/ansible-zabbix_agent'
-#  name:    'zabbix'
-#  scm:     'git'
-#  version: 'master'
+- src:     'https://github.com/dj-wasabi/ansible-zabbix-agent'
+  name:    'zabbix'
+  scm:     'git'
+  version: 'master'
 
 - src:     'https://github.com/LIP-Computing/ansible-role-nvidia'
   name:    'opencl'

@@ -43,8 +43,8 @@ git submodule add -f  https://github.com/AlbanAndrieu/ansible-xvbf.git alban.and
 #rm -rf ../.git/modules/roles/zfs/
 git submodule add -f  https://github.com/AlbanAndrieu/ansible-zfs.git alban.andrieu.zfs
 
-#git clone https://github.com/ahelal/ansible-zabbix_server zabbix-server
-#git submodule add -f  https://github.com/AlbanAndrieu/ansible-zabbix_server.git zabbix
+#git clone https://github.com/dj-wasabi/ansible-zabbix-agent zabbix
+#git submodule add -f  https://github.com/dj-wasabi/ansible-zabbix-agent.git zabbix
 
 #git submodule deinit -f locale
 #git submodule add -f  https://github.com/knopki/ansible-locale locale

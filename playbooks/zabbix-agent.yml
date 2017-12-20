@@ -1,4 +1,4 @@
-#ansible-playbook -i hosts-albandri -c local -v zabbix.yml | tee setup.log
+#sudo ansible-playbook -i hosts -c local -v zabbix-agent.yml | tee setup.log
 
 - hosts: all
   gather_facts: true
@@ -6,7 +6,7 @@
     - name: group hosts by distribution
       group_by: key="{{ ansible_distribution }}-{{ ansible_distribution_version }}"
 
-- hosts: RedHat-7*:RedHat-6*:RedHat-5*:CentOS-7*:CentOS-6*:Ubuntu-17*:Ubuntu-16*:Ubuntu-15*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
+- hosts: RedHat-7*:RedHat-6*:RedHat-5*:CentOS-7*:CentOS-6*:Ubuntu-17*:Ubuntu-16*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
   gather_facts: false
   tasks:
     - name: group hosts for supported distributions
@@ -18,25 +18,28 @@
     - name: fail for unsupported distribution
       fail: msg="{{ ansible_distribution }} {{ ansible_distribution_version }}
                  is not a supported OS for a Tower installation.  Supported
-                 OSes include Red Hat Enterprise Linux 6/7/5, CentOS 6, or
-                 Ubuntu 12.04/13.04/14.04/15.04/16.04/17.04."
+                 OSes include Red Hat Enterprise Linux 6/7, CentOS 6, or
+                 Ubuntu 12.04/13.04/14.04/16.04/17.04."
     - debug: msg="Version {{ ansible_distribution }} {{ ansible_distribution_version }} {{ ansible_architecture }}"
 
-#TODO this role is not using the saome mysql role as I used to
 # This playbook can be run using vagrant (on virtual box).
-- name: Install zabbix
-  hosts: zabbix
-  remote_user: root
+- name: Install zabbix-agent
+  hosts: zabbix-agent-paris
+  user: root
 #  connection: local
 
   roles:
     - role: zabbix
-      name: zabbix
+      name: zabbix-agent-paris
+      zabbix_agent_server: 150.151.000.000
 
-  vars:
-      zabbix_server_db_type: 'mysql'
-      zabbix_agent_major: '2'
-      zabbix_agent_minor: '2'
-      zabbix_agent_revision: '9'
-      zabbix_agent_ubuntu: "1:{{zabbix_agent_version}}-1+trusty"
-      #zabbix_agent_Server: 127.0.0.1
+# This playbook can be run using vagrant (on virtual box).
+- name: Install zabbix-agent
+  hosts: zabbix-agent-gdynia
+  user: root
+#  connection: local
+
+  roles:
+    - role: zabbix
+      name: zabbix-agent-gdynia
+      zabbix_agent_server: 10.7.000.000,10.22.000.000

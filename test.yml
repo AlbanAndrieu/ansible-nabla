@@ -445,12 +445,7 @@
   scm:     'git'
   version: 'master'
 
-- src:     'https://github.com/AlbanAndrieu/ansible-zabbix-agent'
-  name:    'zabbix-agent'
-  scm:     'git'
-  version: 'master'
-
-- src:     'https://github.com/AlbanAndrieu/ansible-zabbix-server'
-  name:    'zabbix-server'
+- src:     'https://github.com/dj-wasabi/ansible-zabbix-agent'
+  name:    'zabbix'
   scm:     'git'
   version: 'master'
