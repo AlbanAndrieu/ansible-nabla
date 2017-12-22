@@ -107,6 +107,8 @@
   roles:
     - role: geerlingguy.git
 
+- import_playbook: yarn.yml
+
 - name: Apply common configuration to all jenkins slaves
 #  hosts: test-boxes
   hosts: jenkins-slaves

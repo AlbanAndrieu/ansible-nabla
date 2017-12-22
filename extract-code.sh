@@ -307,6 +307,8 @@ git submodule add -f  https://github.com/AlbanAndrieu/ansible-java-certificate.g
 git submodule add -f  https://github.com/AlbanAndrieu/ansible-role-ssl-certs.git ssl-certificate
 git submodule add -f  https://github.com/AlbanAndrieu/ansible-trust-ca.git ssl-ca-certificate
 
+git submodule add -f  https://github.com/ocha/ansible-role-yarn.git yarn
+
 #SEE
 #https://github.com/docker/docker-registry
 

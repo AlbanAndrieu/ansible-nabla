@@ -1,4 +1,5 @@
-#sudo ansible-playbook -i hosts -c local -v zabbix-agent.yml | tee setup.log
+#ansible-playbook -i production -c local -v zabbix-agent.yml -vvvv --ask-sudo-pass  | tee setup.log
+#ansible-playbook -i production -v zabbix-agent.yml --limit albandri -vvvv --ask-sudo-pass
 
 - hosts: all
   gather_facts: true
