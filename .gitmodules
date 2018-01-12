@@ -10,9 +10,6 @@
 [submodule "roles/supervisor"]
 	path = roles/supervisor
 	url = https://github.com/AlbanAndrieu/ansible-supervisor_task.git
-[submodule "roles/zabbix-agent"]
-	path = roles/zabbix-agent
-	url = https://github.com/AlbanAndrieu/ansible-zabbix_agent.git
 [submodule "roles/virtualbox"]
 	path = roles/virtualbox
 	url = https://github.com/AlbanAndrieu/ansible-galaxy.ubuntu.virtualbox.git
