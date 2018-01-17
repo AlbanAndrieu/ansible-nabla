@@ -27,7 +27,7 @@ if re.match(regex, branch):
         # # 'Mike Cannon-Brookes [Atlassian]'
         # print issue_to_check.fields.reporter.displayName
 
-        required_message = "%s" % (issue_to_check)
+        required_message = '%s' % (issue_to_check)
 
         result = re.match('feature/NABLA-(.*)', branch)
         issue_number = result.group(1)
@@ -36,5 +36,6 @@ if re.match(regex, branch):
         content = f.read()
         if not content.startswith(required_message):
             print(
-                "commit-msg: ERROR! The commit message must start with '%s'") % required_message
+                "commit-msg: ERROR! The commit message must start with '%s'"
+            ) % required_message
             sys.exit(1)

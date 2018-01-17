@@ -1,3 +1,5 @@
+#!/bin/bash
+#set -xv
 
 # Add the remote, call it "upstream":
 
@@ -70,3 +72,5 @@ git rebase --continue
 git push origin master --force
 
 #git branch --set-upstream-to master origin/master
+
+exit 0

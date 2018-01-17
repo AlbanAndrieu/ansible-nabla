@@ -21,7 +21,7 @@
     - name: fail for unsupported distribution
       fail: msg="{{ ansible_distribution }} {{ ansible_distribution_version }}
                  is not a supported OS for a Tower installation.  Supported
-                 OSes include MacOSX 10
+                 OSes include MacOSX 10"
 
 - name: Apply common configuration to mac nodes
   hosts: mac

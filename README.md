@@ -31,6 +31,7 @@ Run `pre-commit install`
 
 Run `pre-commit run --all-files`
 
+Run `SKIP=ansible-lint git commit -am 'Add key'`
 Run `git commit -am 'Add key' --no-verify`
 
 ## Docker image
