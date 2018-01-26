@@ -34,6 +34,7 @@
        - "5000" #xrdp / openstack /windows vm
        - "5001" #xrdp
        - "5050" #CouchPatato
+       - "5555" #XMRig
        - "5678" #Private bower
        - "6000" #Logstash
        - "6082" #Varnish admin
