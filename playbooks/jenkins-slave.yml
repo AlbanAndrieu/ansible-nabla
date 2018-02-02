@@ -146,6 +146,7 @@
     nexus_url: "{{ home_url }}:8081"
     bower_url: "http://home.nabla.mobi:5678"
     #npm_nexus_npm_url: "{{ nexus_url }}/maven/content/groups/npmjs-all/"
+    npm_nexus_private_npm_data: ["//registry.npmjs.org/:_authToken=112466a4-3791-4a3f-94f4-646fe2c3f770","//uk1cslalm0011.misys.global.ad:8080/:_authToken=92f95118-306a-447d-9236-7d89be2a921e"]
     npm_phantomjs_cdnurl: "{{ home_url }}:7070/download/phantomjs"
     jenkins_ssh_key_file: "~/.ssh/id_rsa"
     jenkins_ssh_authorized_keys_fingerprints:   # Set known authorized keys for ssh

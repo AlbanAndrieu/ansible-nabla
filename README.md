@@ -18,13 +18,22 @@ When the playbook run completes, you should be able to work on any NABLA project
 
 This is a very simple playbook and could serve as a starting point for more complex projects.
 
-## Install ansible
+## How to run it
+
+### Install python dependencies
+
+```
+#pip2.7 freeze > requirements.txt
+sudo pip2.7 install -r requirements.txt
+```
+
+### Install ansible
 
 ```
 sudo pip2 install ansible==2.4.1.0
 ```
 
-## Quality tools
+### Quality tools
 
 See [pre-commit](http://pre-commit.com/)
 Run `pre-commit install`
@@ -34,36 +43,36 @@ Run `pre-commit run --all-files`
 Run `SKIP=ansible-lint git commit -am 'Add key'`
 Run `git commit -am 'Add key' --no-verify`
 
-## Docker image
+### Docker image
 
 See [ansible-jenkins-slave](https://hub.docker.com/r/nabla/ansible-jenkins-slave-docker/)
 
-### Pull image
+#### Pull image
 ```
 docker pull nabla/ansible-jenkins-slave
 ```
-### Start container
+#### Start container
 ```
 docker run -t -d -w /sandbox/project-to-build -v /workspace/users/albandri30/:/sandbox/project-to-build:rw --name sandbox nabla/ansible-jenkins-slave:latest cat
 ```
-### Build
+#### Build
 ```
 docker exec sandbox /opt/maven/apache-maven-3.2.1/bin/mvn -B -Djava.io.tmpdir=./tmp -Dmaven.repo.local=/home/jenkins/.m2/.repository -Dmaven.test.failure.ignore=true -s /home/jenkins/.m2/settings.xml -f cmr/pom.xml clean install
 ```
 
-### Stop & remove container
+#### Stop & remove container
 ```
 docker stop sandbox
 docker rm sandbox
 ```
 
-## Build & development
+### Build & development
 
 Run `./run-ansible-workstation.sh` for building like Jenkins.
 Run `./setup.sh` for building.
 Run `./build.sh` for building docker image.
 
-### Dependency Graph
+#### Dependency Graph
 
 See ansigenome.conf file in your HOME folder ~.ansigenome.conf and templates in misc/ansigenome/templates
 
