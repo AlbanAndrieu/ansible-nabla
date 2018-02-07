@@ -19,30 +19,32 @@ print('prepare-commit-msg: File: %s\nType: %s\nHash: %s') % (
 )
 # Figure out which branch we're on
 branch = check_output(['git', 'symbolic-ref', '--short', 'HEAD']).strip()
-print("prepare-commit-msg: On branch '%s'") % branch
+print(r"prepare-commit-msg: On branch '{}'".format(branch))
 regex = re.compile('^feature|^bugfix')
 # Populate the commit message with the issue #, if there is one
 if re.match(regex, branch):
     print("prepare-commit-msg: Oh hey, it's an issue branch.")
 
-    pattern = re.compile(r'[A-Z]{3,5}-[0-9]+')  # Matches any unique issue code
-    issue = re.search(pattern, branch).group(0)  # Extract issue code
+    # Matches any unique issue code
+    pattern = re.compile(r'(^feature|^bugfix)\/([A-Z]{3,5}-[0-9]+)')
+    issue = re.search(pattern, branch).group(2)  # Extract issue code
+    print('Issue number : %s.') % issue
 
-    # from jira import JIRA
-    # options = {'server': 'https://home.nabla.mobi/jira'}
-    # jira = JIRA(options, basic_auth=('test', 'TODO'))
-    # issue_to_check = jira.issue(issue)
-    # print issue_to_check.fields.project.key             # 'JRA'
-    # print issue_to_check.fields.issuetype.name          # 'New Feature'
-    # # 'Mike Cannon-Brookes [Atlassian]'
-    # print issue_to_check.fields.reporter.displayName
+    try:
+        from jira import JIRA
+        options = {'server': 'https://home.nabla.mobi/jira'}
+        jira = JIRA(options, basic_auth=('test', 'TODO'))
+        issue_to_check = jira.issue(issue)
+        print(issue_to_check.fields.project.key)             # 'JRA'
+        print(issue_to_check.fields.issuetype.name)          # 'New Feature'
+        print(issue_to_check.fields.reporter.displayName)
 
-    # required_message = "%s : %s by %s" % (
-    #     issue_to_check, issue_to_check.fields.issuetype.name, issue_to_check.fields.reporter.displayName)
-
-    result = re.match('feature/NABLA-(.*)', branch)
-    issue_number = result.group(1)
-    required_message = 'NABLA-%s' % issue_number
+        required_message = '%s : %s by %s' % (
+            issue_to_check, issue_to_check.fields.issuetype.name, issue_to_check.fields.reporter.displayName,
+        )
+    except:  # noqa: ignore=E722
+        print('Oops!  JIRA is failing. Switch to manual...')
+        required_message = '%s' % issue
 
     with open(commit_msg_filepath, 'r+') as f:
         content = f.read()
