@@ -9,13 +9,15 @@
 #ansible-playbook jenkins-slave.yml -i hosts-albandri --limit localhost -vvvv --ask-sudo-pass --sudo
 # --extra-vars "jenkins_username=aandrieu jenkins_password=tbd"
 
+#ansible all -m setup -i hosts-albandri --limit localhost -vvvv
+
 - hosts: all
   gather_facts: true
   tasks:
     - name: group hosts by distribution
       group_by: key="{{ ansible_distribution }}-{{ ansible_distribution_version }}"
 
-- hosts: RedHat-7*:RedHat-6*:RedHat-5*:CentOS-7*:CentOS-6*:Ubuntu-12*:Ubuntu-13*:Ubuntu-14*:Ubuntu-16*:Ubuntu-17*
+- hosts: RedHat-7*:RedHat-6*:RedHat-5*:CentOS-7*:CentOS-6*:Ubuntu-17*:Ubuntu-16*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
   gather_facts: false
   tasks:
     - name: group hosts for supported distributions
@@ -79,6 +81,7 @@
     changed_when: output.stdout|trim() != ""
 
   - name: Install sudo if not there
+    hosts: Ubuntu-12*:Ubuntu-13*:Ubuntu-14*:Ubuntu-16*
     become: yes
     raw: |
       test -e /usr/bin/sudo || apt install -y sudo
@@ -100,6 +103,51 @@
   roles:
     - alban.andrieu.hostname
 
+- name: Apply nfs configuration to all nodes
+  hosts: jenkins-slaves
+  become: yes
+
+  roles:
+    - geerlingguy.nfs
+
+- name: Apply administration configuration to all nodes
+  hosts: jenkins-slaves
+  become: yes
+
+  roles:
+    - administration
+
+- name: Apply common configuration to all nodes
+  hosts: jenkins-slaves
+  become: yes
+
+  roles:
+    - common
+
+- import_playbook: dns.yml
+
+- name: Apply security configuration
+  hosts: jenkins-slaves
+  become: yes
+
+  roles:
+    - security
+
+  vars:
+      security_ssh_password_authentication: "yes"
+      security_ssh_permit_root_login: "yes"
+      security_ssh_x11_forwarding: "yes"
+      security_fail2ban_enabled: false
+      security_autoupdate_enabled: false #make yum to get stuck later
+
+- import_playbook: java.yml
+
+- import_playbook: certificate.yml
+
+- import_playbook: python.yml
+
+- import_playbook: maven-legacy.yml
+
 - name: Install git
   hosts: jenkins-slaves
   remote_user: root
@@ -107,16 +155,45 @@
   roles:
     - role: geerlingguy.git
 
+- name: Install chrome
+  hosts: jenkins-slaves
+#  hosts: Ubuntu-14*:Ubuntu-16*
+#  connection: local
+
+  roles:
+     - role: chrome
+       google_talkplugin_enabled: no                       # Enable module
+       google_agent_pkg_state: installed # Package states: present or installed or latest
+
+- name: Install selenium
+  hosts: jenkins-slaves
+  become: yes
+#  connection: local
+
+  roles:
+    - selenium
+
+  vars:
+    selenium_mirror: "http://kgrdb01/download/selenium/"
+    selenium_server_major_version: "2.42"
+    selenium_server_minor_version: "2"
+
+- name: Install xvbf
+  hosts: jenkins-slaves
+#  connection: local
+
+  roles:
+    - xvbf
+
+- import_playbook: zabbix-agent.yml
+
 - import_playbook: yarn.yml
 
-- name: Apply common configuration to all jenkins slaves
-#  hosts: test-boxes
+- name: Configure all jenkins slaves
   hosts: jenkins-slaves
-#  sudo: yes
-#  user: vagrant
+  become: yes
   remote_user: albandri
-  connection: local
-#  remote_user: vagrant
+#  connection: local
 
   roles:
     - alban.andrieu.jenkins-slave
@@ -124,7 +201,23 @@
   vars:
     docker_files_enable: no
     #docker_files_generated_directory: "../roles/alban.andrieu.jenkins-slave"
-    #NOK nodejs_version: "0.12.7"
+
+    jenkins_home: /home/jenkins
+    jenkins_user: jenkins
+    jenkins_group: docker
+    jenkins_http_port: 8380
+    jenkins_slave_home: /workspace
+    jenkins_prefix: "/jenkins"
+    jenkins_url: http://localhost:8380{{ jenkins_prefix }}
+    jenkins_slave_directory: ["{{ jenkins_slave_home }}/slave","{{ jenkins_slave_home }}/slavearc"]
+    home_url: "http://home.nabla.mobi"
+    nexus_url: "{{ home_url }}:8081"
+    bower_url: "http://home.nabla.mobi:5678"
+    npm_nexus_npm_url: "{{ nexus_url }}/nexus/content/groups/npmjs-all/"
+    npm_nexus_private_npm_url: ""
+    npm_nexus_private_npm_data: ["//registry.npmjs.org/:_authToken=112466a4-3791-4a3f-94f4-646fe2c3f770","//uk1cslalm0011.misys.global.ad:8080/:_authToken=92f95118-306a-447d-9236-7d89be2a921e"]
+    npm_phantomjs_cdnurl: "{{ home_url }}:7070/download/phantomjs"
+    npm_slimerjs_cdnurl: "{{ home_url }}:7070//download/slimerjs"
     shell_git:
       # Additional properties: 'shell_git_machine, shell_git_login, shell_git_email, shell_git_password, shell_git_name, shell_git_path, shell_git_ssl'.
        - {
@@ -137,17 +230,6 @@
          shell_git_path: '/usr/bin',
          shell_git_ssl: false
        }
-    jenkins_http_port: 8380
-    jenkins_prefix: "/jenkins"
-    jenkins_home: "/home/jenkins"
-    jenkins_group: docker
-    jenkins_url: http://localhost:8380{{ jenkins_prefix }}
-    home_url: "http://home.nabla.mobi"
-    nexus_url: "{{ home_url }}:8081"
-    bower_url: "http://home.nabla.mobi:5678"
-    #npm_nexus_npm_url: "{{ nexus_url }}/maven/content/groups/npmjs-all/"
-    npm_nexus_private_npm_data: ["//registry.npmjs.org/:_authToken=112466a4-3791-4a3f-94f4-646fe2c3f770","//uk1cslalm0011.misys.global.ad:8080/:_authToken=92f95118-306a-447d-9236-7d89be2a921e"]
-    npm_phantomjs_cdnurl: "{{ home_url }}:7070/download/phantomjs"
     jenkins_ssh_key_file: "~/.ssh/id_rsa"
     jenkins_ssh_authorized_keys_fingerprints:   # Set known authorized keys for ssh
     # Alban Andrieu
@@ -155,34 +237,17 @@
     jenkins_ssh_fingerprints: # Set known hosts for ssh
       - "bitbucket.org,131.103.20.167 ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAubiN81eDcafrgMeLzaFPsw2kNvEcqTKl/VqLat/MaB33pZy0y3rJZtnqwR2qOOvbwKZYKiEO1O6VqNEBxKvJJelCq0dTXWT5pbO2gDXC6h6QDXCaHo6pOHGPUy+YBaGQRGuSusMEASYiWunYN0vCAI8QaXnWMXNMdFP3jHAJH0eDsoiGnLPBlBp4TNm6rYI74nMzgz3B9IikW4WVK+dc8KZJZWYjAuORU3jc1c/NPskD2ASinf8v3xnfXeukU0sJ5N6m5E8VLjObPEO+mN2t/FZTMZLiFqPWc/ALSqnMnnhwrNi2rbfg/rd/IpL8Le3pSBne8+seeFVBoGqzHM9yXw=="
       - "github.com,204.232.175.90 ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXYPCPy6rbTrTtw7PHkccKrpp0yVhp5HdEIcKr6pLlVDBfOLX9QUsyCOV0wzfjIJNlGEYsdlLJizHhbn2mUjvSAHQqZETYP81eFzLQNnPHt4EVVUh7VfDESU84KezmD5QlWpXLmvU31/yMf+Se8xhHTvKSCZIFImWwoG6mbUoWf9nzpIoaSjB+weqqUUmpaaasXVal72J+UX2B+2RPW3RcT0eOzQgqlJL3RKrTJvdsjE3JEAvGq3lGHSZXy28G3skua2SmVi/w4yCE6gbODqnTWlg7+wC604ydGXA8VJiS5ap43JXiUFFAaQ=="
-    #jenkins_jdk7_enable: yes
+    jenkins_jdk7_enable: no
+    jenkins_jdk8_enable: no
     #user: "albandri"
     #home: "/workspace/users/albandri10"
 
-#- name: Apply swarm configuration to all jenkins slaves
-#  hosts: test-boxes
-#  sudo: yes
-#  remote_user: vagrant
-#  connection: local
-##  remote_user: vagrant
-#
-#  vars_prompt:
-#  - name: jenkins_username
-#    prompt: "What is your jenkins user?"
-#    private: no
-#  - name: jenkins_password
-#    prompt: "What is your jenkins password?"
-#    private: yes
-#
-#  roles:
-#    - alban.andrieu.jenkins-swarm
-#
-#  vars:
-#    jenkins_home: "/jenkins"
-
-- name: Install xvbf
+- name: Configure xvbf
   hosts: jenkins-slaves
-  remote_user: root
+  become: yes
+  #connection: local
 
   roles:
     - alban.andrieu.xvbf
+
+- import_playbook: docker.yml

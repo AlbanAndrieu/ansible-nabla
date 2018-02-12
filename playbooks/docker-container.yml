@@ -7,7 +7,7 @@
     - name: group hosts by distribution
       group_by: key="{{ ansible_distribution }}-{{ ansible_distribution_version }}"
 
-- hosts: RedHat-7*:RedHat-6*:CentOS-7*:CentOS-6*:Ubuntu-12*:Ubuntu-13*:Ubuntu-14*:Ubuntu-16*:Ubuntu-17*
+- hosts: RedHat-7*:RedHat-6*:RedHat-5*:CentOS-7*:CentOS-6*:Ubuntu-17*:Ubuntu-16*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
   gather_facts: false
   tasks:
     - name: group hosts for supported distributions
@@ -25,43 +25,47 @@
 
 #sudo docker logout https://docker.nabla.mobi:5000
 #sudo docker login registry.nabla.mobi:443
-- hosts: docker
-  become: yes
+- hosts: docker-container
+#  become: yes
+
   tasks:
-    - name: Log into private registry and force re-authorization
+    - name: Log into private registry
       docker_login:
         registry: https://docker.nabla.mobi/
         username: nabla
         password: microsoft
-        reauthorize: yes
-        ignore_errors: true
-
-#See https://docs.ansible.com/ansible/docker_service_module.html
-    - name: Stop all containers
-      docker_service:
-        project_src: "{{ lookup('env','WORKSPACE') }}/dockerfile-nabla/centos"
-        files: docker-compose-nabla.yml
-        build: no
-        recreate: never
-        restarted: no
-        project_name: "TEST"
-        remove_images: local
-        remove_orphans: true
-        remove_volumes: true
-        state: absent
-        stopped: yes
-#        pull: true
-#        timeout: 120
+        state: present
         debug: true
-      register: output
-#      ignore_errors: true
+        #reauthorize: yes
+#        ignore_errors: true
 
-    - debug: var=output
+##See https://docs.ansible.com/ansible/docker_service_module.html
+#    - name: Stop all containers
+#      docker_service:
+#        project_src: "{{ lookup('env','WORKSPACE') }}/dockerfile-nabla/centos"
+#        files: docker-compose-nabla.yml
+#        build: no
+#        recreate: never
+#        restarted: no
+#        project_name: "TEST"
+#        remove_images: local
+#        remove_orphans: true
+#        remove_volumes: true
+#        state: absent
+#        stopped: yes
+##        pull: true
+##        timeout: 120
+#        debug: true
+#      register: output
+##      ignore_errors: true
+#
+#    - debug: var=output
 
 - import_playbook: docker-registry.yml
 
-- hosts: docker
-  become: yes
+- hosts: docker-container
+#  become: yes
+
   tasks:
     - name: Create a data container
       docker_container:
@@ -109,47 +113,54 @@
 #    - name: Print nabla's URL
 #      debug: msg="You can connect to nabla server http://{{ ansible_default_ipv4.address }}:{{ nablaboard_port }}"
 
-    - name: Clean all containers
-      shell: "docker rm $(docker ps -qa)"
-      ignore_errors: true
+    - name: Define WORKSPACE
+      shell: "echo $WORKSPACE"
+      environment:
+        WORKSPACE: "{{ repository_target_dir }}"
 
-#    - name: Clean all volume
-#      shell: "docker volume prune -f"
-#      ignore_errors: true
+    - name: Echo WORKSPACE again
+      shell: "echo $WORKSPACE"
 
-    - name: Update all containers
-      docker_service:
-        project_src: "{{ lookup('env','WORKSPACE') }}/dockerfile-nabla/centos"
-        files: docker-compose-nabla.yml
-        pull: yes
-        build: yes
-#        restarted: true
-#        recreate: always
-        project_name: "TEST"
-        remove_images: local
-        remove_orphans: true
-        remove_volumes: true
-        state: present
-#        stopped: yes
-        timeout: 120
-        debug: true
-      register: output
-#      ignore_errors: true
-
-    - debug: var=output
+    - name: Copy the code from repository
+      git: repo={{ repository }} version={{ repository_version }} dest={{ repository_target_dir }}/dockerfile-fusionrisk
+      ignore_errors: yes
 
     - name: Sync .env file
       synchronize:
-        src: "{{ lookup('env','WORKSPACE') }}/dockerfile-nabla/centos/.env"
-        dest: "{{ lookup('env','WORKSPACE') }}/.env"
+        src: "{{ repository_target_dir }}/dockerfile-fusionrisk/centos/.env"
+        dest: "{{ repository_target_dir }}/dockerfile-fusionrisk/.env"
+      #delegate_to: delegate.host
+      #delegate_to: localhost
+      delegate_to: "{{ inventory_hostname }}"
 
-    - name: Restart all containers
+#    - name: Update all containers
+#      docker_service:
+#        project_src: "{{ lookup('env','WORKSPACE') }}/dockerfile-nabla/centos"
+#        files: docker-compose-nabla.yml
+#        pull: yes
+#        build: yes
+##        restarted: true
+##        recreate: always
+#        project_name: "TEST"
+#        remove_images: local
+#        remove_orphans: true
+#        remove_volumes: true
+#        state: present
+##        stopped: yes
+#        timeout: 120
+#        debug: true
+#      register: output
+##      ignore_errors: true
+#
+#    - debug: var=output
+
+    - name: Start all containers
       docker_service:
-        project_src: "{{ lookup('env','WORKSPACE') }}/dockerfile-nabla/centos"
+        project_src: "{{ repository_target_dir }}/dockerfile-nabla/centos"
         files: docker-compose-nabla.yml
 #        build: yes
-        restarted: true
-#        recreate: always
+        restarted: false
+        recreate: always
         project_name: "TEST"
         remove_images: local
         remove_orphans: true
