@@ -492,3 +492,8 @@
   name:    'geerlingguy.nfs'
   scm:     'git'
   version: 'master'
+
+- src:     'https://github.com/kamaln7/ansible-swapfile'
+  name:    'ansible-swapfile'
+  scm:     'git'
+  version: 'master'

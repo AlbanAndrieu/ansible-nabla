@@ -51,6 +51,7 @@
       local_action: wait_for port=22 timeout=5 host={{inventory_hostname}}
       register: default_ssh
       ignore_errors: true
+      check_mode: no
     - name: set ansible_ssh_port to default
       set_fact: ansible_ssh_port=22
       when: default_ssh.elapsed < 5

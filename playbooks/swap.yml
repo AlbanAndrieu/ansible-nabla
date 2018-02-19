@@ -1,0 +1,10 @@
+---
+# To prevent OOM errors on docker hosts (can be included with docker playbook)
+- hosts: "{{ hosts }}"
+  roles:
+    - {
+      role: ansible-swapfile,
+      swapfile_size: 8GiB,
+      swapfile_swappiness: 20,
+      swapfile_location: /data/swap
+      }

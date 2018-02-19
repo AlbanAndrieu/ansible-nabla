@@ -50,6 +50,7 @@ repos:
 #    hooks:
 #    -   id: ansible-lint
 #        files: \.(yaml|yml)$
+#        exclude: '.travis.yml'
 -   repo: git://github.com/doublify/pre-commit-hindent
     sha: c1b9c390e1379aa5b40f63557aa7478a3ee95389
     hooks:

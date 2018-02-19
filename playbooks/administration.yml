@@ -22,13 +22,13 @@
                  Ubuntu 12.04/14.04."
 
 
-- name: Apply nfs configuration to all nodes
-  hosts: RedHat-7*:RedHat-6*:RedHat-5*:CentOS-6*:Ubuntu-12*:Ubuntu-13*:Ubuntu-14*
-  gather_facts: false
-  remote_user: root
-
-  roles:
-    - nfs
+#- name: Apply nfs configuration to all nodes
+#  hosts: RedHat-7*:RedHat-6*:RedHat-5*:CentOS-6*:Ubuntu-12*:Ubuntu-13*:Ubuntu-14*
+#  gather_facts: false
+#  remote_user: root
+#
+#  roles:
+#    - geerlingguy.nfs
 
 - name: Apply administration configuration to all nodes
   hosts: RedHat-7*:RedHat-6*:RedHat-5*:CentOS-6*:Ubuntu-12*:Ubuntu-13*:Ubuntu-14*
