@@ -216,7 +216,7 @@
     bower_url: "http://home.nabla.mobi:5678"
     npm_nexus_npm_url: "{{ nexus_url }}/nexus/content/groups/npmjs-all/"
     npm_nexus_private_npm_url: ""
-    npm_nexus_private_npm_data: ["//registry.npmjs.org/:_authToken=112466a4-3791-4a3f-94f4-646fe2c3f770","//uk1cslalm0011.misys.global.ad:8080/:_authToken=92f95118-306a-447d-9236-7d89be2a921e"]
+    npm_nexus_private_npm_data: []
     npm_phantomjs_cdnurl: "{{ home_url }}:7070/download/phantomjs"
     npm_slimerjs_cdnurl: "{{ home_url }}:7070//download/slimerjs"
     shell_git:
