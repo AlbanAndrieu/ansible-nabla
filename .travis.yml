@@ -9,13 +9,14 @@ cache:
   directories:
     - $HOME/.cache/pip
 env:
+  matrix:
 #  - ANSIBLE_VERSION=latest
   - ANSIBLE_VERSION=2.4.1.0
 #  - ANSIBLE_VERSION=2.3.1.0
-cache: bundler
+  global:
+    secure: TGUihI8NZudZK09yhYmP3DF2YarY4d9ljgm+sArpvc7Ga7NvU7A2GxJm6KJ6ZAxBd/K+R89vo6fRWQma4ZFOjbi/TLabDgWJVD+aabhY5n1gPBDuoz/N7At3v4Ws1qD4M3Bj8+ds+ye1q+0MEDy+AYko8+UUhgLEvsbGUI9d4PY=
 #sudo: false
 sudo: required
-#dist: travis_lts
 dist: trusty
 
 branches:
@@ -31,36 +32,6 @@ install:
   # Install Ansible.
   - if [ "$ANSIBLE_VERSION" = "latest" ]; then pip install ansible; else pip install ansible==$ANSIBLE_VERSION; fi
   - if [ "$ANSIBLE_VERSION" = "latest" ]; then pip install ansible-lint; fi
-
-# Install required dependencies.
-#  - git clone https://github.com/AlbanAndrieu/ansible-supervisor_task.git supervisor
-#  - ansible-galaxy install alban.andrieu.webmin
-#  - ansible-galaxy install alban.andrieu.xvbf
-#  - ansible-galaxy install alban.andrieu.zfs
-#  - ansible-galaxy install alban.andrieu.dropbox
-#  - ansible-galaxy install alban.andrieu.selenium
-#  - ansible-galaxy install alban.andrieu.conky
-#  - ansible-galaxy install alban.andrieu.subversion
-#  - ansible-galaxy install alban.andrieu.css
-#  - ansible-galaxy install alban.andrieu.security
-#  - ansible-galaxy install alban.andrieu.zap
-#  - ansible-galaxy install alban.andrieu.cmake
-#  - ansible-galaxy install alban.andrieu.shell
-#  - ansible-galaxy install alban.andrieu.eclipse
-#  - ansible-galaxy install alban.andrieu.jboss
-#  - ansible-galaxy install alban.andrieu.windows
-#  - ansible-galaxy install alban.andrieu.cpp
-#  - ansible-galaxy install alban.andrieu.pagespeed
-#  - ansible-galaxy install alban.andrieu.jmeter
-#  - ansible-galaxy install alban.andrieu.mon
-#  - ansible-galaxy install alban.andrieu.grive
-#  - ansible-galaxy install alban.andrieu.web
-#  - ansible-galaxy install alban.andrieu.common
-#  - ansible-galaxy install alban.andrieu.administration
-#  - ansible-galaxy install alban.andrieu.workstation
-#  - ansible-galaxy install alban.andrieu.dns
-#  - ansible-galaxy install alban.andrieu.tomcat
-#  - ansible-galaxy install alban.andrieu.synergy
 
   # Update Ansible submodule.
   - git pull && git submodule init
@@ -97,7 +68,7 @@ script:
 #  - sudo /etc/init.d/nexus status || exit 1
 #  - sudo /etc/init.d/mon status || exit 1
 
-  # Test whether kibana is running correctly.
+  # Test whether server is running correctly.
 #  - curl http://localhost/
 
 notifications:
