@@ -111,6 +111,25 @@ localhost
 #vagrant local box
 #192.168.33.10
 
+[docker-container]
+#ansible_python_interpreter="/usr/bin/python3.6"
+localhost
+
+[docker-container:vars]
+repository="git@github.com:AlbanAndrieu/nabla-projects-interview-visma.git"
+#repository_version=HEAD
+repository_version="develop"
+#repository_target_dir="{{ lookup('env','WORKSPACE') }}/"
+repository_target_dir="/workspace/slave/workspace/"
+git_user="jenkins"
+
+[docker-container-oracle]
+#Issue on Redhat ansible_python_interpreter="/usr/local/bin/python3.5"
+localhost
+
+[docker-cleaning]
+localhost
+
 [nodejs]
 localhost
 

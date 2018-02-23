@@ -23,7 +23,7 @@
                  Ubuntu 12.04/13.04/14.04/16.04/17.04."
     - debug: msg="Version {{ ansible_distribution }} {{ ansible_distribution_version }} {{ ansible_architecture }}"
 
-- hosts: docker
+- hosts: docker-cleaning
   become: yes
 
   tasks:
@@ -34,7 +34,7 @@
         password: microsoft
         reauthorize: yes
 
-- hosts: docker
+- hosts: docker-cleaning
   become: yes
 
   tasks:

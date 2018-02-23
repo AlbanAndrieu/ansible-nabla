@@ -7,7 +7,7 @@
     - name: group hosts by distribution
       group_by: key="{{ ansible_distribution }}-{{ ansible_distribution_version }}"
 
-- hosts: RedHat-7*:RedHat-6*:CentOS-7*:CentOS-6*:Ubuntu-17*:Ubuntu-16*:Ubuntu-15*:Ubuntu-13*:Ubuntu-14*:Ubuntu-12*
+- hosts: RedHat-7*:RedHat-6*:RedHat-5*:CentOS-7*:CentOS-6*:Ubuntu-17*:Ubuntu-16*:Ubuntu-15*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
   gather_facts: false
   tasks:
     - name: group hosts for supported distributions
@@ -20,81 +20,17 @@
       fail: msg="{{ ansible_distribution }} {{ ansible_distribution_version }}
                  is not a supported OS for a Tower installation.  Supported
                  OSes include Red Hat Enterprise Linux 6/7, CentOS 6/7, or
-                 Ubuntu 12.04/12.04/14.04/16.04/17.04."
+                 Ubuntu 12.04/13.04/14.04/16.04/17.04."
     - debug: msg="Version {{ ansible_distribution }} {{ ansible_distribution_version }} {{ ansible_architecture }}"
 
-- import_playbook: docker.yml
+#- import_playbook: docker.yml
+
 
 #sudo docker logout https://docker.nabla.mobi:5000
 #sudo docker login dtr.nabla.mobi:443
-- hosts: docker
-  become: yes
 
-  tasks:
-    - name: Log into private registry and force re-authorization
-      docker_login:
-        registry: https://docker.nabla.mobi/
-        username: nabla
-        password: microsoft
-        reauthorize: yes
+- import_playbook: docker-registry-nabla.yml
 
-    - name: Inspect multiple images
-      docker_image_facts:
-        name:
-          - nabla/centos
-          - nabla/java
-
-- hosts: docker
-#  become: yes
-
-  tasks:
-
-    - name: Pull ansible-jenkins-slave images
-      docker_container:
-        name: ansible-jenkins-slave
-        image: registry.nabla.mobi/fusion-risk/ansible-jenkins-slave
-        state: stopped
-        pull: yes
-        #command: sleep infinity
-
-    - name: Pull centos images
-      docker_container:
-        name: centos
-        image: docker/nabla/centos:6.8-latest
-        state: stopped
-        pull: yes
-        #command: sleep infinity
-
-    - name: Pull selenium hub images
-      docker_container:
-        name: selenium-hub
-        image: selenium/hub
-        #state: stopped
-        pull: yes
-        #command: sleep infinity
-
-    - name: Pull selenium chrome images
-      docker_container:
-        name: selenium-node-chrome
-        image: selenium/node-chrome
-        state: stopped
-        pull: yes
-        #command: sleep infinity
-
-    - name: Pull selenium standalone chrome images
-      docker_container:
-        name: selenium-standalone-chrome-debug
-        image: selenium/standalone-chrome-debug
-        state: stopped
-        pull: yes
-        #command: sleep infinity
-
-    - name: Pull selenium standalone firefox images
-      docker_container:
-        name: selenium-standalone-firefox-debug
-        image: selenium/standalone-firefox-debug
-        state: stopped
-        pull: yes
-        #command: sleep infinity
+- import_playbook: docker-registry-oracle.yml
 
 - import_playbook: docker-cleaning.yml
