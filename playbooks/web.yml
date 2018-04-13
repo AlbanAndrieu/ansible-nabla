@@ -1,4 +1,6 @@
 #sudo ansible-playbook -i hosts-albandri -c local -v web.yml | tee setup.log
+#TODO ansible -i hosts-albandri albandri --sudo --ask-sudo-pass -m raw -a "apt-get -f install && apt-get update"
+#TODO ansible -i hosts-albandri albandri --sudo --ask-sudo-pass -m raw -a "apt-get install -y python3 python-simplejson"
 
 #WARNING jenkins-master role has disabled a2dissite 000-default
 - name: Configure and deploy the nabla php sample application code to apache

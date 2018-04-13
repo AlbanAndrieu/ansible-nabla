@@ -1,25 +1,6 @@
 #sudo ansible-playbook -i hosts-albandri -c local -v phpvirtualbox.yml | tee setup.log
 
-#WARNING jenkins-master role has disabled a2dissite 000-default
-#- name: Configure and deploy the nabla php sample application code to apache
-#  connection: local
-#  hosts: workstation
-##  remote_user: root
-#
-#  roles:
-#    - { role: alban.andrieu.web,
-#       apache_listen_port: 7070,
-#       #jenkins_proxy_port: "{{ apache_listen_port }}" #TODO why is it needed!!!
-#       phpmyadmin_mysql_user: root,
-#       phpmyadmin_mysql_password: microsoft,
-#       phpmyadmin_mysql_port: "{{ apache_listen_port }}",
-#       php_date_timezone: "Europe/Paris",
-#       mysql_innodb_log_file_size: "5M",
-#       mysql_root_username: root,
-#       mysql_root_password: microsoft,
-#       docker_files_enable: yes,
-#       docker_files_generated_directory: "../roles/alban.andrieu.web",
-#       }
+#- import_playbook: lamp.yml
 
 - name: Install phpvirtualbox
   connection: local

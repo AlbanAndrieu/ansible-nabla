@@ -25,7 +25,6 @@
 
 #- import_playbook: docker.yml
 
-
 #sudo docker logout https://docker.nabla.mobi:5000
 #sudo docker login dtr.nabla.mobi:443
 

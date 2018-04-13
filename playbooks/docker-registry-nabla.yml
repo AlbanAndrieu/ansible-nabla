@@ -73,6 +73,14 @@
         pull: yes
         #command: sleep infinity
 
+    - name: Pull zaproxy images
+      docker_container:
+        name: zap2docker-stable
+        image: owasp/zap2docker-stable
+        state: stopped
+        pull: yes
+        #command: sleep infinity
+
     - name: Pull centos images
       docker_container:
         name: centos

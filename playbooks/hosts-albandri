@@ -1,6 +1,6 @@
 [all]
 #127.0.0.1
-albandri dtap=prod comment="Hosting by Alban Andrieu" ext_id="SRV_02" groups="paris misc"
+albandri ansible_host=192.168.0.29 ansible_ssh_port=22 ansible_connection=ssh dtap=prod comment="Hosting by Alban Andrieu" ext_id="SRV_02" groups="paris misc"
 
 #below is used only git lamp.yml
 [lamp]

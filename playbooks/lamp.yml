@@ -100,20 +100,40 @@
 #  vars:
 #       php_date_timezone: "Europe/Paris"
 
-- name: Add admin tool for Apache like PHPmyAdmin
+- name: Configure and deploy php to apache
   hosts: apache-servers
-  remote_user: root
-#  connection: local
-
-  roles:
-    - geerlingguy.phpmyadmin
+  become: yes
 
   vars:
-       phpmyadmin_mysql_user: root
-       phpmyadmin_mysql_password: microsoft
-       phpmyadmin_mysql_port: 7070
-       apache_listen_port: 7070
-       php_date_timezone: "Europe/Paris"
-       mysql_innodb_log_file_size: "5M"
-       mysql_root_username: root
-       mysql_root_password: microsoft
+    apache_listen_port: 7070
+    apache_mods_enabled:
+      - rewrite.load
+      - ssl.load
+    apache_vhosts:
+      # Additional properties:
+      # 'serveradmin, serveralias, allow_override, options, extra_parameters'.
+      - servername: "{{ansible_fqdn}}"
+        documentroot: "/var/www/html"
+        #documentroot: "/var/www"
+    php_version: '7.2'
+    php_memory_limit: "128M"
+    php_max_execution_time: "90"
+    php_upload_max_filesize: "256M"
+    phpmyadmin_mysql_user: root
+    phpmyadmin_mysql_password: microsoft
+    phpmyadmin_mysql_port: 7070
+    php_date_timezone: "Europe/Paris"
+    mysql_innodb_log_file_size: "5M"
+    mysql_root_username: root
+    mysql_root_password: microsoft
+
+  roles:
+#    - role: geerlingguy.repo-remi
+#      when: ansible_os_family == 'RedHat'
+    - geerlingguy.mysql
+    - geerlingguy.apache
+#    - geerlingguy.php-versions
+    - geerlingguy.php
+#    - geerlingguy.php-xdebug
+    - geerlingguy.php-mysql
+    - geerlingguy.phpmyadmin

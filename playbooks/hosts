@@ -1,6 +1,6 @@
 [all]
 #127.0.0.1
-localhost dtap=test comment="Hosting by Alban Andrieu" ext_id="SRV_01" groups="paris misc"
+localhost ansible_host=127.0.0.1 ansible_ssh_port=22 ansible_connection=ssh dtap=test comment="Hosting by Alban Andrieu" ext_id="SRV_01" groups="paris misc"
 
 #below is used only git lamp.yml
 [lamp]
