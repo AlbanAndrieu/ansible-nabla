@@ -29,15 +29,15 @@
 #  become: yes
 
   tasks:
-    - name: Log into private registry
-      docker_login:
-        registry: https://docker.nabla.mobi/
-        username: nabla
-        password: microsoft
-        state: present
-        debug: true
-        #reauthorize: yes
-#        ignore_errors: true
+#    - name: Log into private registry
+#      docker_login:
+#        registry: https://docker.nabla.mobi/
+#        username: nabla
+#        password: microsoft
+#        state: present
+#        debug: true
+##        reauthorize: yes
+##        ignore_errors: true
 
 
 #See https://docs.ansible.com/ansible/docker_service_module.html
