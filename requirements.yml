@@ -313,6 +313,11 @@
   scm:     'git'
   version: 'master'
 
+#- src:     'https://github.com/geerlingguy/ansible-role-php-xdebug'
+#  name:    'geerlingguy.php-xdebugl'
+#  scm:     'git'
+#  version: 'master'
+
 - src:     'https://github.com/AlbanAndrieu/ansible-role-nginx'
   name:    'geerlingguy.nginx'
   scm:     'git'
@@ -327,6 +332,11 @@
   name:    'geerlingguy.php'
   scm:     'git'
   version: 'master'
+
+#- src:     'https://github.com/geerlingguy/ansible-role-php-versions'
+#  name:    'geerlingguy.php-versions'
+#  scm:     'git'
+#  version: 'master'
 
 - src:     'https://github.com/geerlingguy/ansible-role-php-mysql'
   name:    'geerlingguy.php-mysql'
@@ -475,6 +485,16 @@
 
 - src:     'https://github.com/geerlingguy/ansible-role-homebrew'
   name:    'geerlingguy.homebrew'
+  scm:     'git'
+  version: 'master'
+
+- src:     'https://github.com/geerlingguy/ansible-role-dotfiles'
+  name:    'geerlingguy.dotfiles'
+  scm:     'git'
+  version: 'master'
+
+- src:     'https://github.com/geerlingguy/ansible-role-mas'
+  name:    'geerlingguy.mas'
   scm:     'git'
   version: 'master'
 

@@ -1,0 +1,43 @@
+
+- name: Install Docker CA root certificate
+  hosts: workstation
+  become: yes
+  remote_user: albandri
+  ignore_errors: yes
+
+#See /root/pki/docker.pem
+  roles:
+    - role: ssl.ca-certificate
+      trust_ca_pki_dir: '~/pki'
+      trust_ca_pki_prefix: 'registry'
+      trust_ca_cert_prefix: 'registry'
+
+#TODO secure docker https://docs.docker.com/engine/security/https/
+#mkdir -pv ~/.docker
+#cp -v {ca,registry,cert,key}.pem ~/.docker
+#docker --tlsverify ps
+
+- hosts: docker
+#  remote_user: root
+
+  tasks:
+    - name: Create .docker
+      file: path=~/.docker state=directory mode=0700
+      become: yes
+      become_user: root
+
+    - name: Create registry
+      file: path=/etc/docker/certs.d/registry.nabla.mobi/ state=directory mode=0700
+      become: yes
+      become_user: root
+
+    - name: Copy ca and docker registry pem crt
+      copy:
+        src: ~/pki/registry.pem
+        dest: "{{ item }}"
+        remote_src: yes
+      with_items:
+        - ~/.docker/ca.pem
+        - /etc/docker/certs.d/registry.nabla.mobi/ca.pem
+      become: yes
+      become_user: root

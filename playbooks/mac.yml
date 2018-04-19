@@ -28,8 +28,19 @@
   become: yes
   #connection: local
 
+#  vars_files:
+#    - default.config.yml
+
   roles:
-    - mac-dev-playbook
+    - role: mac-dev-playbook
+#    - role: geerlingguy.homebrew
+#      tags: ['homebrew']
+#    - role: geerlingguy.dotfiles
+#      when: configure_dotfiles
+#      tags: ['dotfiles']
+#    - role: geerlingguy.mas
+#      when: mas_installed_apps
+#      tags: ['mas']
 
   vars:
     homebrew_installed_packages:
@@ -72,15 +83,37 @@
       - shellcheck
       - flawfinder
       - rats
-      - rats
       - findbugs
+      - ansible-lint
       - bison
       - flex
       - openssl
       - ant
       - maven
       - svn
+      - unixodbc
+#brew rm unixodbc && brew rm freetds
+      - libtool
+#brew installink libtool
+      - freetds --with-unixodbc
+      - md5sha1sum
+      - zabbix --without-server-proxy
+#Below todo in default.config.yml disable homebrew/php
+    homebrew_taps:
+      - homebrew/core
+      - caskroom/cask
+#      - homebrew/php
 
-#macport
+- hosts: mac
 
-#- include: jenkins-master.yml
+  post_tasks:
+   - name: macport | Install macport package (Darwin based)
+     action: "{{ ansible_pkg_mgr }} name={{ item }} state={{ util_pkg_state|default('present') }}"
+     when: (ansible_distribution == 'MacOSX')
+     tags: package
+     with_items:
+      - wget
+      - openssl
+     changed_when: false
+
+#- import_playbook: jenkins-master.yml
