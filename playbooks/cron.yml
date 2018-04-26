@@ -1,0 +1,14 @@
+- hosts: jenkins-slaves
+  become: yes
+  gather_facts: true
+  tasks:
+  - cron:
+      name: "Clean Jenkins Workspace"
+      minute: "0"
+      hour: "*"
+      day: "*"
+      weekday: "*"
+      month: "*"
+      user: root
+      job: "find /workspace/slave -maxdepth 1 -mtime +5 -type d | xargs rm -rf"
+      cron_file: "clean_workspace"

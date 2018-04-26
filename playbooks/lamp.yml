@@ -1,4 +1,8 @@
-#sudo ansible-playbook -i hosts-albandri -c local -v lamp.yml | tee setup.log
+
+#ansible all -m setup -i hosts-albandri --limit albandri -vvvv
+
+#ansible-playbook lamp.yml -i hosts-albandri --limit albandri -vvvv
+
 
 - hosts: all
   gather_facts: true
@@ -105,31 +109,54 @@
   become: yes
 
   vars:
-    apache_listen_port: 7070
+    apache_listen_port: 80
+    apache_listen_ip: "*"
+    apache_global_vhost_settings: |
+      DirectoryIndex index.php index.html
+      # Add other global settings on subsequent lines.
+    #apache_allow_override: "All"
+    apache_allow_override: "FileInfo Indexes"
+    #apache_options: "-Indexes +FollowSymLinks"
+    apache_options: "MultiViews Indexes SymLinksIfOwnerMatch IncludesNoExec"
     apache_mods_enabled:
       - rewrite.load
       - ssl.load
+    apache_create_vhosts: true
+    #apache_vhosts_template: "vhosts.conf.j2"
     apache_vhosts:
-      # Additional properties:
-      # 'serveradmin, serveralias, allow_override, options, extra_parameters'.
       - servername: "{{ansible_fqdn}}"
-        documentroot: "/var/www/html"
-        #documentroot: "/var/www"
+        documentroot: "/var/www/sample"
+        allow_override: "FileInfo Indexes"
+        options: "MultiViews Indexes SymLinksIfOwnerMatch IncludesNoExec"
+        extra_parameters: |
+          <Directory "/var/www/password-protected-directory">
+            Require valid-user
+            AuthType Basic
+            AuthName "Please authenticate"
+            AuthUserFile /var/www/password-protected-directory/.htpasswd
+          </Directory>
+    apache_vhosts_ssl:
+      - servername: "{{ansible_fqdn}}"
+        documentroot: "/var/www"
+        #TODO
+        #certificate_file: "/etc/ssl/{{ansible_fqdn}}/{{ansible_fqdn}}.pem"
+        certificate_file: "/etc/webmin/miniserv.cert"
+        certificate_key_file: "/etc/webmin/miniserv.pem"
+        # Optional.
+        #certificate_chain_file: "/etc/ssl/{{ansible_fqdn}}/certificate_chain.crt"
     php_version: '7.2'
     php_memory_limit: "128M"
     php_max_execution_time: "90"
     php_upload_max_filesize: "256M"
     phpmyadmin_mysql_user: root
     phpmyadmin_mysql_password: microsoft
-    phpmyadmin_mysql_port: 7070
+    phpmyadmin_mysql_port: 80
     php_date_timezone: "Europe/Paris"
     mysql_innodb_log_file_size: "5M"
     mysql_root_username: root
     mysql_root_password: microsoft
 
   roles:
-#    - role: geerlingguy.repo-remi
-#      when: ansible_os_family == 'RedHat'
     - geerlingguy.mysql
     - geerlingguy.apache
 #    - geerlingguy.php-versions
