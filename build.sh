@@ -19,6 +19,7 @@ NC="\033[0m"
 #double_arrow='\xC2\xBB'
 head_skull='\xE2\x98\xA0'
 happy_smiley='\xE2\x98\xBA'
+# shellcheck disable=SC2034
 reverse_exclamation='\u00A1'
 DOCKERREGISTRY=""
 DOCKERORGANISATION=""

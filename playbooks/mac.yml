@@ -9,7 +9,7 @@
       group_by: key="{{ ansible_distribution }}-{{ ansible_distribution_version }}-{{ ansible_architecture }}"
 
 #Solaris-10-sun4u not managed via ansible on purpose
-- hosts: MacOSX-10.12*
+- hosts: MacOSX-10.13*:MacOSX-10.12*
   gather_facts: false
   tasks:
     - name: group hosts for supported distributions
@@ -47,7 +47,7 @@
       # - ansible # Installed via Pip.
       - autoconf
       - bash-completion
-      - chromedriver
+#      - chromedriver #moved to caskroom/cask
       - doxygen
       - gettext
       - gifsicle
@@ -76,6 +76,7 @@
       - lcov
       - gperf
       - llvm
+#brew install llvm --with-toolchain --with-graphviz --with-ocaml --with-lldb
       - clang-format
       - mingw-w64
       - gnustep-make
@@ -89,15 +90,17 @@
       - flex
       - openssl
       - ant
-      - maven
+#      - maven
       - svn
       - unixodbc
 #brew rm unixodbc && brew rm freetds
       - libtool
 #brew installink libtool
-      - freetds --with-unixodbc
+      - freetds
+#brew install freetds --with-unixodbc
       - md5sha1sum
-      - zabbix --without-server-proxy
+      - zabbix
+#brew install zabbix --without-server-proxy
 #Below todo in default.config.yml disable homebrew/php
     homebrew_taps:
       - homebrew/core

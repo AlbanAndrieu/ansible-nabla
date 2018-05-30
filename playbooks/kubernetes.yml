@@ -1,0 +1,16 @@
+
+- name: Install kubernetes helm
+  hosts: kubernetes
+  become: yes
+#  ignore_errors: yes
+
+  roles:
+    - andrewrothstein.kubernetes-helm
+
+- name: Install kubectl
+  hosts: kubernetes
+  become: yes
+#  ignore_errors: yes
+
+  roles:
+    - andrewrothstein.kubectl

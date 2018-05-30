@@ -133,6 +133,9 @@ albandri
 [docker-cleaning]
 albandri
 
+[kubernetes]
+albandri
+
 [nodejs]
 albandri
 

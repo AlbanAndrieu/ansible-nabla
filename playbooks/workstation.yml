@@ -155,3 +155,9 @@
 
   roles:
     - alban.andrieu.xvbf
+
+- name: Install samba
+  hosts: workstation
+
+  roles:
+    - geerlingguy.samba

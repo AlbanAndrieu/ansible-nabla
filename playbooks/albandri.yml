@@ -392,7 +392,6 @@
   hosts: css
   remote_user: albandri
 
-
   roles:
     - alban.andrieu.css
 
@@ -577,3 +576,9 @@
 - import_playbook: private-bower.yml
 
 - import_playbook: owasp-wte.yml
+
+- name: Install samba
+  hosts: workstation
+
+  roles:
+    - geerlingguy.samba

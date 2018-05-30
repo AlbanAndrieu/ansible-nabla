@@ -19,6 +19,7 @@ NC="\033[0m"
 #double_arrow='\xC2\xBB'
 head_skull='\xE2\x98\xA0'
 happy_smiley='\xE2\x98\xBA'
+# shellcheck disable=SC2034
 reverse_exclamation='\u00A1'
 
 if [ -n "${TARGET_SLAVE}" ]; then
@@ -63,6 +64,7 @@ if [ -t "0" ]; then
     ANSIBLE_FORCE_COLOR=True
 fi
 
+# shellcheck disable=SC2034
 getopts "e:" EXTRA_ARGS
 if [ "$OPTARG" != "" ]; then
     echo -e "${green} Running with extra args: ${OPTARG} ${NC}"

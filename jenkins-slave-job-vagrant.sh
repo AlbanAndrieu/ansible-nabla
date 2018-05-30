@@ -2,6 +2,7 @@
 #set -xv
 
 red='\e[0;31m'
+# shellcheck disable=SC2034
 green='\e[0;32m'
 NC='\e[0m' # No Color
 
@@ -35,15 +36,7 @@ echo "WORKSPACE : $WORKSPACE"
 
 echo -e "${red} Find stale processes ${NC}"
 
-find /proc -maxdepth 1 -user ${TARGET_USER} -type d -mmin +200 -exec basename {} \; | xargs ps -edf
-echo -e "${red} Killing stale grunt processes ${NC}"
-find /proc -maxdepth 1 -user ${TARGET_USER} -type d -mmin +200 -exec basename {} \; | xargs ps | grep grunt | awk '{ print $1 }' | sudo xargs kill
-echo -e "${red} Killing stale google/chrome processes ${NC}"
-find /proc -maxdepth 1 -user ${TARGET_USER} -type d -mmin +200 -exec basename {} \; | xargs ps | grep google/chrome | awk '{ print $1 }' | sudo xargs kill
-echo -e "${red} Killing stale selenium processes ${NC}"
-find /proc -maxdepth 1 -user ${TARGET_USER} -type d -mmin +200 -exec basename {} \; | xargs ps | grep selenium | awk '{ print $1 }' | sudo xargs kill
-echo -e "${red} Killing stale zaproxy processes ${NC}"
-find /proc -maxdepth 1 -user ${TARGET_USER} -type d -mmin +200 -exec basename {} \; | xargs ps | grep ZAPROXY | awk '{ print $1 }' | sudo xargs kill
+./step-0-1-run-processes-cleaning.sh
 
 echo -e "${red} Configure workstation ${NC}"
 
@@ -148,8 +141,8 @@ sshpass -f /jenkins/pass.txt ssh-copy-id vagrant@192.168.33.12
 # test ansible
 
 export ANSIBLE_REMOTE_USER=vagrant
-export ANSIBLE_PRIVATE_KEY_FILE=$HOME/.vagrant.d/insecure_private_key
-ssh-add $ANSIBLE_PRIVATE_KEY_FILE
+export ANSIBLE_PRIVATE_KEY_FILE="$HOME/.vagrant.d/insecure_private_key"
+ssh-add "$ANSIBLE_PRIVATE_KEY_FILE"
 
 #ansible -m setup slave01 -i hosts --user=vagrant --private-key=~/.vagrant.d/insecure_private_key  -vvvv
 ansible -m setup slave01 -i hosts --user=vagrant -vvvv
