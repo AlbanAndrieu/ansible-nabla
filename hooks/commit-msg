@@ -6,7 +6,10 @@ from subprocess import check_output
 # Collect the parameters
 commit_msg_filepath = sys.argv[1]
 # Figure out which branch we're on
-branch = check_output(['git', 'symbolic-ref', '--short', 'HEAD']).strip()
+branch = check_output([
+    'git', 'symbolic-ref', '--short',
+    'HEAD',
+]).strip().decode('utf-8')
 print(r"commit-msg: On branch '{}'".format(branch))
 regex = re.compile('^feature|^bugfix')
 # Check the commit message if we're on an issue branch
@@ -16,14 +19,14 @@ if re.match(regex, branch):
     # Matches any unique issue code
     pattern = re.compile(r'(^feature|^bugfix)\/([A-Z]{3,5}-[0-9]+)')
     issue = re.search(pattern, branch).group(2)  # Extract issue code
-    print('Issue number : %s.') % issue
+    print('Issue number : {}.'.format(issue))
 
     with open(commit_msg_filepath, 'r') as f:
 
         try:
             from jira import JIRA
             options = {'server': 'https://home.nabla.mobi/jira'}
-            jira = JIRA(options, basic_auth=('test', 'TODO'))
+            jira = JIRA(options, verify=False, basic_auth=('test', 'TODO'))
             issue_to_check = jira.issue(issue)
             print(issue_to_check.fields.project.key)             # 'JRA'
             print(issue_to_check.fields.issuetype.name)          # 'New Feature'
@@ -39,6 +42,8 @@ if re.match(regex, branch):
         content = f.read()
         if not content.startswith(required_message):
             print(
-                "commit-msg: ERROR! The commit message must start with '%s'",
-            ) % required_message
+                'commit-msg: ERROR! The commit message must start with {}'.format(
+                    required_message,
+                ),
+            )
             sys.exit(1)
