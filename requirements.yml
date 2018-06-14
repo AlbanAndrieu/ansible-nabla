@@ -443,6 +443,11 @@
   scm:     'git'
   version: 'master'
 
+- src:     'https://github.com/geerlingguy/ansible-role-sonar-runner'
+  name:    'geerlingguy.sonar-runner'
+  scm:     'git'
+  version: 'master'
+
 - src:     'https://github.com/AlbanAndrieu/ansible-role-ssl-certs'
   name:    'ssl-certificate'
   scm:     'git'

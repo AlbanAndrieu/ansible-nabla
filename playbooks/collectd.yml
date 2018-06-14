@@ -1,4 +1,6 @@
-#sudo ansible-playbook -i hosts-albandri -c local -v collectd.yml | tee setup.log
+#sudo rm -Rf /opt/collectd
+#sudo rm -Rf /usr/src/collectd-*
+#sudo ansible-playbook -i hosts-albandri -c local --limit albandri -v collectd.yml -vvvv --ask-sudo | tee setup.log
 
 - hosts: all
   gather_facts: true
@@ -6,7 +8,7 @@
     - name: group hosts by distribution
       group_by: key="{{ ansible_distribution }}-{{ ansible_distribution_version }}"
 
-- hosts: RedHat-7*:RedHat-6*:CentOS-6*:Ubuntu-12.04:Ubuntu-14.04
+- hosts: RedHat-7*:RedHat-6*:RedHat-5*:CentOS-7*:CentOS-6*:Ubuntu-18*:Ubuntu-17*:Ubuntu-16*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
   gather_facts: false
   tasks:
     - name: group hosts for supported distributions
@@ -18,12 +20,13 @@
     - name: fail for unsupported distribution
       fail: msg="{{ ansible_distribution }} {{ ansible_distribution_version }}
                  is not a supported OS for a Tower installation.  Supported
-                 OSes include Red Hat Enterprise Linux 6/7, CentOS 6, or
-                 Ubuntu 12.04/14.04."
+                 OSes include Red Hat Enterprise Linux 6/7, CentOS 6/7, or
+                 Ubuntu 12.04/13.04/14.04/16.04/17.04/18.04."
+    - debug: msg="Version {{ ansible_distribution }} {{ ansible_distribution_version }} {{ ansible_architecture }}"
 
 - name: Add collectd configuration
   hosts: collectd
-  remote_user: root
+  become: yes
 #  connection: local
 
   roles:
@@ -33,12 +36,12 @@
        collectd_write_graphite: no
 #       collectd_hostname: "{{ inventory_hostname }}"
        collectd_hostname: "albandri"
-       collectd_prefix: "/etc/collectd"
+       #collectd_prefix: "/etc/collectd"
        collectd_type: no
-       collectd_prefix_type: "/usr/share/collectd/"
-       collectd_prefix_conf: "{{ collectd_prefix }}"
-       collectd_prefix_sbin: "/usr/sbin"
-       collectd_prefix_custom_dir: "/usr/lib/collectd"
+       #collectd_prefix_type: "/usr/share/collectd/"
+       #collectd_prefix_conf: "{{ collectd_prefix }}"
+       #collectd_prefix_sbin: "/usr/sbin"
+       #collectd_prefix_custom_dir: "/usr/lib/collectd"
        collectd_upstart: no # used ubuntu default one
        collectd_plugins: [apache, battery, irq, java, mysql, nginx, memcached]
        collectd_default_plugins: [cpu, df, disk, entropy, interface, load, memory, swap, processes, network, uptime, users]
