@@ -49,12 +49,12 @@ script:
   - "{ echo '[defaults]'; echo 'roles_path = ./roles'; } >> ansible.cfg"
 
   # Check the role/playbook's syntax.
-  - ansible-playbook --syntax-check -i ./playbooks/hosts ./playbooks/nabla.yml --connection=local -e "python_versions=[2.7]"  -e "git_user=root"
+  - ansible-playbook --syntax-check -i ./playbooks/hosts ./playbooks/nabla.yml --connection=local -e "python_versions=[2.7]" -e "git_user=root"
 
   # First run
   # Run the role/playbook with ansible-playbook.
 #  - travis_wait 30
-  - ansible-playbook -i ./playbooks/hosts ./playbooks/nabla.yml --connection=local --sudo -e "python_versions=[2.7]" v
+  - ansible-playbook -i ./playbooks/hosts ./playbooks/nabla.yml --connection=local --sudo -e "python_versions=[2.7]" -e "git_user=root"
 
   # Second run Idempotence test
   # Run the role/playbook again, checking to make sure it's idempotent.
