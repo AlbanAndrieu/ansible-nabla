@@ -48,11 +48,15 @@ def DOCKERTAG="latest"
 def DOCKERUSERNAME="nabla"
 def DOCKERNAME="ansible-jenkins-slave"
 
-def dockerRegistryUrl = "https://${DOCKERREGISTRY}"
-def dockerRegistryCredentialsId = 'nabla'
-def dockerImage = "${DOCKERUSERNAME}/${DOCKERNAME}:${DOCKERTAG}"
-def dockerOpts = [
-    '--dns-search=nabla.mobi',
+def DOCKER_REGISTRY_URL = "https://${DOCKERREGISTRY}"
+def DOCKER_REGISTRY_CREDENTIAL = 'nabla'
+def DOCKER_IMAGE = "${DOCKERUSERNAME}/${DOCKERNAME}:${DOCKERTAG}"
+
+//JENKINS-42369 : Docker options need to be defined outside of pipeline
+def DOCKER_OPTS = [
+    '--net=host',
+    '--pid=host',
+//    '--dns-search=nabla.mobi',
 //    '-v /home/jenkins/.m2:/home/jenkins/.m2 ',
     '-v /home/jenkins:/home/jenkins',
     '-v /etc/passwd:/etc/passwd:ro ',
@@ -154,11 +158,11 @@ pipeline {
                 //    doGenerateSubmoduleConfigurations: false,
                 //    extensions: [
                 //        [$class: 'CloneOption', depth: 0, noTags: true, reference: '', shallow: true],
-                //        [$class: 'LocalBranch', localBranch: '${env.GIT_BRANCH_NAME}'],
+                //        [$class: 'LocalBranch', localBranch: "${env.GIT_BRANCH_NAME}"],
                 //        [$class: 'RelativeTargetDirectory', relativeTargetDir: 'bm'],
                 //        [$class: 'MessageExclusion', excludedMessage: '.*\\\\[maven-release-plugin\\\\].*'],
                 //        [$class: 'IgnoreNotifyCommit'],
-                //        [$class: 'ChangelogToBranch', options: [compareRemote: 'origin', compareTarget: 'release/1.6.0']]
+                //        [$class: 'ChangelogToBranch', options: [compareRemote: 'origin', compareTarget: 'release/1.0.0']]
                 //    ],
                 //    gitTool: 'git-latest',
                 //    submoduleCfg: [],
@@ -193,16 +197,16 @@ pipeline {
                     docker_build_args="--no-cache --pull --build-arg JENKINS_HOME=/home/jenkins"
                    //-f Dockerfile-jenkins-slave-ubuntu:16.04 . --no-cache  -t "${DOCKERUSERNAME}/${DOCKERNAME}" --tag "${DOCKERTAG}"
 
-                   docker.withRegistry("${dockerRegistryUrl}", "${dockerRegistryCredentialsId}") {
+                   docker.withRegistry("${DOCKER_REGISTRY_URL}", "${DOCKER_REGISTRY_CREDENTIAL}") {
                        withCredentials([
                            [$class: 'UsernamePasswordMultiBinding',
-                           credentialsId: dockerRegistryCredentialsId,
+                           credentialsId: DOCKER_REGISTRY_CREDENTIAL,
                            usernameVariable: 'USERNAME',
                            passwordVariable: 'PASSWORD']
                        ]) {
-                           //sh "docker login --password=${PASSWORD} --username=${USERNAME} ${dockerRegistryUrl}"
+                           //sh "docker login --password=${PASSWORD} --username=${USERNAME} ${DOCKER_REGISTRY_URL}"
                            //git '…'
-                           def container = docker.build("${dockerImage}", "${docker_build_args} -f Dockerfile-jenkins-slave-ubuntu:16.04 . ")
+                           def container = docker.build("${DOCKER_IMAGE}", "${docker_build_args} -f Dockerfile-jenkins-slave-ubuntu:16.04 . ")
                            container.inside {
                              sh 'echo test'
                            }
@@ -210,14 +214,14 @@ pipeline {
                            //stage 'Test image'
                            stage('Test image') {
                                //docker run -i -t --entrypoint /bin/bash ${myImg.imageName()}
-                               docker.image(${dockerImage}).withRun {c ->
+                               docker.image(${DOCKER_IMAGE}).withRun {c ->
                                sh "docker logs ${c.id}"
                                }
                            }
                            // run some tests on it (see below), then if everything looks good:
                            //stage 'Approve image'
                            //container.push 'test'
-                           //def myImg = docker.image(${dockerImage})
+                           //def myImg = docker.image(${DOCKER_IMAGE})
                            //sh "docker push ${myImg.imageName()}"
                        } // withCredentials
                    }
@@ -238,7 +242,7 @@ pipeline {
         }
         //stage('Approve image') {
         // sshagent(['19d51c37-1c1f-4c73-8282-08abea3f0b87']) {
-        ////   def myImg = docker.image("${dockerImage}")
+        ////   def myImg = docker.image("${DOCKER_IMAGE}")
         ////   sh "docker run -it --rm -v /var/run/docker.sock:/var/run/docker.sock nate/dockviz ${myImg.imageName()}"
          //    sh returnStdout: true, script: 'sudo docker run -it --net host --pid host --cap-add audit_control -v /var/lib:/var/lib -v /var/run/docker.sock:/var/run/docker.sock -v /usr/lib/systemd:/usr/lib/systemd -v /etc:/etc --label docker_bench_security docker/docker-bench-security'
          //}
