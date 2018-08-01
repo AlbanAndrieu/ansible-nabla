@@ -69,7 +69,7 @@ def DOCKER_OPTS = [
 */
 pipeline {
     agent {
-      label 'ansible-check&&ubuntu&&!albandri
+      label 'ansible-check'
     }
     triggers {
         cron(cronString)
@@ -98,8 +98,8 @@ pipeline {
         //CARGO_RMI_PORT = "${params.CARGO_RMI_PORT}"
        // WORKSPACE_SUFFIX = "${params.WORKSPACE_SUFFIX}"
         DRY_RUN = "${params.DRY_RUN}"
-        CLEAN_RUN = "${params.CLEAN_RUN}"
-        DEBUG_RUN = "${params.DEBUG_RUN}"
+        //CLEAN_RUN = "${params.CLEAN_RUN}"
+        //DEBUG_RUN = "${params.DEBUG_RUN}"
         //echo "JOB_NAME: ${env.JOB_NAME} : ${env.JOB_BASE_NAME}"
         TARGET_PROJECT = sh(returnStdout: true, script: "echo ${env.JOB_NAME} | cut -d'/' -f -1").trim()
         BRANCH_NAME = "${env.BRANCH_NAME}".replaceAll("feature/","")
@@ -143,9 +143,10 @@ pipeline {
                     GIT_COMMIT = readFile('.git/commit-id')
                 }
 
-                echo "GIT_COMMIT: ${GIT_COMMIT}"
-                echo "SONAR_BRANCH: ${SONAR_BRANCH}"
-                echo "PROJECT_BRANCH: ${PROJECT_BRANCH}"
+                echo "GIT_COMMIT: ${env.GIT_COMMIT}"
+                echo "SONAR_BRANCH: ${env.SONAR_BRANCH}"
+                echo "PROJECT_BRANCH: ${env.PROJECT_BRANCH}"
+                echo "TARGET_PROJECT: ${env.TARGET_PROJECT}"
                 echo "BRANCH_NAME: ${env.BRANCH_NAME}"
                 echo "GIT_BRANCH_NAME: ${env.GIT_BRANCH_NAME}"
 
@@ -181,53 +182,56 @@ pipeline {
                 ansiblePlaybook colorized: true, extras: '-vvvv --syntax-check', installation: 'ansible-2.2.0.0', inventory: 'production', limit: 'FR1CSLFRBM0059.misys.global.ad', playbook: 'jenkins-slave.yml', sudoUser: null
 
                 script {
-                // check quality
+                    // check quality
                     sh returnStatus: true, script: 'ansible-lint jenkins-slave.yml || true'
 
-                    sh './run-ansible-workstation.sh'
-            }
-        }
-        }
+                    //TODO (too long), replace by https://docs.docker.com/develop/develop-images/multistage-build/
+                    sh './playbooks/run-ansible-workstation.sh'
+                } // script
+            } // steps
+        } // stage Build
+
         stage('Docker') {
             when {
                 expression { BRANCH_NAME ==~ /(release|master|develop)/ }
             }
-           steps {
-               script {
+            steps {
+                script {
+                     // --target builder
                     docker_build_args="--no-cache --pull --build-arg JENKINS_HOME=/home/jenkins"
-                   //-f Dockerfile-jenkins-slave-ubuntu:16.04 . --no-cache  -t "${DOCKERUSERNAME}/${DOCKERNAME}" --tag "${DOCKERTAG}"
+                    //-f Dockerfile-jenkins-slave-ubuntu:16.04 . --no-cache  -t "${DOCKERUSERNAME}/${DOCKERNAME}" --tag "${DOCKERTAG}"
 
-                   docker.withRegistry("${DOCKER_REGISTRY_URL}", "${DOCKER_REGISTRY_CREDENTIAL}") {
-                       withCredentials([
-                           [$class: 'UsernamePasswordMultiBinding',
-                           credentialsId: DOCKER_REGISTRY_CREDENTIAL,
-                           usernameVariable: 'USERNAME',
-                           passwordVariable: 'PASSWORD']
-                       ]) {
-                           //sh "docker login --password=${PASSWORD} --username=${USERNAME} ${DOCKER_REGISTRY_URL}"
-                           //git '…'
-                           def container = docker.build("${DOCKER_IMAGE}", "${docker_build_args} -f Dockerfile-jenkins-slave-ubuntu:16.04 . ")
-                           container.inside {
-                             sh 'echo test'
-                           }
-                           //container.push()  // record this snapshot (optional)
-                           //stage 'Test image'
-                           stage('Test image') {
-                               //docker run -i -t --entrypoint /bin/bash ${myImg.imageName()}
-                               docker.image(${DOCKER_IMAGE}).withRun {c ->
-                               sh "docker logs ${c.id}"
-                               }
-                           }
-                           // run some tests on it (see below), then if everything looks good:
-                           //stage 'Approve image'
-                           //container.push 'test'
-                           //def myImg = docker.image(${DOCKER_IMAGE})
-                           //sh "docker push ${myImg.imageName()}"
-                       } // withCredentials
-                   }
-               } //script
-           }
-        }
+                    docker.withRegistry("${DOCKER_REGISTRY_URL}", "${DOCKER_REGISTRY_CREDENTIAL}") {
+                        withCredentials([
+                            [$class: 'UsernamePasswordMultiBinding',
+                            credentialsId: DOCKER_REGISTRY_CREDENTIAL,
+                            usernameVariable: 'USERNAME',
+                            passwordVariable: 'PASSWORD']
+                        ]) {
+                            //sh "docker login --password=${PASSWORD} --username=${USERNAME} ${DOCKER_REGISTRY_URL}"
+                            //git '…'
+                            def container = docker.build("${DOCKER_IMAGE}", "${docker_build_args} -f Dockerfile-jenkins-slave-ubuntu:16.04 . ")
+                            container.inside {
+                              sh 'echo test'
+                            }
+                            //container.push()  // record this snapshot (optional)
+                            //stage 'Test image'
+                            stage('Test image') {
+                                //docker run -i -t --entrypoint /bin/bash ${myImg.imageName()}
+                                docker.image(${DOCKER_IMAGE}).withRun {c ->
+                                sh "docker logs ${c.id}"
+                                }
+                            }
+                            // run some tests on it (see below), then if everything looks good:
+                            //stage 'Approve image'
+                            //container.push 'test'
+                            //def myImg = docker.image(${DOCKER_IMAGE})
+                            //sh "docker push ${myImg.imageName()}"
+                        } // withCredentials
+                     } // withRegistry
+                } //script
+            } // steps
+        } // stage Docker
 
         stage('SonarQube analysis') {
             environment {
@@ -239,13 +243,6 @@ pipeline {
                     sh "/usr/local/sonar-runner/bin/sonar-scanner -D sonar-project.properties"
                 }
             }
-        }
-        //stage('Approve image') {
-        // sshagent(['19d51c37-1c1f-4c73-8282-08abea3f0b87']) {
-        ////   def myImg = docker.image("${DOCKER_IMAGE}")
-        ////   sh "docker run -it --rm -v /var/run/docker.sock:/var/run/docker.sock nate/dockviz ${myImg.imageName()}"
-         //    sh returnStdout: true, script: 'sudo docker run -it --net host --pid host --cap-add audit_control -v /var/lib:/var/lib -v /var/run/docker.sock:/var/run/docker.sock -v /usr/lib/systemd:/usr/lib/systemd -v /etc:/etc --label docker_bench_security docker/docker-bench-security'
-         //}
-        //}
+        } // stage SonarQube
     } //stages
 } // pipeline
