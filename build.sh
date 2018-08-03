@@ -21,11 +21,11 @@ export head_skull='\xE2\x98\xA0'
 export happy_smiley='\xE2\x98\xBA'
 # shellcheck disable=SC2034
 export reverse_exclamation='\u00A1'
-export DOCKERREGISTRY=""
-export DOCKERORGANISATION=""
+#export DOCKERREGISTRY=""
+#export DOCKERORGANISATION=""
 export DOCKERUSERNAME="nabla"
 export DOCKERNAME="ansible-jenkins-slave-docker"
-export #DOCKERTAG="ubuntu:16.04"
+#export DOCKERTAG="ubuntu:16.04"
 export DOCKERTAG="latest"
 
 source ./playbooks/run-ansible.sh
@@ -34,8 +34,8 @@ echo -e "${green} Insalling roles version ${NC}"
 ansible-galaxy install -r requirements.yml -p ./roles/ --ignore-errors
 
 echo -e "${green} Building docker image ${NC}"
-echo -e "${magenta} time docker build -f docker/ubuntu16/Dockerfile-jenkins-slave-ubuntu-16.04 -t \"$DOCKERUSERNAME/$DOCKERNAME\" . --no-cache --tag \"$DOCKERTAG\" ${NC}"
-time docker build -f docker/ubuntu16/Dockerfile-jenkins-slave-ubuntu-16.04 -t "$DOCKERUSERNAME/$DOCKERNAME" . --no-cache --tag "$DOCKERTAG"
+echo -e "${magenta} time docker build -f docker/ubuntu16/Dockerfile -t \"$DOCKERUSERNAME/$DOCKERNAME\" . --no-cache --tag \"$DOCKERTAG\" ${NC}"
+time docker build -f docker/ubuntu16/Dockerfile -t "$DOCKERUSERNAME/$DOCKERNAME" . --no-cache --tag "$DOCKERTAG"
 RC=$?
 if [ ${RC} -ne 0 ]; then
   echo ""
@@ -51,11 +51,11 @@ echo -e "See https://hub.docker.com/r/nabla/ansible-jenkins-slave-docker/"
 echo -e ""
 echo -e "To push it"
 echo -e "    docker login ${DOCKERREGISTRY} --username $DOCKERUSERNAME --password password"
-echo -e "    docker tag $DOCKERUSERNAME/$DOCKERNAME:latest $DOCKERREGISTRY/$DOCKERORGANISATION/$DOCKERNAME:latest"
-echo -e "    docker push $DOCKERREGISTRY/$DOCKERORGANISATION/$DOCKERNAME"
+echo -e "    docker tag $DOCKERUSERNAME/$DOCKERNAME:$DOCKERTAG $DOCKERREGISTRY/$DOCKERORGANISATION/$DOCKERNAME:$DOCKERTAG"
+echo -e "    docker push $DOCKERUSERNAME/$DOCKERNAME:$DOCKERTAG"
 echo -e ""
 echo -e "To pull it"
-echo -e "    docker pull $DOCKERREGISTRY/$DOCKERORGANISATION/$DOCKERNAME:$DOCKERTAG"
+echo -e "    docker pull $DOCKERUSERNAME/$DOCKERNAME/$DOCKERNAME:$DOCKERTAG"
 echo -e ""
 echo -e "To use this docker:"
 echo -e "    docker run -d -P $DOCKERUSERNAME/$DOCKERNAME"

@@ -56,7 +56,10 @@ docker pull nabla/ansible-jenkins-slave
 #Sample using container to buid my local workspace
 docker run -t -d -w /sandbox/project-to-build -v /workspace/users/albandri30/:/sandbox/project-to-build:rw --name sandbox nabla/ansible-jenkins-slave:latest cat
 #More advance sample using jenkins user on my workstation in order to get bash completion, git-radar and most of the dev tools I need
-docker run -it -u 1004:999 --rm --net=host --pid=host --dns-search=nabla.mobi --init -v /workspace:/workspace -v /jenkins:/home/jenkins -v /etc/passwd:/etc/passwd:ro -v /etc/group:/etc/group:ro -v /etc/bash_completion.d:/etc/bash_completion.d:ro -v/data1/home/albandri/.git-radar/:/home/jenkins/.git-radar/ --name sandbox nabla/ansible-jenkins-slave:latest -s
+# -v/data1/home/albandri/.git-radar/:/home/jenkins/.git-radar/
+docker run -it -u 1004:999 --rm --net=host --pid=host --dns-search=nabla.mobi --init -v /workspace:/workspace -v /jenkins:/home/jenkins -v /etc/passwd:/etc/passwd:ro -v /etc/group:/etc/group:ro -v /etc/bash_completion.d:/etc/bash_completion.d:ro --name sandbox nabla/ansible-jenkins-slave:latest -s
+#Now if I want to use my user albandri (1000) instead of jenkins
+docker run -it -u 1000:999 --rm --net=host --pid=host --dns-search=nabla.mobi --init -w /sandbox/project-to-build -v /workspace/users/albandri30/:/sandbox/project-to-build:rw -v /workspace:/workspace -v /data1/home/albandri/:/home/jenkins -v /etc/passwd:/etc/passwd:ro -v /etc/group:/etc/group:ro -v /etc/bash_completion.d:/etc/bash_completion.d:ro --name sandbox nabla/ansible-jenkins-slave:latest /bin/bash
 
 ```
 #### Build
