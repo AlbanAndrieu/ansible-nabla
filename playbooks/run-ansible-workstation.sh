@@ -5,7 +5,10 @@ if [ -d "${WORKSPACE}/ansible" ]; then
   cd "${WORKSPACE}/ansible"
 fi
 
-source ./run-ansible.sh
+WORKING_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}"  )" && pwd  )"
+
+source ${WORKING_DIR}/run-ansible.sh
+
 RC=$?
 if [ ${RC} -ne 0 ]; then
   echo ""

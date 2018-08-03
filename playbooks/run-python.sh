@@ -127,7 +127,7 @@ source "${VIRTUALENV_PATH}/bin/activate" || exit 2
 
 echo -e "${cyan} =========== ${NC}"
 echo -e "${green} Install virtual env requirements : requirements-current-${PYTHON_MAJOR_VERSION}.txt ${NC}"
-${USE_SUDO} "${VIRTUALENV_PATH}/bin/pip${PYTHON_MAJOR_VERSION}" install -r roles/jenkins-slave/files/requirements-current-${PYTHON_MAJOR_VERSION}.txt
+${USE_SUDO} "${VIRTUALENV_PATH}/bin/pip${PYTHON_MAJOR_VERSION}" install -r ./roles/alban.andrieu.jenkins-slave/files/requirements-current-${PYTHON_MAJOR_VERSION}.txt
 
 echo -e "${cyan} =========== ${NC}"
 echo -e "${green} Checking docker-compose version ${NC}"
