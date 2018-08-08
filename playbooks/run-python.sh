@@ -91,8 +91,8 @@ if [ -n "${VIRTUALENV_PATH}" ]; then
 else
   echo -e "${red} ${double_arrow} Undefined build parameter ${head_skull} : VIRTUALENV_PATH, use the default one ${NC}"
   VIRTUALENV_PATH=/opt/ansible/env$(echo $PYTHON_MAJOR_VERSION | sed 's/\.//g')
-  #sudo virtualenv --no-site-packages ${VIRTUALENV_PATH} -p {{PYTHON_EXE}}
-  #source ${VIRTUALENV_PATH}/bin/activate
+  echo -e "${green} virtualenv --no-site-packages ${VIRTUALENV_PATH} -p python${PYTHON_MAJOR_VERSION} ${NC}"
+  echo -e "${green} source ${VIRTUALENV_PATH}/bin/activate ${NC}"
   export VIRTUALENV_PATH
   echo -e "${magenta} VIRTUALENV_PATH : ${VIRTUALENV_PATH} ${NC}"
 fi
@@ -126,8 +126,26 @@ export PYTHONPATH="/usr/local/lib/python${PYTHON_MAJOR_VERSION}/dist-packages/"
 source "${VIRTUALENV_PATH}/bin/activate" || exit 2
 
 echo -e "${cyan} =========== ${NC}"
-echo -e "${green} Install virtual env requirements : requirements-current-${PYTHON_MAJOR_VERSION}.txt ${NC}"
-${USE_SUDO} "${VIRTUALENV_PATH}/bin/pip${PYTHON_MAJOR_VERSION}" install -r ./roles/alban.andrieu.jenkins-slave/files/requirements-current-${PYTHON_MAJOR_VERSION}.txt
+echo -e "${green} Install virtual env requirements prerequisites ${NC}"
+sudo apt-get install libcups2-dev linuxbrew-wrapper
+#brew install cairo libxml2 libffi
+#source /opt/ansible/env35/bin/activate
+#pip3 uninstall libxml2-python
+#pip3 install cairocffi==0.8.0
+#pip3 install CairoSVG==2.0.3
+
+echo -e "${cyan} =========== ${NC}"
+echo -e "${green} Install virtual env requirements : pip install -r ./roles/alban.andrieu.jenkins-slave/files/requirements-current-${PYTHON_MAJOR_VERSION}.txt ${NC}"
+#"${VIRTUALENV_PATH}/bin/pip${PYTHON_MAJOR_VERSION}" install -r "./roles/alban.andrieu.jenkins-slave/files/requirements-current-${PYTHON_MAJOR_VERSION}.txt"
+pip install -r "./roles/alban.andrieu.jenkins-slave/files/requirements-current-${PYTHON_MAJOR_VERSION}.txt"
+RC=$?
+if [ ${RC} -ne 0 ]; then
+  echo ""
+  echo -e "${red} ${head_skull} Sorry,  python requirements installation failed ${NC}"
+  exit 1
+else
+  echo -e "${green} The python requirements installation completed successfully. ${NC}"
+fi
 
 echo -e "${cyan} =========== ${NC}"
 echo -e "${green} Checking docker-compose version ${NC}"
@@ -137,15 +155,15 @@ RC=$?
 if [ ${RC} -ne 0 ]; then
   echo ""
   echo -e "${red} ${head_skull} Sorry, docker-compose failed ${NC}"
-  ${USE_SUDO} "${VIRTUALENV_PATH}/bin/pip${PYTHON_MAJOR_VERSION}" freeze | grep docker
+  "${VIRTUALENV_PATH}/bin/pip${PYTHON_MAJOR_VERSION}" freeze | grep docker
 
   "${VIRTUALENV_PATH}/bin/pip${PYTHON_MAJOR_VERSION}" show docker-py
   RC=$?
   if [ ${RC} -ne 1 ]; then
     echo -e "${red} ${head_skull} Please remove docker-py ${NC}"
   fi
-  echo -e "${red} ${head_skull} ${USE_SUDO} ${VIRTUALENV_PATH}/bin/pip${PYTHON_MAJOR_VERSION} uninstall docker-py; sudo ${VIRTUALENV_PATH}/bin/pip${PYTHON_MAJOR_VERSION} uninstall docker; sudo ${VIRTUALENV_PATH}/bin/pip${PYTHON_MAJOR_VERSION} uninstall docker-compose; ${NC}"
-  echo -e "${red} ${head_skull} ${USE_SUDO} ${VIRTUALENV_PATH}/bin/pip${PYTHON_MAJOR_VERSION} install --upgrade --force-reinstall --no-cache-dir docker-compose==1.12.0 ${NC}"
+  echo -e "${red} ${head_skull} ${VIRTUALENV_PATH}/bin/pip${PYTHON_MAJOR_VERSION} uninstall docker-py; sudo ${VIRTUALENV_PATH}/bin/pip${PYTHON_MAJOR_VERSION} uninstall docker; sudo ${VIRTUALENV_PATH}/bin/pip${PYTHON_MAJOR_VERSION} uninstall docker-compose; ${NC}"
+  echo -e "${red} ${head_skull} ${VIRTUALENV_PATH}/bin/pip${PYTHON_MAJOR_VERSION} install --upgrade --force-reinstall --no-cache-dir docker-compose==1.12.0 ${NC}"
   exit 1
 else
   echo -e "${green} The docker-compose check completed successfully. ${NC}"
@@ -183,7 +201,7 @@ ${PYTHON_CMD} --version || true
 echo -e "${magenta} ${VIRTUALENV_PATH}/bin/pip${PYTHON_MAJOR_VERSION} --version ${NC}"
 "${VIRTUALENV_PATH}/bin/pip${PYTHON_MAJOR_VERSION}" --version || true
 
-${USE_SUDO} "${VIRTUALENV_PATH}/bin/pip${PYTHON_MAJOR_VERSION}" list --format=legacy | grep docker || true
+"${VIRTUALENV_PATH}/bin/pip${PYTHON_MAJOR_VERSION}" list --format=freeze | grep docker || true
 
-echo -e "${magenta} ${USE_SUDO} -H ${VIRTUALENV_PATH}/bin/pip${PYTHON_MAJOR_VERSION} freeze > requirements-${PYTHON_MAJOR_VERSION}.txt ${NC}"
-${USE_SUDO} "${VIRTUALENV_PATH}/bin/pip${PYTHON_MAJOR_VERSION}" freeze > requirements-${PYTHON_MAJOR_VERSION}.txt
+echo -e "${magenta} ${VIRTUALENV_PATH}/bin/pip${PYTHON_MAJOR_VERSION} freeze > requirements-${PYTHON_MAJOR_VERSION}.txt ${NC}"
+"${VIRTUALENV_PATH}/bin/pip${PYTHON_MAJOR_VERSION}" freeze > requirements-${PYTHON_MAJOR_VERSION}.txt

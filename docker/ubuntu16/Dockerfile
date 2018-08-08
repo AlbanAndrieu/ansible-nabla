@@ -37,14 +37,15 @@ USER 0
 #USER root
 
 #COPY --chown=1000:0 . $JENKINS_HOME
+COPY *.yml roles playbooks group_vars $JENKINS_HOME/
 
 # Install ansible
 ENV BUILD_PACKAGES="python-dev"
 RUN apt-get clean && apt-get -y update && apt-get install -y $BUILD_PACKAGES git unzip python-yaml python-jinja2 python-pip openssh-server rsyslog && pip install ansible==2.4.1.0
 
 # Execute
-RUN ansible-galaxy install -r $WORKDIR/requirements.yml -p $WORKDIR/roles/ --ignore-errors && \
-ansible-playbook $WORKDIR/jenkins-slave-docker.yml -i $WORKDIR/hosts -c local
+RUN ansible-galaxy install -r $JENKINS_HOME/requirements.yml -p $JENKINS_HOME/roles/ --ignore-errors && \
+ansible-playbook $JENKINS_HOME/jenkins-slave-docker.yml -i $JENKINS_HOME/hosts -c local
 
 # Install a basic SSH server
 RUN mkdir -p /var/run/sshd
