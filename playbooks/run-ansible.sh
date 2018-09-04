@@ -120,6 +120,16 @@ else
   echo -e "${magenta} ANSIBLE_LINT_CMD : ${ANSIBLE_LINT_CMD} ${NC}"
 fi
 
+echo -e "${cyan} =========== ${NC}"
+echo -e "${green} Ansible vault password. ${NC}"
+if [ -n "${ANSIBLE_VAULT_PASS}" ]; then
+  echo -e "${green} ANSIBLE_VAULT_PASS is defined ${happy_smiley} : *** ${NC}"
+else
+  echo -e "${red} ${double_arrow} Undefined build parameter ${head_skull} : ANSIBLE_VAULT_PASS, use the default one ${NC}"
+  exit 1
+fi
+echo "${ANSIBLE_VAULT_PASS}" > vault.passwd
+
 lsb_release -a
 
 # DOCKER

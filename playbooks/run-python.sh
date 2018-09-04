@@ -120,19 +120,25 @@ echo -e "${cyan} Use virtual env ${VIRTUALENV_PATH}/activate ${NC}"
 #source /opt/rh/python27/enable
 
 #sudo virtualenv -p /usr/bin/python3.5 /opt/ansible/env35
-
-export PYTHONPATH="/usr/local/lib/python${PYTHON_MAJOR_VERSION}/dist-packages/"
-
 source "${VIRTUALENV_PATH}/bin/activate" || exit 2
+
+#export PYTHONPATH="/usr/local/lib/python${PYTHON_MAJOR_VERSION}/dist-packages/"
+export PATH="${VIRTUALENV_PATH}/bin:${PATH}"
+echo -e "${cyan} PATH : ${PATH} ${NC}"
+export PYTHONPATH="${VIRTUALENV_PATH}/lib/python${PYTHON_MAJOR_VERSION}/site-packages/"
+echo -e "${cyan} PYTHONPATH : ${PYTHONPATH} ${NC}"
 
 echo -e "${cyan} =========== ${NC}"
 echo -e "${green} Install virtual env requirements prerequisites ${NC}"
-sudo apt-get install libcups2-dev linuxbrew-wrapper
-#brew install cairo libxml2 libffi
+echo -e "${green} sudo apt-get install libcups2-dev linuxbrew-wrapper ${NC}"
+echo -e "${green} brew install cairo libxml2 libffi ${NC}"
 #source /opt/ansible/env35/bin/activate
 #pip3 uninstall libxml2-python
 #pip3 install cairocffi==0.8.0
 #pip3 install CairoSVG==2.0.3
+
+echo -e "${green} Fix permission rights ${NC}"
+echo -e "${green} chown -R jenkins:docker /opt/ansible/env35 ${NC}"
 
 echo -e "${cyan} =========== ${NC}"
 echo -e "${green} Install virtual env requirements : pip install -r ./roles/alban.andrieu.jenkins-slave/files/requirements-current-${PYTHON_MAJOR_VERSION}.txt ${NC}"

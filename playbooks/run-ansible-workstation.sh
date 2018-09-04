@@ -8,7 +8,6 @@ fi
 WORKING_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}"  )" && pwd  )"
 
 source ${WORKING_DIR}/run-ansible.sh
-
 RC=$?
 if [ ${RC} -ne 0 ]; then
   echo ""
@@ -44,7 +43,7 @@ fi
 
 echo -e "${cyan} =========== ${NC}"
 echo -e "${green} Ansible server setup ${NC}"
-rm -Rf out || true
+rm -Rf ./out || true
 mkdir out
 echo -e "${magenta} ${ANSIBLE_CMD} -i ${ANSIBLE_INVENTORY} -m setup --user=root -vvv --tree out/ all ${NC}"
 ${ANSIBLE_CMD} -i ${ANSIBLE_INVENTORY} -m setup --user=root -vvv --tree out/ all
@@ -69,10 +68,10 @@ if [ ${RC} -ne 0 ]; then
 else
   echo -e "${green} The inventory generation completed successfully. ${NC}"
 fi
-#sudo cp overview.html /var/www/html/
+cp overview.html /var/www/html/ || true
 echo -e "${green} Ansible server summary done. $? ${NC}"
 
-echo -e "${green} See http://${TARGET_SLAVE}/overview.html ${NC}"
+echo -e "${green} See http://${TARGET_SLAVE}/html/overview.html ${NC}"
 
 cd "${WORKSPACE}/bm/Scripts/shell"
 
