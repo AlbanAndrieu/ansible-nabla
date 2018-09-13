@@ -1,3 +1,6 @@
+---
+#This script is used to configure your workstation (for developer)
+
 #sudo ansible-playbook -i hosts-albandri -c local -v supervisor.yml | tee setup.log
 
 - hosts: all
@@ -24,8 +27,8 @@
 # This playbook can be run using vagrant (on virtual box).
 - name: configure supervisor
   hosts: supervisors
-  remote_user: root
-#  connection: local
+  user: root
+
   roles:
     - role: supervisor
       name: webserver

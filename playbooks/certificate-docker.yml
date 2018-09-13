@@ -1,9 +1,10 @@
 
 - name: Install Docker CA root certificate
-  hosts: workstation
+  hosts: docker
   become: yes
-  remote_user: albandri
+  check_mode: no
   ignore_errors: yes
+  remote_user: root
 
 #See /root/pki/docker.pem
   roles:
@@ -31,13 +32,26 @@
       become: yes
       become_user: root
 
-    - name: Copy ca and docker registry pem crt
+    #- name: Copy docker registry pem crt
+    #  copy:
+    #    src: ~/pki/registry.pem
+    #    dest: "{{ item }}"
+    #    remote_src: yes
+    #  with_items:
+    #    - ~/.docker/registry.crt
+    #    - /etc/docker/certs.d/registry.nabla.mobi/registry.crt
+    #  become: yes
+    #  become_user: root
+
+    - name: Copy ca pem crt
       copy:
-        src: ~/pki/registry.pem
+        src: ~/pki/ca.pem
         dest: "{{ item }}"
         remote_src: yes
       with_items:
-        - ~/.docker/ca.pem
-        - /etc/docker/certs.d/registry.nabla.mobi/ca.pem
+        - ~/.docker/ca.crt
+        - /etc/docker/certs.d/registry.nabla.mobi/ca.crt
       become: yes
+      check_mode: no
+      ignore_errors: yes
       become_user: root

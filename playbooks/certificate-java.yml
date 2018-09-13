@@ -1,7 +1,7 @@
 
-- name: Install java certificate for java 7 and 8
-  hosts: workstation
-  remote_user: albandri
+- name: Install java certificate for java
+  hosts: RedHat-7*:RedHat-6*:RedHat-5*:CentOS-7*:CentOS-6*
+  remote_user: root
   become: yes
 
   roles:
@@ -23,12 +23,23 @@
 #      java_certificate_port: 8999
 
     - role: java.certificate
+      ignore_errors: yes
+      java_path: "/usr/java/latest/"
       java_certificate_host: google.com
       java_certificate_port: 443
 
     - role: java.certificate
+      ignore_errors: yes
+      java_path: "/usr/java/latest/"
       java_certificate_host: github.com
       java_certificate_port: 443
+
+- name: Install java certificate for java
+  hosts: Ubuntu-18*:Ubuntu-17*:Ubuntu-16*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
+  remote_user: root
+  become: yes
+
+  roles:
 
 #Default standard oracle java 8
     - role: java.certificate

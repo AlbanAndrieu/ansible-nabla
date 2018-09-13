@@ -24,7 +24,9 @@
 
 - name: Install sonar
   hosts: sonar
-  remote_user: albandri
+  #become: yes
+  #remote_user: vagrant
+  #connection: local
 
   roles:
     - role: sonar

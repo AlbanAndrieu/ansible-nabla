@@ -1,0 +1,27 @@
+
+- name: Install filebeat
+  hosts: jenkins-slaves
+  roles:
+    - geerlingguy.filebeat
+
+  vars:
+    filebeat_output_elasticsearch_hosts:
+#      - "localhost:9200"
+      - "frbm:9200"
+
+    filebeat_output_logstash_hosts:
+#      - "localhost:5044"
+      - "frbm:5044"
+
+    filebeat_prospectors:
+      - input_type: log
+        paths:
+#          - "/var/log/*.log"
+          - "/jenkins/jobs/*/builds/*/log"
+          - /var/log/jenkins/jenkins.log
+
+    filebeat_enable_logging: true
+    #filebeat_log_level: warning
+    filebeat_log_level: info
+    filebeat_log_dir: /var/log/filebeat
+    filebeat_log_filename: info.log

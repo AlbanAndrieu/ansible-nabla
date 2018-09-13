@@ -24,7 +24,7 @@
     - debug: msg="Version {{ ansible_distribution }} {{ ansible_distribution_version }} {{ ansible_architecture }}"
 
 #sudo docker logout https://docker.misys.global.ad:5000
-#sudo docker login registry.misys.global.ad:443
+#sudo docker login registry.nabla.mobi
 - hosts: docker-container-oracle
 #  become: yes
 
@@ -79,33 +79,29 @@
     - name: Run the database-enterprise container
       docker_container:
           name: database-enterprise
-          image: registry.misys.global.ad/misys-common/oracle-database:12.1.0.2
+          image: registry.nabla.mobi/nabla-common/oracle-database:12.1.0.2
           #restart_policy: always
           state: started
-          recreate: false
+          recreate: true
           ports:
             - "1521:1521"
             - "5500:5500"
           #prd direct access
             - "5501:5501"
-#          exposed_ports:
-#            - 1521
-#            - 5500
 #          #prd direct access
 #            - 5500
           volumes_from:
             - mydata
           #detach: True
           #use_tls: encrypt
-          env: ORACLE_SID=ARC1
-          #     ORACLE_PWD=Almonde01$
+          env: ORACLE_SID=TEST1
+          #     ORACLE_PWD=microsoft
           volumes:
             - "/opt/oracle/oradata:/opt/oracle/oradata"
             - "/opt/oracle/scripts/startup"
+          shm_size: "8g"
           #working_dir:
           #-v [<host mount point>:]/opt/oracle/oradata \
-          #ports:
-          #  - "{{ misysboard_port }}:8080"
 
     - name: sleep for 300 seconds (5 minutes) and continue with play
       wait_for: timeout=300
@@ -129,7 +125,7 @@
 
 #TODO
 #    - name: "Check the status of sqlplus"
-#      command: sqlplus sys/Almonde01\$@//localhost:1521/ARC1 as sysdba
+#      command: sqlplus sys/microsoft@//localhost:1521/TEST1 as sysdba
 #      register: sqlplus_result
 
-#sqlplus sys/Almonde01\$@//10.21.188.31:1521/ARC1 as sysdba
+#sqlplus sys/microsoft@//10.21.188.1:1521/TEST1 as sysdba

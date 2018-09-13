@@ -1,13 +1,285 @@
-#sudo ansible-playbook -i hosts-albandri -c local -v web.yml | tee setup.log
-#TODO ansible -i hosts-albandri albandri --sudo --ask-sudo-pass -m raw -a "apt-get -f install && apt-get update"
-#TODO ansible -i hosts-albandri albandri --sudo --ask-sudo-pass -m raw -a "apt-get install -y python3 python-simplejson"
+
+#ansible all -m setup -i production --limit FR1CSLFRBM0059.misys.global.ad,FR1CSLFRBM0060.misys.global.ad -vvvv
+
+#ansible-playbook web.yml -i production --limit FR1CSLFRBM0059.misys.global.ad,FR1CSLFRBM0060.misys.global.ad -vvvv
+# -e python2_version="2.7"
+
+#TODO ansible -i production FR1CSLFRBM0059.misys.global.ad --sudo --ask-sudo-pass -m raw -a "yum install -y python2 python-simplejson"
+#TODO ansible -i production FR1CSLFRBM0059.misys.global.ad --sudo --ask-sudo-pass -m raw -a "apt-get -f install && apt-get update"
+#TODO ansible -i production FR1CSLFRBM0059.misys.global.ad --sudo --ask-sudo-pass -m raw -a "apt-get install -y python python-simplejson"
+
+- hosts: all
+  gather_facts: true
+  tasks:
+    - name: group hosts by distribution
+      group_by: key="{{ ansible_distribution }}-{{ ansible_distribution_version }}"
+
+- hosts: RedHat-7*:RedHat-6*:RedHat-5*:CentOS-7*:CentOS-6*:Ubuntu-18*:Ubuntu-17*:Ubuntu-16*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
+  gather_facts: false
+  tasks:
+    - name: group hosts for supported distributions
+      group_by: key="supported"
+
+- hosts: "!supported"
+  gather_facts: false
+  tasks:
+    - name: fail for unsupported distribution
+      fail: msg="{{ ansible_distribution }} {{ ansible_distribution_version }}
+                 is not a supported OS for a Tower installation.  Supported
+                 OSes include Red Hat Enterprise Linux 6/7, CentOS 6/7, or
+                 Ubuntu 12.04/13.04/14.04/16.04/17.04/18.04."
+    - debug: msg="Version {{ ansible_distribution }} {{ ansible_distribution_version }} {{ ansible_architecture }}"
+
+- hosts: localhost
+
+  tasks:
+    - name: Install Ansible-Galaxy dependencies
+      shell: ansible-galaxy install -r requirements.yml -p ./roles/
+      #shell: ansible-galaxy install -r requirements.yml -p ./roles/ --ignore-errors --force
+      ignore_errors: yes
+
+#Below is too make sure we can ssh all required hosts
+- name: determine ssh port
+  hosts: all
+  gather_facts: false
+
+  vars:
+    custom_ssh_port: 23
+
+  tasks:
+    - name: test default ssh port
+      local_action: wait_for port=22 timeout=5 host={{inventory_hostname}}
+      register: default_ssh
+      ignore_errors: true
+      check_mode: no
+    - name: set ansible_ssh_port to default
+      set_fact: ansible_ssh_port=22
+      when: default_ssh.elapsed < 5
+    - name: test ssh on high port
+      local_action: wait_for port={{custom_ssh_port}} timeout=5 host={{inventory_hostname}}
+      register: high_ssh
+      when: default_ssh.elapsed >= 5
+      ignore_errors: true
+    - name: set ansible_ssh_port high
+      set_fact: ansible_ssh_port={{custom_ssh_port}}
+      when: default_ssh.elapsed >= 5 and high_ssh.elapsed < 5
+
+#TODO ansible myhost --sudo -m raw -a "yum install -y python2 python-simplejson"
+
+- import_playbook: python.yml
+
+- name: Bootstrap python onto server
+  hosts: Ubuntu-17*:Ubuntu-16*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
+#  become: yes
+
+  pre_tasks:
+  - name: Install python 2 if not there
+    become: yes
+    raw: |
+      test -e /usr/bin/python || \
+      (apt -y update && apt install -y python-simplejson)
+    register: output
+    changed_when: output.stdout|trim() != ""
+
+  - name: Install sudo if not there
+    become: yes
+    raw: |
+      test -e /usr/bin/sudo || apt install -y sudo
+    register: output
+    changed_when: output.stdout|trim() != ""
+
+- name: Apply hostname configuration
+  hosts: hostname
+  become: yes
+
+  roles:
+    - hostname
+
+- name: Apply nfs configuration to all nodes
+  hosts: jenkins-slaves
+  become: yes
+
+  roles:
+    - geerlingguy.nfs
+
+- import_playbook: administration.yml
+
+- name: Apply common configuration to all nodes
+  hosts: jenkins-slaves
+  become: yes
+
+  roles:
+    - common
+
+- import_playbook: dns.yml
+
+- name: Apply security configuration
+  hosts: jenkins-slaves
+  become: yes
+
+  roles:
+    - security
+
+  vars:
+      security_ssh_password_authentication: "yes"
+      security_ssh_permit_root_login: "yes"
+      security_ssh_x11_forwarding: "yes"
+      security_fail2ban_enabled: false
+      security_autoupdate_enabled: false #make yum to get stuck later
+
+- import_playbook: java.yml
+
+- import_playbook: certificate.yml
+
+- import_playbook: python.yml
+
+- name: Install webmin
+  hosts: webmin
+
+  roles:
+    - webmin
+
+- name: Install chrome
+  hosts: jenkins-slaves
+#  hosts: Ubuntu-14*:Ubuntu-16*
+#  connection: local
+
+  roles:
+     - role: chrome
+       google_talkplugin_enabled: no                       # Enable module
+       google_agent_pkg_state: installed # Package states: present or installed or latest
+
+- name: Install selenium
+  hosts: jenkins-slaves
+  become: yes
+#  connection: local
+
+  roles:
+    - selenium
+
+  vars:
+    selenium_mirror: "http://FR1CSLFRBM0059.misys.global.ad/download/selenium/"
+    selenium_server_major_version: "2.42"
+    selenium_server_minor_version: "2"
+
+- name: Install xvbf
+  hosts: jenkins-slaves
+#  connection: local
+
+  roles:
+    - xvbf
+
+- import_playbook: zabbix-agent.yml
+
+- import_playbook: yarn.yml
+
+- name: Configure all jenkins slaves
+  hosts: jenkins-slaves
+  become: yes
+  #connection: local
+
+  roles:
+    - jenkins-slave
+
+  vars:
+    jenkins_home: /jenkins
+    jenkins_user: jenkins
+    jenkins_http_port: 8380
+    jenkins_slave_home: /workspace
+    jenkins_prefix: "/jenkins"
+    jenkins_url: http://10.21.22.69:8380/jenkins
+    jenkins_slave_directory: ["{{ jenkins_slave_home }}/slave","{{ jenkins_slave_home }}/slavearc"]
+    home_url: "https://alm-artifacts.misys.global.ad"
+    nexus_url: "{{ home_url }}"
+    bower_url: "http://risk-bower:5678"
+    npm_nexus_npm_url: "{{ nexus_url }}/nexus/content/groups/npmjs-all/"
+    npm_nexus_private_npm_url: "http://alm-npmjs.misys.global.ad:8080/"
+    npm_nexus_private_npm_data: ["//alm-artifacts.misys.global.ad/maven/content/repositories/npmjs-internal/:_authToken=MHI4eDhhVGo6cGh2UUQvREY0UUcraUFFU0ZMYkRBcGY5UGlmZkkyYWhRcFRTS3M5dTc2OTc=","//uk1cslalm0011.misys.global.ad:8080/:_authToken=92f95118-306a-447d-9236-7d89be2a921e", "@uxp:registry=http://uk1cslalm0011.misys.global.ad:8080/", "@uxp-tools:registry=http://uk1cslalm0011.misys.global.ad:8080/", "@generic-limits:registry=http://uk1cslalm0011.misys.global.ad:8080/"]
+    proxy_cdnurl_server: "FR1CSLFRBM0059.misys.global.ad"
+    npm_phantomjs_cdnurl: "http://{{ proxy_cdnurl_server }}/download/phantomjs"
+    npm_slimerjs_cdnurl: "http://{{ proxy_cdnurl_server }}/download/slimerjs"
+    zabbix_agent_config_server: "10.21.16.120"
+    shell_git:
+      - {
+        shell_git_machine: "10.21.200.140",
+        shell_git_login: "mgr.jenkins",
+        shell_git_email: "mgr.jenkins@misys.com",
+        shell_git_password: "Misys2013",
+        shell_git_name: "mgr jenkins",
+        shell_git_path: "/usr/bin",
+        shell_git_ssl: false
+        }
+    shell_sa_password: "Almonde01"
+    svn_user: "ctfjenkins.admin"
+    svn_password: "misys123$"
+    #WARNING role must be run as kgr_mvn because only this user got the right key
+    jenkins_ssh_key_file: "~/.ssh/id_rsa"
+    jenkins_ssh_authorized_keys_fingerprints: # Set known authorized keys for ssh
+    # Alban Andrieu
+      - "ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAIEAio3SOQ9yeK6QfKqSFNKyTasuzjStxWevG1Vz1wgJIxPF+KB0XoMAPD081J+Bzj2LCDRSWisNv2L4xv2jbFxW/Pl7NEakoX47eNx3U+Dxaf+szeWBTryYcDUGkduLV7G8Qncm0luIFd+HDIe/Qir1E2f56Qu2uuBNE6Tz5TFt1vc= Alban"
+    # Michal Tyde
+      - "ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAQEAobOs/19MAmxx8ri8ybVIr4GfQqgvq+1z2u44YEoyhbWg8T8cxhQ72jiukoxmMHhydXrQ/43Yf7pX17R8FYhDQRVik6iSKlT6wUZSJOx4052sV5U93+0muHL9YJWVYXU4B3yNNnVMf7xwG71YSnnXw+gPAnYD0C5QIuAsbR6/6tb0ns5U5j8ZLy8jDXVfKf5T+4fl8ptU8hxZ1EHA6pArXGAa1XbEb5pf+ts6XAOpr8MMY0AhoO5NCumwfkyL9k9l/k6Jd7DQiIjDtKBNiyyeF+voY0e8Hv0Pu6Gj91ZSGsGl/zJVPwzDB52xl7jWS5BaDZoezPLF3yy7zbp9WqJJDw== rsa-key-20140108"
+    # Philippe Baudrier
+      - "ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAQEAgx+jxx3DY7rEbx46Ln4VhrJ95ieqGQBMi6WiNgxISLuVa/O+epWI9Q/HRwnBuVVBwcT41/uFm7/UShomi0MCVSTmzTSXkMJ74ZVTt9AE5TO58hbzTnD3Ieeqb1SWmZd5KgyDUobqL/dtAx7lRBiS6sFZqihsK/saRxvqjE0GArcsrbkiKsl/YExhbGEnhm84fKgsjG4J2BW8SbNtq1w/BEeE8Lgnk8pH1UnDSexDZ8Uo7UDiEQxYW8F76o8w8ikIn+91UZ9mNnMsLsIP8FS4dEpncaM1y3iugvr2EdShrJCZCVZNdf9fDt75QHeeBcTNODdQOixXv1E0POHBqKLw5w== Baudrier, Philippe"
+    # Weronika Wazna
+      - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCrc9SZjHHGCqSzlvaUnv2petWK17+/XNuNKOp4R3OIX9mp7tIo3qxNvR8q7L8SQUTWoG0jOflR3xpNeWxDr/YbPDGMK6vQGl6Gx6/GC/EjJ6CisEHQWt+xw08ti5FoRuIeaNQxZh1CQPf6+4eU96RdVAjJbwBMG194l3IL4jv2RvG7aRF4YLU7mfLGWay2KqGNCjzkdWovacJXlX47sSFafqBDTuUOVdt83HNyaVAJmbujXQHRAIy8KPU8krEXxMkrw2LcjTRc1+1UySKLm3D2kbrEOabe0c9i4PeVx1t49vAtodlUDVb0mdNxgL4modRcAvTjQyP8XpRlj0qHIiRH weronika.wazna@misys.com"
+    # Jenkins UAT master
+      - "ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAIEArEZwPYeyr98mgnng7WaFUB7zkwMWo3nGR6GZrHaCxJkVfzAQMNZXeQPugPXCxBq8sb+ZQiWA3CfYOmUxwbNLgFOGvpucp6OSKmy+Bzrxhpf5d91UgvUVZwYSrqfF/wwvS+sxbsYmKlsqcDMVBN2q8YQypKVDPSstAnVBwV4dR9c= kgr@kenvng"
+    # kgrdb01 kgr_mvn user (same as mgr.jenkins.pub)
+      - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCyTZc0ySGrGc2Fkl0ZrNc5iour4+CfQBUjgCR7Cy7eyG2vwIJb1lHrzIRxrEusz9fF4aUE7cMO6HTkUsAGg0g0B6A42/vhWVYanZAl26z9kNbT80UrKgvw6T4hJ602Q4bFQ4ODqM/UGJh18Xk4Wsj3mRRvmIyQ7TokWVevYKLmc96RdMtRlB8nFxcGfcVS0FQuADxVQF55wn7857C6VzbihOpAwndVZZTIGjXmsLNrthhYMwJcDzN8fSdhfyb7mbYDIxz931XAZqxv+fDagvfsurCcpL4X4fSXFhF2dZMN21Qng9VaHxQg2psr7/PgOSE5sY4hMhcbpRAr72E6yjnZ mgr.jenkins"
+    # kgrdb01 kgr_mvn user (same as kenvng.rsa) in order to connect to zones
+      - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAAAgQC/y3/RxP31+jolt6FAeTMigwEZIeiZb4wF0pRzN7rMBnHQvyp4UMBuEbv62JEgRkmoqbVbQU05K2r4Pih2XCQU5ga+NOkHN7CjdGmqNAL2dGXPOgv14+e6orOOO3k4WOuthpskl6OUEJ8TnJ6jwXlY0Ttlz2ThkBz8SSLWj1L5qQ== everybody@kenvng.turazglobal.com"
+    # Majus Misiak
+      - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC1vQG90xNfIuEkTP0yQsPYjn5409lVfUi21Fjw7DiRqYse+THoe1RgXxcjzLpEIcUcvXTT/is+aCFrm2wij+SU4zqCC8pVCFtCzaZA6+9qfPw0VKM/J/ecf1yazxOVq/obd4w2FJaO3oduu2RW1wiT1EhYHggXhOam99V96tykMT7QTT5IqhJbk5rLgqp1L1qB9ou2kTe3zzIU8ArXGB6T/cCj/BuFfu/HQ2p4IA0FtBVmevpJfTrOc4M4frL7+t3U8oakuz5EO+OH2BUbq2vGgncb7TgWFxk+9lm9xa2XPsB3YQLLZBe9JwRNhrrdlBxWg5cn+X0ROjemUC/EueC5 mamisiak@kworkstation"
+    # Alexandre Feblot
+      - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDe7sdyQ8qVdR2QPph+CX2sOIa3T0kne9Slw8vIXnklR4pLq+v2ldiKE2JfmXixjt3TZd8/ySQV9HK6Hm/CkfSrsqHFxdJX84bBvOA1YvddnicmygA5tF2P9N3cQxwffNf7XnLD+67wt2kre9Od0Z84hnxcWNdPluMe883IETwopK1MqGobgmoY6z21kkf+1p4y03SSbCODyHNkz+EwfLI1IWbgLhQElDU2jCMmVp+c3blAcRpYgTR7NCT36JPwjYi+wXeY/wzeHl550fvLi5TNhCaOQfMlcaqhPkTuLDtpDKeqbSS+tn3eyDN3IHF5jrxgQJKD5vOsc6LsRG9f3UKN alefeblo@anywhere"
+    # Marcin Karaczewski BM Team
+      - "ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAuo4cmNV/siyATxXeqGVHlTQn7jU8bPOeo2JF9SLH4hSYL+SKbNyO8glLm6pCSudGrVujNU/uIUF4pF5yBuIHD9kHHfRQMjTuXS6Zk3EL19UQKQhG+/la3ZSkOYhhhzrms3sgHN5kUUEHzZJH+PQW7I6tSsewR5XAtisdqLMDwMreV1IMmx8/+IFiolNry7Rx2meaX1gjN5X9ziYBgn5J+w5P3IluRjD+CxwjXQ2T9C8VJXg0tgp1ViN1P7OPE9tDuEqsFFoIjAFTByaPZKNHW3Yhx0D8RKD/CSjZVIp3mjSdSQNriBGvYJ8D/soAvZ1wxLCg+ZFbD5jIDmGQZiCFhQ== root@bm-ansible"
+#ssh-keyscan -t rsa,dsa bitbucket.org
+    jenkins_ssh_fingerprints: # Set known hosts for ssh
+      - "bitbucket.org,131.103.20.167 ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAubiN81eDcafrgMeLzaFPsw2kNvEcqTKl/VqLat/MaB33pZy0y3rJZtnqwR2qOOvbwKZYKiEO1O6VqNEBxKvJJelCq0dTXWT5pbO2gDXC6h6QDXCaHo6pOHGPUy+YBaGQRGuSusMEASYiWunYN0vCAI8QaXnWMXNMdFP3jHAJH0eDsoiGnLPBlBp4TNm6rYI74nMzgz3B9IikW4WVK+dc8KZJZWYjAuORU3jc1c/NPskD2ASinf8v3xnfXeukU0sJ5N6m5E8VLjObPEO+mN2t/FZTMZLiFqPWc/ALSqnMnnhwrNi2rbfg/rd/IpL8Le3pSBne8+seeFVBoGqzHM9yXw=="
+      - "github.com,204.232.175.90 ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXYPCPy6rbTrTtw7PHkccKrpp0yVhp5HdEIcKr6pLlVDBfOLX9QUsyCOV0wzfjIJNlGEYsdlLJizHhbn2mUjvSAHQqZETYP81eFzLQNnPHt4EVVUh7VfDESU84KezmD5QlWpXLmvU31/yMf+Se8xhHTvKSCZIFImWwoG6mbUoWf9nzpIoaSjB+weqqUUmpaaasXVal72J+UX2B+2RPW3RcT0eOzQgqlJL3RKrTJvdsjE3JEAvGq3lGHSZXy28G3skua2SmVi/w4yCE6gbODqnTWlg7+wC604ydGXA8VJiS5ap43JXiUFFAaQ=="
+      - "[scm-git-eur.misys.global.ad]:7999,[10.21.200.140]:7999 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCP8ZkWwD/REuQ+jYwWGKANklOidkkmgbHDlJbQQkjVSW2iLnuldYcvLfqcu3HNfSBfJ7YH+iyeZKUDYw2kGgXymbVENTaBCfOCu/ztrnHWUn7zUFCWP12WxgzNQ7InVN+YCayaBNbwfXNt1w3/I/sWCyqaUKAQ/waPe6QUAGWPHg2fGctGMfhi6HbFk9LG5LG8luwVxvmFfhmXEsIILdH1jasOMctzCiMvttpHxY2gKMVX4OJ/Pt8TB7EhPmXDxu3WEBkqyulcQydBb3GpV6QOX5BWWaJxw9WnLRaCXFKMQOBLgx5tQcbaDmsbDk5dWgQeUcHCXRCks+8p329iCHAl"
+      - "alm-artifacts.misys.global.ad ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDBVr8jGpDSmasMnMdDs9cxRyHU3rSytODLIqUhTXuHOQXrX10X1V0pFK+/1+gC79kbJ0cWhVxWat/sLOQJGpDKJRRn6G/BGU8toDpAiyYXnqVMnWRHNGGKkVoMbf21ou75mZmJeidNa0LkYGZGo8h5yXO+bdroJlx/WJdvphnmxXgDTABKUJQtrlg16aAhliCIMCHgpzstauD4sKmaMXmLdwokQXSgkGSib1/cTheh0KzbBF9//CH32HXXshqYfkrnXyiKlleN4lmEZBpkv67/JOQfWog3+Q99tuMQKIe2VGXT6d41w5g/g6CTYrp9SLJh4+ezDBL028gv+9bNubK9"
+      - "alm-sonar ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDESWHcLfGU8dYYZhRis18g2gALoVIPKRQ69KEHV4+ujcQah6j6eAyIh6dO5hZgZpoZsjnUWbNv/njrxUgBmg7f4yKh1gQStAHh/IjzBwpSQj4IGSJXiML4JerYN8ivqcbT9XtPNmqRVvOQoJYoSWcuavsniu+S3myp2WKZCNtoBlNCe+jUIqI0yH4wSrAlM0pWMF149SOpkUMHSlG86UPzB2nIXu58l1CnoPwS568JOfU1YiLPuNxB8FgZW6c24q9Hx1ogV+kgzhEPAmdQLYwakPZD0CKK7DdnxGvoCgT64nx2ssheq/zCJqu4B5CKIILxLae8ZB/J+xU9HOUQqPVF"
+      - "registry.misys.global.ad ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDESWHcLfGU8dYYZhRis18g2gALoVIPKRQ69KEHV4+ujcQah6j6eAyIh6dO5hZgZpoZsjnUWbNv/njrxUgBmg7f4yKh1gQStAHh/IjzBwpSQj4IGSJXiML4JerYN8ivqcbT9XtPNmqRVvOQoJYoSWcuavsniu+S3myp2WKZCNtoBlNCe+jUIqI0yH4wSrAlM0pWMF149SOpkUMHSlG86UPzB2nIXu58l1CnoPwS568JOfU1YiLPuNxB8FgZW6c24q9Hx1ogV+kgzhEPAmdQLYwakPZD0CKK7DdnxGvoCgT64nx2ssheq/zCJqu4B5CKIILxLae8ZB/J+xU9HOUQqPVF"
+      - "kgrdb01,150.151.160.25 ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBK8wCB9NOWgA/vLQCn99t7cuwCj6LB0YLEKk7z0LGbKhEqyr2Ftb56SjDJA2y8uJOMHGT6agi7QZy9tntsE+QYs="
+      - "risk-jenkins.misys.global.ad ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAxlEva8Y3SXdrscgPFVActxBmYehEHGTSIpsT73BEE95nR/Ti4Az1gTP1sUa2Oh9hpTGZgLxneOd1N0PkDVMzLM4tupwie0KMnfPnCrrWY6kyUv72m3dCPkDES/XPlTOWIlUWrtXUrWQRlmW0ImGHQXRutMCAXg60Q1kjNKZmgfLNmDnOxE8I1NgyVhmHpX1Yj3tRkSxi6bX2J+HPdUyUluUF6XY7xa4/qX/sT58iS85cysLSH+k9kB5wmo1x/ZmRA1sWAP5v5Ti2ohW5O0OX9uklDAJvKImd6W6ch7GmSgc5lq1nbvcfQ9dD7ZaKB39UlRciLO2gOjCGma1PkLaoqw=="
+      - "almonde-jenkins.misys.global.ad ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCSsZvbQ+fqF0zwm9qeeH7J0nTDW3RT32Ta7Uy2yaQYrwjtnSigl865x205D+u7HXZ3ZEQ2x2vDRIQ7Vd4ECoqOxwwI7/hr9orZY6AESReKGpcu7lJS8PL9XYVG/FqTSGzA9c35lAmazriMxZV4glgEkWIbO34lK4oP5oS5yEDlRoHtIP6efQSS50864ZSeurgRQy0dSNo4cRBj1rTtjYLcnEPwyqLg9mo6CkR46pVwfpAWmBGM0b96XlmgT3bXtJTqYpJUnIBuyxexE6IiU3THv8elKipzrA9shDEoIVfEule9p4RCRq+lz4WHHsyneRKLzH64uFApTXk4bo0O46Gz"
+      - "risk-bower ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAvO0GKEO8AuWj4dauX3m+MpW+Mt4wDndji2f46YFJtK+sb4kGM2vP5IvJtXXNU+VBeMxqcrxCYphpNvc4yAI+Chfegl1NqTpmD1JWDyZIXSNKtyt5INt6SFkh0Y65HFwZ5rEVcHYx+THKkCoqtU/Shlo5ylRRbofbnL8pBU4gceEeLbJ5hbyZK0jt3F4t4O4Sosz/2YsUx+y2I+Bi93nOgPt/c3XWRsgUxH3R5XJGJt4PqycoJCvnL7cVsk1O2w7J2DgMcgy2kqE8c0MKc5fGYnVON3pazEXfn/GlHgcSzFiXGszvodlKCQIUTclEAB0paW0Vv6VoiJM764UNY+uG+w=="
+      - "albandri ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCp0b8cc40aoK5TUcCPiqOgKONOndUmE/TpnC/f0ZLhxnMLHtmkf+wqslG2xT9Lv3Cjz+BqCfCGsq2x4mnf4klAwOdEoeZF5N0RW5EBDXgTsLxDeNB/7cuTIenNbLy4bjmxlJFnUtM8cSBEa9/NO1dFlGqDYtPtI9gDtvLNUkRqQ/ID2O29lqRiKaRK+DWt2FqsMD05YtQrMuCRw/jd6ai3poPfVfPPk0dr2jZr3ZuJ+tDq+HY5fBCWrDopPiAWrOqUaS21o+38rvQUQls0mAs+VKgzrxSRImq+nZNurhFNkuc2Vetbsfi05/ZVl43GM3Y9ToulFwMtmctA89XrP8zD"
+    jenkins_jdk7_enable: no
+    jenkins_jdk8_enable: no
+    epel_repo_enabled: no
+    proxy_repo_enabled: no
+    proxy_repo_server: shili.misys.global.ad
+    proxy_repo_url: "http://{{ proxy_repo_server }}:3142"
+
+- import_playbook: docker.yml
+
+- import_playbook: lamp.yml
+
+- name: Configure and deploy the ALMTest application to apache
+  hosts: apache-servers
+  become: yes
+
+  roles:
+    - { role: web,
+       apache_listen_port: 80,
+       web_base_dir: "/var/www/~devel-test",
+       apache_owner: "jenkins",
+       apache_group: "www-data",
+       git_user: "jenkins",
+       share_user: "kgr_mvn",
+       share_group: "www-data",
+       repository: "ssh://git@scm-git-eur.misys.global.ad:7999/risk/fr-alm-site-test.git",
+       repository_version: "master",
+       }
 
 #WARNING jenkins-master role has disabled a2dissite 000-default
 - name: Configure and deploy the nabla php sample application code to apache
 #  connection: local
-  hosts: workstation
-  remote_user: albandri
-#  remote_user: root
+  hosts: apache-servers
   become: yes
 
   roles:

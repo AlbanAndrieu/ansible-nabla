@@ -91,8 +91,6 @@ if [ -n "${VIRTUALENV_PATH}" ]; then
 else
   echo -e "${red} ${double_arrow} Undefined build parameter ${head_skull} : VIRTUALENV_PATH, use the default one ${NC}"
   VIRTUALENV_PATH=/opt/ansible/env$(echo $PYTHON_MAJOR_VERSION | sed 's/\.//g')
-  echo -e "${green} virtualenv --no-site-packages ${VIRTUALENV_PATH} -p python${PYTHON_MAJOR_VERSION} ${NC}"
-  echo -e "${green} source ${VIRTUALENV_PATH}/bin/activate ${NC}"
   export VIRTUALENV_PATH
   echo -e "${magenta} VIRTUALENV_PATH : ${VIRTUALENV_PATH} ${NC}"
 fi
@@ -120,6 +118,8 @@ echo -e "${cyan} Use virtual env ${VIRTUALENV_PATH}/activate ${NC}"
 #source /opt/rh/python27/enable
 
 #sudo virtualenv -p /usr/bin/python3.5 /opt/ansible/env35
+echo -e "${green} virtualenv --no-site-packages ${VIRTUALENV_PATH} -p python${PYTHON_MAJOR_VERSION} ${NC}"
+echo -e "${green} source ${VIRTUALENV_PATH}/bin/activate ${NC}"
 source "${VIRTUALENV_PATH}/bin/activate" || exit 2
 
 #export PYTHONPATH="/usr/local/lib/python${PYTHON_MAJOR_VERSION}/dist-packages/"

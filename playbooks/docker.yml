@@ -6,7 +6,7 @@
     - name: group hosts by distribution
       group_by: key="{{ ansible_distribution }}-{{ ansible_distribution_version }}"
 
-- hosts: RedHat-7*:RedHat-6*:RedHat-5*:CentOS-7*:CentOS-6*:Ubuntu-17*:Ubuntu-16*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
+- hosts: RedHat-7*:RedHat-6*:RedHat-5*:CentOS-7*:CentOS-6*:Ubuntu-18*:Ubuntu-17*:Ubuntu-16*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
   gather_facts: false
   tasks:
     - name: group hosts for supported distributions
@@ -19,10 +19,8 @@
       fail: msg="{{ ansible_distribution }} {{ ansible_distribution_version }}
                  is not a supported OS for a Tower installation.  Supported
                  OSes include Red Hat Enterprise Linux 6/7, CentOS 6/7, or
-                 Ubuntu 12.04/13.04/14.04/16.04/17.04."
+                 Ubuntu 12.04/13.04/14.04/16.04/17.04/18.04."
     - debug: msg="Version {{ ansible_distribution }} {{ ansible_distribution_version }} {{ ansible_architecture }}"
-
-#- import_playbook: certificate.yml
 
 #- hosts: docker
 #  become: yes
@@ -33,10 +31,22 @@
 #      password: todo
 #      email: alban.andrieu@free.fr
 
+- import_playbook: docker-ubuntu.yml
+
 #https://askubuntu.com/questions/477551/how-can-i-use-docker-without-sudo
 #sudo groupadd docker
 #sudo gpasswd -a ${USER} docker
 #sudo gpasswd -a jenkins docker
+
+- name: Run docker.ubuntu
+#  hosts: RedHat-7*:RedHat-6*:RedHat-5*:CentOS-7*:CentOS-6*
+  hosts: docker
+  become: yes
+
+  roles:
+  - docker
+  # vars:
+  #   docker_ce_version: "17.09.1~ce-0~ubuntu"
 
 - hosts: docker
   become: yes
@@ -57,56 +67,10 @@
       become: yes
       ignore_errors: true
 
-- name: Install docker
-  hosts: docker
-#  hosts: Ubuntu-17*:Ubuntu-16:*Ubuntu-14*
-  become: yes
-
-  roles:
-    - docker
-
-  vars:
-#       docker_opts: "-H tcp://127.0.0.1:4243 -H unix:///var/run/docker.sock --dns 8.8.8.8 --dns 8.8.4.4 --storage-driver=zfs"
-#       docker_opts: "-H tcp://127.0.0.1:4243 -H unix:///var/run/docker.sock --dns 8.8.8.8 --dns 8.8.4.4 --storage-driver=overlay"
-       docker_opts: "-H tcp://0.0.0.0:4243 -H unix:///var/run/docker.sock --dns 10.21.200.3 --dns 10.41.200.3 --dns 8.8.8.8 --dns 8.8.4.4 --data-root /docker --storage-driver overlay --disable-legacy-registry --tlsverify --tlscacert /root/pki/ca.pem --tlscert /etc/ssl/{{ansible_fqdn}}/{{ansible_fqdn}}.pem --tlskey /etc/ssl/{{ansible_fqdn}}/{{ansible_fqdn}}.key --label provider=albandri"
-       #--insecure-registry docker:443
-       #TODO add
-       #--userns-remap=default #see https://stackoverflow.com/questions/35291520/docker-and-userns-remap-how-to-manage-volume-permissions-to-share-data-betwee
-       #--tlsverify --tlscacert /etc/docker/ca.pem --tlscert /etc/docker/server.pem --tlskey /etc/docker/server-key.pem --label provider=amazonec2
-       #pip_version_docker_py: 1.9.0 #Fix issue with https://github.com/angstwad/docker.ubuntu/issues/109#issuecomment-257706232
-       #pip_version_docker: latest
-       pip_version_docker: 2.2.1
-       #pip_version_docker_compose: 1.9.0
-       #pip_version_docker_compose: latest
-       pip_version_docker_compose: 1.12.0
-       # TypeError: create_network() got an unexpected keyword argument 'enable_ipv6' with pip_version_docker_py: 1.9.0
-       #Please upgrade to 1.10.6
-       pip_install_docker_py: false
-
-#https://stackoverflow.com/questions/37178824/how-to-find-docker-rest-api-url
-#curl -X GET http://10.25.40.139:4243/images/json
-#curl --unix-socket /var/run/docker.sock http:127.0.0.1:4243/version
-#curl --unix-socket /var/run/docker.sock tcp:10.25.40.139:4243/version
-#curl 10.25.40.139:4243/version
-
-#TODO restart docker after installing docker CA
-#sudo service docker start
-
-#sudo docker logout https://docker:5000
-#sudo docker login docker.nabla.mobi --username=albandri
-
-#- hosts: docker
-#  become: yes
-#
-#  post_tasks:
-#    - name: Log into private registry and force re-authorization
-#      docker_login:
-#        registry: https://docker.nabla.mobi/
-#        username: test
-#        password: Microsoft
-#        reauthorize: yes
-
-#    - name: Inspect multiple images
-#      docker_image_facts:
-#        name:
-#          - nabla/java
+    - name: Add user(s) to docker group
+      user:
+          name="{{ remote_user|default('jenkins') }}"
+          group=docker
+          state=present
+      become: yes
+      ignore_errors: true

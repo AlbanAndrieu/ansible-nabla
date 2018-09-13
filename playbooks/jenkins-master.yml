@@ -7,27 +7,14 @@
 #ansible-playbook jenkins-master.yml -i hosts-albandri -vvvv --ask-sudo-pass --sudo
 # --extra-vars "jenkins_username=aandrieu jenkins_password=tbd"
 
-- hosts: all
-  gather_facts: true
-  tasks:
-    - name: group hosts by distribution
-      group_by: key="{{ ansible_distribution }}-{{ ansible_distribution_version }}"
+- name: Apply hostname configuration
+  hosts: jenkins-master
+  #remote_user: vagrant
+#  connection: local
+  become: yes
 
-- hosts: RedHat-7*:RedHat-6*:RedHat-5*:CentOS-7*:CentOS-6*:Ubuntu-17*:Ubuntu-16*:Ubuntu-15*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
-  gather_facts: false
-  tasks:
-    - name: group hosts for supported distributions
-      group_by: key="supported"
-
-- hosts: "!supported"
-  gather_facts: false
-  tasks:
-    - name: fail for unsupported distribution
-      fail: msg="{{ ansible_distribution }} {{ ansible_distribution_version }}
-                 is not a supported OS for a Tower installation.  Supported
-                 OSes include Red Hat Enterprise Linux 6/7/5, CentOS 6, or
-                 Ubuntu 12.04/13.04/14.04/15.04/16.04/17.04."
-    - debug: msg="Version {{ ansible_distribution }} {{ ansible_distribution_version }} {{ ansible_architecture }}"
+  roles:
+    - hostname
 
 - name: Install python
   hosts: jenkins-master
@@ -53,7 +40,6 @@
 
 - name: Apply configuration to jenkins master
   hosts: jenkins-master
-  remote_user: albandri
 
   roles:
     - jenkins-master
@@ -69,6 +55,7 @@
 #      jenkins_ssh_key_file: "{{resources_to}}/resources/jenkins/ssh_key"    # (you can manage remote files with Stouts.resources role)
       jenkins_ssh_key_file: "~/.ssh/id_rsa"
       jenkins_http_port: 8380
+      jenkins_http_host: "{{ansible_fqdn}}"
       #jenkins_proxy_port: 7070
       jenkins_proxy_ssl: true
       jenkins_proxy_ssl_certificate: "{{ jenkins_http_host }}.cer"
@@ -94,6 +81,9 @@
 #2        - "-XX:+UseG1GC -XX:+UseCompressedClassPointers -XX:+UseCompressedOops"
 #3        - "-XX:+UseG1GC -XX:+AlwaysPreTouch -XX:+UseStringDeduplication -XX:+UseCompressedClassPointers -XX:+UseCompressedOops"
 #4        - "-XX:+UseG1GC -XX:+ExplicitGCInvokesConcurrent -XX:+ParallelRefProcEnabled -XX:+UseStringDeduplication -XX:+UnlockExperimentalVMOptions -XX:G1NewSizePercent=20 -XX:+UnlockDiagnosticVMOptions -XX:G1SummarizeRSetStatsPeriod=1" #G1 GC settings
+#JENKINS_ACCESSLOG
+        - "--accessLoggerClassName=winstone.accesslog.SimpleAccessLogger --simpleAccessLogger.format=combined --simpleAccessLogger.file=/var/log/jenkins/access.log"
+        - "-Dhudson.plugins.git.GitSCM.verbose=true"
       jenkins_prefix: "/jenkins"
       jenkins_system_config:
         admin_email: alban.andrieu@free.fr

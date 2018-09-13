@@ -68,7 +68,7 @@ COPY *.yml hosts roles group_vars .ssh ansible.pub.key $JENKINS_HOME/
 
 # Execute
 RUN ansible-galaxy install -r $JENKINS_HOME/requirements.yml -p $JENKINS_HOME/roles/ --ignore-errors \
- && ansible-playbook $JENKINS_HOME/jenkins-slave-docker.yml -i $JENKINS_HOME/hosts -c local -vvvv -e "workspace=/tmp"
+ && ansible-playbook $JENKINS_HOME/jenkins-slave-docker.yml -i $JENKINS_HOME/hosts -c local -vvvv -e "workspace=/tmp" -e "jdk_home="/usr/lib/jvm/java-8-oracle/""
 
 #COPY . $JENKINS_HOME
 #COPY --chown=jenkins:$(id -gn jenkins) . $JENKINS_HOME

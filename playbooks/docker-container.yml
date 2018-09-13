@@ -7,7 +7,7 @@
     - name: group hosts by distribution
       group_by: key="{{ ansible_distribution }}-{{ ansible_distribution_version }}"
 
-- hosts: RedHat-7*:RedHat-6*:RedHat-5*:CentOS-7*:CentOS-6*:Ubuntu-17*:Ubuntu-16*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
+- hosts: RedHat-7*:RedHat-6*:RedHat-5*:CentOS-7*:CentOS-6*:Ubuntu-18*:Ubuntu-17*:Ubuntu-16*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
   gather_facts: false
   tasks:
     - name: group hosts for supported distributions
@@ -20,7 +20,7 @@
       fail: msg="{{ ansible_distribution }} {{ ansible_distribution_version }}
                  is not a supported OS for a Tower installation.  Supported
                  OSes include Red Hat Enterprise Linux 6/7, CentOS 6/7, or
-                 Ubuntu 12.04/13.04/14.04/16.04/17.04."
+                 Ubuntu 12.04/13.04/14.04/16.04/17.04/18.04."
     - debug: msg="Version {{ ansible_distribution }} {{ ansible_distribution_version }} {{ ansible_architecture }}"
 
 #sudo docker logout https://docker.nabla.mobi:5000
@@ -49,17 +49,17 @@
 
     - name: Copy the code from repository
       git: repo={{ repository }} version={{ repository_version }} dest={{ repository_target_dir }}/dockerfile-fusionrisk
-      become_user: "{{ git_user }}"
       become: yes
+      become_user: "{{ git_user }}"
 #      ignore_errors: yes
 
-    - name: Sync .env file
-      synchronize:
-        src: "{{ repository_target_dir }}/dockerfile-nabla/centos/.env"
-        dest: "{{ repository_target_dir }}/dockerfile-nabla/.env"
-      #delegate_to: delegate.host
-      #delegate_to: localhost
-      delegate_to: "{{ inventory_hostname }}"
+#    - name: Sync .env file
+#      synchronize:
+#        src: "{{ repository_target_dir }}/dockerfile-nabla/centos/.env"
+#        dest: "{{ repository_target_dir }}/dockerfile-nabla/.env"
+#      #delegate_to: delegate.host
+#      #delegate_to: localhost
+#      delegate_to: "{{ inventory_hostname }}"
 
 #See https://docs.ansible.com/ansible/docker_service_module.html
     - name: Stop all containers
@@ -79,7 +79,7 @@
 #        timeout: 120
         debug: true
       register: output
-#      ignore_errors: true
+      ignore_errors: true
 
     - debug: var=output
 
@@ -162,15 +162,17 @@
         project_src: "{{ repository_target_dir }}/dockerfile-nabla/centos"
         files: docker-compose-nabla.yml
 #        build: yes
-        restarted: false
-        recreate: always
+        pull: yes
+        #restarted: true
+        #recreate: always
+        recreate: smart
         project_name: "TEST"
-        remove_images: local
-        remove_orphans: true
-        remove_volumes: true
+        #remove_images: local
+        #remove_orphans: true
+        #remove_volumes: true
         state: present
 #        stopped: yes
-        timeout: 120
+        timeout: 180
         debug: true
       register: output
 

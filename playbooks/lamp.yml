@@ -3,107 +3,6 @@
 
 #ansible-playbook lamp.yml -i hosts-albandri --limit albandri -vvvv
 
-
-- hosts: all
-  gather_facts: true
-  tasks:
-    - name: group hosts by distribution
-      group_by: key="{{ ansible_distribution }}-{{ ansible_distribution_version }}"
-
-- hosts: RedHat-7*:RedHat-6*:CentOS-6*:Ubuntu-12.04:Ubuntu-14.04
-  gather_facts: false
-  tasks:
-    - name: group hosts for supported distributions
-      group_by: key="supported"
-
-- hosts: "!supported"
-  gather_facts: false
-  tasks:
-    - name: fail for unsupported distribution
-      fail: msg="{{ ansible_distribution }} {{ ansible_distribution_version }}
-                 is not a supported OS for a Tower installation.  Supported
-                 OSes include Red Hat Enterprise Linux 6/7, CentOS 6, or
-                 Ubuntu 12.04/14.04."
-
-#See corresponding vagrant file
-
-- name: Apply ntp configuration to all nodes
-  hosts: lamp
-  gather_facts: false
-  remote_user: root
-#  connection: local
-
-  roles:
-    - geerlingguy.ntp
-
-  vars:
-       ntp_timezone: Europe/Paris
-#       ntp_enabled: true
-
-#- name: Apply firewall configuration to all nodes
-#  hosts: lamp
-#  gather_facts: false
-#  remote_user: root
-##  connection: local
-#
-#  roles:
-#    - geerlingguy.firewall
-#
-#  vars:
-#       firewall_allowed_tcp_ports:
-#       - "22"
-#       - "25"
-#       - "80"
-#       - "443"
-
-- name: Add repo configuration to all nodes
-  hosts: RedHat-7*:RedHat-6*:CentOS-6*
-  gather_facts: false
-  remote_user: root
-#  connection: local
-
-  roles:
-    - geerlingguy.repo-epel
-    - geerlingguy.repo-remi
-
-## This playbook deploys a MySQL databse.
-#- name: Deploy MySQL and configure the databases
-#  hosts: lamp
-#  remote_user: root
-##  connection: local
-#
-#  roles:
-#    - geerlingguy.mysql
-#
-#  vars:
-#       mysql_innodb_log_file_size: "5M"
-#       mysql_root_username: root
-#       mysql_root_password: microsoft
-#
-## This playbook deploys an Apache database.
-#- name: Deploy Apache and configure the server
-#  hosts: apache-servers
-#  remote_user: root
-##  connection: local
-#
-#  roles:
-#    - geerlingguy.apache
-#
-#  vars:
-#       apache_listen_port: 7070
-#
-#- name: Add dependencies for Apache like PHP
-#  hosts: apache-servers
-#  remote_user: root
-##  connection: local
-#
-#  roles:
-#    - geerlingguy.php
-#    - geerlingguy.php-mysql
-#
-#  vars:
-#       php_date_timezone: "Europe/Paris"
-
 - name: Configure and deploy php to apache
   hosts: apache-servers
   become: yes
@@ -164,3 +63,12 @@
 #    - geerlingguy.php-xdebug
     - geerlingguy.php-mysql
     - geerlingguy.phpmyadmin
+
+- hosts: apache-servers
+  become: yes
+
+  roles:
+    - {
+      role: ansible-swapfile,
+      swapfile_size: 4GiB
+      }

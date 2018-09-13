@@ -1,17 +1,21 @@
 
 - name: Install CA root certificate
-  hosts: workstation
-  become: yes
-  remote_user: albandri
+  hosts: jenkins-slaves
+  remote_user: root
+  check_mode: no
   ignore_errors: yes
+  become: yes
 
   roles:
     - role: ssl.ca-certificate
       trust_ca_pki_dir: '~/pki'
 
 - name: Install server certificate
-  hosts: workstation
-  remote_user: albandri
+  hosts: jenkins-slaves
+#TODO does not work for CentOS
+#  hosts: Ubuntu-12.04:Ubuntu-14.04:Ubuntu-16.04
+  remote_user: root
+  check_mode: no
   become: yes
 
   roles:
@@ -20,8 +24,8 @@
       ssl_certs_locality: "Paris"
       ssl_certs_organization: "Nabla"
       ssl_certs_state: "Ile de France"
-      #ssl_certs_common_name: "{{ansible_fqdn}}"
-      ssl_certs_common_name: "nabla.freeboxos.fr"
+      ssl_certs_common_name: "{{ansible_fqdn}}"
+      #ssl_certs_common_name: "nabla.freeboxos.fr"
       ssl_certs_days: "365"
       ssl_certs_fields: "/C={{ssl_certs_country}}/ST={{ssl_certs_state}}/L={{ssl_certs_locality}}/O={{ssl_certs_organization}}/CN={{ssl_certs_common_name}}/emailAddress=alban.andrieu@free.fr/subjectAltName=DNS.1={{ ssl_certs_common_name }},DNS.2=nabla.mobi,DNS.3={{ ansible_fqdn }},DNS.4={{ ansible_hostname }},DNS.5=localhost,IP={{ ansible_default_ipv4.address }},IP=127.0.0.1"
       #ssl_certs_path_owner: "root"

@@ -1,4 +1,6 @@
-- hosts: jenkins-slaves
+---
+- name: Add cron cleaning policies
+  hosts: jenkins-slaves
   become: yes
   gather_facts: true
   tasks:

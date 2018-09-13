@@ -158,6 +158,8 @@ echo -e "${red} Configure workstation ${NC}"
 
 if [ -d "${WORKSPACE}/ansible" ]; then
   cd "${WORKSPACE}/ansible"
+  #Below workaround for ansible plugins in jenkins (vault not found)
+  cp ansible.cfg vault.passwd ${WORKSPACE} || true
 fi
 
 echo -e "${cyan} =========== ${NC}"
