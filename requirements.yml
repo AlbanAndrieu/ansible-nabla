@@ -293,11 +293,6 @@
   scm:     'git'
   version: 'master'
 
-- src:     'https://github.com/AlbanAndrieu/ansible-role-java'
-  name:    'geerlingguy.java'
-  scm:     'git'
-  version: 'master'
-
 - src:     'https://github.com/AlbanAndrieu/ansible-role-kibana'
   name:    'geerlingguy.kibana'
   scm:     'git'
@@ -368,8 +363,18 @@
   scm:     'git'
   version: 'master'
 
-- src:     'https://github.com/AlbanAndrieu/oracle-java'
-  name:    'java'
+- src:     'https://github.com/AlbanAndrieu/ansible-role-java'
+  name:    'geerlingguy.java'
+  scm:     'git'
+  version: 'master'
+
+#- src:     'https://github.com/AlbanAndrieu/oracle-java'
+#  name:    'java'
+#  scm:     'git'
+#  version: 'master'
+
+- src:     'https://github.com/ansiblebit/oracle-java'
+  name:    'ansiblebit.oracle-java'
   scm:     'git'
   version: 'master'
 
@@ -422,21 +427,6 @@
   name:    'security'
   scm:     'git'
   version: 'master'
-
-#- src:     'https://github.com/AlbanAndrieu/ansible-lib'
-#  name:    'silpion.lib'
-#  scm:     'git'
-#  version: 'master'
-#
-#- src:     'https://github.com/AlbanAndrieu/ansible-util'
-#  name:    'silpion.util'
-#  scm:     'git'
-#  version: 'master'
-#
-#- src:     'https://github.com/silpion/ansible-java'
-#  name:    'silpion.java'
-#  scm:     'git'
-#  version: 'master'
 
 - src:     'https://github.com/AlbanAndrieu/ansible-sonar'
   name:    'sonar'
