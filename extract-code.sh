@@ -1,4 +1,7 @@
-#!/bin/sh
+#!/bin/bash
+#set -xv
+
+WORKING_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}"  )" && pwd  )"
 
 #create a git local repo
 #touch README.md
@@ -53,7 +56,7 @@ git submodule add -f  https://github.com/Oefenweb/ansible-locales locale
 #TODO maybe switch to https://github.com/nickjj/ansible-locale
 
 #git clone https://github.com/kost/ansible-galaxy.ubuntu.virtualbox.git virtualbox
-git submodule add -f  https://github.com/AlbanAndrieu/ansible-galaxy.ubuntu.virtualbox.git virtualbox
+git submodule add -f  https://github.com/AlbanAndrieu/ansible-galaxy.ubuntu.virtualbox.git alban.andrieu.virtualbox
 
 #git clone https://github.com/aw/ansible-galaxy-vagrant.git vagrant-user
 #git submodule add -f  https://github.com/AlbanAndrieu/ansible-galaxy-vagrant.git vagrant-user
@@ -347,7 +350,7 @@ git submodule add -f  https://github.com/ocha/ansible-role-yarn.git yarn
 TODO https://github.com/ypid/ypid-ansible-common
 
 #sudo pip install ansigenome --upgrade
-cd ansigenome ; sudo python setup.py develop
+cd ${WORKING_DIR}/ansigenome ; sudo python setup.py develop
 
 ./misc/ansigenome/bin/ansigenome scan
 ./misc/ansigenome/bin/ansigenome gendoc -f md
@@ -379,3 +382,9 @@ ansible-galaxy install alban.andrieu.jmeter
 
 find ./ -type f -name "*.yml" -exec chmod 644 {} +
 find ./ -type f -name "*.j2" -exec chmod 644 {} +
+
+cd ${WORKING_DIR}/alban.andrieu.webmin
+molecule init scenario --scenario-name default --role-name alban.andrieu.webmin
+
+cd ${WORKING_DIR}/alban.andrieu.virtualbox
+molecule init scenario --scenario-name default --role-name alban.andrieu.virtualbox

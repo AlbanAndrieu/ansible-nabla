@@ -1,0 +1,7 @@
+
+- name: Install git
+  hosts: jenkins-slaves
+  remote_user: root
+
+  roles:
+    - role: geerlingguy.git

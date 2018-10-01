@@ -1,17 +1,13 @@
-#as root
-#ansible-playbook -i hosts-albandri -c local -v hostname.yml -vvvv | tee setup.log
-#as albandri
-#sudo ansible-playbook -i hosts-albandri -c local -v hostname.yml -vvvv | tee setup.log
-#ansible-playbook hostname.yml -i hosts-albandri -vvvv --ask-sudo-pass --sudo
 
 - name: Apply common hostname
-  connection: local
-  hosts: workstation
-  sudo: yes
+  hosts: hostname
+  become: true
 
   roles:
-    - { role: alban.andrieu.hostname,
-       hostname_enabled: yes,
+    - alban.andrieu.hostname
+
+  vars:
+       hostname_enabled: true,
+       hostname_hostname_loopback: "{{ ansible_hostname }} home.nabla.mobi nabla.mobi"
 #force inventory_hostname
-      inventory_hostname: albandri.nabla.mobi
-       }
+#       inventory_hostname: albandri.nabla.mobi

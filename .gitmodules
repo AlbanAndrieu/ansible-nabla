@@ -10,9 +10,6 @@
 [submodule "roles/supervisor"]
 	path = roles/supervisor
 	url = https://github.com/AlbanAndrieu/ansible-supervisor_task.git
-[submodule "roles/virtualbox"]
-	path = roles/virtualbox
-	url = https://github.com/AlbanAndrieu/ansible-galaxy.ubuntu.virtualbox.git
 [submodule "roles/vagrant"]
 	path = roles/vagrant
 	url = https://github.com/AlbanAndrieu/ansible-vagrant-role.git
@@ -265,3 +262,6 @@
 [submodule "roles/geerlingguy.nodejs"]
 	path = roles/geerlingguy.nodejs
 	url = https://github.com/AlbanAndrieu/ansible-role-nodejs.git
+[submodule "roles/alban.andrieu.virtualbox"]
+	path = roles/alban.andrieu.virtualbox
+	url = https://github.com/AlbanAndrieu/ansible-galaxy.ubuntu.virtualbox.git

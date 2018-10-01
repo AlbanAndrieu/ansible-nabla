@@ -1,38 +1,9 @@
-#for testing purpose
-#ansible-playbook -i hosts-albandri -v jenkins-master.yml -c local --limit albandri-laptop-work --ask-sudo-pass -vvvv | tee setup.log
 
-#as root
-#ansible-playbook jenkins-master.yml -i hosts-albandri -vvvv
-#as albandri
-#ansible-playbook jenkins-master.yml -i hosts-albandri -vvvv --ask-sudo-pass --sudo
-# --extra-vars "jenkins_username=aandrieu jenkins_password=tbd"
+- import_playbook: hostname.yml
 
-- name: Apply hostname configuration
-  hosts: jenkins-master
-  #remote_user: vagrant
-#  connection: local
-  become: yes
+- import_playbook: python.yml
 
-  roles:
-    - hostname
-
-- name: Install python
-  hosts: jenkins-master
-#  remote_user: root
-#  accelerate: true
-
-  roles:
-    - python
-
-  vars:
-      python_version: 2.7
-
-- name: Apply administration configuration to all nodes
-  hosts: jenkins-master
-  become: yes
-
-  roles:
-    - administration
+- import_playbook: administration.yml
 
 - import_playbook: java.yml
 
@@ -45,11 +16,11 @@
     - jenkins-master
 
   vars:
-      docker_files_enable: yes
+      docker_files_enable: true
       docker_files_generated_directory: "../roles/jenkins-master"
       jenkins_proxy: apache
       jenkins_user: jenkins
-      jenkins_group: docker
+#      jenkins_group: docker
       jenkins_version: 2.7.4
       jenkins_proxy_hostname: localhost
 #      jenkins_ssh_key_file: "{{resources_to}}/resources/jenkins/ssh_key"    # (you can manage remote files with Stouts.resources role)
@@ -65,7 +36,7 @@
       #See jenkins tuning https://jenkins.io/blog/2016/11/21/gc-tuning/?utm_source=feedburner&utm_medium=twitter&utm_campaign=Feed%3A+ContinuousBlog+%28Jenkins%29
       #-Xmx8096m -XX:MaxPermSize=2048m -Djava.awt.headless=true -Djava.util.Arrays.useLegacyMergeSort=true -Dhudson.slaves.WorkspaceList=-
       jenkins_java_args:
-        - "-Xmx1024m"
+#        - "-Xms8096m -Xmx16192m"
         - "-Djava.awt.headless=true"
         - "-Djenkins.install.runSetupWizard=false"
 #0        - "-Xloggc:$JENKINS_HOME/gc-%t.log -XX:NumberOfGCLogFiles=5 -XX:+UseGCLogFileRotation -XX:GCLogFileSize=20m -XX:+PrintGC -XX:+PrintGCDateStamps -XX:+PrintGCDetails -XX:+PrintHeapAtGC -XX:+PrintGCCause -XX:+PrintTenuringDistribution -XX:+PrintReferenceGC -XX:+PrintAdaptiveSizePolicy" #GC Logging
@@ -312,6 +283,6 @@
           shell_git_name: "Andrieu, Alban",
           shell_git_path: "/usr/bin",
           shell_git_ssl: false,
-          shell_git_meld_enabled: yes,
+          shell_git_meld_enabled: true,
           shell_git_editor: "gedit"
           }

@@ -459,7 +459,7 @@
   version: 'master'
 
 - src:     'https://github.com/AlbanAndrieu/ansible-galaxy.ubuntu.virtualbox'
-  name:    'virtualbox'
+  name:    'alban.andrieu.virtualbox'
   scm:     'git'
   version: 'master'
 
