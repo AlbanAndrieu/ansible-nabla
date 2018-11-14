@@ -388,3 +388,4 @@ molecule init scenario --scenario-name default --role-name alban.andrieu.webmin
 
 cd ${WORKING_DIR}/alban.andrieu.virtualbox
 molecule init scenario --scenario-name default --role-name alban.andrieu.virtualbox
+molecule --debug converge

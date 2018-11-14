@@ -114,8 +114,10 @@ pipeline {
         GIT_COMMIT = "TODO"
     }
     options {
-        //disableConcurrentBuilds()
+        disableConcurrentBuilds()
+        ansiColor('xterm')
         timeout(time: 360, unit: 'MINUTES')
+        timestamps()
         buildDiscarder(
           logRotator(
             daysToKeepStr: daysToKeep,

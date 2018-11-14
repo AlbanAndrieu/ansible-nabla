@@ -77,7 +77,7 @@ docker rm sandbox
 
 Run `./run-ansible-workstation.sh` for building like Jenkins.
 Run `./setup.sh` for building.
-Run `./build.sh` for building docker image.
+Run `./docker-build.sh` for building docker image.
 
 #### Dependency Graph
 

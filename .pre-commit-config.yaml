@@ -22,6 +22,10 @@ repos:
                   )$
     -   id: double-quote-string-fixer
     -   id: name-tests-test
+        exclude: >
+                  (?x)^(
+                      .*/molecule/default/tests/test_default.py
+                  )$
     -   id: end-of-file-fixer
     -   id: fix-encoding-pragma
     -   id: requirements-txt-fixer

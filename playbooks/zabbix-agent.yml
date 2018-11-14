@@ -33,7 +33,7 @@
   roles:
     - role: zabbix
       name: zabbix-agent-paris
-      zabbix_agent_server: 150.151.000.000
+      zabbix_agent_server: localhost
 
 # This playbook can be run using vagrant (on virtual box).
 - name: Install zabbix-agent

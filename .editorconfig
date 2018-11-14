@@ -64,4 +64,4 @@ indent_size=2
 
 [Jenkinsfile]
 indent_style = space
-indent_size =
+indent_size = 2

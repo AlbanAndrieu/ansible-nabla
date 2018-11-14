@@ -25,16 +25,9 @@
                  Ubuntu 12.04/13.04/14.04/16.04/17.04/18.04."
     - debug: msg="Version {{ ansible_distribution }} {{ ansible_distribution_version }} {{ ansible_architecture }}"
 
-- import_playbook: jenkins-slave.yml
+- import_playbook: jenkins-slave.yml workstation_enabled=true automount_enabled=true nis_enabled=true
 
 - import_playbook: maven.yml
-
-- name: Apply hostname configuration
-  hosts: workstation
-  become: yes
-
-  roles:
-    - alban.andrieu.hostname
 
 - name: Install git
   hosts: workstation
@@ -64,23 +57,14 @@
        dropbox_owner: "{{ user }}"
        dropbox_group: "{{ group }}"
 
-- name: Install chrome
-  hosts: chrome
-  become: yes
-
-  roles:
-     - role: chrome
-
-  vars:
-       google_talkplugin_enabled: yes                       # Enable module
-       google_agent_pkg_state: installed # Package states: present or installed or latest
+- import_playbook: chrome.yml
 
 - name: Install virtualbox
   hosts: virtualbox
-  become: yes
+  become: true
 
   roles:
-    - virtualbox
+    - alban.andrieu.virtualbox
 
   vars:
       virtualbox_version: "5.1.30"
@@ -88,8 +72,8 @@
 
 - name: Install vagrant
   hosts: vagrant
-  become: yes
-  ignore_errors: yes
+  become: true
+  ignore_errors: true
 
   roles:
     - vagrant
@@ -114,20 +98,14 @@
 #      ruby_version: "2.3.1"
       ruby_version: ""
 
-
-# This playbook can be run using vagrant (on virtual box).
-- name: Install webmin
-  hosts: webmin
-
-  roles:
-    - webmin
+- import_playbook: webmin.yml
 
 #- import_playbook: jenkins-master.yml
 
 - name: Apply solaris configuration to all nodes
   hosts: workstation
   gather_facts: false
-  become: yes
+  become: true
 
   roles:
     - solaris
@@ -177,11 +155,11 @@
   roles:
     - geerlingguy.samba
 
-- name: Install packer
-  hosts: workstation
-
-  roles:
-    - geerlingguy.packer
+#- name: Install packer
+#  hosts: workstation
+#
+#  roles:
+#    - geerlingguy.packer
 
 - name: Install terraform
   hosts: workstation
@@ -189,18 +167,18 @@
   roles:
     - andrewrothstein.terraform
 
-- name: Install kubernetes
-  hosts: workstation
+#- name: Install kubernetes
+#  hosts: workstation
+#
+#  vars:
+#    docker_install_compose: false
+#    kubernetes_allow_pods_on_master: True
+#
+#  roles:
+#    - geerlingguy.docker
+#    - geerlingguy.kubernetes
 
-  vars:
-    docker_install_compose: false
-    kubernetes_allow_pods_on_master: True
-
-  roles:
-    - geerlingguy.docker
-    - geerlingguy.kubernetes
-
-- import_playbook: collectd.yml
+#- import_playbook: collectd.yml
 
 #- name: Install certbot
 #  hosts: workstation
