@@ -71,6 +71,7 @@
 #- src: https://github.com/Stouts/Stouts.hostname
 #  version: master
 #  name: Stouts.hostname
+
 - src: 'https://github.com/AlbanAndrieu/ansible-hostname'
   name: 'alban.andrieu.hostname'
   scm: 'git'
@@ -367,10 +368,10 @@
   scm: 'git'
   version: 'master'
 
-- src: 'https://github.com/AlbanAndrieu/ansible-role-java'
-  name: 'geerlingguy.java'
-  scm: 'git'
-  version: 'master'
+#- src: 'https://github.com/AlbanAndrieu/ansible-role-java'
+#  name: 'geerlingguy.java'
+#  scm: 'git'
+#  version: 'master'
 
 #- src: 'https://github.com/AlbanAndrieu/oracle-java'
 #  name: 'java'

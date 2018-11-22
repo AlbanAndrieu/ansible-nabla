@@ -1,33 +1,31 @@
 ---
 language: python
 python:
-  - 2.7
+#  - 2.7
 #  - 3.3
 #  - 3.4
 #  - 3.5
+  - 3.6
 cache:
   directories:
     - $HOME/.cache/pip
 env:
   matrix:
 #  - ANSIBLE_VERSION=latest
-  - ANSIBLE_VERSION=2.4.1.0
+  - ANSIBLE_VERSION=2.7.2  
 #  - ANSIBLE_VERSION=2.3.1.0
   global:
     secure: TGUihI8NZudZK09yhYmP3DF2YarY4d9ljgm+sArpvc7Ga7NvU7A2GxJm6KJ6ZAxBd/K+R89vo6fRWQma4ZFOjbi/TLabDgWJVD+aabhY5n1gPBDuoz/N7At3v4Ws1qD4M3Bj8+ds+ye1q+0MEDy+AYko8+UUhgLEvsbGUI9d4PY=
 #sudo: false
 sudo: required
 dist: trusty
-
 branches:
   only:
     - master
-
 before_install:
  - sudo apt-get update -qq
  - sudo apt-get install -qq python-apt python-pycurl
  - sudo apt-get install -qq curl
-
 install:
   # Install Ansible.
   - if [ "$ANSIBLE_VERSION" = "latest" ]; then pip install ansible; else pip install ansible==$ANSIBLE_VERSION; fi
@@ -54,12 +52,12 @@ script:
   # First run
   # Run the role/playbook with ansible-playbook.
 #  - travis_wait 30
-  - ansible-playbook -i ./playbooks/hosts ./playbooks/nabla.yml --connection=local --sudo -e "python_versions=[2.7]" -e "git_user=root"
+  - ansible-playbook -i ./playbooks/hosts ./playbooks/nabla.yml --connection=local -e "python_versions=[2.7]" -e "git_user=root"
 
   # Second run Idempotence test
   # Run the role/playbook again, checking to make sure it's idempotent.
 #  - >
-#    ansible-playbook -i ./playbooks/hosts ./playbooks/nabla.yml --connection=local --sudo  -e "python_versions=[2.7]"  -e "git_user=root"
+#    ansible-playbook -i ./playbooks/hosts ./playbooks/nabla.yml --connection=local  -e "python_versions=[2.7]"  -e "git_user=root"
 #    | grep -q 'changed=0.*failed=0'
 #    && (echo 'Idempotence test: pass' && exit 0)
 #    || (echo 'Idempotence test: fail' && exit 1)
