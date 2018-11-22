@@ -17,7 +17,7 @@
 #      java_certificate_host: home.nabla.mobi
 #      java_certificate_port: 443
 
-#sonar
+# Sonar
 #    - role: java.certificate
 #      java_certificate_host: home.nabla.mobi
 #      java_certificate_port: 8999
@@ -41,7 +41,7 @@
 
   roles:
 
-#Default standard oracle java 8
+# Default standard oracle java 8
     - role: java.certificate
       ignore_errors: yes
       java_path: "/usr/lib/jvm/java-8-oracle/"
@@ -54,7 +54,7 @@
       java_certificate_host: github.com
       java_certificate_port: 443
 
-#Default standard oracle java 7
+# Default standard oracle java 7
     - role: java.certificate
       ignore_errors: yes
       java_path: "/usr/lib/jvm/java-7-oracle/"
@@ -67,7 +67,7 @@
       java_certificate_host: github.com
       java_certificate_port: 443
 
-#Dependency check
+# Dependency check
     - role: java.certificate
       ignore_errors: yes
       java_path: "/usr/lib/jvm/java-8-oracle/"

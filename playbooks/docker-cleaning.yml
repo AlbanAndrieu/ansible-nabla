@@ -1,28 +1,6 @@
 #ansible-playbook -i production -c local -v docker-cleaning.yml --ask-pass -vvvv | tee setup.log
 #ansible-playbook -i production -c local -v docker-cleaning.yml --limit albandri --ask-sudo-pass -vvvv | tee setup.log
 
-- hosts: all
-  gather_facts: true
-  tasks:
-    - name: group hosts by distribution
-      group_by: key="{{ ansible_distribution }}-{{ ansible_distribution_version }}"
-
-- hosts: RedHat-7*:RedHat-6*:RedHat-5*:CentOS-7*:CentOS-6*:Ubuntu-18*:Ubuntu-17*:Ubuntu-16*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
-  gather_facts: false
-  tasks:
-    - name: group hosts for supported distributions
-      group_by: key="supported"
-
-- hosts: "!supported"
-  gather_facts: false
-  tasks:
-    - name: fail for unsupported distribution
-      fail: msg="{{ ansible_distribution }} {{ ansible_distribution_version }}
-                 is not a supported OS for a Tower installation.  Supported
-                 OSes include Red Hat Enterprise Linux 6/7, CentOS 6/7, or
-                 Ubuntu 12.04/13.04/14.04/16.04/17.04/18.04."
-    - debug: msg="Version {{ ansible_distribution }} {{ ansible_distribution_version }} {{ ansible_architecture }}"
-
 - hosts: docker-cleaning
   become: yes
 
@@ -60,15 +38,10 @@
       shell: "docker rmi $(docker images | grep \"<none>\" | awk ' { print $3} ')"
       ignore_errors: true
 
-    - name: Pull ansible-jenkins-slave images
-      docker_container:
-        name: ansible-jenkins-slave
-        image: nabla/ansible-jenkins-slave-docker
-        state: stopped
-        pull: yes
-        timeout: 120
-        #command: sleep infinity
-      ignore_errors: true
+    - name: Pull ansible-jenkins-slave-docker images
+      docker_image:
+        name: nabla/ansible-jenkins-slave-docker
+        tag: latest
 
 #TODO http://blog.yohanliyanage.com/2015/05/docker-clean-up-after-yourself/
 #TODD must be run on a daily basis
@@ -103,6 +76,10 @@
 
     - name: Remove hanging and old fusion-risk docker images
       shell: "docker system prune -f --filter until=24h ; docker kill $(docker ps | grep -E 'Up [0-9]+ days' | awk '{print $1}') ; docker rmi $(docker image ls | grep -i nabla | grep -E 'days|weeks|months ago' | grep -v jenkins-slave | awk '{print $3}')"
+      ignore_errors: true
+
+    - name: Check images is fully available
+      shell: "docker inspect -f . nabla/ansible-jenkins-slave-docker:latest"
       ignore_errors: true
 
 #docker ps -a -s

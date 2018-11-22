@@ -1,0 +1,10 @@
+---
+#cd  | tee setup.log
+
+- name: Install brew
+  hosts: jenkins-slaves
+  become: yes
+  ignore_errors: yes
+
+  roles:
+    - geerlingguy.homebrew

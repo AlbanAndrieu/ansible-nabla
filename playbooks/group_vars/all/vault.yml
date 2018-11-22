@@ -1,0 +1,6 @@
+shell_git_password: "microsoft"
+mysql_root_password: microsoft
+shell_sa_password: "microsoft"
+docker_registry_password: "microsoft"
+svn_password: "microsoft"
+zabbix_api_pass: "microsoft"

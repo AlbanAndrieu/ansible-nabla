@@ -1,6 +1,7 @@
 
 - name: Apply common hostname
   hosts: hostname
+  gather_facts: false
   become: true
 
   roles:

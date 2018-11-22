@@ -23,26 +23,54 @@
                  Ubuntu 12.04/13.04/14.04/16.04/17.04/18.04."
     - debug: msg="Version {{ ansible_distribution }} {{ ansible_distribution_version }} {{ ansible_architecture }}"
 
-# This playbook can be run using vagrant (on virtual box).
 - name: Install zabbix-agent
   hosts: zabbix-agent-paris
   user: root
   become: yes
-#  check_mode: no
 
   roles:
     - role: zabbix
       name: zabbix-agent-paris
       zabbix_agent_server: localhost
+      zabbix_agent_serveractive: localhost
+      zabbix_url: https://localhost/zabbix/
+      zabbix_api_use: true # use zabbix_api_create_hosts and/or zabbix_api_create_hostgroup from 0.8.0
+      zabbix_create_host: present
+      zabbix_api_create_hosts: true
+      #zabbix_api_create_hostgroup: true
+      zabbix_api_user: "nabla"
+      zabbix_api_pass: "microsoft"
+      zabbix_host_groups:
+        - NABLA Hosts
+      zabbix_link_templates:
+        - Template OS Linux
+#        - Performance Monitoring Linux
+#        - Template Jenkins User
+#        - Template OS Linux Extended
+        - Template App SSH Service
 
-# This playbook can be run using vagrant (on virtual box).
 - name: Install zabbix-agent
   hosts: zabbix-agent-gdynia
   user: root
   become: yes
-#  check_mode: no
 
   roles:
     - role: zabbix
       name: zabbix-agent-gdynia
-      zabbix_agent_server: 10.7.000.000,10.22.000.000
+      zabbix_agent_server: localhost
+      zabbix_agent_serveractive: localhost
+      zabbix_url: https://localhost/zabbix/
+      zabbix_api_use: true # use zabbix_api_create_hosts and/or zabbix_api_create_hostgroup from 0.8.0
+      zabbix_create_host: present
+      zabbix_api_create_hosts: true
+      #zabbix_api_create_hostgroup: true
+      zabbix_api_user: "nabla"
+      zabbix_api_pass: "microsoft"
+      zabbix_host_groups:
+        - NABLA Hosts
+      zabbix_link_templates:
+        - Template OS Linux
+#        - Performance Monitoring Linux
+#        - Template Jenkins User
+#        - Template OS Linux Extended
+        - Template App SSH Service

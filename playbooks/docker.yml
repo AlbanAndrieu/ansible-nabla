@@ -1,27 +1,5 @@
 #ansible-playbook -i hosts -v docker.yml --limit albandri --ask-sudo-pass -vvvv | tee setup.log
 
-- hosts: all
-  gather_facts: true
-  tasks:
-    - name: group hosts by distribution
-      group_by: key="{{ ansible_distribution }}-{{ ansible_distribution_version }}"
-
-- hosts: RedHat-7*:RedHat-6*:RedHat-5*:CentOS-7*:CentOS-6*:Ubuntu-18*:Ubuntu-17*:Ubuntu-16*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
-  gather_facts: false
-  tasks:
-    - name: group hosts for supported distributions
-      group_by: key="supported"
-
-- hosts: "!supported"
-  gather_facts: false
-  tasks:
-    - name: fail for unsupported distribution
-      fail: msg="{{ ansible_distribution }} {{ ansible_distribution_version }}
-                 is not a supported OS for a Tower installation.  Supported
-                 OSes include Red Hat Enterprise Linux 6/7, CentOS 6/7, or
-                 Ubuntu 12.04/13.04/14.04/16.04/17.04/18.04."
-    - debug: msg="Version {{ ansible_distribution }} {{ ansible_distribution_version }} {{ ansible_architecture }}"
-
 #- hosts: docker
 #  become: yes
 #  pre_tasks:
@@ -38,25 +16,51 @@
 #sudo gpasswd -a ${USER} docker
 #sudo gpasswd -a jenkins docker
 
-- name: Run docker.ubuntu
-#  hosts: RedHat-7*:RedHat-6*:RedHat-5*:CentOS-7*:CentOS-6*
+- name: Run docker
   hosts: docker
-  become: yes
+  become: true
 
   roles:
-  - docker
-  # vars:
-  #   docker_ce_version: "17.09.1~ce-0~ubuntu"
+    - geerlingguy.pip
+    - geerlingguy.docker
+
+  vars:
+    docker_install_compose: true
+    docker_compose_version: "1.22.0"
+     #TODO fix docker version
+     #docker_edition: ce
+     #docker_version: 18.06.0
+     #docker_package: "docker-{{ docker_edition }}-{{ docker_version }}" # CentOS
+     #docker_package: "docker-{{ docker_edition }}={{ docker_version }}" # Ubuntu
+ #TODO make sure it does not conflit with jenkins-slave python35.yml and requirements-minimal-current-3.5.txt
+     #pip_install_packages:
+     #  - name: docker
+     #    version: "2.7.0"
+     #    virtualenv: /opt/ansible/env35
+     #
+     #  # Or uninstall a package.
+     #  - name: awscli
+     #    state: absent
+     #    virtualenv: /opt/ansible/env35
+     #
+     #  # Or force a reinstall.
+     #  - name: docker-compose
+     #    version: "1.12.0"
+     #    state: forcereinstall
+     #    virtualenv: /opt/ansible/env35
+     #docker_users:
+     #  - docker
+     #  - jenkins
 
 - hosts: docker
-  become: yes
+  become: true
 
   tasks:
     - name: Create a docker group
       group:
           name=docker
           state=present
-      become: yes
+      become: true
       ignore_errors: true
 
     - name: Add user(s) to docker group
@@ -64,7 +68,7 @@
           name="{{ lookup('env','USER') }}"
           group=docker
           state=present
-      become: yes
+      become: true
       ignore_errors: true
 
     - name: Add user(s) to docker group
@@ -72,5 +76,5 @@
           name="{{ remote_user|default('jenkins') }}"
           group=docker
           state=present
-      become: yes
+      become: true
       ignore_errors: true

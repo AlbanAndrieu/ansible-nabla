@@ -3,6 +3,7 @@
 
 - hosts: all
   gather_facts: true
+  gather_subset: hardware
   tasks:
     - name: group hosts by distribution
       group_by: key="{{ ansible_distribution }}-{{ ansible_distribution_version }}"
@@ -52,9 +53,7 @@
        #pip_version_docker_py: 1.9.0 #Fix issue with https://github.com/angstwad/docker.ubuntu/issues/109#issuecomment-257706232
        #pip_version_docker: latest
        #pip_version_docker: 2.2.1
-       #pip_version_docker_compose: 1.9.0
-       #pip_version_docker_compose: latest
-       #pip_version_docker_compose: 1.12.0
+       #pip_version_docker_compose: 1.23.1
        # TypeError: create_network() got an unexpected keyword argument 'enable_ipv6' with pip_version_docker_py: 1.9.0
        #Please upgrade to 1.10.6
        pip_install_docker_py: false

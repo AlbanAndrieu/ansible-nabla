@@ -3,6 +3,7 @@
 
 - hosts: all
   gather_facts: true
+  gather_subset: hardware
   tasks:
     - name: group hosts by distribution
       group_by: key="{{ ansible_distribution }}-{{ ansible_distribution_version }}"
@@ -25,7 +26,7 @@
 
 #TODO at first run there is no jenkins user, so it will not work properly
 - hosts: RedHat-7*:RedHat-6*:RedHat-5*:CentOS-7*:CentOS-6*:Ubuntu-12*:Ubuntu-13*:Ubuntu-14*:Ubuntu-16*:Ubuntu-18*
-  become: yes
+  become: true
 
   tasks:
     - name: Create virtualenv directory
@@ -40,14 +41,13 @@
       with_items:
         - { path: 'ansible' }
         - { path: 'scons' }
-      become: yes
+      become: true
       changed_when: false
-      ignore_errors: true
 
-- name: Install python
-  hosts: Ubuntu-12*:Ubuntu-13*:Ubuntu-14*
-  become: yes
-  ignore_errors: yes
+- name: Install python 2 and 3.5
+  hosts: Ubuntu-12*:Ubuntu-13*:Ubuntu-14*:Ubuntu-16*:Ubuntu-18*
+  become: true
+  ignore_errors: true
 
   roles:
     - python
@@ -59,71 +59,58 @@
       python_virtualenvs:
         - path: /opt/ansible/env
           python: python2.7
-#        - path: /opt/ansible/env36
-#          python: python3.6
         - path: /opt/ansible/env35
           python: python3.5
         - path: /opt/scons/env
           python: python2.7
 
-- name: Install python
+- name: Install python 3 and 3.6
   hosts: Ubuntu-16*:Ubuntu-18*
-  become: yes
-  ignore_errors: yes
+  become: true
+  ignore_errors: true
 
   roles:
     - python
 
   vars:
-      python_versions: [2.7, 3]
+      python_versions: [3, 3.6]
       python_install: [numpy, pylint, pandas]
       python_virtualenv_user: jenkins
       python_virtualenvs:
-        - path: /opt/ansible/env
-          python: python2.7
-#        - path: /opt/ansible/env36
-#          python: python3.6
+        - path: /opt/ansible/env36
+          python: python3.6
         - path: /opt/ansible/env35
           python: python3.5
-        - path: /opt/scons/env
-          python: python2.7
 
-#TODO https://www.softwarecollections.org/en/scls/rhscl/rh-python35/
-
-#TODO below role do not work with CentOS
-- name: Install python
+- name: Install python 2
   hosts: RedHat-7*:RedHat-6*:RedHat-5*
-  become: yes
-#  ignore_errors: yes
+  become: true
 
   roles:
     - python
 
   vars:
       python_versions: [2]
+      python_yum_enablerepo: epel
       python_pkg_bin: /bin
       python_bin: /bin/python
       python_virtualenv_user: jenkins
       python_virtualenvs:
         - path: /opt/ansible/env
           python: python2.7
-#        - path: /opt/ansible/env36
-#          python: python3.6
-        - path: /opt/ansible/env35
-          python: python3.5
         - path: /opt/scons/env
           python: python2.7
 
 - name: Install python 2
   hosts: CentOS-7*:CentOS-6*
-  become: yes
-#  ignore_errors: yes
+  become: true
 
   roles:
     - python
 
   vars:
       python_versions: [2]
+      python_yum_enablerepo: epel
       python_pkg_bin: /bin
       python_bin: /bin/python
       python_virtualenv_user: jenkins
@@ -133,22 +120,71 @@
         - path: /opt/scons/env
           python: python2.7
 
-- name: Install python 3
-  hosts: CentOS-7*:CentOS-6*
-  become: yes
-#  ignore_errors: yes
+- name: Install python 3.5
+  hosts: RedHat-6*:RedHat-5*
+  become: true
 
   roles:
     - python
 
   vars:
       python_versions: [3.5]
+      python_yum_enablerepo: epel
       python_pkg_bin: /bin
       #python_bin: /opt/rh/rh-python35/root/usr/bin/python
       python_bin: /bin/python
       python_virtualenv_user: jenkins
       python_virtualenvs:
-#        - path: /opt/ansible/env36
-#          python: python3.6
         - path: /opt/ansible/env35
           python: python3.5
+
+- name: Install python 3.5
+  hosts: CentOS-7*:CentOS-6*:CentOS-5*
+  become: true
+
+  roles:
+    - python
+
+  vars:
+      python_versions: [3.5u]
+      python_yum_enablerepo: ius
+      python_pkg_bin: /bin
+      python_bin: /bin/python
+      python_virtualenv_user: jenkins
+      python_virtualenvs:
+        - path: /opt/ansible/env35
+          python: python3.5
+
+- name: Install python 3.6
+  hosts: RedHat-7*
+  become: true
+
+  roles:
+    - python
+
+  vars:
+      python_versions: [3.6]
+      python_yum_enablerepo: epel
+      python_pkg_bin: /usr/local/bin
+      python_bin: /bin/python
+      python_virtualenv_user: jenkins
+      python_virtualenvs:
+        - path: /opt/ansible/env36
+          python: python3.6
+
+- name: Install python 3.6
+  hosts: CentOS-7*:CentOS-6*:CentOS-5*
+  become: true
+
+  roles:
+    - python
+
+  vars:
+      python_versions: [3.6u]
+      python_yum_enablerepo: ius
+      python_pkg_bin: /bin
+      python_bin: /bin/python
+      python_virtualenv_user: jenkins
+      python_virtualenvs:
+        - path: /opt/ansible/env36
+          python: python3.6

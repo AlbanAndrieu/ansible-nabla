@@ -1,7 +1,9 @@
 #ansible-playbook -i hosts-albandri -c local -v maven.yml -vvvv --ask-sudo-pass | tee setup.log
 
 - name: Install maven
-  hosts: workstation
+  hosts: maven
+  become: yes
+  ignore_errors: "{{ ansible_check_mode }}"
 #  remote_user: root
 #  accelerate: true
 

@@ -1,5 +1,6 @@
+# file: hosts
+
 [all]
-#127.0.0.1
 localhost ansible_host=127.0.0.1 ansible_ssh_port=22 ansible_connection=ssh dtap=test comment="Hosting by Alban Andrieu" ext_id="SRV_{{ host_id }}" groups="paris misc"
 
 #below is used only git lamp.yml
@@ -15,14 +16,20 @@ localhost
 [administration]
 #localhost
 
-[security]
+[common]
 localhost
 
+[hostname]
+#localhost
+
+[security]
+#localhost
+
 [cmake]
-localhost ansible_connection=local
+localhost
 
 [cpp]
-localhost ansible_connection=local
+localhost
 
 [java]
 localhost
@@ -31,49 +38,67 @@ localhost
 localhost
 
 [css]
-localhost ansible_connection=local
+localhost
 
 [chrome]
 localhost
 
-[tomcat-servers]
+[python]
 localhost
+
+[chrome]
+localhost
+
+[selenium]
+localhost
+
+[tomcat-servers]
+#webserver1
+#localhost
 
 [jboss-servers]
-localhost
+#webserver1
+#localhost
 
 [nabla-servers]
-localhost
+#localhost
 
 [apache-servers]
-localhost
+#localhost
 
 [mysql-servers]
+#localhost
+
+[webservers]
+#web3
 localhost
 
 [locale]
 localhost
 
 [zabbix]
-localhost
+#localhost
+
+[zabbix-agent-paris]
+#localhost
+
+[zabbix-agent-gdynia]
+#localhost
 
 [webmin]
-localhost
+#localhost
 
 [zfs]
-localhost ansible_connection=local
+#localhost
 
 [xvbf]
 localhost
 
-[selenium]
-localhost
-
 [jenkins-master]
-localhost
+#localhost
 
-[jenkins-slaves]
-localhost
+[jenkins-master:vars]
+ansible_ssh_common_args='-o StrictHostKeyChecking=no'
 
 [jenkins-UAT-master]
 #master ansible_ssh_host=192.168.11.33 ansible_ssh_port=22 ansible_connection=ssh ansible_user=vagrant
@@ -91,11 +116,24 @@ ansible_ssh_common_args='-o StrictHostKeyChecking=no'
 [jenkins-UAT-slaves:vars]
 ansible_ssh_common_args='-o StrictHostKeyChecking=no'
 
+[jenkins-slaves]
+localhost
+
+[jenkins-slaves:vars]
+ansible_ssh_common_args='-o StrictHostKeyChecking=no'
+#jenkins_home='/jenkins'
+
 [jenkins-swarm]
 #localhost
 
-[jenkins-swarm:vars]
+[jenkins-minimal]
+localhost
+
+[jenkins-minimal:vars]
 ansible_ssh_common_args='-o StrictHostKeyChecking=no'
+
+[opencl]
+#localhost
 
 [supervisors]
 localhost
@@ -104,16 +142,19 @@ localhost
 localhost
 
 [vagrant]
-localhost
+#localhost
+
+[vagrant_hosts:children]
+jenkins-master
+jenkins-slaves
+sonar
 
 [docker]
-localhost
-#vagrant local box
-#192.168.33.10
+#localhost
 
 [docker-container]
 #ansible_python_interpreter="/usr/bin/python3.6"
-localhost
+#localhost
 
 [docker-container:vars]
 repository="git@github.com:AlbanAndrieu/nabla-projects-interview-visma.git"
@@ -125,22 +166,28 @@ git_user="jenkins"
 
 [docker-container-oracle]
 #Issue on Redhat ansible_python_interpreter="/usr/local/bin/python3.5"
-localhost
+#localhost
 
 [docker-cleaning]
-localhost
+#localhost
 
 [kubernetes]
-localhost
+#localhost
 
 [nodejs]
 localhost
 
-[nexus]
-localhost
-
 [sonar]
-localhost
+#localhost
+
+[sonar:vars]
+ansible_ssh_common_args='-o StrictHostKeyChecking=no'
+
+[private-bower]
+#localhost
+
+[nexus]
+#localhost
 
 [shell]
 #see workstation
@@ -150,6 +197,12 @@ localhost
 
 [dropbox]
 #see workstation
+
+[workstation]
+#localhost
+
+[checkmarx]
+#localhost
 
 [jmeter]
 #see workstation
@@ -164,8 +217,7 @@ localhost
 localhost
 
 [windows]
-#10.0.2.15
-localhost
+#localhost
 
 [windows:vars]
 #ansible_user=vagrant
@@ -182,7 +234,7 @@ ansible_winrm_transport=ssl
 #192.168.33.12
 
 [workstation]
-localhost ansible_connection=local
+#localhost ansible_connection=local
 
 [workstation:vars]
 #user=albandri
@@ -194,6 +246,7 @@ group=root
 install_kernel_extras=false
 
 [solaris]
+#localhost
 #sun4v is a blade server. Logical Domains LDOM
 #sparc-sun4sol-u6-1-sun4v ansible_user=jenkins ansible_python_interpreter="/opt/csw/bin/python"
 #sun4u is a normal rack server.
@@ -204,6 +257,7 @@ install_kernel_extras=false
 [solaris:vars]
 user=jenkins
 group=jenkins
+home=/export/home/jenkins/
 #ansible_sudo_pass=jenkins1234
 #ansible_python_interpreter="/opt/csw/bin/python"
 #For x86sol

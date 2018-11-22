@@ -21,14 +21,14 @@ export head_skull='\xE2\x98\xA0'
 export happy_smiley='\xE2\x98\xBA'
 # shellcheck disable=SC2034
 export reverse_exclamation='\u00A1'
-#export DOCKERREGISTRY=""
-#export DOCKERORGANISATION=""
-export DOCKERUSERNAME="nabla"
+export DOCKERREGISTRY="https://hub.docker.com/"
+export DOCKERORGANISATION="nabla"
+export DOCKERUSERNAME=""
 export DOCKERNAME="ansible-jenkins-slave-docker"
 #export DOCKERTAG="ubuntu:16.04"
 export DOCKERTAG="latest"
 
-source ./playbooks/run-ansible.sh
+#source ./playbooks/run-ansible.sh
 
 echo -e "${green} Insalling roles version ${NC}"
 ansible-galaxy install -r requirements.yml -p ./roles/ --ignore-errors
@@ -43,7 +43,7 @@ else
 fi
 
 echo -e "${green} Building docker image ${NC}"
-echo -e "${magenta} time docker build ${DOCKER_BUILD_ARGS} -f docker/ubuntu16/Dockerfile -t \"$DOCKERORGANISATION/$DOCKERNAME\" . --tag \"${DOCKERTAG}\" ${NC}"
+echo -e "${magenta} time docker build ${DOCKER_BUILD_ARGS} -f docker/ubuntu16/Dockerfile -t \"${DOCKERORGANISATION}/${DOCKERNAME}\" . --tag \"${DOCKERTAG}\" ${NC}"
 time docker build ${DOCKER_BUILD_ARGS} -f docker/ubuntu16/Dockerfile -t "${DOCKERORGANISATION}/${DOCKERNAME}" . --tag "${DOCKERTAG}"
 RC=$?
 if [ ${RC} -ne 0 ]; then

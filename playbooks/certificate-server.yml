@@ -1,6 +1,7 @@
 
 - name: Install CA root certificate
   hosts: jenkins-slaves
+  gather_facts: false
   remote_user: root
   check_mode: no
   ignore_errors: yes
@@ -12,11 +13,15 @@
 
 - name: Install server certificate
   hosts: jenkins-slaves
+  gather_facts: false
 #TODO does not work for CentOS
 #  hosts: Ubuntu-12.04:Ubuntu-14.04:Ubuntu-16.04
   remote_user: root
   check_mode: no
-  become: yes
+  #become: no # become is not working with local_action
+#  run_once: true
+#  strategy: debug
+#  ignore_errors: yes
 
   roles:
     - role: ssl.certificate

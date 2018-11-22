@@ -20,7 +20,6 @@
       docker_files_generated_directory: "../roles/jenkins-master"
       jenkins_proxy: apache
       jenkins_user: jenkins
-#      jenkins_group: docker
       jenkins_version: 2.7.4
       jenkins_proxy_hostname: localhost
 #      jenkins_ssh_key_file: "{{resources_to}}/resources/jenkins/ssh_key"    # (you can manage remote files with Stouts.resources role)
@@ -55,11 +54,11 @@
 #JENKINS_ACCESSLOG
         - "--accessLoggerClassName=winstone.accesslog.SimpleAccessLogger --simpleAccessLogger.format=combined --simpleAccessLogger.file=/var/log/jenkins/access.log"
         - "-Dhudson.plugins.git.GitSCM.verbose=true"
+#        - "-Dorg.jenkinsci.plugins.docker.workflow.client.DockerClient.CLIENT_TIMEOUT=240" #JAVA_OPTS
       jenkins_prefix: "/jenkins"
       jenkins_system_config:
         admin_email: alban.andrieu@free.fr
       jenkins_plugins:
-        - "swarm"
         - "ws-cleanup"
         - "envinject"
         - "artifactdeployer"
@@ -279,7 +278,7 @@
           shell_git_machine: "github.com",
           shell_git_login: "AlbanAndrieu",
           shell_git_email: "alban.andrieu@free.fr",
-          shell_git_password: "Misys2013",
+          shell_git_password: "microsoft",
           shell_git_name: "Andrieu, Alban",
           shell_git_path: "/usr/bin",
           shell_git_ssl: false,

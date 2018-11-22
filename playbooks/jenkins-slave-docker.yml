@@ -6,17 +6,10 @@
 #ansible-playbook jenkins-slave.yml -i hosts-albandri -vvvv --ask-sudo-pass --sudo
 # --extra-vars "jenkins_username=aandrieu jenkins_password=tbd"
 
-- name: Apply hostname configuration
-  hosts: jenkins-slave-create-image-docker
-  remote_user: root
-#  connection: local
-
-  roles:
-    - hostname
+- import_playbook: hostname.yml
 
 - name: Apply common configuration to all nodes
-#  hosts: Ubuntu-12*:Ubuntu-14*
-  hosts: jenkins-slave-create-image-docker
+  hosts: jenkins-slaves
   gather_facts: false
   remote_user: root
 #  connection: local
@@ -34,9 +27,9 @@
      python_enabled             : true
 
 - name: Install Docker
-  hosts: jenkins-slave-create-image-docker
+  hosts: jenkins-slaves
   remote_user: root
-#  connection: local
+
   roles:
     - docker
 
@@ -47,7 +40,7 @@
 
 
 - name: Copy the role to build image
-  hosts: jenkins-slave-create-image-docker
+  hosts: jenkins-slaves
   sudo: yes
   tasks:
   - name: copy build.sh
@@ -55,14 +48,14 @@
     #mode=0777
 
 #- name: Copy Dockerfile to build image
-#  hosts: jenkins-slave-create-image-docker
+#  hosts: jenkins-slaves
 #  sudo: yes
 #  tasks:
 #  - name: copy Dockerfile
 #    copy: src=roles/jenkins-slave/Dockerfile dest=./Dockerfile mode=0777
 #
 #- name: Copy build.sh to build image
-#  hosts: jenkins-slave-create-image-docker
+#  hosts: jenkins-slaves
 #  sudo: yes
 #  tasks:
 #  - name: copy build.sh
@@ -74,7 +67,7 @@
 #http://docs.ansible.com/docker_module.html
 #TODO http://docs.ansible.com/docker_image_module.html
 - name: Build docker image if required. Path should contains Dockerfile to build image
-  hosts: jenkins-slave-create-image-docker
+  hosts: jenkins-slaves
   sudo: yes
   tasks:
   - name: Check or build image
@@ -82,7 +75,7 @@
     docker_image: path="/home/vagrant" name="nabla/ansible-jenkins-slave" state=present
 
 #- name: Build new version of image
-#  hosts: jenkins-slave-create-image-docker
+#  hosts: jenkins-slaves
 #  sudo: yes
 #  tasks:
 #  - name: check or build image
@@ -92,7 +85,7 @@
 #http://patg.net/ansible,docker/2014/06/18/ansible-docker/
 
 - name: Run docker containers
-  hosts: jenkins-slave-create-image-docker
+  hosts: jenkins-slaves
   sudo: yes
   tasks:
   - name: Run docker containers
@@ -106,7 +99,7 @@
     with_sequence: count=2
 
 #- name: Remove image from local docker storage:
-#  hosts: jenkins-slave-create-image-docker
+#  hosts: jenkins-slaves
 #  sudo: yes
 #  tasks:
 #  - name: remove image

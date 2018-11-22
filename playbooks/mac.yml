@@ -4,6 +4,7 @@
 
 - hosts: all
   gather_facts: true
+  gather_subset: hardware
   tasks:
     - name: group hosts by distribution
       group_by: key="{{ ansible_distribution }}-{{ ansible_distribution_version }}-{{ ansible_architecture }}"
@@ -22,6 +23,8 @@
       fail: msg="{{ ansible_distribution }} {{ ansible_distribution_version }}
                  is not a supported OS for a Tower installation.  Supported
                  OSes include MacOSX 10"
+
+- import_playbook: roles/mac-dev-playbook/main.yml
 
 - name: Apply common configuration to mac nodes
   hosts: mac
@@ -49,9 +52,11 @@
       - bash-completion
 #      - chromedriver #moved to caskroom/cask
       - doxygen
+      - graphviz
+      - ocaml
       - gettext
       - gifsicle
-      - git
+#      - git
       - go
       - gpg
       - hub
@@ -67,7 +72,6 @@
       - cowsay
       - readline
       - openssl
-      - pv
       - wget
       - wrk
       #- cmake
@@ -101,6 +105,13 @@
       - md5sha1sum
       - zabbix
 #brew install zabbix --without-server-proxy
+#GNU Coreutils contains the most essential UNIX commands, such as ls, cat.
+      - coreutils
+#      - gnu-tar
+      - screen
+      - watch
+      - gdb
+#echo "set startup-with-shell off" >> ~/.gdbinit
 #Below todo in default.config.yml disable homebrew/php
     homebrew_taps:
       - homebrew/core
@@ -117,6 +128,18 @@
      with_items:
       - wget
       - openssl
+      - gnutar
+      - git
+      - git-lfs
+      - pv
      changed_when: false
+
+#By hand please do
+#git config --global credential.helper store
+
+- name: git | Initialize git-lfs
+  shell: >
+    git lfs install
+  become: yes
 
 #- import_playbook: jenkins-master.yml

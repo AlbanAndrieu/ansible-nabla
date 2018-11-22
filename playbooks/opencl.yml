@@ -5,7 +5,7 @@
 # pkill -u jenkins
 # pkill -u jenkins-bm
 
-- hosts: jenkins-slaves
+- hosts: opencl
   become: yes
   remote_user: root
 
@@ -24,9 +24,10 @@
     #apt-get purge nvidia-304
 
 - name: Configure opencl
-  hosts: jenkins-slaves
+  hosts: opencl
   become: yes
   remote_user: root
+  ignore_errors: true
   #connection: local
 
   roles:

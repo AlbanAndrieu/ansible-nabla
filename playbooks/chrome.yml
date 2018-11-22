@@ -1,13 +1,11 @@
-#sudo ansible-playbook -i hosts-albandri -c local -v chrome.yml | tee setup.log
+---
 
 - name: Install chrome
-  connection: local
-  hosts: workstation
-#  remote_user: root
+  hosts: jenkins-slaves
+  become: true
 #  accelerate: true
 
   roles:
-    - { role: chrome,
-        google_talkplugin_enabled: yes,
-        google_agent_pkg_state: installed # Package states: present or installed or latest
-      }
+     - role: chrome
+       google_talkplugin_enabled: false
+       google_agent_pkg_state: installed # Package states: present or installed or latest
