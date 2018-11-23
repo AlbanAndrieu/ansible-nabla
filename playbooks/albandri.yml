@@ -99,7 +99,6 @@
   gather_facts: false
   remote_user: albandri
 
-
   roles:
     - geerlingguy.repo-epel
     - geerlingguy.repo-remi
@@ -116,7 +115,7 @@
 #       hostname_hostname_loopback: "{{ ansible_hostname }} nabla"
 
 - name: Apply common configuration to all nodes
-  hosts: Ubuntu-17*:Ubuntu-16*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
+  hosts: Ubuntu-18*:Ubuntu-17*:Ubuntu-16*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
   gather_facts: false
   remote_user: albandri
 
