@@ -10,14 +10,14 @@ cache:
   directories:
     - $HOME/.cache/pip
 env:
-  - JENKINS_HOME=/home/jenkins
-  - UID=1000
-  - GID=1000
-matrix:
+  global:
+    - JENKINS_HOME=/home/jenkins
+    - UID=1000
+    - GID=1000
+    - secure: TGUihI8NZudZK09yhYmP3DF2YarY4d9ljgm+sArpvc7Ga7NvU7A2GxJm6KJ6ZAxBd/K+R89vo6fRWQma4ZFOjbi/TLabDgWJVD+aabhY5n1gPBDuoz/N7At3v4Ws1qD4M3Bj8+ds+ye1q+0MEDy+AYko8+UUhgLEvsbGUI9d4PY=
+  matrix:
 #  - ANSIBLE_VERSION=latest
-  - ANSIBLE_VERSION=2.7.2
-global:
-  secure: TGUihI8NZudZK09yhYmP3DF2YarY4d9ljgm+sArpvc7Ga7NvU7A2GxJm6KJ6ZAxBd/K+R89vo6fRWQma4ZFOjbi/TLabDgWJVD+aabhY5n1gPBDuoz/N7At3v4Ws1qD4M3Bj8+ds+ye1q+0MEDy+AYko8+UUhgLEvsbGUI9d4PY=
+    - ANSIBLE_VERSION=2.7.2
 sudo: required
 dist: trusty
 branches:
