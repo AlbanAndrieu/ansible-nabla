@@ -36,7 +36,7 @@
 #TODO https://docs.docker.com/engine/installation/linux/ubuntulinux/
 
 - name: Install docker
-  hosts: Ubuntu-17*:Ubuntu-16*:Ubuntu-14*:Ubuntu-12*
+  hosts: Ubuntu-18*:Ubuntu-17*:Ubuntu-16*:Ubuntu-14*:Ubuntu-12*
   become: yes
   ignore_errors: true
 

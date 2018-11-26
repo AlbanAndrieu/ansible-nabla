@@ -1,7 +1,7 @@
 ---
 
 - name: Install chrome
-  hosts: jenkins-slaves
+  hosts: chrome
   become: true
 #  accelerate: true
 

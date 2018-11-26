@@ -28,7 +28,7 @@
 
 - name: Apply common configuration to solaris nodes
   hosts: solaris
-  become: yes
+  become: true
   #connection: local
 
   roles:

@@ -22,7 +22,7 @@ RUN printf "\033[1;32mFROM UID:GID: ${UID}:${GID}- JENKINS_HOME: ${JENKINS_HOME}
 ENV BUILD_PACKAGES="python-dev"
 RUN apt-get clean && apt-get -y update && apt-get install -y \
     -o APT::Install-Recommend=false -o APT::Install-Suggests=false \
-    $BUILD_PACKAGES git bzip2 zip unzip python-yaml python-jinja2 python-pip openssh-server rsyslog && pip install ansible==2.6.0 \
+    $BUILD_PACKAGES git bzip2 zip unzip python-yaml python-jinja2 python-pip openssh-server rsyslog && pip install ansible==2.7.2 \
     && apt-get install -y ocl-icd-libopencl1 ocl-icd-opencl-dev clinfo numactl libnuma1 pciutils \
     xz-utils ksh wget curl lsof sshpass \
     python3 python3-pip python3-dev python3-apt \
@@ -55,11 +55,12 @@ RUN chown -R jenkins:$(id -gn jenkins) $JENKINS_HOME $JENKINS_HOME/.*
 
 # Execute
 RUN ansible-galaxy install -r $JENKINS_HOME/requirements.yml -p $JENKINS_HOME/roles/ --ignore-errors \
- && ansible-playbook $JENKINS_HOME/jenkins-slave.yml -i $JENKINS_HOME/hosts -c local \
+ && ansible-playbook $JENKINS_HOME/jenkins-slave-docker.yml -i $JENKINS_HOME/hosts -c local \
  -e "jenkins_ssh_key_file={{ jenkins_home }}/.ssh/id_rsa" -e "workspace=/tmp" \
  -e "jenkins_jdk8_enable=true" -e "jdk_home=/usr/lib/jvm/java-8-oracle/" \
  -e "jenkins_id=${UID}" -e "docker_gid=${GID}" \
  -e "nis_enabled=false" -e "automount_enabled=false" -e "dns_enabled=false" \
+ --skip-tags restart \
  -vvvv
 
 RUN chown -R jenkins:$(id -gn jenkins) $JENKINS_HOME

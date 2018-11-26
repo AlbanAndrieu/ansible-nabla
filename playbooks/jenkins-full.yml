@@ -66,35 +66,13 @@
 
 - import_playbook: administration.yml automount_enabled=true nis_enabled=true
 
-- name: Apply solaris configuration to all nodes
-  hosts: jenkins-slaves
-  become: true
+- import_playbook: solaris.yml
 
-  roles:
-    - solaris
-
-- name: Apply common configuration to all nodes
-  hosts: jenkins-slaves
-  become: true
-
-  roles:
-    - common
+- import_playbook: common.yml
 
 - import_playbook: dns.yml
 
-- name: Apply security configuration
-  hosts: jenkins-slaves
-  become: true
-
-  roles:
-    - geerlingguy.security
-
-  vars:
-      security_ssh_password_authentication: "yes"
-      security_ssh_permit_root_login: "yes"
-      security_ssh_x11_forwarding: "yes"
-      security_fail2ban_enabled: false
-      security_autoupdate_enabled: false # make yum to get stuck later
+- import_playbook: security.yml
 
 #- import_playbook: java-legacy.yml
 

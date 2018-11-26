@@ -1,12 +1,15 @@
-#ansible-playbook -i hosts-albandri -c local -v security.yml -vvvv --ask-sudo-pass | tee setup.log
+---
 
-- name: Apply common security configuration
-  hosts: workstation
-  remote_user: root
-  connection: local
-#  sudo: yes
+- name: Apply security configuration
+  hosts: jenkins-slaves
+  become: true
 
   roles:
-    - { role: security,
-        sudoers_enabled: no
-      }
+    - geerlingguy.security
+
+  vars:
+      security_ssh_password_authentication: "yes"
+      security_ssh_permit_root_login: "yes"
+      security_ssh_x11_forwarding: "yes"
+      security_fail2ban_enabled: false
+      security_autoupdate_enabled: false # make yum to get stuck later

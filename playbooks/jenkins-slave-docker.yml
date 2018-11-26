@@ -1,106 +1,138 @@
+---
 #see https://blog.trifork.com/2013/04/02/ansible-example-playbook-to-setup-jenkins-slave/
 
 #as root
-#ansible-playbook jenkins-slave.yml -i hosts-albandri -vvvv
+#ansible-playbook jenkins-slave-docker.yml -i hosts -vvvv
 #as albandri
-#ansible-playbook jenkins-slave.yml -i hosts-albandri -vvvv --ask-sudo-pass --sudo
+#ansible-playbook jenkins-slave-docker.yml -i hosts -vvvv --ask-sudo-pass --sudo
 # --extra-vars "jenkins_username=aandrieu jenkins_password=tbd"
+#for testing purpose
+#sudo ansible-playbook -i hosts -c local -v jenkins-slave-docker.yml -vvvv
 
-- import_playbook: hostname.yml
+- name: Assert platform is supported
+  hosts: all
+  remote_user: root
+  gather_facts: true
 
-- name: Apply common configuration to all nodes
-  hosts: jenkins-slaves
+  tasks:
+    - name: Assert platform is supported
+      assert:
+        that:
+          - ansible_os_family in ['Debian', 'RedHat', 'CentOS', 'Windows', 'Solaris']
+          - ansible_architecture in ['x86_64']
+
+- hosts: all
+  gather_facts: true
+  tasks:
+    - name: group hosts by distribution
+      group_by: key="{{ ansible_distribution }}-{{ ansible_distribution_version }}"
+
+- hosts: RedHat-7*:RedHat-6*:RedHat-5*:CentOS-7*:CentOS-6*:Ubuntu-18*:Ubuntu-17*:Ubuntu-16*:Ubuntu-15*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
+  gather_facts: false
+  tasks:
+    - name: group hosts for supported distributions
+      group_by: key="supported"
+
+- hosts: "!supported"
+  gather_facts: false
+  tasks:
+    - name: fail for unsupported distribution
+      fail: msg="{{ ansible_distribution }} {{ ansible_distribution_version }}
+                 is not a supported OS for a Tower installation.  Supported
+                 OSes include Red Hat Enterprise Linux 6/7, CentOS 6/7, or
+                 Ubuntu 12.04/13.04/14.04/15.04/16.04/17.04/18.04."
+    - debug: msg="Version {{ ansible_distribution }} {{ ansible_distribution_version }} {{ ansible_architecture }}"
+
+- hosts: localhost
+
+  tasks:
+    - name: Install Ansible-Galaxy dependencies
+      shell: ansible-galaxy install -r requirements.yml -p ./roles/
+      #shell: ansible-galaxy install -r requirements.yml -p ./roles/ --ignore-errors --force
+      ignore_errors: true
+
+- import_playbook: python-bootstrap.yml
+
+- name: Bootstrap sudo onto server
+  hosts: Ubuntu-18*:Ubuntu-17*:Ubuntu-16*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
+#  become: yes
+
+  pre_tasks:
+  - name: Install sudo if not there
+    become: yes
+    raw: |
+      test -e /usr/bin/sudo || apt install -y sudo
+    register: output
+    changed_when: output.stdout|trim() != ""
+
+- import_playbook: common.yml
+
+#- import_playbook: dns.yml
+
+- import_playbook: python.yml
+
+#Below ntp role is included in administration role
+- name: Apply ntp configuration to all nodes
+  hosts: all
   gather_facts: false
   remote_user: root
-#  connection: local
+  become: yes
+  ignore_errors: yes
 
   roles:
-    - alban.andrieu.common
+    - geerlingguy.ntp
 
   vars:
-     apt_install_packages_list  :
-     stats_enabled              : false
-     utilities_enabled          : false
-     editors_enabled            : true
-     cowsay_enabled             : true
-     perl_enabled               : false
-     python_enabled             : true
+       ntp_timezone: Europe/Paris
 
-- name: Install Docker
-  hosts: jenkins-slaves
-  remote_user: root
+#- import_playbook: hostname.yml
 
-  roles:
-    - docker
+#- import_playbook: administration.yml automount_enabled=false nis_enabled=false
 
-  vars:
-      docker_host_ip: 127.0.0.1
-      docker_host_port: 4243
-      docker_opts: "-H unix:// -H tcp://{{ docker_host_ip }}:{{ docker_host_port }}"
-
-
-- name: Copy the role to build image
-  hosts: jenkins-slaves
-  sudo: yes
-  tasks:
-  - name: copy build.sh
-    copy: src=roles/alban.andrieu.jenkins-slave/ dest=./
-    #mode=0777
-
-#- name: Copy Dockerfile to build image
-#  hosts: jenkins-slaves
-#  sudo: yes
-#  tasks:
-#  - name: copy Dockerfile
-#    copy: src=roles/jenkins-slave/Dockerfile dest=./Dockerfile mode=0777
+#- name: Install git
+#  hosts: all
+#  become: true
+#  remote_user: root
+##  connection: local
 #
-#- name: Copy build.sh to build image
-#  hosts: jenkins-slaves
-#  sudo: yes
-#  tasks:
-#  - name: copy build.sh
-#    copy: src=roles/jenkins-slave/build.sh dest=./build.sh mode=0777
+#  roles:
+#    - role: geerlingguy.git
 
-#- name: Copy the code from repository
-#  git: repo={{ repository }} dest=/var/www/html/
+- import_playbook: java.yml
 
-#http://docs.ansible.com/docker_module.html
-#TODO http://docs.ansible.com/docker_image_module.html
-- name: Build docker image if required. Path should contains Dockerfile to build image
-  hosts: jenkins-slaves
-  sudo: yes
-  tasks:
-  - name: Check or build image
-#    docker_image: path="/home/vagrant" name="{{ docker_image_name }}" state=present
-    docker_image: path="/home/vagrant" name="nabla/ansible-jenkins-slave" state=present
+- import_playbook: maven.yml
 
-#- name: Build new version of image
-#  hosts: jenkins-slaves
-#  sudo: yes
-#  tasks:
-#  - name: check or build image
-#    docker_image: path="/path/to/build/dir" name="my/app" state=build
+- import_playbook: chrome.yml google_talkplugin_enabled=false
+
+- import_playbook: jenkins-slave.yml
+
+#- import_playbook: cpp.yml
+
+#- import_playbook: certificate.yml
+
+#- import_playbook: docker.yml
+
+- import_playbook: xvbf.yml
+
 #
-
-#http://patg.net/ansible,docker/2014/06/18/ansible-docker/
-
-- name: Run docker containers
-  hosts: jenkins-slaves
-  sudo: yes
-  tasks:
-  - name: Run docker containers
-    local_action:
-      module: docker
-      docker_url: tcp://127.0.0.1:4243
-      image: "{{ docker_image_name }}"
-      name: jenkins-slaves
-      state: present
-      publish_all_ports: yes
-    with_sequence: count=2
-
-#- name: Remove image from local docker storage:
-#  hosts: jenkins-slaves
-#  sudo: yes
-#  tasks:
-#  - name: remove image
-#    docker_image: name="my/app" state=absent
+##Below cmake role is included in cpp role
+##- name: Install cmake
+##  hosts: all
+##  remote_user: root
+###  connection: local
+##
+##  roles:
+##    - alban.andrieu.cmake
+#
+#- name: Install cpp
+#  hosts: all
+#  remote_user: root
+##  connection: local
+#
+#  roles:
+#    - alban.andrieu.cpp
+#
+#  vars:
+#      gcc_version: "4:4.8.2-1ubuntu6"
+#      cppunit_version: "1.13-0"
+#      boost_version: "1.54"

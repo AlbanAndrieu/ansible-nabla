@@ -3,8 +3,7 @@
 #Use below only if you want your servers to be part of MGR build farm
 - name: Apply common configuration to all nodes
   hosts: common
-#  hosts: all
-  gather_facts: false
+#  gather_facts: false
   user: root
 #  connection: local
 

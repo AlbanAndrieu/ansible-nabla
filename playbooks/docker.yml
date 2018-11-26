@@ -19,6 +19,7 @@
 - name: Run docker
   hosts: docker
   become: true
+  ignore_errors: true
 
   roles:
     - geerlingguy.pip
