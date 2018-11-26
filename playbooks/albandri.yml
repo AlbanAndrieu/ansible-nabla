@@ -11,7 +11,7 @@
     - name: Assert platform is supported
       assert:
         that:
-          - ansible_os_family in ['Debian', 'RedHat', 'Windows', 'Solaris']
+          - ansible_os_family in ['Debian', 'RedHat', 'CentOS', 'Windows', 'Solaris']
           - ansible_architecture in ['x86_64']
 
 #supported version
@@ -398,29 +398,9 @@
 #       ruby_version: 2.3.1
        ruby_version: "2.2"
 
-- name: Install chrome
-  hosts: chrome
-  remote_user: albandri
+- import_playbook: chrome.yml
 
-
-  roles:
-     - role: chrome
-
-  vars:
-       google_talkplugin_enabled: yes                       # Enable module
-       google_agent_pkg_state: installed # Package states: present or installed or latest
-
-- name: Install nodejs
-  hosts: nodejs
-  remote_user: albandri
-
-
-  roles:
-    - geerlingguy.nodejs
-
-  vars:
-       nodejs_install_packages: false
-       nodejs_global_packages: []
+- import_playbook: nodejs.yml
 
 - name: configure supervisor
   hosts: supervisors

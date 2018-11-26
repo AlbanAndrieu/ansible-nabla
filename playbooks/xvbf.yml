@@ -1,7 +1,7 @@
 #sudo ansible-playbook -i hosts-albandri -c local -v xvbf.yml -vvvv | tee setup.log
 
 - name: Install xvbf
-  hosts: jenkins-slaves
+  hosts: xvbf
   become: true
 
   roles:

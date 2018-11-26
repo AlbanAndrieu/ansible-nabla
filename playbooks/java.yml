@@ -24,10 +24,19 @@
                  Ubuntu 12.04/13.04/14.04/16.04/17.04/18.04."
     - debug: msg="Version {{ ansible_distribution }} {{ ansible_distribution_version }} {{ ansible_architecture }}"
 
+- name: Install java 8 License
+  hosts: Ubuntu-18*:Ubuntu-16*
+  become: true
+  ignore_errors: true
+
+  tasks:
+    - name: jdk8 | Accept Java 8 License
+      debconf: name='oracle-java8-installer' question='shared/accepted-oracle-license-v1-1' value='true' vtype='select'
+
 # debian | ubuntu | Java 8
 - name: Install java
   hosts: Ubuntu-18*:Ubuntu-17*:Ubuntu-16*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
-  become: yes
+  become: true
 #  ignore_errors: true
 
   roles:
@@ -46,7 +55,7 @@
 # redhat | centos 7 | Java 8
 - name: Install java
   hosts: RedHat-7*:RedHat-6*:RedHat-5*:CentOS-7*:CentOS-6*
-  become: yes
+  become: true
 
   roles:
       - role: ansiblebit.oracle-java

@@ -392,29 +392,9 @@
   roles:
     - alban.andrieu.css
 
-- name: Install chrome
-  hosts: chrome
-  remote_user: root
-#  connection: local
+- import_playbook: chrome.yml
 
-  roles:
-     - role: chrome
-
-  vars:
-       google_talkplugin_enabled: yes                       # Enable module
-       google_agent_pkg_state: installed # Package states: present or installed or latest
-
-- name: Install nodejs
-  hosts: nodejs
-  remote_user: root
-#  connection: local
-
-  roles:
-    - geerlingguy.nodejs
-
-  vars:
-       nodejs_install_packages: false
-       nodejs_global_packages: []
+- import_playbook: nodejs.yml
 
 - name: configure supervisor
   hosts: supervisors

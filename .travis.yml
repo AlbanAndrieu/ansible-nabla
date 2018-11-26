@@ -10,13 +10,14 @@ cache:
   directories:
     - $HOME/.cache/pip
 env:
-  matrix:
+  - JENKINS_HOME=/home/jenkins
+  - UID=1000
+  - GID=1000
+matrix:
 #  - ANSIBLE_VERSION=latest
-  - ANSIBLE_VERSION=2.7.2  
-#  - ANSIBLE_VERSION=2.3.1.0
-  global:
-    secure: TGUihI8NZudZK09yhYmP3DF2YarY4d9ljgm+sArpvc7Ga7NvU7A2GxJm6KJ6ZAxBd/K+R89vo6fRWQma4ZFOjbi/TLabDgWJVD+aabhY5n1gPBDuoz/N7At3v4Ws1qD4M3Bj8+ds+ye1q+0MEDy+AYko8+UUhgLEvsbGUI9d4PY=
-#sudo: false
+  - ANSIBLE_VERSION=2.7.2
+global:
+  secure: TGUihI8NZudZK09yhYmP3DF2YarY4d9ljgm+sArpvc7Ga7NvU7A2GxJm6KJ6ZAxBd/K+R89vo6fRWQma4ZFOjbi/TLabDgWJVD+aabhY5n1gPBDuoz/N7At3v4Ws1qD4M3Bj8+ds+ye1q+0MEDy+AYko8+UUhgLEvsbGUI9d4PY=
 sudo: required
 dist: trusty
 branches:
@@ -45,6 +46,13 @@ script:
 
   # Add ansible.cfg to pick up roles path.
   - "{ echo '[defaults]'; echo 'roles_path = ./roles'; } >> ansible.cfg"
+
+  # Prepare tests
+  # Add user jenkins to the image
+  - groupadd -g ${GID} docker && \
+    adduser --quiet --uid ${UID} --gid ${GID} --home ${JENKINS_HOME} jenkins
+  # Set password for the jenkins user (you may want to alter this).
+  - echo "jenkins:jenkins1234" | chpasswd
 
   # Check the role/playbook's syntax.
   - ansible-playbook --syntax-check -i ./playbooks/hosts ./playbooks/nabla.yml --connection=local -e "python_versions=[2.7]" -e "git_user=root"

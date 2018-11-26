@@ -1,0 +1,106 @@
+#see https://blog.trifork.com/2013/04/02/ansible-example-playbook-to-setup-jenkins-slave/
+
+#as root
+#ansible-playbook jenkins-slave.yml -i hosts-albandri -vvvv
+#as albandri
+#ansible-playbook jenkins-slave.yml -i hosts-albandri -vvvv --ask-sudo-pass --sudo
+# --extra-vars "jenkins_username=aandrieu jenkins_password=tbd"
+
+- import_playbook: hostname.yml
+
+- name: Apply common configuration to all nodes
+  hosts: jenkins-slaves
+#  gather_facts: false
+  become: yes
+  remote_user: root
+#  connection: local
+
+  roles:
+    - alban.andrieu.common
+
+  vars:
+     apt_install_packages_list  :
+     stats_enabled              : false
+     utilities_enabled          : false
+     editors_enabled            : true
+     cowsay_enabled             : true
+     perl_enabled               : false
+     python_enabled             : true
+
+#- name: Install Docker
+#  hosts: jenkins-slaves
+#  remote_user: root
+#
+#  roles:
+#    - docker
+#
+#  vars:
+#      docker_host_ip: 127.0.0.1
+#      docker_host_port: 4243
+#      docker_opts: "-H unix:// -H tcp://{{ docker_host_ip }}:{{ docker_host_port }}"
+
+- name: Copy the role to build image
+  hosts: jenkins-slaves
+  become: yes
+  tasks:
+  - name: copy build.sh
+    copy: src=roles/alban.andrieu.jenkins-slave/ dest=./
+    #mode=0777
+
+#- name: Copy Dockerfile to build image
+#  hosts: jenkins-slaves
+#  sudo: yes
+#  tasks:
+#  - name: copy Dockerfile
+#    copy: src=roles/jenkins-slave/Dockerfile dest=./Dockerfile mode=0777
+#
+#- name: Copy build.sh to build image
+#  hosts: jenkins-slaves
+#  sudo: yes
+#  tasks:
+#  - name: copy build.sh
+#    copy: src=roles/jenkins-slave/build.sh dest=./build.sh mode=0777
+
+#- name: Copy the code from repository
+#  git: repo={{ repository }} dest=/var/www/html/
+
+#http://docs.ansible.com/docker_module.html
+#TODO http://docs.ansible.com/docker_image_module.html
+- name: Build docker image if required. Path should contains Dockerfile to build image
+  hosts: jenkins-slaves
+  become: yes
+  tasks:
+  - name: Check or build image
+#    docker_image: path="/home/vagrant" name="{{ docker_image_name }}" state=present
+    docker_image: path="/home/vagrant" name="nabla/ansible-jenkins-slave" state=present
+
+#- name: Build new version of image
+#  hosts: jenkins-slaves
+#  sudo: yes
+#  tasks:
+#  - name: check or build image
+#    docker_image: path="/path/to/build/dir" name="my/app" state=build
+#
+
+#http://patg.net/ansible,docker/2014/06/18/ansible-docker/
+
+- name: Run docker containers
+  hosts: jenkins-slaves
+  become: yes
+  tasks:
+  - name: Run docker containers
+    local_action:
+      module: docker
+      docker_url: tcp://127.0.0.1:4243
+      image: "{{ docker_image_name }}"
+      name: jenkins-slaves
+      state: present
+      publish_all_ports: yes
+    with_sequence: count=2
+
+#- name: Remove image from local docker storage:
+#  hosts: jenkins-slaves
+#  sudo: yes
+#  tasks:
+#  - name: remove image
+#    docker_image: name="my/app" state=absent
