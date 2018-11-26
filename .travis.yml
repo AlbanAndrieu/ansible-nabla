@@ -12,8 +12,8 @@ cache:
 env:
   global:
     - JENKINS_HOME=/home/jenkins
-    - UID=3000
-    - GID=3000
+    - JENKINS_UID=3000
+    - DOCKER_GID=999
     - secure: TGUihI8NZudZK09yhYmP3DF2YarY4d9ljgm+sArpvc7Ga7NvU7A2GxJm6KJ6ZAxBd/K+R89vo6fRWQma4ZFOjbi/TLabDgWJVD+aabhY5n1gPBDuoz/N7At3v4Ws1qD4M3Bj8+ds+ye1q+0MEDy+AYko8+UUhgLEvsbGUI9d4PY=
   matrix:
 #  - ANSIBLE_VERSION=latest
@@ -49,18 +49,20 @@ script:
 
   # Prepare tests
   # Add user jenkins to the image
-  - groupadd -g ${GID} docker && \
-    adduser --quiet --uid ${UID} --gid ${GID} --home ${JENKINS_HOME} jenkins
+  - id -a
+  - getent passwd 3000 || true # 3000 not found we can use it for jenkins user
+#  - groupadd -g ${DOCKER_GID} docker && \
+  - sudo adduser --quiet --disabled-password --shell /bin/bash --uid ${JENKINS_UID} --gid ${DOCKER_GID} --home ${JENKINS_HOME} --gecos "Jenkins" jenkins
   # Set password for the jenkins user (you may want to alter this).
-  - echo "jenkins:jenkins1234" | chpasswd
+#  - sudo echo "jenkins:jenkins1234" | sudo chpasswd
 
   # Check the role/playbook's syntax.
-  - ansible-playbook --syntax-check -i ./playbooks/hosts ./playbooks/nabla.yml --connection=local -e "python_versions=[2.7]" -e "docker_gid=${GID}" -e "jenkins_id=${UID}" -e "git_user=root"
+  - ansible-playbook --syntax-check -i ./playbooks/hosts ./playbooks/nabla.yml --connection=local -e "python_versions=[2.7]" -e "docker_gid=${DOCKER_GID}" -e "jenkins_id=${JENKINS_UID}" -e "git_user=root"
 
   # First run
   # Run the role/playbook with ansible-playbook.
 #  - travis_wait 30
-  - ansible-playbook -i ./playbooks/hosts ./playbooks/nabla.yml --connection=local -e "python_versions=[2.7]"  -e "docker_gid=${GID}" -e "jenkins_id=${UID}" -e "git_user=root"
+  - ansible-playbook -i ./playbooks/hosts ./playbooks/nabla.yml --connection=local -e "python_versions=[2.7]"  -e "docker_gid=${DOCKER_GID}" -e "jenkins_id=${JENKINS_UID}" -e "git_user=root"
 
   # Second run Idempotence test
   # Run the role/playbook again, checking to make sure it's idempotent.

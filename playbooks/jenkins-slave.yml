@@ -21,9 +21,9 @@
   vars:
     docker_files_enable: false
     #docker_files_generated_directory: "../roles/alban.andrieu.jenkins-slave"
-    jenkins_home: /home/jenkins
+    #jenkins_home: /home/jenkins
     jenkins_user: jenkins
-    jenkins_group: docker
+    #jenkins_group: docker
     jenkins_http_port: 8380
     jenkins_slave_home: /workspace
     jenkins_prefix: "/jenkins"
@@ -58,5 +58,7 @@
       - "github.com,204.232.175.90 ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXYPCPy6rbTrTtw7PHkccKrpp0yVhp5HdEIcKr6pLlVDBfOLX9QUsyCOV0wzfjIJNlGEYsdlLJizHhbn2mUjvSAHQqZETYP81eFzLQNnPHt4EVVUh7VfDESU84KezmD5QlWpXLmvU31/yMf+Se8xhHTvKSCZIFImWwoG6mbUoWf9nzpIoaSjB+weqqUUmpaaasXVal72J+UX2B+2RPW3RcT0eOzQgqlJL3RKrTJvdsjE3JEAvGq3lGHSZXy28G3skua2SmVi/w4yCE6gbODqnTWlg7+wC604ydGXA8VJiS5ap43JXiUFFAaQ=="
     jenkins_jdk7_enable: false
     jenkins_jdk8_enable: false
+    epel_repo_enabled: false
+    proxy_repo_enabled: false
     #user: "albandri"
     #home: "/workspace/users/albandri10"
