@@ -57,12 +57,12 @@ script:
 #  - sudo echo "jenkins:jenkins1234" | sudo chpasswd
 
   # Check the role/playbook's syntax.
-  - ansible-playbook --syntax-check -i ./playbooks/hosts ./playbooks/nabla.yml --connection=local -e "python_versions=[2.7]" -e "docker_gid=${DOCKER_GID}" -e "jenkins_id=${JENKINS_UID}" -e "git_user=root"
+  - ansible-playbook --syntax-check -i ./playbooks/hosts ./playbooks/nabla.yml --connection=local -e "python_versions=[2.7]" -e "docker_gid=${DOCKER_GID}" -e "jenkins_id=${JENKINS_UID}" -e "git_user=root" --skip-tags restart
 
   # First run
   # Run the role/playbook with ansible-playbook.
 #  - travis_wait 30
-  - ansible-playbook -i ./playbooks/hosts ./playbooks/nabla.yml --connection=local -e "python_versions=[2.7]"  -e "docker_gid=${DOCKER_GID}" -e "jenkins_id=${JENKINS_UID}" -e "git_user=root"
+  - ansible-playbook -i ./playbooks/hosts ./playbooks/nabla.yml --connection=local -e "python_versions=[2.7]"  -e "docker_gid=${DOCKER_GID}" -e "jenkins_id=${JENKINS_UID}" -e "git_user=root" --skip-tags restart
 
   # Second run Idempotence test
   # Run the role/playbook again, checking to make sure it's idempotent.
