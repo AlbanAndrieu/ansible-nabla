@@ -1,12 +1,9 @@
 ---
-#This script is used to configure your workstation (for developer)
-
-#sudo ansible-playbook -i hosts-albandri -c local -v supervisor.yml | tee setup.log
 
 # This playbook can be run using vagrant (on virtual box).
 - name: configure supervisor
   hosts: supervisors
-  user: root
+  become: true
 
   roles:
     - role: supervisor
@@ -14,4 +11,4 @@
       command: python -m SimpleHTTPServer
       directory: /opt/web
 # user is the same as base_admin_username
-      user: ubuntu
+      user: jenkins
