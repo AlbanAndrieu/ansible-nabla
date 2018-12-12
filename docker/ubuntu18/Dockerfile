@@ -11,7 +11,9 @@ LABEL description="Image used by Nabla products to build Java/Javascript and CPP
 
 ENV JENKINS_HOME=${JENKINS_HOME}
 
-#ENV LANG en_US.UTF-8
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US:en
+ENV LC_ALL en_US.UTF-8
 ENV TERM="xterm-256color"
 
 USER 0
@@ -19,16 +21,23 @@ USER 0
 RUN printf "\033[1;32mFROM UID:GID: ${UID}:${GID}- JENKINS_HOME: ${JENKINS_HOME} \033[0m\n"
 
 # Install ansible
-ENV BUILD_PACKAGES="python-dev"
 RUN apt-get clean && apt-get -y update && apt-get install -y \
     -o APT::Install-Recommend=false -o APT::Install-Suggests=false \
-    $BUILD_PACKAGES git bzip2 zip unzip python-yaml python-jinja2 python-pip openssh-server rsyslog && pip install ansible==2.7.2 \
+    git bzip2 zip unzip python-yaml python-jinja2 python-pip openssh-server rsyslog && pip install ansible==2.7.2 \
     && apt-get install -y ocl-icd-libopencl1 ocl-icd-opencl-dev clinfo numactl libnuma1 pciutils \
     xz-utils ksh wget curl lsof sshpass \
-    python3 python3-pip python3-dev python3-apt \
+    python3-setuptools python3 python3-pip python3-dev python3-apt \
     openjdk-8-jdk maven gcc g++ make \
     net-tools iputils-ping x11-apps \
     && pip install zabbix-api
+
+RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+RUN add-apt-repository \
+    "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+    $(lsb_release -cs) \
+    stable"
+# Install Docker from Docker Inc. repositories.
+RUN apt-get update -qq && apt-get install -qqy docker-ce=5:18.09.0~3-0~ubuntu-xenial && rm -rf /var/lib/apt/lists/*
 
 RUN curl -sL https://deb.nodesource.com/setup_8.x | bash - ;\
     apt-get update && apt-get install -y nodejs ;\
@@ -76,8 +85,8 @@ RUN apt-get autoremove -y && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/*
 # drop back to the regular jenkins user - good practice
 USER jenkins
 ENV HOME=${JENKINS_HOME}
-RUN chmod -R 777 ${HOME} && mkdir ${HOME}/workspace && mkdir ${HOME}/.config && mkdir ${HOME}/.local
-RUN id jenkins && ls -lrta $HOME/
+RUN chmod -R 777 ${HOME} && mkdir ${HOME}/workspace && mkdir ${HOME}/.config && mkdir ${HOME}/.local && mkdir ${HOME}/.sonar
+#RUN id jenkins && ls -lrtai $HOME/ && ls -lrtai $HOME/.sonar
 
 # Standard SSH port
 EXPOSE 22
