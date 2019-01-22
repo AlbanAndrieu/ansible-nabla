@@ -15,7 +15,7 @@ readonly DOCKERTAG="latest"
 
 #source "${WORKING_DIR}/run-ansible.sh"
 
-echo -e "${green} Insalling roles version ${NC}"
+echo -e "${green} Installing roles version ${NC}"
 ansible-galaxy install -r requirements.yml -p ./roles/ --ignore-errors
 
 if [ -n "${DOCKER_BUILD_ARGS}" ]; then

@@ -143,7 +143,8 @@ echo -e "${green} chown -R jenkins:docker /opt/ansible/env35 ${NC}"
 echo -e "${cyan} =========== ${NC}"
 echo -e "${green} Install virtual env requirements : pip install -r ./roles/alban.andrieu.jenkins-slave/files/requirements-current-${PYTHON_MAJOR_VERSION}.txt ${NC}"
 #"${VIRTUALENV_PATH}/bin/pip${PYTHON_MAJOR_VERSION}" install -r "./roles/alban.andrieu.jenkins-slave/files/requirements-current-${PYTHON_MAJOR_VERSION}.txt"
-pip install -r "./roles/alban.andrieu.jenkins-slave/files/requirements-current-${PYTHON_MAJOR_VERSION}.txt"
+# TODO
+#pip install -r "./roles/alban.andrieu.jenkins-slave/files/requirements-current-${PYTHON_MAJOR_VERSION}.txt"
 RC=$?
 if [ ${RC} -ne 0 ]; then
   echo ""

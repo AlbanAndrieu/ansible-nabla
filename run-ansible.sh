@@ -9,7 +9,7 @@ if [ -n "${TARGET_SLAVE}" ]; then
   echo -e "${green} TARGET_SLAVE is defined ${happy_smiley} : ${TARGET_SLAVE} ${NC}"
 else
   echo -e "${red} ${double_arrow} Undefined build parameter ${head_skull} : TARGET_SLAVE, use the default one ${NC}"
-  export TARGET_SLAVE=albandri.misys.global.ad
+  export TARGET_SLAVE=albandri-test.misys.global.ad
   echo -e "${magenta} TARGET_SLAVE : ${TARGET_SLAVE} ${NC}"
 fi
 
@@ -145,7 +145,7 @@ echo "DOCKER_CLIENT_TIMEOUT : $DOCKER_CLIENT_TIMEOUT"
 echo "COMPOSE_HTTP_TIMEOUT : $COMPOSE_HTTP_TIMEOUT"
 
 #tomcat8 must be stop to no use same port
-${USE_SUDO} service tomcat8 stop || true
+#${USE_SUDO} service tomcat8 stop || true
 
 echo -e "${cyan} =========== ${NC}"
 echo -e "${green} Checking ansible version ${NC}"
@@ -163,7 +163,7 @@ if [ -d "${WORKSPACE}/ansible" ]; then
 fi
 
 echo -e "${cyan} =========== ${NC}"
-echo -e "${green} Insalling roles version ${NC}"
+echo -e "${green} Installing roles version ${NC}"
 echo -e "${magenta} ${ANSIBLE_GALAXY_CMD} install -r requirements.yml -p ./roles/ --ignore-errors --force ${NC}"
 ${ANSIBLE_GALAXY_CMD} install -r requirements.yml -p ./roles/ --ignore-errors --force
 

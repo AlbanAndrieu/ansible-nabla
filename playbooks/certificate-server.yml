@@ -8,7 +8,7 @@
   become: yes
 
   roles:
-    - role: ssl.ca-certificate
+    - role: ssl-ca-certificate
       trust_ca_pki_dir: '~/pki'
 
 - name: Install server certificate
@@ -24,7 +24,7 @@
 #  ignore_errors: yes
 
   roles:
-    - role: ssl.certificate
+    - role: ssl-certificate
       ssl_certs_country: "FR"
       ssl_certs_locality: "Paris"
       ssl_certs_organization: "Nabla"

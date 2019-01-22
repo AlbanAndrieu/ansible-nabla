@@ -87,7 +87,7 @@
 
 - import_playbook: certificate.yml
 
-- import_playbook: maven-legacy.yml
+#- import_playbook: maven-legacy.yml
 
 - import_playbook: chrome.yml
 

@@ -1,0 +1,214 @@
+[all]
+#127.0.0.1
+#albandri ansible_host=192.168.0.29 ansible_ssh_port=22 ansible_connection=ssh dtap=prod comment="Hosting by Alban Andrieu" ext_id="SRV_{{ host_id }}" groups="paris misc"
+albandri-test
+
+#below is used only git lamp.yml
+[lamp]
+albandri-test
+
+[ntp]
+#Same as all
+
+[dns]
+#Same as all
+
+[administration]
+#albandri-test
+
+[security]
+albandri-test
+
+[cmake]
+albandri-test
+
+[cpp]
+albandri-test
+
+[java]
+albandri-test
+
+[maven]
+albandri-test
+
+[css]
+albandri-test
+
+[chrome]
+albandri-test
+
+[tomcat-servers]
+albandri-test
+
+[jboss-servers]
+albandri-test
+
+[nabla-servers]
+albandri-test
+
+[apache-servers]
+albandri-test
+
+[mysql-servers]
+albandri-test
+
+[locale]
+albandri-test
+
+[zabbix]
+albandri-test
+
+[webmin]
+albandri-test
+
+[zfs]
+albandri-test
+#albandri-test ansible_connection=local
+
+[xvbf]
+albandri-test
+
+[selenium]
+albandri-test
+
+[jenkins-master]
+albandri-test
+master ansible_ssh_host=192.168.11.33 ansible_ssh_port=22 ansible_connection=ssh ansible_user=vagrant
+
+[jenkins-master:vars]
+ansible_ssh_common_args='-o StrictHostKeyChecking=no'
+
+[jenkins-slaves]
+albandri-test
+slave01 ansible_ssh_host=192.168.11.51 ansible_ssh_port=22 ansible_connection=ssh ansible_user=vagrant
+slave02 ansible_ssh_host=192.168.11.52 ansible_ssh_port=22 ansible_connection=ssh ansible_user=vagrant
+slave03 ansible_ssh_host=192.168.11.53 ansible_ssh_port=22 ansible_connection=ssh ansible_user=vagrant
+slave04 ansible_ssh_host=192.168.11.54 ansible_ssh_port=22 ansible_connection=ssh ansible_user=vagrant
+
+[jenkins-slaves:vars]
+ansible_ssh_common_args='-o StrictHostKeyChecking=no'
+jenkins_home='/jenkins'
+
+[jenkins-swarm]
+#albandri-test
+
+[jenkins-swarm:vars]
+ansible_ssh_common_args='-o StrictHostKeyChecking=no'
+
+[supervisors]
+albandri-test
+
+[virtualbox]
+albandri-test
+
+[vagrant_hosts:children]
+jenkins-master
+jenkins-slaves
+#sonar
+
+[vagrant]
+albandri-test
+
+[docker]
+albandri-test
+#vagrant local box
+#192.168.33.10
+
+[docker-container]
+#ansible_python_interpreter="/usr/bin/python3.6"
+albandri-test
+
+[docker-container:vars]
+repository="git@github.com:AlbanAndrieu/nabla-projects-interview-visma.git"
+#repository_version=HEAD
+repository_version="develop"
+#repository_target_dir="{{ lookup('env','WORKSPACE') }}/"
+repository_target_dir="/workspace/slave/workspace/"
+git_user="jenkins"
+
+[docker-container-oracle]
+#Issue on Redhat ansible_python_interpreter="/usr/local/bin/python3.5"
+albandri-test
+
+[docker-cleaning]
+albandri-test
+
+[kubernetes]
+albandri-test
+
+[nodejs]
+albandri-test
+
+[workstation]
+albandri-test
+
+[workstation:vars]
+user=albandri-test
+group=docker
+version=10
+#ansible_sudo_pass=todo
+
+[nexus]
+albandri-test
+
+[sonar]
+albandri-test
+sonarqube ansible_ssh_host=192.168.11.99 ansible_ssh_port=22 ansible_connection=ssh ansible_user=vagrant
+
+[sonar:vars]
+ansible_ssh_common_args='-o StrictHostKeyChecking=no'
+
+[shell]
+#see workstation
+
+[zap]
+#see workstation
+
+[dropbox]
+#see workstation
+
+[jmeter]
+#see workstation
+
+[eclipse]
+albandri-test
+albandri-test.misys.global.ad ansible_host=10.41.40.91 ansible_user="root" jenkins_home=/jenkins jenkins_id=1001 jenkins_gid=1006 docker_gid=1007 data_gid=33 dtap=dev comment="Hosting by Alban Andrieu"
+
+[logstash]
+albandri-test
+
+[collectd]
+albandri-test
+
+[windows]
+#10.0.2.15
+#albandri-test
+#PARD011996.nabla.mobi ansible_host=10.41.40.121 ansible_user="fru" ansible_password="Kondor_123" dtap=acc comment="Hosting by Alban Andrieu" ext_id="SRV_029" groups="workstation"
+#.\fru Kondor_123
+#FR1CSWFRBM0005.nabla.mobi ansible_host=10.21.185.152 ansible_python_interpreter="/usr/bin/python2.7" ansible_user="todo" ansible_password="todo" dtap=acc comment="Hosting by Alban Andrieu" ext_id="SRV_{{ host_id }}" groups="micloud paris"
+#GDNCSWFRDEV0009.nabla.mobi ansible_host=10.22.64.181 ansible_python_interpreter="/usr/bin/python2.7" ansible_user="todo" ansible_password="todo" dtap=acc comment="Hosting by Alban Andrieu" ext_id="SRV_{{ host_id }}" groups="micloud paris"
+
+[windows:vars]
+#ansible_user=vagrant
+#ansible_password=vagrant
+ansible_port=5986
+ansible_connection=winrm
+ansible_winrm_server_cert_validation=ignore
+ansible_winrm_transport=ssl
+
+[solaris]
+
+[solaris:vars]
+user=jenkins
+group=jenkins
+#ansible_sudo_pass=jenkins1234
+#ansible_python_interpreter="/opt/csw/bin/python"
+#For x86sol
+#ansible_python_interpreter="/usr/local/bin/python2.7"
+#ansible_ssh_user="jenkins"
+#ansible_ssh_pass="jenkins1234"
+
+[mac]
+
+[mac:vars]
+become_method=su

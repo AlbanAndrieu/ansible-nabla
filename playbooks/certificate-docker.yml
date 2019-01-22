@@ -8,7 +8,7 @@
 
 #See /root/pki/docker.pem
   roles:
-    - role: ssl.ca-certificate
+    - role: ssl-ca-certificate
       trust_ca_pki_dir: '~/pki'
       trust_ca_pki_prefix: 'registry'
       trust_ca_cert_prefix: 'registry'

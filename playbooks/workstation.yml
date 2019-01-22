@@ -1,7 +1,7 @@
 ---
 #This script is used to configure your workstation (for developer)
 
-#ansible-playbook -i inventory/production -v playbooks/workstation.yml --limit albandri-test.misys.global.ad -vvvv | tee setup.log
+#ansible-playbook -i playbooks/hosts-albandri-test -v playbooks/workstation.yml --limit albandri-test.misys.global.ad -vvvv | tee setup.log
 
 - hosts: all
   gather_facts: true
@@ -86,7 +86,7 @@
   hosts: css
 
   roles:
-    - css
+    - alban.andrieu.css
 
   vars:
 #      ruby_version: "2.3.1"
@@ -102,7 +102,7 @@
   become: true
 
   roles:
-    - solaris
+    - alban.andrieu.solaris
 
   vars:
     size: 2
@@ -131,7 +131,7 @@
   hosts: tomcat-servers
 
   roles:
-    - tomcat
+    - alban.andrieu.tomcat
 
   vars:
       tomcat_version: "8"

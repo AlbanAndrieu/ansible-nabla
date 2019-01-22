@@ -252,11 +252,6 @@
 #  scm: 'git'
 #  version: 'master'
 
-- src: 'https://github.com/AlbanAndrieu/docker.ubuntu'
-  name: 'docker'
-  scm: 'git'
-  version: 'master'
-
 #TODO nor more maintained
 #- src: 'https://github.com/AlbanAndrieu/ansible-role-base'
 #  name: 'elao-base'
@@ -270,6 +265,25 @@
 #
 #- src: 'https://github.com/AlbanAndrieu/ansible-role-sass'
 #  name: 'elao-sass'
+#  scm: 'git'
+#  version: 'master'
+
+#- src: angstwad.docker_ubuntu
+#  version: v3.4.1
+#  name: angstwad.docker-ubuntu
+
+- src: 'https://github.com/geerlingguy/ansible-role-pip'
+  name: 'geerlingguy.pip'
+  scm: 'git'
+  version: 'master'
+
+- src: 'https://github.com/geerlingguy/ansible-role-docker'
+  name: 'geerlingguy.docker'
+  scm: 'git'
+  version: 'master'
+
+#- src: 'https://github.com/AlbanAndrieu/docker.ubuntu'
+#  name: 'docker'
 #  scm: 'git'
 #  version: 'master'
 
@@ -428,18 +442,23 @@
   scm: 'git'
   version: 'master'
 
-- src: 'https://github.com/AlbanAndrieu/ansible-role-security'
-  name: 'security'
-  scm: 'git'
-  version: 'master'
-
 - src: 'https://github.com/AlbanAndrieu/ansible-sonar'
   name: 'sonar'
   scm: 'git'
   version: 'master'
 
+- src: 'https://github.com/AlbanAndrieu/ansible-role-security'
+  name: 'geerlingguy.security'
+  scm: 'git'
+  version: 'master'
+
 - src: 'https://github.com/geerlingguy/ansible-role-sonar-runner'
   name: 'geerlingguy.sonar-runner'
+  scm: 'git'
+  version: 'master'
+
+- src: 'https://github.com/geerlingguy/ansible-role-filebeat'
+  name: 'geerlingguy.filebeat'
   scm: 'git'
   version: 'master'
 
@@ -525,5 +544,20 @@
 
 - src: 'https://github.com/andrewrothstein/ansible-kubectl'
   name: 'andrewrothstein.kubectl'
+  scm: 'git'
+  version: 'master'
+
+- src: 'https://github.com/geerlingguy/ansible-role-clamav'
+  name: 'geerlingguy.clamav'
+  scm: 'git'
+  version: 'master'
+
+- src: 'https://github.com/geerlingguy/ansible-role-packer'
+  name: 'geerlingguy.varnish'
+  scm: 'git'
+  version: 'master'
+
+- src: 'https://github.com/andrewrothstein/ansible-terraform'
+  name: 'andrewrothstein.terraform'
   scm: 'git'
   version: 'master'
