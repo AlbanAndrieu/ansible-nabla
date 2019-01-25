@@ -171,8 +171,7 @@ ansible_ssh_common_args='-o StrictHostKeyChecking=no'
 #see workstation
 
 [eclipse]
-albandri-test
-albandri-test.misys.global.ad ansible_host=10.41.40.91 ansible_user="root" jenkins_home=/jenkins jenkins_id=1001 jenkins_gid=1006 docker_gid=1007 data_gid=33 dtap=dev comment="Hosting by Alban Andrieu"
+albandri-test ansible_host=10.41.40.91 ansible_user="root" jenkins_home=/jenkins jenkins_id=1001 jenkins_gid=1006 docker_gid=1007 data_gid=33 dtap=dev comment="Hosting by Alban Andrieu"
 
 [logstash]
 albandri-test

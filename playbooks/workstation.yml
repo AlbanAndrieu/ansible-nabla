@@ -26,14 +26,15 @@
                  Ubuntu 12.04/13.04/14.04/16.04/17.04/18.04."
     - debug: msg="Version {{ ansible_distribution }} {{ ansible_distribution_version }} {{ ansible_architecture }}"
 
-- import_playbook: jenkins-full.yml workstation_enabled=true automount_enabled=true nis_enabled=true
+#- import_playbook: jenkins-full.yml workstation_enabled=true automount_enabled=true nis_enabled=true
 
 - import_playbook: maven.yml
 
 - name: Apply common configuration to all jenkins slaves
   hosts: workstation
   remote_user: albandri
-  connection: local
+#  connection: local
+  become: true
 
   roles:
     - alban.andrieu.workstation
