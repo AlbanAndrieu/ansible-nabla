@@ -1,5 +1,5 @@
 ---
-#ansible-playbook -i hosts-albandri -c local -v python.yml --limit localhost --ask-sudo-pass | tee setup.log
+#ansible-playbook -i hosts-albandri -c local -v python.yml --limit localhost --ask-become-pass | tee setup.log
 
 - hosts: all
   gather_facts: true
@@ -31,7 +31,7 @@
   tasks:
     - name: Create virtualenv directory
       file:
-       path: "/opt/{{item.path}}"
+       path: "/opt/{{ item.path }}"
        state: directory
        mode: 0775
        recurse: yes
@@ -82,18 +82,19 @@
         - path: /opt/ansible/env35
           python: python3.5
 
-- name: Install python 2
-  hosts: RedHat-7*:RedHat-6*:RedHat-5*
+# Only python 2.6 is installed as default for python2 we need python 2.7
+- name: Install python 2.7
+  hosts: RedHat-6*:RedHat-5*:CentOS-6*
   become: true
 
   roles:
     - python
 
   vars:
-      python_versions: [2]
+      python_versions: [2.7]
       python_yum_enablerepo: epel
-      python_pkg_bin: /bin
-      python_bin: /bin/python
+      python_pkg_bin: /usr/bin
+      python_bin: /usr/bin/python
       python_virtualenv_user: jenkins
       python_virtualenvs:
         - path: /opt/ansible/env
@@ -102,7 +103,7 @@
           python: python2.7
 
 - name: Install python 2
-  hosts: CentOS-7*:CentOS-6*
+  hosts: RedHat-7*:CentOS-7*
   become: true
 
   roles:
@@ -121,25 +122,7 @@
           python: python2.7
 
 - name: Install python 3.5
-  hosts: RedHat-6*:RedHat-5*
-  become: true
-
-  roles:
-    - python
-
-  vars:
-      python_versions: [3.5]
-      python_yum_enablerepo: epel
-      python_pkg_bin: /bin
-      #python_bin: /opt/rh/rh-python35/root/usr/bin/python
-      python_bin: /bin/python
-      python_virtualenv_user: jenkins
-      python_virtualenvs:
-        - path: /opt/ansible/env35
-          python: python3.5
-
-- name: Install python 3.5
-  hosts: CentOS-7*:CentOS-6*:CentOS-5*
+  hosts: RedHat-6*:RedHat-5*:CentOS-7*:CentOS-6*:CentOS-5*
   become: true
 
   roles:
@@ -148,8 +131,8 @@
   vars:
       python_versions: [3.5u]
       python_yum_enablerepo: ius
-      python_pkg_bin: /bin
-      python_bin: /bin/python
+      python_pkg_bin: /usr/bin
+      python_bin: /usr/bin/python
       python_virtualenv_user: jenkins
       python_virtualenvs:
         - path: /opt/ansible/env35

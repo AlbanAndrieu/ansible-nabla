@@ -1,0 +1,143 @@
+# file: hosts
+
+[all]
+localhost ansible_user=root
+
+[administration]
+#localhost ansible_user=root
+
+[common]
+localhost ansible_user=root
+
+[hostname]
+
+[security]
+localhost ansible_user=root
+
+[java]
+localhost ansible_user=root
+
+[maven]
+localhost ansible_user=root
+
+[css]
+localhost ansible_user=root
+
+[python]
+localhost ansible_user=root
+
+[chrome]
+localhost ansible_user=root
+
+[selenium]
+localhost ansible_user=root
+
+[tomcat-servers]
+#webserver1
+#localhost ansible_user=root
+
+[jboss-servers]
+#webserver1
+#localhost ansible_user=root
+
+[webservers]
+#web3
+localhost ansible_user=root
+
+[locale]
+localhost ansible_user=root
+
+[zabbix-agent-paris]
+#localhost ansible_user=root
+
+[zabbix-agent-gdynia]
+#localhost ansible_user=root
+
+[webmin]
+#localhost ansible_user=root
+
+[xvbf]
+localhost ansible_user=root
+
+[jenkins-master]
+#localhost ansible_user=root
+
+[jenkins-master:vars]
+ansible_ssh_common_args='-o StrictHostKeyChecking=no'
+
+[jenkins-LIQ-master]
+
+[jenkins-LIQ-master:vars]
+ansible_ssh_common_args='-o StrictHostKeyChecking=no'
+
+[jenkins-slaves]
+localhost ansible_user=root
+
+[jenkins-slaves:vars]
+ansible_ssh_common_args='-o StrictHostKeyChecking=no'
+#jenkins_home='/jenkins'
+
+[jenkins-minimal]
+localhost ansible_user=root
+
+[jenkins-minimal:vars]
+ansible_ssh_common_args='-o StrictHostKeyChecking=no'
+
+[opencl]
+#localhost ansible_user=root
+
+[supervisors]
+localhost ansible_user=root
+
+[virtualbox]
+localhost ansible_user=root
+
+[vagrant]
+#localhost ansible_user=root
+
+[sonar]
+#localhost ansible_user=root
+
+[sonar:vars]
+ansible_ssh_common_args='-o StrictHostKeyChecking=no'
+
+[private-bower]
+#localhost ansible_user=root
+
+[nexus]
+#localhost ansible_user=root
+
+[docker]
+#localhost ansible_user=root
+
+[workstation]
+localhost ansible_user=root
+
+[checkmarx]
+#localhost
+
+[windows]
+#localhost
+
+[vagrant_hosts:children]
+jenkins-master
+jenkins-slaves
+sonar
+
+[solaris]
+
+[solaris:vars]
+user=jenkins
+group=jenkins
+home=/export/home/jenkins/
+#ansible_sudo_pass=jenkins1234
+#ansible_python_interpreter="/opt/csw/bin/python"
+#For x86sol
+#ansible_python_interpreter="/usr/local/bin/python2.7"
+#ansible_ssh_user="jenkins"
+#ansible_ssh_pass="jenkins1234"
+
+[mac]
+
+[mac:vars]
+become_method=su

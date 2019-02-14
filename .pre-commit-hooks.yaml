@@ -4,3 +4,9 @@
     entry: pre-commit-validate-manifest
     language: python
     files: ^(\.pre-commit-hooks\.yaml|hooks\.yaml)$
+#-   id: ansible-lint
+#    name: Ansible-lint
+#    description: This hook runs ansible-lint.
+#    entry: ansible-lint
+#    language: python
+#    files: \.(yaml|yml)$

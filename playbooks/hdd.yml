@@ -25,6 +25,13 @@
       ignore_errors: true
 
     - name: hdd | Extend sdb
+      command: vgextend VolGroup00 /dev/sdb
+      when: (ansible_distribution == 'Red Hat Enterprise Linux' or ansible_distribution == 'RedHat') and ansible_distribution_major_version == '6'
+      changed_when: false
+      become: true
+      ignore_errors: true
+
+    - name: hdd | Extend sdb
       command: vgextend rhel_fr1cslvcacrhel71 /dev/sdb
       when: (ansible_distribution == 'Red Hat Enterprise Linux' or ansible_distribution == 'RedHat') and ansible_distribution_major_version == '7'
       changed_when: false
@@ -48,6 +55,13 @@
     - name: hdd | Create docker filesystem
       command: lvcreate -l 12794 -n docker fr1vslub1604-vg
       when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and ansible_distribution_version not in ['12.04', '14.04']
+      changed_when: false
+      become: true
+      ignore_errors: true
+
+    - name: hdd | Create workspace filesystem
+      command: lvcreate -l 12805 -n workspace VolGroup00
+      when: (ansible_distribution == 'Red Hat Enterprise Linux' or ansible_distribution == 'RedHat') and ansible_distribution_major_version == '6'
       changed_when: false
       become: true
       ignore_errors: true
@@ -90,6 +104,13 @@
     - name: hdd | Make docker filesystem xfs
       command: mkfs -t xfs /dev/fr1vslub1604-vg/docker
       when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and ansible_distribution_version not in ['12.04', '14.04']
+      changed_when: false
+      become: true
+      ignore_errors: true
+
+    - name: hdd | Make workspace filesystem ext4
+      command: mkfs -t ext4 /dev/VolGroup00/workspace
+      when: (ansible_distribution == 'Red Hat Enterprise Linux' or ansible_distribution == 'RedHat') and ansible_distribution_major_version == '6'
       changed_when: false
       become: true
       ignore_errors: true
@@ -161,6 +182,7 @@
 # /dev/rhel_fr1cslvcacrhel71/docker /docker xfs defaults,usrquota,prjquota  0   0
 # /dev/fr1vslub1604-vg/workspace /workspace xfs auto 0 2
 # /dev/fr1vslub1604-vg/docker /docker xfs defaults,usrquota,prjquota  0   0
+# /dev/VolGroup00/workspace /workspace ext4 auto 0 2
 
 # Check entry in /etc/fstab
 # sudo mount /workspace
@@ -185,7 +207,7 @@
       changed_when: false
 
     - name: hdd | Install hdd tools
-      action: "{{ ansible_pkg_mgr }} name={{ item }} state={{ util_pkg_state|default('present') }} update_cache=yes"
+      action: "{{ ansible_pkg_mgr }} name={{ item }} state={{ util_pkg_state|default('present') }} update_cache=true"
       when: (ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux' or ansible_distribution == 'RedHat')
       with_items:
         - gnome-disk-utility

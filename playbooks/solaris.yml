@@ -1,7 +1,7 @@
 #ansible -m setup sparc-sun4sol-u6-1-sun4v -vvvv -i staging -vvvv
 #ansible sparc-sun4sol-u6-1-sun4v -i staging -m raw -a "pkginfo -l"  -k -u jenkins  -vvvv
 
-#ansible-playbook -i staging  -v solaris.yml --limit sparc-sun4sol-u6-1-sun4v --ask-sudo-pass
+#ansible-playbook -i staging  -v solaris.yml --limit sparc-sun4sol-u6-1-sun4v --ask-become-pass
 # --ask-pass
 
 - hosts: all

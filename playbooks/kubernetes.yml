@@ -1,7 +1,7 @@
 
 - name: Install kubernetes helm
   hosts: kubernetes
-  become: yes
+  become: true
 #  ignore_errors: yes
 
   roles:
@@ -9,7 +9,7 @@
 
 - name: Install kubectl
   hosts: kubernetes
-  become: yes
+  become: true
 #  ignore_errors: yes
 
   roles:

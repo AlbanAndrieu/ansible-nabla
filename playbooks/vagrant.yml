@@ -1,30 +1,10 @@
-#sudo ansible-playbook -i hosts-albandri -c local -v vagrant.yml | tee setup.log
-
-- hosts: all
-  gather_facts: true
-  tasks:
-    - name: group hosts by distribution
-      group_by: key="{{ ansible_distribution }}-{{ ansible_distribution_version }}"
-
-- hosts: RedHat-7*:RedHat-6*:CentOS-6*:Ubuntu-12.04:Ubuntu-14.04:Ubuntu-16.04:Ubuntu-17.04
-  gather_facts: false
-  tasks:
-    - name: group hosts for supported distributions
-      group_by: key="supported"
-
-- hosts: "!supported"
-  gather_facts: false
-  tasks:
-    - name: fail for unsupported distribution
-      fail: msg="{{ ansible_distribution }} {{ ansible_distribution_version }}
-                 is not a supported OS for a Tower installation.  Supported
-                 OSes include Red Hat Enterprise Linux 6/7, CentOS 6, or
-                 Ubuntu 12.04/14.04."
+---
+#ansible-playbook playbooks/vagrant.yml -i inventory/production --limit albandri-test -vvvv
 
 - name: Install vagrant
   hosts: vagrant
-  remote_user: root
-#  connection: local
+  become: true
+#  ignore_errors: true
 
   roles:
     - vagrant
@@ -37,7 +17,7 @@
       vagrant_hosts_enabled: true
       vagrant_share_enabled: true
       vagrant_winrm_enabled: true
-#      vagrant_version: "1.7.1"
+#      vagrant_version: "2.0.0"
 
 #- name: Install vagrant user
 #  hosts: vagrant

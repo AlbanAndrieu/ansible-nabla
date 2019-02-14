@@ -1,12 +1,12 @@
-#ansible-playbook -i hosts-albandri -v shell.yml --limit localhost --ask-sudo-pass -vvvv | tee setup.log
-# -c local  --ask-pass --ask-sudo-pass --sudo
+#ansible-playbook -i hosts-albandri -v shell.yml --limit localhost --ask-become-pass -vvvv | tee setup.log
+# -c local  --ask-pass --ask-become-pass --sudo
 
 - name: Apply common shell configuration
   hosts: workstation
 #  remote_user: root
   remote_user: albandri
 #  connection: local
-  become: yes
+  become: true
 
   roles:
     - alban.andrieu.shell

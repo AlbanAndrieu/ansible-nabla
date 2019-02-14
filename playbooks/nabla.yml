@@ -1,5 +1,5 @@
 ---
-#sudo ansible-playbook -i hosts-albandri -c local -v nabla.yml -vvvv --ask-sudo-pass | tee setup.log
+#sudo ansible-playbook -i hosts-albandri -c local -v nabla.yml -vvvv --ask-become-pass | tee setup.log
 
 - hosts: all
   gather_facts: true
@@ -33,7 +33,7 @@
 
 - name: Bootstrap python onto server
   hosts: Ubuntu-17*:Ubuntu-16*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
-#  become: yes
+#  become: true
 
   pre_tasks:
   - name: Install python 2 if not there
@@ -44,7 +44,7 @@
     changed_when: output.stdout|trim() != ""
 
   - name: Install sudo if not there
-    become: yes
+    become: true
     raw: |
       test -e /usr/bin/sudo || apt install -y sudo
     register: output

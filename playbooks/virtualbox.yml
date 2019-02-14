@@ -1,36 +1,16 @@
-#sudo ansible-playbook -i hosts-albandri -c local -v virtualbox.yml | tee setup.log
-
-- hosts: all
-  gather_facts: true
-  tasks:
-    - name: group hosts by distribution
-      group_by: key="{{ ansible_distribution }}-{{ ansible_distribution_version }}"
-
-- hosts: RedHat-7*:RedHat-6*:CentOS-6*:Ubuntu-12.04:Ubuntu-14.04
-  gather_facts: false
-  tasks:
-    - name: group hosts for supported distributions
-      group_by: key="supported"
-
-- hosts: "!supported"
-  gather_facts: false
-  tasks:
-    - name: fail for unsupported distribution
-      fail: msg="{{ ansible_distribution }} {{ ansible_distribution_version }}
-                 is not a supported OS for a Tower installation.  Supported
-                 OSes include Red Hat Enterprise Linux 6/7, CentOS 6, or
-                 Ubuntu 12.04/14.04."
+#ansible-playbook -i playbooks/hosts-albandri-test -v playbooks/virtualbox.yml --limit albandri-test -vvvv
 
 - name: Install virtualbox
   hosts: virtualbox
-  remote_user: root
-#  connection: local
+  become: true
+  ignore_errors: true
 
   roles:
-    - virtualbox
+    - alban.andrieu.virtualbox
 
   vars:
-      #virtualbox_package_name: virtualbox
-      #virtualbox_version: 4.3
-      virtualbox_dkms_enable: no
-      virtualbox_extension_enable: yes
+    virtualbox_version: "5.2.26"
+    virtualbox_package_name: virtualbox
+    virtualbox_users:
+      - "jenkins"
+      - "micloud"

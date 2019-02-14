@@ -3,7 +3,7 @@
 
 - name: Install sonar
   hosts: sonar
-  #become: yes
+  #become: true
   #remote_user: vagrant
   #connection: local
 
@@ -15,8 +15,8 @@
       sonar_analyzer_runner_install: false
 #Handle by jenkins_slave role, Warning it will override settings.xml.j2 from jenkins_slave role
       maven_install: false
-      sonar_mysql_install: true
-      sonar_postgres_install : false
+      sonar_postgres_install: false
+      sonar_mysql_install: false
       sonar_jdbc_driver: "mysql"
       sonar_jdbc_port: 3306
       mysql_root_username: root

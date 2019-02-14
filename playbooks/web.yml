@@ -4,9 +4,9 @@
 #ansible-playbook web.yml -i production --limit FR1CSLFRBM0059.misys.global.ad,FR1CSLFRBM0060.misys.global.ad -vvvv
 # -e python2_version="2.7"
 
-#TODO ansible -i production FR1CSLFRBM0059.misys.global.ad --sudo --ask-sudo-pass -m raw -a "yum install -y python2 python-simplejson"
-#TODO ansible -i production FR1CSLFRBM0059.misys.global.ad --sudo --ask-sudo-pass -m raw -a "apt-get -f install && apt-get update"
-#TODO ansible -i production FR1CSLFRBM0059.misys.global.ad --sudo --ask-sudo-pass -m raw -a "apt-get install -y python python-simplejson"
+#TODO ansible -i production FR1CSLFRBM0059.misys.global.ad --sudo --ask-become-pass -m raw -a "yum install -y python2 python-simplejson"
+#TODO ansible -i production FR1CSLFRBM0059.misys.global.ad --sudo --ask-become-pass -m raw -a "apt-get -f install && apt-get update"
+#TODO ansible -i production FR1CSLFRBM0059.misys.global.ad --sudo --ask-become-pass -m raw -a "apt-get install -y python python-simplejson"
 
 - hosts: all
   gather_facts: true

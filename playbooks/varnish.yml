@@ -3,7 +3,7 @@
 
 - name: Install varnish
   hosts: varnish
-  become: yes
+  become: true
 #  ignore_errors: true
 
   roles:

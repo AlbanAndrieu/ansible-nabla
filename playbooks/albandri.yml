@@ -1,5 +1,5 @@
-#ansible-playbook -i hosts-albandri -v albandri.yml --limit albandri-laptop-work -c local --ask-sudo-pass -vvvv | tee setup.log
-# -c local  --ask-pass --ask-sudo-pass --sudo
+#ansible-playbook -i hosts-albandri -v albandri.yml --limit albandri-laptop-work -c local --ask-become-pass -vvvv | tee setup.log
+# -c local  --ask-pass --ask-become-pass --sudo
 #ansible all -m setup -i hosts-albandri --limit albandri-laptop-work -vvvv
 
 - name: Assert platform is supported
@@ -77,7 +77,7 @@
 
 - name: Bootstrap python onto server
   hosts: Ubuntu-17*:Ubuntu-16*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
-#  become: yes
+#  become: true
 
   pre_tasks:
   - name: Install python 2 if not there
@@ -88,7 +88,7 @@
     changed_when: output.stdout|trim() != ""
 
   - name: Install sudo if not there
-    become: yes
+    become: true
     raw: |
       test -e /usr/bin/sudo || apt install -y sudo
     register: output
@@ -136,7 +136,7 @@
   hosts: all
   gather_facts: false
   remote_user: albandri
-  become: yes
+  become: true
 
 
   roles:
@@ -160,7 +160,7 @@
 - name: Apply security configuration
   hosts: security
   remote_user: albandri
-  become: yes
+  become: true
 
 
   roles:
@@ -465,7 +465,7 @@
 #  remote_user: root
   remote_user: albandri
 
-#  become: yes
+#  become: true
 
   roles:
     - role: alban.andrieu.shell

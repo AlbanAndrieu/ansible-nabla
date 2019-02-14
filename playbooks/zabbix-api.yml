@@ -1,0 +1,73 @@
+---
+# Playbook to register node on Zabbix server, requires running zabbix agent on node
+#
+# nabla should be default zabbix server
+# On localhost, zabbix-api library needs to be installed globally:
+# $ sudo pip install zabbix-api
+#
+# Usage:
+# (interactive prompt)
+# $ ansible-playbook -i inventory/production  playbooks/zabbix-api.yml
+# (automatically)
+# $ ansible-playbook -i inventory/production  playbooks/zabbix-api.yml -e zabbix_username=nabla -e zabbix_password=***
+# $ ansible-playbook -i inventory/production  playbooks/zabbix-api.yml -e zabbix_username=nabla -e zabbix_password=*** --tags remove --skip-tags configure
+
+- hosts: zabbix
+  name: Add hosts to Zabbix monitoring
+  vars_prompt:
+  - name: "zabbix_username"
+    prompt: "User for specified Zabbix server [mgr]"
+  - name: "zabbix_password"
+    prompt: "Password for Zabbix user"
+  tasks:
+  - local_action:
+      module: zabbix_host
+      server_url: https://nabla/zabbix/
+      login_user: "{{ zabbix_username }}"
+      login_password: "{{ zabbix_password }}"
+      host_name: "{{ inventory_hostname.split('.')[0] }}"
+      visible_name: "{{ zabbix_visible_name | default(ansible_fqdn) }}"
+      description: "{{ description | default('Zabbix Agent automatically configured with Ansible') }}"
+      host_groups:
+      - FRBM Hosts
+      - FR Hosts
+      link_templates:
+      - Template OS Linux
+      status: enabled
+      state: present
+      force: yes
+      proxy: null
+      inventory_mode: automatic
+      interfaces:
+      - type: 1
+        main: 1
+        useip: 0
+        dns: "{{ ansible_fqdn }}"
+      - type: 1
+        main: 0
+        useip: 1
+        ip: "{{ ansible_facts.default_ipv4.address }}"
+  become: no
+  tags:
+  - configure
+
+- hosts: zabbix-deprecated
+  name: Remove hosts from Zabbix monitoring
+  gather_facts: no
+  vars_prompt:
+  - name: "zabbix_username"
+    prompt: "User for specified Zabbix server [mgr]"
+  - name: "zabbix_password"
+    prompt: "Password for Zabbix user"
+  tasks:
+  - local_action:
+      module: zabbix_host
+      server_url: https://nabla/zabbix/
+      login_user: "{{ zabbix_username }}"
+      login_password: "{{ zabbix_password }}"
+      host_name: "{{ inventory_hostname.split('.')[0] }}"
+      state: absent
+  become: no
+  tags:
+  - never
+  - remove

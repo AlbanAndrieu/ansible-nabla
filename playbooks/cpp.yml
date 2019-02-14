@@ -2,8 +2,6 @@
 
 - name: Install gcc
   hosts: cpp
-#  connection: local
-#  remote_user: root
 
   roles:
 #    - role: alban.andrieu.gcc
@@ -28,8 +26,6 @@
 
 - name: Install cpp
   hosts: cpp
-#  connection: local
-#  remote_user: root
 
   roles:
     - alban.andrieu.cpp

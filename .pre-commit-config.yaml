@@ -17,6 +17,7 @@ repos:
     -   id: detect-private-key
         exclude: >
                   (?x)^(
+                      .ssh/id_rsa|
                       roles/jenkins-master/defaults/main.yml|
                       roles/jenkins-master/README.md
                   )$
@@ -49,12 +50,12 @@ repos:
 #    hooks:
 #    -   id: check-hooks-apply
 #    -   id: check-useless-excludes
-#-   repo: https://github.com/willthames/ansible-lint.git
-#    sha: v3.4.20
-#    hooks:
-#    -   id: ansible-lint
-#        files: \.(yaml|yml)$
-#        exclude: '.travis.yml'
+-   repo: https://github.com/ansible/ansible-lint.git
+    sha: v4.1.0
+    hooks:
+    -   id: ansible-lint
+        files: \.(yaml|yml)$
+        exclude: '.travis.yml'
 -   repo: git://github.com/doublify/pre-commit-hindent
     rev: 73078a9ff6f276461c63568445972d6365dfeab2
     hooks:

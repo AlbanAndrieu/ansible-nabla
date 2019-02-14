@@ -1,250 +1,340 @@
 #!/usr/bin/env groovy
+@Library('nabla-pipeline-scripts') _
+
 /*
-    Point of this Jenkinsfile is to:
-    - define global behavior
-*/
+ * Fusion Risk Ansible
+ *
+ * Test Ansible Playbooks by: ansible-lint, ansible-playbook on docker images
+ */
 
-def isReleaseBranch() {
-    env.BRANCH_NAME ==~ /develop/ || env.BRANCH_NAME ==~ /master/ || env.BRANCH_NAME ==~ /release\/.*/
-}
-
-def abortPreviousRunningBuilds() {
-  def hi = Hudson.instance
-  def pname = env.JOB_NAME.split('/')[0]
-
-  try {
-    hi.getItem(pname).getItem(env.JOB_BASE_NAME).getBuilds().each{ build ->
-    def exec = build.getExecutor()
-
-    if (build.number != currentBuild.number && exec != null) {
-      exec.interrupt(
-        Result.ABORTED,
-        new CauseOfInterruption.UserInterruption(
-          "Aborted by #${currentBuild.number}"
-        )
-      )
-      println("Aborted previous running build #${build.number} - ${env.JOB_BASE_NAME}")
-    } else {
-      println("Build ${pname} / ${env.JOB_BASE_NAME} is not running or is already built, not aborting #${build.number}")
-    }
-  }
-  } catch(NullPointerException e) {
-      // happens the first time if there is no branch at all
-  } finally {
-      // carry on as if nothing went wrong
-  }
-
-} // abortPreviousRunningBuilds
-
-def daysToKeep         = isReleaseBranch() ? '30' : '10'
-def numToKeep          = isReleaseBranch() ? '20' : '5'
-def artifactDaysToKeep = isReleaseBranch() ? '30' : '10'
-def artifactNumToKeep  = isReleaseBranch() ? '3'  : '1'
-def cronString         = isReleaseBranch() ? 'H H(3-7) * * 1-5' : ''
-
-def DOCKERREGISTRY="docker.hub"
-//def DOCKERORGANISATION="nabla"
-def DOCKERTAG="latest"
-def DOCKERUSERNAME="nabla"
+def DOCKER_REGISTRY="docker.hub"
+def DOCKER_TAG="latest"
 def DOCKERNAME="ansible-jenkins-slave"
+def DOCKERUSERNAME="nabla"
 
-def DOCKER_REGISTRY_URL = "https://${DOCKERREGISTRY}"
-def DOCKER_REGISTRY_CREDENTIAL = 'nabla'
-def DOCKER_IMAGE = "${DOCKERUSERNAME}/${DOCKERNAME}:${DOCKERTAG}"
+def DOCKER_REGISTRY_URL="https://${DOCKER_REGISTRY}"
+def DOCKER_REGISTRY_CREDENTIAL='jenkins'
+def DOCKER_IMAGE="${DOCKER_REGISTRY}/${DOCKERUSERNAME}/${DOCKERNAME}:1.0.1"
 
-//JENKINS-42369 : Docker options need to be defined outside of pipeline
 def DOCKER_OPTS = [
-    '--net=host',
-    '--pid=host',
-//    '--dns-search=nabla.mobi',
-//    '-v /home/jenkins/.m2:/home/jenkins/.m2 ',
-    '-v /home/jenkins:/home/jenkins',
-    '-v /etc/passwd:/etc/passwd:ro ',
-    '-v /etc/group:/etc/group:ro '
+  '--dns-search=nabla.mobi',
+  '-v /etc/passwd:/etc/passwd:ro ',
+  '-v /etc/group:/etc/group:ro '
 ].join(" ")
 
-/*
-    Point of this Jenkinsfile is to:
-    - build java project
-*/
 pipeline {
-    agent {
-      label 'ansible-check'
-    }
-    triggers {
-        cron(cronString)
-        //pollSCM '@hourly'
-        bitbucketPush()
-    }
-    parameters {
-        //booleanParam(name: "RELEASE", defaultValue: false, description: "Perform release-type build.")
-        string(defaultValue: 'develop', description: 'Default git branch to override', name: 'GIT_BRANCH_NAME')
-        string(defaultValue: '--check', description: 'Default mode used to test playbook', name: 'DRY_RUN')
-        string(defaultValue: '', description: 'Default inventory used to test playbook', name: 'DOCKER_RUN')
-        string(defaultValue: 'production', description: 'Default inventory used to test playbook', name: 'ANSIBLE_INVENTORY')
-        string(defaultValue: 'albandri', description: 'Default server used to test playbook', name: 'TARGET_SLAVE')
-        string(defaultValue: 'jenkins-slave.yml', description: 'Default playbook to override', name: 'TARGET_PLAYBOOK')
-        string(defaultValue: '/usr/bin/python3.5', description: 'Default python command to override', name: 'PYTHON_CMD')
-        string(defaultValue: 'LATEST_SUCCESSFULL', description: 'Create a TAG', name: 'TARGET_TAG')
-        //string(defaultValue: '', description: 'Shall we build docker image', name: 'DOCKER_RUN')
-        string(defaultValue: 'jenkins', description: 'User', name: 'TARGET_USER')
-        //booleanParam(defaultValue: false, description: 'Dry run', name: 'DRY_RUN')
-        booleanParam(defaultValue: false, description: 'Clean before run', name: 'CLEAN_RUN')
-        //booleanParam(defaultValue: false, description: 'Debug run', name: 'DEBUG_RUN')
-    }
-    environment {
-        JENKINS_CREDENTIALS = 'jenkins-ssh'
-        GIT_BRANCH_NAME = "${params.GIT_BRANCH_NAME}"
-        //CARGO_RMI_PORT = "${params.CARGO_RMI_PORT}"
-       // WORKSPACE_SUFFIX = "${params.WORKSPACE_SUFFIX}"
-        DRY_RUN = "${params.DRY_RUN}"
-        //CLEAN_RUN = "${params.CLEAN_RUN}"
-        //DEBUG_RUN = "${params.DEBUG_RUN}"
-        //echo "JOB_NAME: ${env.JOB_NAME} : ${env.JOB_BASE_NAME}"
-        TARGET_PROJECT = sh(returnStdout: true, script: "echo ${env.JOB_NAME} | cut -d'/' -f -1").trim()
-        BRANCH_NAME = "${env.BRANCH_NAME}".replaceAll("feature/","")
-        PROJECT_BRANCH = "${env.GIT_BRANCH}".replaceFirst("origin/","")
-        BUILD_ID = "${env.BUILD_ID}"
-        SONAR_BRANCH = sh(returnStdout: true, script: "echo ${env.BRANCH_NAME} | cut -d'/' -f 2-").trim()
-        GIT_AUTHOR_EMAIL = "${env.CHANGE_AUTHOR_EMAIL}"
-        GIT_PROJECT = "ansible-nabla"
-        GIT_BROWSE_URL = "https://github.com/AlbanAndrieu/${GIT_PROJECT}/"
-        //GIT_URL = "https://github.com/scm/AlbanAndrieu/${GIT_PROJECT}.git"
-        GIT_URL = "ssh://git@github.com/AlbanAndrieu/${GIT_PROJECT}.git"
-        GIT_COMMIT = "TODO"
-    }
-    options {
-        disableConcurrentBuilds()
-        ansiColor('xterm')
-        timeout(time: 360, unit: 'MINUTES')
-        timestamps()
-        buildDiscarder(
-          logRotator(
-            daysToKeepStr: daysToKeep,
-            numToKeepStr: numToKeep,
-            artifactDaysToKeepStr: artifactDaysToKeep,
-            artifactNumToKeepStr: artifactNumToKeep
-          )
-        )
-    }
-    stages {
-        stage('Cleaning') {
-            steps {
-                script {
-                    //utils = load "Jenkinsfile-vars"
-                    if (! isReleaseBranch()) { abortPreviousRunningBuilds() }
-                }
-            }
+  agent {
+    label 'ansible-check'
+  }
+  parameters {
+    string(name: 'DRY_RUN', defaultValue: '--check', description: 'Default mode used to test playbook')
+    string(name: 'DOCKER_RUN', defaultValue: '', description: 'Default inventory used to test playbook')
+    string(name: 'ANSIBLE_INVENTORY', defaultValue: 'production', description: 'Default inventory used to test playbook')
+    string(name: 'TARGET_SLAVE', defaultValue: 'albandri', description: 'Default server used to test playbook')
+    string(name: 'TARGET_PLAYBOOK', defaultValue: 'jenkins-slave.yml', description: 'Default playbook to override')
+    string(name: 'ANSIBLE_VAULT_PASS', defaultValue: 'test123', description: 'Default vault password to override')
+    booleanParam(name: 'CLEAN_RUN', defaultValue: false, description: 'Clean before run')
+    booleanParam(name: 'SKIP_LINT', defaultValue: true, description: 'Skip Linter - requires ansible galaxy roles, so it is time consuming')
+    booleanParam(name: 'SKIP_DOCKER', defaultValue: false, description: 'Skip Docker - requires image rebuild from scratch')
+    booleanParam(name: 'MOLECULE_DEBUG', defaultValue: false, description: 'Enable --debug flag for molecule - does not affect executions of other tests')
+  }
+  environment {
+    JENKINS_CREDENTIALS = 'jenkins-ssh'
+    DRY_RUN = "${params.DRY_RUN}"
+    CLEAN_RUN = "${params.CLEAN_RUN}"
+    DEBUG_RUN = "${params.DEBUG_RUN}"
+    BRANCH_NAME = "${env.BRANCH_NAME}".replaceAll("feature/","")
+    PROJECT_BRANCH = "${env.GIT_BRANCH}".replaceFirst("origin/","")
+    BUILD_ID = "${env.BUILD_ID}"
+  }
+  options {
+    disableConcurrentBuilds()
+    ansiColor('xterm')
+    timeout(time: 360, unit: 'MINUTES')
+    timestamps()
+  }
+  stages {
+    stage('Setup') {
+      steps {
+        script {
+          properties(createPropertyList())
+          setBuildName()
+          if (! isReleaseBranch()) { abortPreviousRunningBuilds() }
         }
-        stage('Preparation') { // for display purposes
-            steps {
-                checkout scm
-                script {
-                    //properties(utils.createPropertyList())
-                    sh "git rev-parse --short HEAD > .git/commit-id"
-                    GIT_COMMIT = readFile('.git/commit-id')
-                }
+      }
+    }
+    stage("Ansible CMDB Report") {
+      // Runs ansible-cmdb and publishes the report
+      agent {
+        label 'ansible-check&&ubuntu&&!albandri'
+      }
+      when {
+        expression { BRANCH_NAME ==~ /(release|master|develop)/ }
+      }
+      steps {
+        script {
+          configFileProvider([configFile(fileId: 'vault.passwd',  targetLocation: 'vault.passwd', variable: '_')]) {
+            sh "./run-ansible-cmbd.sh"
+          }
+          publishHTML([
+            allowMissing: false,
+            alwaysLinkToLastBuild: false,
+            keepAll: true,
+            reportDir: "./overwiev/",
+            reportFiles: 'overview.html',
+            includes: '**/*',
+            reportName: 'Ansible CMDB Report',
+            reportTitles: "Ansible CMDB Report Index"
+          ])
 
-                echo "GIT_COMMIT: ${env.GIT_COMMIT}"
-                echo "SONAR_BRANCH: ${env.SONAR_BRANCH}"
-                echo "PROJECT_BRANCH: ${env.PROJECT_BRANCH}"
-                echo "TARGET_PROJECT: ${env.TARGET_PROJECT}"
-                echo "BRANCH_NAME: ${env.BRANCH_NAME}"
-                echo "GIT_BRANCH_NAME: ${env.GIT_BRANCH_NAME}"
+          junit "target/ansible-lint.xml"
 
-                //checkout([
-                //    $class: 'GitSCM',
-                //    branches: [[name: "${env.GIT_BRANCH_NAME}"]],
-                //    browser: [
-                //        $class: 'Stash',
-                //        repoUrl: "${env.GIT_BROWSE_URL}"],
-                //    doGenerateSubmoduleConfigurations: false,
-                //    extensions: [
-                //        [$class: 'CloneOption', depth: 0, noTags: true, reference: '', shallow: true],
-                //        [$class: 'LocalBranch', localBranch: "${env.GIT_BRANCH_NAME}"],
-                //        [$class: 'RelativeTargetDirectory', relativeTargetDir: 'bm'],
-                //        [$class: 'MessageExclusion', excludedMessage: '.*\\\\[maven-release-plugin\\\\].*'],
-                //        [$class: 'IgnoreNotifyCommit'],
-                //        [$class: 'ChangelogToBranch', options: [compareRemote: 'origin', compareTarget: 'release/1.0.0']]
-                //    ],
-                //    gitTool: 'git-latest',
-                //    submoduleCfg: [],
-                //    userRemoteConfigs: [[
-                //        credentialsId: "${env.JENKINS_CREDENTIALS}",
-                //        url: "${env.GIT_URL}"]
-                //    ]
-                //])
-
-                sh 'ansible-galaxy install -r requirements.yml -p ./roles/ --ignore-errors'
-            }
         }
-        stage('Build') { // for display purposes
-            steps {
-                // check syntax
-                ansiblePlaybook colorized: true, extras: '-vvvv --syntax-check', installation: 'ansible-2.2.0.0', inventory: 'production', limit: 'FR1CSLFRBM0059.misys.global.ad', playbook: 'jenkins-slave.yml', sudoUser: null
-
-                script {
-                    // check quality
-                    sh returnStatus: true, script: 'ansible-lint jenkins-slave.yml || true'
-
-                    //TODO (too long), replace by https://docs.docker.com/develop/develop-images/multistage-build/
-                    sh './playbooks/run-ansible-workstation.sh'
-                } // script
-            } // steps
-        } // stage Build
-
-        stage('Docker') {
-            when {
-                expression { BRANCH_NAME ==~ /(release|master|develop)/ }
+      }
+    }
+    stage('Documentation') {
+      // Creates documentation using Sphinx and publishes it on Jenkins
+      // Copy of the documentation is rsynced with kgrdb01
+      steps {
+        script {
+          dir("docs") {
+            sh "source /opt/ansible/env35/bin/activate && make html"
+          }
+          publishHTML([
+            allowMissing: false,
+            alwaysLinkToLastBuild: false,
+            keepAll: true,
+            reportDir: "./docs/_build/html/",
+            reportFiles: 'index.html',
+            includes: '**/*',
+            reportName: 'Sphinx Docs',
+            reportTitles: "Sphinx Docs Index"
+          ])
+          if (isReleaseBranch()) {
+            // Initially, we will want to publish only one version,
+            // i.e. the latest one from develop branch.
+            dir("docs/_build/html") {
+              rsync([
+                source: "*",
+                destination: "jenkins@albandri:/kgr/release/docs/fusionrisk-ansible/",
+                credentialsId: "jenkins_unix_slaves"
+              ])
             }
-            steps {
-                script {
-                     // --target builder
-                    docker_build_args="--no-cache --pull --build-arg JENKINS_HOME=/home/jenkins"
-                    //-f Dockerfile-jenkins-slave-ubuntu:16.04 . --no-cache  -t "${DOCKERUSERNAME}/${DOCKERNAME}" --tag "${DOCKERTAG}"
+          }
+        }
+      }
+    }
+    stage('SonarQube analysis') {
+      environment {
+        SONAR_USER_HOME = "$WORKSPACE"
+      }
+      steps {
+        script {
+          withSonarQubeWrapper(verbose: true, skipMaven: true, repository: "ansible-nabla") {
 
-                    docker.withRegistry("${DOCKER_REGISTRY_URL}", "${DOCKER_REGISTRY_CREDENTIAL}") {
-                        withCredentials([
-                            [$class: 'UsernamePasswordMultiBinding',
-                            credentialsId: DOCKER_REGISTRY_CREDENTIAL,
-                            usernameVariable: 'USERNAME',
-                            passwordVariable: 'PASSWORD']
-                        ]) {
-                            //sh "docker login --password=${PASSWORD} --username=${USERNAME} ${DOCKER_REGISTRY_URL}"
-                            //git '…'
-                            def container = docker.build("${DOCKER_IMAGE}", "${docker_build_args} -f Dockerfile-jenkins-slave-ubuntu:16.04 . ")
-                            container.inside {
-                              sh 'echo test'
-                            }
-                            //container.push()  // record this snapshot (optional)
-                            //stage 'Test image'
-                            stage('Test image') {
-                                //docker run -i -t --entrypoint /bin/bash ${myImg.imageName()}
-                                docker.image(${DOCKER_IMAGE}).withRun {c ->
-                                sh "docker logs ${c.id}"
-                                }
-                            }
-                            // run some tests on it (see below), then if everything looks good:
-                            //stage 'Approve image'
-                            //container.push 'test'
-                            //def myImg = docker.image(${DOCKER_IMAGE})
-                            //sh "docker push ${myImg.imageName()}"
-                        } // withCredentials
-                     } // withRegistry
-                } //script
-            } // steps
-        } // stage Docker
+          }
+        }
+      } // steps
+    } // stage SonarQube analysis
+    stage('Molecule - Java') {
+      agent {
+        label 'molecule'
+      }
+      steps {
+        script {
 
-        stage('SonarQube analysis') {
-            environment {
-                SONAR_SCANNER_OPTS = "-Xmx1g"
+          testAnsibleRole("ansiblebit.oracle-java")
+
+        }
+      }
+    } // stage
+    stage('Molecule') {
+      //environment {
+      //  MOLECULE_DEBUG="${params.MOLECULE_DEBUG ? '--debug' : ' '}"  // syntax: important to have the space ' '
+      //}
+      parallel {
+        stage("administration") {
+          agent {
+            label 'molecule'
+          }
+          steps {
+            script {
+              testAnsibleRole("administration")
             }
-            steps {
-                script {
-                    sh "pwd"
-                    sh "/usr/local/sonar-runner/bin/sonar-scanner -D sonar-project.properties"
-                }
+          }
+        }
+        stage("common") {
+          agent {
+            label 'molecule'
+          }
+          steps {
+            script {
+              testAnsibleRole("common")
             }
-        } // stage SonarQube
-    } //stages
-} // pipeline
+          }
+        }
+        stage("security") {
+          agent {
+            label 'molecule'
+          }
+          steps {
+            script {
+              testAnsibleRole("security")
+            }
+          }
+        }
+      }
+    }
+    stage('Molecule parallel') {
+      parallel {
+        stage("cleaning") {
+          agent {
+            label 'molecule'
+          }
+          steps {
+            script {
+              testAnsibleRole("cleaning")
+            }
+          }
+        }
+        stage("DNS") {
+          agent {
+            label 'molecule'
+          }
+          steps {
+            script {
+              testAnsibleRole("dns")
+            }
+          }
+        }
+      }
+    }
+    stage('Docker') {
+      parallel {
+        stage('Ansible Self-Config') {
+          agent {
+            label 'docker-inside'
+          }
+          steps {
+            script {
+              println("TODO: test ansible role by self configuration of docker images")
+            }
+          }
+        }
+        stage('Ubuntu 16.04') {
+          agent {
+            label 'docker-inside'
+          }
+          when {
+            expression { BRANCH_NAME ==~ /(release|master|develop)/ }
+          }
+          steps {
+            script {
+              if (! params.SKIP_DOCKER) {
+
+                configFileProvider([configFile(fileId: 'vault.passwd',  targetLocation: 'vault.passwd', variable: '_')]) {
+
+                  sh 'mkdir -p .ssh/ || true'
+
+                  docker_build_args="--no-cache --pull --build-arg JENKINS_HOME=/home/jenkins --tag 1.0.4"
+
+                  docker.withRegistry("${DOCKER_REGISTRY_URL}", "${DOCKER_REGISTRY_CREDENTIAL}") {
+                     withCredentials([
+                         [$class: 'UsernamePasswordMultiBinding',
+                         credentialsId: DOCKER_REGISTRY_CREDENTIAL,
+                         usernameVariable: 'USERNAME',
+                         passwordVariable: 'PASSWORD']
+                     ]) {
+                       def container = docker.build("${DOCKER_IMAGE}", "${docker_build_args} -f docker/ubuntu16/Dockerfile . ")
+                       container.inside {
+                         sh 'echo test'
+                       }
+                       docker.image("${DOCKER_IMAGE}").withRun("-u root", "/bin/bash") {c ->
+                         sh "docker logs ${c.id}"
+                       }
+                     }
+                  }
+                } // vault
+              }
+            }
+          }
+        }
+        stage('Ubuntu 18.04') {
+          agent {
+            label 'docker-inside'
+          }
+          when {
+            expression { BRANCH_NAME ==~ /(release|master|develop)/ }
+          }
+          steps {
+            script {
+              if (! params.SKIP_DOCKER) {
+
+                configFileProvider([configFile(fileId: 'vault.passwd',  targetLocation: 'vault.passwd', variable: '_')]) {
+
+                  sh 'mkdir -p .ssh/ || true'
+
+                  docker_build_args="--no-cache --pull --build-arg JENKINS_HOME=/home/jenkins --tag 1.0.8"
+
+                  docker.withRegistry("${DOCKER_REGISTRY_URL}", "${DOCKER_REGISTRY_CREDENTIAL}") {
+                     withCredentials([
+                         [$class: 'UsernamePasswordMultiBinding',
+                         credentialsId: DOCKER_REGISTRY_CREDENTIAL,
+                         usernameVariable: 'USERNAME',
+                         passwordVariable: 'PASSWORD']
+                     ]) {
+                      def container = docker.build("${DOCKER_IMAGE}", "${docker_build_args} -f docker/ubuntu18/Dockerfile . ")
+                      container.inside {
+                        sh 'echo test'
+                      }
+
+                      //docker run -i -t --entrypoint /bin/bash ${myImg.imageName()}
+                      docker.image("${DOCKER_IMAGE}").withRun("-u root", "/bin/bash") {c ->
+                        sh "docker logs ${c.id}"
+                      }
+
+                      parallel "sample default maven project": {
+                        build_test = build(job:"TEST/nabla-servers-bower-sample/develop",
+                        wait: true,
+                        propagate: false).result
+                        if (build_test == 'FAILURE') {
+                            echo "First job failed"
+                            currentBuild.result = 'UNSTABLE' // of FAILURE
+                        }
+                      } // parallel
+                    }
+                  }
+
+                  // TODO
+                  //junit "target/jenkins-full-*.xml"
+
+                } // vault
+              }
+            }
+          }
+        }
+        stage("CentOS 7") {
+          agent {
+            label 'docker-inside'
+          }
+          steps {
+            script {
+              println("TODO: test centos 7 building")
+            }
+          }
+        }
+      }
+    }
+  }
+  post {
+    always {
+      archiveArtifacts artifacts: "**/*.log", onlyIfSuccessful: false, allowEmptyArchive: true
+      runHtmlPublishers(["LogParserPublisher", "AnalysisPublisher"])
+    }
+    success {
+      script {
+        if (! isReleaseBranch()) { cleanWs() }
+      }
+    }
+  } // post
+}

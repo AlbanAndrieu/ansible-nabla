@@ -1,10 +1,10 @@
 #ansible-playbook -i staging -c local -v docker-container.yml --ask-pass -vvvv | tee setup.log
-#ansible-playbook -i staging -c local -v docker-container.yml --limit albandri --ask-sudo-pass -vvvv | tee setup.log
+#ansible-playbook -i staging -c local -v docker-container.yml --limit albandri --ask-become-pass -vvvv | tee setup.log
 
 #sudo docker logout https://docker.misys.global.ad:5000
 #sudo docker login registry.nabla.mobi
 - hosts: docker-container-oracle
-#  become: yes
+#  become: true
 
   tasks:
 #    - name: Log into private registry
@@ -41,7 +41,7 @@
 #    - debug: var=output
 
 - hosts: docker-container-oracle
-#  become: yes
+#  become: true
 
   tasks:
     - name: Create a data container

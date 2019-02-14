@@ -1,4 +1,5 @@
-#sudo ansible-playbook -i hosts-albandri -c local -v sonar-runner.yml -vvvv | tee setup.log
+---
+#sudo ansible-playbook -i inventory/production -c local -v playbooks/sonar-runner.yml -vvvv | tee setup.log
 
 - name: Install sonar
   hosts: jenkins-slaves

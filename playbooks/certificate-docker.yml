@@ -1,7 +1,7 @@
 
 - name: Install Docker CA root certificate
   hosts: docker
-  become: yes
+  become: true
   check_mode: no
   ignore_errors: yes
   remote_user: root
@@ -24,12 +24,12 @@
   tasks:
     - name: Create .docker
       file: path=~/.docker state=directory mode=0700
-      become: yes
+      become: true
       become_user: root
 
     - name: Create registry
       file: path=/etc/docker/certs.d/registry.nabla.mobi/ state=directory mode=0700
-      become: yes
+      become: true
       become_user: root
 
     #- name: Copy docker registry pem crt
@@ -40,7 +40,7 @@
     #  with_items:
     #    - ~/.docker/registry.crt
     #    - /etc/docker/certs.d/registry.nabla.mobi/registry.crt
-    #  become: yes
+    #  become: true
     #  become_user: root
 
     - name: Copy ca pem crt
@@ -51,7 +51,7 @@
       with_items:
         - ~/.docker/ca.crt
         - /etc/docker/certs.d/registry.nabla.mobi/ca.crt
-      become: yes
+      become: true
       check_mode: no
       ignore_errors: yes
       become_user: root

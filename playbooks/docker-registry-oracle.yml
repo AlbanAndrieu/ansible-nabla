@@ -1,5 +1,5 @@
 #ansible-playbook -i staging -c local -v docker-registry.yml --ask-pass -vvvv | tee setup.log
-#ansible-playbook -i staging -c local -v docker-registry.yml --limit albandri --ask-sudo-pass -vvvv | tee setup.log
+#ansible-playbook -i staging -c local -v docker-registry.yml --limit albandri --ask-become-pass -vvvv | tee setup.log
 
 - hosts: docker-container-oracle
 
@@ -21,7 +21,7 @@
           - database-enterprise
 
 - hosts: docker-container-oracle
-#  become: yes
+#  become: true
 
   tasks:
     - name: Pull database-instantclient images

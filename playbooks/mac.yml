@@ -1,6 +1,6 @@
 #ansible -m setup mac-jenkins.nabla.mobi -vvvv -i production -vvvv
-#ansible-playbook -i production  -v mac.yml --limit mac-jenkins.nabla.mobi --ask-sudo-pass
-#ansible-playbook -i production -v jenkins-master.yml -vvvv --ask-sudo-pass --limit mac-jenkins.nabla.mobi
+#ansible-playbook -i production  -v mac.yml --limit mac-jenkins.nabla.mobi --ask-become-pass
+#ansible-playbook -i production -v jenkins-master.yml -vvvv --ask-become-pass --limit mac-jenkins.nabla.mobi
 
 - hosts: all
   gather_facts: true
@@ -28,7 +28,7 @@
 
 - name: Apply common configuration to mac nodes
   hosts: mac
-  become: yes
+  become: true
   #connection: local
 
 #  vars_files:
@@ -140,6 +140,6 @@
 - name: git | Initialize git-lfs
   shell: >
     git lfs install
-  become: yes
+  become: true
 
 #- import_playbook: jenkins-master.yml

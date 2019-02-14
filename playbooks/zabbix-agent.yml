@@ -1,5 +1,5 @@
-#ansible-playbook -i production -c local -v zabbix-agent.yml -vvvv --ask-sudo-pass  | tee setup.log
-#ansible-playbook -i production -v zabbix-agent.yml --limit albandri -vvvv --ask-sudo-pass
+#ansible-playbook -i production -c local -v zabbix-agent.yml -vvvv --ask-become-pass  | tee setup.log
+#ansible-playbook -i production -v zabbix-agent.yml --limit albandri -vvvv --ask-become-pass
 
 - hosts: all
   gather_facts: true
@@ -26,7 +26,7 @@
 - name: Install zabbix-agent
   hosts: zabbix-agent-paris
   user: root
-  become: yes
+  become: true
 
   roles:
     - role: zabbix
@@ -52,7 +52,7 @@
 - name: Install zabbix-agent
   hosts: zabbix-agent-gdynia
   user: root
-  become: yes
+  become: true
 
   roles:
     - role: zabbix

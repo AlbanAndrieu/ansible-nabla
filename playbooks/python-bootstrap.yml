@@ -59,6 +59,9 @@
   roles:
     - geerlingguy.repo-epel
 
+# WARNING below seems no more to work
+# /etc/yum.repos.d/remi.repo put enable to 1
+# See https://www.tecmint.com/enable-remi-repository-in-centos-redhat-fedora/
 - name: Add repo configuration to all nodes
   hosts: RedHat-6*:CentOS-6*
   become: true

@@ -2,7 +2,7 @@
 - name: Install java certificate for java
   hosts: RedHat-7*:RedHat-6*:RedHat-5*:CentOS-7*:CentOS-6*
   remote_user: root
-  become: yes
+  become: true
 
   roles:
 #    - role: java-certificate
@@ -37,7 +37,7 @@
 - name: Install java certificate for java
   hosts: Ubuntu-18*:Ubuntu-17*:Ubuntu-16*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
   remote_user: root
-  become: yes
+  become: true
 
   roles:
 

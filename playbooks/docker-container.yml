@@ -1,5 +1,5 @@
 #ansible-playbook -i staging -c local -v docker-container.yml --ask-pass -vvvv | tee setup.log
-#ansible-playbook -i staging -c local -v docker-container.yml --limit localhost --ask-sudo-pass -vvvv | tee setup.log
+#ansible-playbook -i staging -c local -v docker-container.yml --limit localhost --ask-become-pass -vvvv | tee setup.log
 
 #sudo docker logout https://docker.nabla.mobi:5000
 #sudo docker login registry.nabla.mobi:443

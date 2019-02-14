@@ -3,7 +3,7 @@
 
 - name: Install brew
   hosts: jenkins-slaves
-  become: yes
+  become: true
   ignore_errors: yes
 
   roles:

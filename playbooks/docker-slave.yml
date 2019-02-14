@@ -3,7 +3,7 @@
 #as root
 #ansible-playbook jenkins-slave.yml -i hosts-albandri -vvvv
 #as albandri
-#ansible-playbook jenkins-slave.yml -i hosts-albandri -vvvv --ask-sudo-pass --sudo
+#ansible-playbook jenkins-slave.yml -i hosts-albandri -vvvv --ask-become-pass --sudo
 # --extra-vars "jenkins_username=aandrieu jenkins_password=tbd"
 
 - import_playbook: hostname.yml
@@ -11,7 +11,7 @@
 - name: Apply common configuration to all nodes
   hosts: jenkins-slaves
 #  gather_facts: false
-  become: yes
+  become: true
   remote_user: root
 #  connection: local
 
@@ -41,7 +41,7 @@
 
 - name: Copy the role to build image
   hosts: jenkins-slaves
-  become: yes
+  become: true
   tasks:
   - name: copy build.sh
     copy: src=roles/alban.andrieu.jenkins-slave/ dest=./
@@ -68,7 +68,7 @@
 #TODO http://docs.ansible.com/docker_image_module.html
 - name: Build docker image if required. Path should contains Dockerfile to build image
   hosts: jenkins-slaves
-  become: yes
+  become: true
   tasks:
   - name: Check or build image
 #    docker_image: path="/home/vagrant" name="{{ docker_image_name }}" state=present
@@ -86,7 +86,7 @@
 
 - name: Run docker containers
   hosts: jenkins-slaves
-  become: yes
+  become: true
   tasks:
   - name: Run docker containers
     local_action:

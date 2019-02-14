@@ -561,3 +561,13 @@
   name: 'andrewrothstein.terraform'
   scm: 'git'
   version: 'master'
+
+- src: 'https://github.com/ANXS/perl'
+  name: 'anxs.perl'
+  scm: 'git'
+  version: 'master'
+
+- src: 'https://github.com/jermon/ansible-role-cpan'
+  name: 'jermon.ansible-role-cpan'
+  scm: 'git'
+  version: 'master'

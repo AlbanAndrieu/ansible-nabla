@@ -1,7 +1,7 @@
 ---
 
 #ansible-playbook -i playbooks/hosts-albandri -c local -v playbooks/eclipse.yml -vvvv --limit albandri | tee setup.log
-#ansible-playbook -i playbooks/hosts-albandri -c local -v playbooks/eclipse.yml -vvvv --limit albandri --ask-sudo-pass | tee setup.log
+#ansible-playbook -i playbooks/hosts-albandri -c local -v playbooks/eclipse.yml -vvvv --limit albandri --ask-become-pass | tee setup.log
 
 - name: Install eclipse
 #  connection: local

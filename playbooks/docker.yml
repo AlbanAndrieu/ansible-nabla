@@ -1,7 +1,7 @@
-#ansible-playbook -i hosts -v docker.yml --limit albandri --ask-sudo-pass -vvvv | tee setup.log
+#ansible-playbook -i hosts -v docker.yml --limit albandri --ask-become-pass -vvvv | tee setup.log
 
 #- hosts: docker
-#  become: yes
+#  become: true
 #  pre_tasks:
 #  - name: Log into DockerHub
 #    docker_login:

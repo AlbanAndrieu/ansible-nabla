@@ -7,6 +7,25 @@ fi
 
 WORKING_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}"  )" && pwd  )"
 
+#Just testing python3.6 but we are keeping python3.5, we will migrate to python3.6 little by little
+export PYTHON_MAJOR_VERSION=3.6
+source ${WORKING_DIR}/run-python.sh
+RC=$?
+if [ ${RC} -ne 0 ]; then
+  echo ""
+  echo -e "${red} ${head_skull} Sorry, python 3.6 basics failed ${NC}"
+  exit 1
+fi
+
+export PYTHON_MAJOR_VERSION=3.5
+source ${WORKING_DIR}/run-python.sh
+RC=$?
+if [ ${RC} -ne 0 ]; then
+  echo ""
+  echo -e "${red} ${head_skull} Sorry, python 3.5 basics failed ${NC}"
+  exit 1
+fi
+
 source ${WORKING_DIR}/run-ansible.sh
 RC=$?
 if [ ${RC} -ne 0 ]; then
@@ -15,14 +34,11 @@ if [ ${RC} -ne 0 ]; then
   exit 1
 fi
 
-# check quality
-#ansible-lint ${TARGET_PLAYBOOK}
-
 # check syntax
 echo -e "${cyan} =========== ${NC}"
 echo -e "${green} Starting the syntax-check. ${NC}"
-echo -e "${magenta} ${ANSIBLE_PLAYBOOK_CMD} -i ${ANSIBLE_INVENTORY} -c local -v ${TARGET_PLAYBOOK} --limit ${TARGET_SLAVE} ${DRY_RUN} -vvvv --syntax-check --become-method=sudo ${NC}"
-${ANSIBLE_PLAYBOOK_CMD} -i ${ANSIBLE_INVENTORY} -v ${TARGET_PLAYBOOK} --limit ${TARGET_SLAVE} ${DRY_RUN} -vvvv --syntax-check --become-method=sudo
+echo -e "${magenta} ${ANSIBLE_PLAYBOOK_CMD} -i inventory/${ANSIBLE_INVENTORY} -c local -v playbooks/${TARGET_PLAYBOOK} --limit ${TARGET_SLAVE} ${DRY_RUN} -vvvv --syntax-check --become-method=sudo ${NC}"
+${ANSIBLE_PLAYBOOK_CMD} -i inventory/${ANSIBLE_INVENTORY} -v playbooks/${TARGET_PLAYBOOK} --limit ${TARGET_SLAVE} ${DRY_RUN} -vvvv --syntax-check --become-method=sudo 2>&1 > syntax-check.log
 RC=$?
 if [ ${RC} -ne 0 ]; then
   echo ""
@@ -41,37 +57,13 @@ else
   ./build.sh
 fi
 
-echo -e "${cyan} =========== ${NC}"
-echo -e "${green} Ansible server setup ${NC}"
-rm -Rf ./out || true
-mkdir out
-echo -e "${magenta} ${ANSIBLE_CMD} -i ${ANSIBLE_INVENTORY} -m setup --user=root -vvv --tree out/ all ${NC}"
-${ANSIBLE_CMD} -i ${ANSIBLE_INVENTORY} -m setup --user=root -vvv --tree out/ all
+${WORKING_DIR}/run-ansible-cmbd.sh
 RC=$?
 if [ ${RC} -ne 0 ]; then
   echo ""
-  echo -e "${red} ${head_skull} Sorry, setup failed ${NC}"
-  #exit 1
-else
-  echo -e "${green} The setup completed successfully. ${NC}"
+  echo -e "${red} ${head_skull} Sorry, ansible inventory failed ${NC}"
+  exit 1
 fi
-
-echo -e "${cyan} =========== ${NC}"
-echo -e "${green} Ansible server inventory HTML generation ${NC}"
-echo -e "${magenta} ${ANSIBLE_CMBD_CMD} -d -i ./${ANSIBLE_INVENTORY} out/ > overview.html ${NC}"
-${ANSIBLE_CMBD_CMD} -d -i ./${ANSIBLE_INVENTORY} out/ > overview.html
-RC=$?
-if [ ${RC} -ne 0 ]; then
-  echo ""
-  echo -e "${red} ${head_skull} Sorry, inventory generation failed ${NC}"
-  #exit 1
-else
-  echo -e "${green} The inventory generation completed successfully. ${NC}"
-fi
-cp overview.html /var/www/html/ || true
-echo -e "${green} Ansible server summary done. $? ${NC}"
-
-echo -e "${green} See http://${TARGET_SLAVE}/html/overview.html ${NC}"
 
 cd "${WORKSPACE}/bm/Scripts/shell"
 
@@ -90,5 +82,7 @@ pylint ./**/*.py
 echo -e "${green} pyhton check for shell done. $? ${NC}"
 
 #pyreverse -o png -p Pyreverse pylint/pyreverse/
+
+echo -e "${green} ansible junit output is in ${JUNIT_OUTPUT_DIR} ${NC}"
 
 exit 0

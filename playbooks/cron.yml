@@ -1,8 +1,9 @@
 ---
 - name: Add cron cleaning policies
-  hosts: jenkins-slaves
+  hosts:
+    - jenkins-slaves
+    - docker
   become: true
-  gather_facts: true
 
   tasks:
   - cron:

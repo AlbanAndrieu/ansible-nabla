@@ -1,5 +1,6 @@
 #!/bin/bash
 #set -xv
+set -e
 
 WORKING_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}"  )" && pwd  )"
 
@@ -13,10 +14,11 @@ readonly DOCKERNAME="ansible-jenkins-slave-docker"
 #readonly DOCKERTAG="ubuntu:16.04"
 readonly DOCKERTAG="latest"
 
-#source "${WORKING_DIR}/run-ansible.sh"
+# shellcheck source=/dev/null
+source "${WORKING_DIR}/run-ansible.sh"
 
-echo -e "${green} Installing roles version ${NC}"
-ansible-galaxy install -r requirements.yml -p ./roles/ --ignore-errors
+#echo -e "${green} Installing roles version ${NC}"
+#ansible-galaxy install -r requirements.yml -p ./roles/ --ignore-errors
 
 if [ -n "${DOCKER_BUILD_ARGS}" ]; then
   echo -e "${green} DOCKER_BUILD_ARGS is defined ${happy_smiley} : ${DOCKER_BUILD_ARGS} ${NC}"
@@ -28,8 +30,8 @@ else
 fi
 
 echo -e "${green} Building docker image ${NC}"
-echo -e "${magenta} time docker build ${DOCKER_BUILD_ARGS} -f docker/ubuntu16/Dockerfile -t \"${DOCKERORGANISATION}/${DOCKERNAME}\" . --tag \"${DOCKERTAG}\" ${NC}"
-time docker build ${DOCKER_BUILD_ARGS} -f docker/ubuntu16/Dockerfile -t "${DOCKERORGANISATION}/${DOCKERNAME}" . --tag "${DOCKERTAG}"
+echo -e "${magenta} time docker build ${DOCKER_BUILD_ARGS} -f docker/ubuntu18/Dockerfile -t \"$DOCKERORGANISATION/$DOCKERNAME\" . --tag \"$DOCKERTAG\" ${NC}"
+time docker build ${DOCKER_BUILD_ARGS} -f docker/ubuntu18/Dockerfile -t "${DOCKERORGANISATION}/${DOCKERNAME}" . --tag "${DOCKERTAG}"
 RC=$?
 if [ ${RC} -ne 0 ]; then
   echo ""
@@ -57,8 +59,8 @@ echo -e " - to attach your container directly to the host's network interfaces"
 echo -e "    docker run --net host -d -P ${DOCKERORGANISATION}/${DOCKERNAME}"
 echo -e ""
 echo -e "To run in interactive mode for debug:"
-echo -e "    docker run -i -t --entrypoint /bin/bash ${DOCKERORGANISATION}/${DOCKERNAME}:latest"
-echo -e "    docker run -it -d --name sandbox ${DOCKERORGANISATION}/${DOCKERNAME}:latest"
+echo -e "    docker run -rm -it -u 1004:999 -v /etc/passwd:/etc/passwd:ro -v /etc/group:/etc/group:ro -v /var/run/docker.sock:/var/run/docker.sock --entrypoint /bin/bash ${DOCKERORGANISATION}/${DOCKERNAME}:latest"
+echo -e "    docker run -it -d -u 1004:999 --name sandbox ${DOCKERORGANISATION}/${DOCKERNAME}:latest cat"
 echo -e "    docker exec -it sandbox /bin/bash"
 echo -e "    docker exec -u 0 -it sandbox env TERM=xterm-256color bash -l"
 echo -e ""

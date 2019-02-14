@@ -5,7 +5,7 @@
 
 - name: Configure and deploy php to apache
   hosts: apache-servers
-  become: yes
+  become: true
 
   vars:
     apache_listen_port: 80
@@ -65,7 +65,7 @@
     - geerlingguy.phpmyadmin
 
 - hosts: apache-servers
-  become: yes
+  become: true
 
   roles:
     - {

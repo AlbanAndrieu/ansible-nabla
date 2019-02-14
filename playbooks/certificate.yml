@@ -1,4 +1,4 @@
-#ansible-playbook -i hosts-albandri -v certificate.yml -c local --limit albandri-laptop-work --ask-sudo-pass -vvvv | tee setup.log
+#ansible-playbook -i hosts-albandri -v certificate.yml -c local --limit albandri-laptop-work --ask-become-pass -vvvv | tee setup.log
 
 - hosts: jenkins-slaves
   remote_user: root
@@ -8,40 +8,42 @@
     #- name: Create private key
     #  shell: ssh-keygen -t rsa -C "alban.andrieu@free.fr"
     #  ignore_errors: yes
-    #  become: yes
+    #  become: true
     #  become_user: albandri
 
     - name: Create ~/pki
       file: path=~/pki/ state=directory mode=0700
-      become: yes
+      become: true
       become_user: root
 
     #- name: Get the CA root certificate
     #  get_url: dest=~/pki/ca.pem url=http://home.nabla.mobi:7072/download/certs/NABLA.crt
     #  ignore_errors: yes
-    #  become: yes
+    #  become: true
     #  become_user: root
 
     - name: Get the server DER certificate
-      get_url: dest=~/pki/{{ansible_fqdn}}-der.cer url=http://home.nabla.mobi:7072/download/certs/servers/{{ansible_fqdn}}-der.cer
+      get_url: dest=~/pki/{{ ansible_fqdn }}-der.cer url=http://home.nabla.mobi:7072/download/certs/servers/{{ ansible_fqdn }}-der.cer
       ignore_errors: yes
-      become: yes
+      become: true
 
     - name: Convert DER certificate to PEM
-      command: openssl x509 -inform DER -outform PEM -in ~/pki/{{ansible_fqdn}}-der.cer -out /etc/ssl/{{ansible_fqdn}}/{{ansible_fqdn}}.pem
+      command: openssl x509 -inform DER -outform PEM -in ~/pki/{{ ansible_fqdn }}-der.cer -out /etc/ssl/{{ ansible_fqdn }}/{{ ansible_fqdn }}.pem
       ignore_errors: yes
-      become: yes
+      become: true
 
     - name: Get the Docker root certificate
       #get_url: dest=~/docker.pem url=http://home.nabla.mobi:7072/download/certs/docker.crt
       shell: 'openssl s_client -showcerts -connect registry.nabla.mobi:443 </dev/null 2>/dev/null |openssl x509 -outform PEM | tee ~/pki/registry.pem'
+      changed_when: false
       ignore_errors: yes
-      become: yes
+      become: true
       become_user: root
 
-    - name: Get the nabla root certificate
+    - name: Get the nabla root certificate # noqa 306
       shell: 'openssl s_client -showcerts -connect nabla.freeboxos.fr:20726 </dev/null 2>/dev/null |openssl x509 -outform PEM | tee ~/nabla.freeboxos.fr.pem'
-      become: yes
+      changed_when: false
+      become: true
       become_user: root
 
 - import_playbook: certificate-server.yml

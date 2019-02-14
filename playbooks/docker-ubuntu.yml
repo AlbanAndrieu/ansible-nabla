@@ -1,5 +1,5 @@
 #ansible-galaxy install -r requirements.yml -p ./roles/ --ignore-errors
-#ansible-playbook -i staging -v docker.yml --limit albandri.nabla.mobi --ask-sudo-pass -vvvv | tee setup.log
+#ansible-playbook -i staging -v docker.yml --limit albandri.nabla.mobi --ask-become-pass -vvvv | tee setup.log
 
 - hosts: all
   gather_facts: true
@@ -37,7 +37,7 @@
 
 - name: Install docker
   hosts: Ubuntu-18*:Ubuntu-17*:Ubuntu-16*:Ubuntu-14*:Ubuntu-12*
-  become: yes
+  become: true
   ignore_errors: true
 
   roles:

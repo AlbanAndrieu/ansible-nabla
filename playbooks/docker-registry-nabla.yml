@@ -1,5 +1,5 @@
 #ansible-playbook -i production -c local -v docker-registry-fusionrisk.yml --ask-pass -vvvv | tee setup.log
-#ansible-playbook -i production -c local -v docker-registry-fusionrisk.yml --limit albandri.misys.global.ad --ask-sudo-pass -vvvv | tee setup.log
+#ansible-playbook -i production -c local -v docker-registry-fusionrisk.yml --limit albandri.misys.global.ad --ask-become-pass -vvvv | tee setup.log
 
 - hosts: all
   gather_facts: true
@@ -24,7 +24,7 @@
     - debug: msg="Version {{ ansible_distribution }} {{ ansible_distribution_version }} {{ ansible_architecture }}"
 
 - hosts: docker-container
-#  become: yes
+#  become: true
 
   tasks:
     - name: Define DOCKER_CLIENT_TIMEOUT
@@ -44,7 +44,7 @@
       shell: "echo $COMPOSE_HTTP_TIMEOUT"
 
 - hosts: docker-container
-  become: yes
+  become: true
 
   tasks:
 #    - name: Log into private registry and force re-authorization
@@ -61,7 +61,7 @@
           - nabla/java
 
 - hosts: docker-container
-#  become: yes
+#  become: true
 
   tasks:
 

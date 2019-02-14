@@ -73,4 +73,8 @@ git push origin master --force
 
 #git branch --set-upstream-to master origin/master
 
+#TODO
+sed -i -e 's/become: yes/become: true/g' playbooks/*.yml
+find . -name '*.yml' -type f | xargs sed -i -e 's/become: yes/become: true/g'
+
 exit 0

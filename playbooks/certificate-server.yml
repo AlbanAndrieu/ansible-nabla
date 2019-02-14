@@ -5,7 +5,7 @@
   remote_user: root
   check_mode: no
   ignore_errors: yes
-  become: yes
+  become: true
 
   roles:
     - role: ssl-ca-certificate

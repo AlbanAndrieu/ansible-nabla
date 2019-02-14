@@ -1,21 +1,24 @@
 #as albandri
-#ansible-playbook opencl.yml -i hosts-production --limit pricer.nabla.mobi -vvvv --ask-sudo-pass --sudo
+#ansible-playbook opencl.yml -i hosts-production --limit pricer.nabla.mobi -vvvv --ask-become-pass --sudo
 
 #TODO service lightdm stop
 # pkill -u jenkins
 # pkill -u jenkins-bm
 
 - hosts: opencl
-  become: yes
+  become: true
   remote_user: root
 
   pre_tasks:
-    - set_fact:
+    - name: Set cpu_driver
+      set_fact:
        cpu_driver: "{% if 'GenuineIntel' in ansible_processor %}intel{% elif 'AuthenticAMD' in ansible_processor %}amd{%else%}unknown{%endif%}"
 
-    - debug: msg="{{cpu_driver}}"
+    - debug: msg="{{ cpu_driver }}"
 
-    - command: "dkms status"
+    - name: Get dkms status
+      command: "dkms status"
+      changed_when: false
 
 #Remove older nvidia driver from kernel
     #modprobe -v nvidia-uvm
@@ -25,7 +28,7 @@
 
 - name: Configure opencl
   hosts: opencl
-  become: yes
+  become: true
   remote_user: root
   ignore_errors: true
   #connection: local

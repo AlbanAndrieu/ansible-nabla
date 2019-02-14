@@ -1,7 +1,7 @@
 ---
 
 - name: Apply dns configuration to all nodes
-  hosts: workstation
+  hosts: docker
   gather_facts: false
   remote_user: root
 #  connection: local

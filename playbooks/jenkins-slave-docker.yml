@@ -4,7 +4,7 @@
 #as root
 #ansible-playbook jenkins-slave-docker.yml -i hosts -vvvv
 #as albandri
-#ansible-playbook jenkins-slave-docker.yml -i hosts -vvvv --ask-sudo-pass --sudo
+#ansible-playbook jenkins-slave-docker.yml -i hosts -vvvv --ask-become-pass --sudo
 # --extra-vars "jenkins_username=aandrieu jenkins_password=tbd"
 #for testing purpose
 #sudo ansible-playbook -i hosts -c local -v jenkins-slave-docker.yml -vvvv
@@ -55,11 +55,11 @@
 
 - name: Bootstrap sudo onto server
   hosts: Ubuntu-18*:Ubuntu-17*:Ubuntu-16*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
-#  become: yes
+#  become: true
 
   pre_tasks:
   - name: Install sudo if not there
-    become: yes
+    become: true
     raw: |
       test -e /usr/bin/sudo || apt install -y sudo
     register: output
@@ -76,7 +76,7 @@
   hosts: all
   gather_facts: false
   remote_user: root
-  become: yes
+  become: true
   ignore_errors: yes
 
   roles:

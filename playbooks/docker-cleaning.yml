@@ -1,8 +1,8 @@
 #ansible-playbook -i production -c local -v docker-cleaning.yml --ask-pass -vvvv | tee setup.log
-#ansible-playbook -i production -c local -v docker-cleaning.yml --limit albandri --ask-sudo-pass -vvvv | tee setup.log
+#ansible-playbook -i production -c local -v docker-cleaning.yml --limit albandri --ask-become-pass -vvvv | tee setup.log
 
 - hosts: docker-cleaning
-  become: yes
+  become: true
 
   tasks:
 #    - name: Log into private registry and force re-authorization
@@ -13,7 +13,7 @@
 #        reauthorize: yes
 
 - hosts: docker-cleaning
-  become: yes
+  become: true
 
   tasks:
     - name: Remove ubuntu image
@@ -33,16 +33,6 @@
 #        name: nabla/ansible-jenkins-slave-docker
 #        tag: test
 
-#For issue : Error pulling: too many links
-    - name: Remove untagged images
-      shell: "docker rmi $(docker images | grep \"<none>\" | awk ' { print $3} ')"
-      ignore_errors: true
-
-    - name: Pull ansible-jenkins-slave-docker images
-      docker_image:
-        name: nabla/ansible-jenkins-slave-docker
-        tag: latest
-
 #TODO http://blog.yohanliyanage.com/2015/05/docker-clean-up-after-yourself/
 #TODD must be run on a daily basis
 #Clean 1 week old containers
@@ -50,37 +40,31 @@
 #Clean all containers
 #docker rm `docker ps --no-trunc -aq`
 
-    - name: Clean all stopped containers
-      shell: "docker rm -v $(docker ps -a -q)"
-      ignore_errors: true
-
-    - name: Clean all exited containers
-      shell: "docker rm -v $(docker ps -a -q -f status=exited)"
-      ignore_errors: true
-
-    - name: Clean all created containers
-      shell: "docker rm -v $(docker ps -a -q -f status=created)"
-      ignore_errors: true
-
-    - name: Clean all created network
-      shell: "docker network rm $(docker network ls | tail -n+2 | awk '{if($2 !~ /bridge|none|host/){ print $1 }}')"
-      ignore_errors: true
-
+# TODO below might be useless
     - name: Remove unwanted dangling images
       shell: "docker rmi $(docker images -f \"dangling=true\" -q)"
       ignore_errors: true
+      changed_when: false
 
+# TODO below might be useless
     - name: Remove unwanted ‘dangling’ volumes
       shell: "docker volume rm $(docker volume ls -qf dangling=true)"
       ignore_errors: true
+      changed_when: false
 
     - name: Remove hanging and old fusion-risk docker images
-      shell: "docker system prune -f --filter until=24h ; docker kill $(docker ps | grep -E 'Up [0-9]+ days' | awk '{print $1}') ; docker rmi $(docker image ls | grep -i nabla | grep -E 'days|weeks|months ago' | grep -v jenkins-slave | awk '{print $3}')"
+      shell: "docker kill $(docker ps | grep -E 'Up [0-9]+ days' | awk '{print $1}') ; docker rmi $(docker image ls | grep -i nabla | grep -E 'days|weeks|months ago' | grep -v jenkins-slave | awk '{print $3}')"
       ignore_errors: true
+      changed_when: false
+
+    - name: Pull ansible-jenkins-slave-docker latest images
+      docker_image:
+        name: nabla/ansible-jenkins-slave-docker
+        tag: latest
 
     - name: Check images is fully available
       shell: "docker inspect -f . nabla/ansible-jenkins-slave-docker:latest"
-      ignore_errors: true
+      changed_when: false
 
 #docker ps -a -s
 #docker images
