@@ -9,12 +9,12 @@
 
 def DOCKER_REGISTRY="docker.hub"
 def DOCKER_TAG="latest"
-def DOCKERNAME="ansible-jenkins-slave"
+def DOCKER_NAME="ansible-jenkins-slave"
 def DOCKERUSERNAME="nabla"
 
 def DOCKER_REGISTRY_URL="https://${DOCKER_REGISTRY}"
 def DOCKER_REGISTRY_CREDENTIAL='jenkins'
-def DOCKER_IMAGE="${DOCKER_REGISTRY}/${DOCKERUSERNAME}/${DOCKERNAME}:1.0.1"
+def DOCKER_IMAGE="${DOCKER_REGISTRY}/${DOCKERUSERNAME}/${DOCKER_NAME}:1.0.1"
 
 def DOCKER_OPTS = [
   '--dns-search=nabla.mobi',

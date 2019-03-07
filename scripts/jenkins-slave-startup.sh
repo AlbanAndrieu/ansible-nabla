@@ -8,5 +8,3 @@ sudo /usr/local/bin/wrapdocker &
 
 # start the ssh daemon
 sudo /usr/sbin/sshd -D
-# else default to run whatever the user wanted like "bash" or "sh"
-exec "$@"
