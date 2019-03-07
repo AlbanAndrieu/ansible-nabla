@@ -68,7 +68,3 @@ repos:
 #    sha: 994f99b6498e9c76341367ecaf76c69dfb4ea4f2
 #    hooks:
 #    -   id: clang-format
--   repo: git://github.com/pre-commit/pre-commit-docker-flake8
-    rev: v0.0.3  # Fill this in with a current revision
-    hooks:
-    -   id: flake8-docker-not-for-production
