@@ -5,9 +5,7 @@
 # This file does only contain a selection of the most common options. For a
 # full list see the documentation:
 # http://www.sphinx-doc.org/en/master/config
-
 # -- Path setup --------------------------------------------------------------
-
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
@@ -20,11 +18,11 @@ sys.path.insert(0, os.path.abspath('../library'))
 # -- Project information -----------------------------------------------------
 
 project = 'Nabla Ansible'
-copyright = '2018, Alban Andrieu'
+copyright = '2019, Alban Andrieu'
 author = 'Alban Andrieu'
 
 # The short X.Y version
-version = ''
+version = '1.0'
 # The full version, including alpha/beta/rc tags
 release = '1.0.0'
 

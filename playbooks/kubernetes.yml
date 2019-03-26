@@ -1,16 +1,28 @@
+---
+# ansible-playbook playbooks/kubernetes.yml -i inventory/production --limit "albandri.misys.global.ad" -vvvv
+
+- name: Install kubernetes
+  hosts: workstation
+
+  roles:
+#    - geerlingguy.docker
+    - geerlingguy.kubernetes
+
+  vars:
+    docker_install_compose: false
+    kubernetes_allow_pods_on_master: True
+    kubernetes_kubelet_extra_args: "--fail-swap-on=false"
+    #kubernetes_kubeadm_init_extra_opts: ""
 
 - name: Install kubernetes helm
-  hosts: kubernetes
-  become: true
-#  ignore_errors: yes
+  hosts: workstation
 
   roles:
     - andrewrothstein.kubernetes-helm
 
-- name: Install kubectl
-  hosts: kubernetes
-  become: true
-#  ignore_errors: yes
-
-  roles:
-    - andrewrothstein.kubectl
+#- name: Install kubectl
+#  hosts: kubernetes
+#  become: true
+#
+#  roles:
+#    - andrewrothstein.kubectl

@@ -49,6 +49,8 @@ pipeline {
   }
   options {
     disableConcurrentBuilds()
+    //skipStagesAfterUnstable()
+    //parallelsAlwaysFailFast() // this is hidding failure and unstable stage
     ansiColor('xterm')
     timeout(time: 360, unit: 'MINUTES')
     timestamps()

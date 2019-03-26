@@ -1,11 +1,13 @@
-#sudo ansible-playbook -i hosts-albandri -c local -v private-bower.yml | tee setup.log
+#ansible-playbook -i inventory/hosts -c local -v playbooks/private-bower.yml --ask-become-pass  | tee setup.log
 
 - name: Install private-bower
   hosts: workstation
-  remote_user: albandri
-#  remote_user: root
-#  accelerate: true
+  become: true
 
   roles:
-    - { role: alban.andrieu.private-bower,
-      }
+#    - geerlingguy.nodejs
+    - alban.andrieu.private-bower
+
+  vars:
+       private_bower_version: "1.1.9"
+#       private_bower_user: "www-data"

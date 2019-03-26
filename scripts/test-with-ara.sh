@@ -4,7 +4,8 @@
 export SCRIPT_NAME=$( basename $0 )
 export WORKING_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}"  )" && pwd  )"
 
-export PYTHON_MAJOR_VERSION=3.6
+PYTHON_MAJOR_VERSION=3.6
+export PYTHON_MAJOR_VERSION
 # shellcheck source=./scripts/run-python.sh
 source "${WORKING_DIR}/run-python.sh"
 RC=$?
@@ -14,7 +15,7 @@ if [ ${RC} -ne 0 ]; then
   exit 1
 fi
 
-# shellcheck source=./scripts/rstep-2-helpers-color.sh
+# shellcheck source=./scripts/step-2-helpers-color.sh
 source "${WORKING_DIR}/step-2-helpers-color.sh"
 
 set_default ANSIBLE_ROOT_DIR         "$( realpath ${WORKING_DIR} )/.."
@@ -123,6 +124,7 @@ test_ansible_role()
     cd "${ANSIBLE_ROOT_DIR}"
     rm -Rf ./ara-$ROLE_NAME* || true
     ROLE_NAME=$1
+    # shellcheck disable=SC1090
     source <( $PYTHON_EXECUTABLE -m ara.setup.env )
     cd "$ANSIBLE_ROOT_DIR/roles/$ROLE_NAME"
 
