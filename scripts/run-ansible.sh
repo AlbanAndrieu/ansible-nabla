@@ -1,1 +1,1 @@
-/workspace/users/albandri10/env/ansible-nabla/roles/alban.andrieu.shell/files/run-ansible.sh
+../roles/alban.andrieu.shell/files/run-ansible.sh
