@@ -87,7 +87,7 @@ COPY playbooks/hosts $JENKINS_HOME/
 COPY inventory $JENKINS_HOME/inventory
 COPY playbooks $JENKINS_HOME/playbooks
 COPY roles $JENKINS_HOME/roles
-COPY .ssh $JENKINS_HOME/.ssh
+#COPY .ssh $JENKINS_HOME/.ssh
 RUN chown -R jenkins:$(id -gn jenkins) $JENKINS_HOME $JENKINS_HOME/.*
 
 #BELOW npm install is adding 700Mb to the images
