@@ -1,0 +1,20 @@
+---
+# Aim of this playbook is to test new npm registry with global configuration
+#
+# javascript-nexus will not be used for previous compilation tasks (label changed)
+# After NPM registry migration is successful, all Javascript slave will be configured using this playbook
+- name: Javascript configuration with new NPM registry server
+  hosts: jenkins-minimal
+  become: true
+  roles:
+    - role: javascript
+      tags: nodejs
+  vars:
+    - npm_nexus_private_npm_url: "https://albandri/nexus/repository/npm_group/"
+    - npm_nexus_private_npm_data:
+      - "; internal dependencies"
+      - "; scoped packages are taken after configuration"
+      - "@uxp:registry=https://albandri/nexus/repository/npm_internal/"
+      - ""
+      - "; jenkins generic credentials"
+      - "//albandri/nexus/repository/npm_group/:_authToken=NpmToken.1234"
