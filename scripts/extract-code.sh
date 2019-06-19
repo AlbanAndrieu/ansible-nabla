@@ -21,6 +21,8 @@ git submodule foreach git pull origin master
 
 git submodule add https://github.com/AlbanAndrieu/ansigenome.git
 
+ansible-galaxy install -r ../requirements.yml -p ../roles/ --ignore-errors
+
 mkdir roles
 
 cd roles
