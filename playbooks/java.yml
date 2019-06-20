@@ -1,5 +1,5 @@
-#ansible-galaxy install -r requirements.yml -p ./roles/ --ignore-errors
-#ansible-playbook -i staging -v java.yml --limit albandri.nabla.mobi --ask-become-pass -vvvv | tee setup.log
+---
+#ansible-playbook -i staging -v playbooks/java.yml --limit albandri.nabla.mobi --ask-become-pass -vvvv | tee setup.log
 
 - hosts: all
   gather_facts: true
@@ -33,6 +33,15 @@
     - name: jdk8 | Accept Java 8 License
       debconf: name='oracle-java8-installer' question='shared/accepted-oracle-license-v1-1' value='true' vtype='select'
 
+    - name: jdk9 | Accept Java 9 License
+      debconf: name='oracle-java9-installer' question='shared/accepted-oracle-license-v1-1' value='true' vtype='select'
+
+    - name: jdk10 | Accept Java 10 License
+      debconf: name='oracle-java10-installer' question='shared/accepted-oracle-license-v1-1' value='true' vtype='select'
+
+    - name: jdk11 | Accept Java 11 License
+      debconf: name='oracle-java11-installer' question='shared/accepted-oracle-license-v1-1' value='true' vtype='select'
+
 # debian | ubuntu | Java 8
 - name: Install java
   hosts: Ubuntu-18*:Ubuntu-17*:Ubuntu-16*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
@@ -44,11 +53,11 @@
       oracle_java_use_defaults: yes
       #oracle_java_apt_repository: 'deb http://ppa.launchpad.net/webupd8team/java/ubuntu bionic main'
       #oracle_java_apt_repository_key: 'EA8CACC073C3DB2A'
-      oracle_java_apt_repository: "ppa:webupd8team/java"
-      oracle_java_cache_valid_time: 3600
-      oracle_java_deb_package: 'oracle-java8-installer'
-      oracle_java_debconf_package_default: 'oracle-java8-set-default'
-      oracle_java_home: "/usr/lib/jvm/java-8-oracle"
+      #oracle_java_apt_repository: "ppa:webupd8team/java"
+      #oracle_java_apt_repository: "ppa:linuxuprising/java"
+      #oracle_java_deb_package: 'oracle-java8-installer'
+      #oracle_java_debconf_package_default: 'oracle-java8-set-default'
+      #oracle_java_home: "/usr/lib/jvm/java-8-oracle"
       oracle_java_set_as_default: yes
       oracle_java_state: latest
 
@@ -61,10 +70,10 @@
       - role: ansiblebit.oracle-java
         oracle_java_dir_source: '/usr/local/src'
         oracle_java_download_timeout: 60
-        oracle_java_rpm_filename: 'jdk-8u191-linux-x64.rpm'
+        oracle_java_rpm_filename: 'jdk-8u201-linux-x64.rpm'
         oracle_java_home: '/usr/java/default'
         oracle_java_os_supported: yes
         oracle_java_rpm_url: 'http://download.oracle.com/otn-pub/java/jdk/8u191-b12/2787e4a523244c269598db4e85c51e0c/jdk-8u191-linux-x64.rpm'
-        oracle_java_rpm_validate_certs: yes
+        oracle_java_rpm_validate_certs: no
         oracle_java_set_as_default: no
-        oracle_java_version_string: 1.8.0_191
+        oracle_java_version_string: 1.8.0_201

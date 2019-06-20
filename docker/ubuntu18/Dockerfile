@@ -6,6 +6,7 @@ ARG JENKINS_HOME=${JENKINS_HOME:-/home/jenkins}
 
 LABEL description="Image used by Nabla products to build Java/Javascript and CPP\
  this image is running on Ubuntu 18.04."
+LABEL com.example.vendor="ACME Incorporated"
 
 # No interactive frontend during docker build
 ENV DEBIAN_FRONTEND=noninteractive \
@@ -26,7 +27,7 @@ RUN apt-get -q update &&\
     apt-get -q install -y -o Dpkg::Options::="--force-confnew" --no-install-recommends \
     git bzip2 zip unzip python-yaml python-jinja2 python-pip openssh-server rsyslog gpg-agent \
     ocl-icd-libopencl1 ocl-icd-opencl-dev clinfo numactl libnuma1 pciutils \
-    apt-transport-https ca-certificates software-properties-common \
+    apt-utils apt-transport-https ca-certificates software-properties-common \
     locales xz-utils ksh wget tzdata sudo curl lsof sshpass \
     python3-setuptools python3 python3-pip python3-dev python3-apt \
     openjdk-8-jdk maven gcc g++ make \
@@ -37,7 +38,7 @@ RUN echo "${TZ}" > /etc/timezone
 RUN ln -fs /usr/share/zoneinfo/${TZ} /etc/localtime && locale-gen en_US.UTF-8
 #RUN dpkg-reconfigure --frontend noninteractive tzdata \
 
-RUN python3 -m pip install --upgrade pip==9.0.3 \
+RUN python3 -m pip install --upgrade pip==19.0.3 \
     && pip install ansible==2.7.2 zabbix-api
 
 RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
@@ -81,7 +82,7 @@ RUN curl -SsL https://github.com/boxboat/fixuid/releases/download/v0.4/fixuid-0.
     mkdir -p /etc/fixuid && \
     printf "user: $USER\ngroup: $GROUP\n" > /etc/fixuid/config.yml
 
-COPY ansible.cfg *.yml $JENKINS_HOME/
+COPY ansible.cfg *.yml vault.passwd $JENKINS_HOME/
 #group_vars .ssh playbooks/ansible.pub.key
 COPY playbooks/hosts $JENKINS_HOME/
 COPY inventory $JENKINS_HOME/inventory
@@ -99,7 +100,8 @@ ENV ANSIBLE_CONFIG=${JENKINS_HOME}/ansible.cfg
 RUN ansible-galaxy install -r $JENKINS_HOME/requirements.yml -p $JENKINS_HOME/roles/ --ignore-errors && \
  ansible-playbook $JENKINS_HOME/playbooks/jenkins-full.yml -i $JENKINS_HOME/inventory/hosts -c local \
  -e "jenkins_ssh_key_file={{ jenkins_home }}/.ssh/id_rsa" -e "workspace=/tmp" \
- -e "jenkins_jdk8_enable=true" -e "jdk_home=/usr/lib/jvm/java-8-oracle/" \
+ -e "jenkins_jdk8_enable=true" \
+# -e "jdk_home=/usr/lib/jvm/java-8-oracle/" \
  -e "jenkins_id=${UID}" -e "docker_gid=${GID}" \
  -e "nis_enabled=false" -e "automount_enabled=false" -e "dns_enabled=false" \
  --skip-tags restart \
@@ -113,7 +115,7 @@ RUN sed -i 's|session    required     pam_loginuid.so|session    optional     pa
 RUN mkdir -p /var/run/sshd
 
 # Clean up APT when done.
-RUN apt-get autoremove -y && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
+RUN apt-get autoremove -y && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* $JENKINS_HOME/vault.passwd \
 && ifconfig | awk '/inet addr/{print substr($2,6)}' ## Display IP address (optional)
 
 ADD wrapdocker /usr/local/bin/wrapdocker
@@ -122,7 +124,8 @@ VOLUME /var/lib/docker
 
 # place the jenkins slave startup script into the container
 ADD jenkins-slave-startup.sh /
-RUN chmod +x /jenkins-slave-startup.sh
+ADD entrypoint.sh /
+RUN chmod +x /jenkins-slave-startup.sh /entrypoint.sh
 
 # drop back to the regular jenkins user - good practice
 USER jenkins:docker
@@ -136,5 +139,6 @@ WORKDIR $HOME
 # Standard SSH port
 EXPOSE 22
 
-ENTRYPOINT ["fixuid"]
+ENTRYPOINT ["/entrypoint.sh"]
+#CMD ["/bin/bash"]
 CMD ["/jenkins-slave-startup.sh"]
