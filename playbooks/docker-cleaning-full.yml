@@ -39,6 +39,7 @@
 #For issue : Error pulling: too many links
     - name: Remove untagged images
       shell: "docker rmi $(docker images | grep \"<none>\" | awk ' { print $3} ')"
+      changed_when: false
       ignore_errors: true
 
 #TODO http://blog.yohanliyanage.com/2015/05/docker-clean-up-after-yourself/
@@ -48,25 +49,25 @@
 #Clean all containers
 #docker rm `docker ps --no-trunc -aq`
 
-    - name: Clean all stopped containers
-      shell: "docker rm -v $(docker ps -a -q)"
-      ignore_errors: true
-
     - name: Clean all exited containers
       shell: "docker rm -v $(docker ps -a -q -f status=exited)"
+      changed_when: false
       ignore_errors: true
 
     - name: Clean all created containers
       shell: "docker rm -v $(docker ps -a -q -f status=created)"
+      changed_when: false
       ignore_errors: true
 
     - name: Clean all created network
       shell: "docker network rm $(docker network ls | tail -n+2 | awk '{if($2 !~ /bridge|none|host/){ print $1 }}')"
+      changed_when: false
       ignore_errors: true
 
 #TODO below is so slow, we have to pull all the images again after
     - name: Remove reclaimable images and volumes
-      shell: "docker system prune -a --volumes -f"
+      command: "docker system prune -a --volumes -f"
+      changed_when: false
       ignore_errors: true
 
 - import_playbook: docker-cleaning.yml

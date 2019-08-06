@@ -31,14 +31,14 @@
       test -e /usr/bin/python || \
       (apt -y update && apt install -y python-simplejson)
     register: output
-    changed_when: output.stdout|trim() != ""
+    changed_when: output.stdout | length > 0
 
   - name: Install sudo if not there
     become: true
     raw: |
       test -e /usr/bin/sudo || apt install -y sudo
     register: output
-    changed_when: output.stdout|trim() != ""
+    changed_when: output.stdout | length > 0
 
 - name: Bootstrap python onto server
   hosts: RedHat-7*:RedHat-6*:RedHat-5*:CentOS-7*:CentOS-6*
@@ -50,7 +50,7 @@
       test -e /usr/bin/python || \
       (yum install -y python2 python-simplejson)
     register: output
-    changed_when: output.stdout|trim() != ""
+    changed_when: output.stdout | length > 0
 
 - name: Add repo configuration to all nodes
   hosts: RedHat-7*:RedHat-6*:CentOS-7*:CentOS-6*

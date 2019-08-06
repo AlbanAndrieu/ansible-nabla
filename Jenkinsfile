@@ -8,24 +8,23 @@
  */
 
 def DOCKER_REGISTRY="docker.hub"
+def DOCKER_ORGANISATION="nabla"
 def DOCKER_TAG="latest"
 def DOCKER_NAME="ansible-jenkins-slave"
-def DOCKERUSERNAME="nabla"
 
 def DOCKER_REGISTRY_URL="https://${DOCKER_REGISTRY}"
 def DOCKER_REGISTRY_CREDENTIAL='jenkins'
-def DOCKER_IMAGE="${DOCKER_REGISTRY}/${DOCKERUSERNAME}/${DOCKER_NAME}:1.0.1"
+def DOCKER_IMAGE="${DOCKER_REGISTRY}/${DOCKER_ORGANISATION}/${DOCKER_NAME}:${DOCKER_TAG}"
 
 def DOCKER_OPTS = [
   '--dns-search=nabla.mobi',
   '-v /etc/passwd:/etc/passwd:ro ',
-  '-v /etc/group:/etc/group:ro '
+  '-v /etc/group:/etc/group:ro ',
+  '--entrypoint=\'\'',
 ].join(" ")
 
 pipeline {
-  agent {
-    label 'ansible-check'
-  }
+  agent none
   parameters {
     string(name: 'DRY_RUN', defaultValue: '--check', description: 'Default mode used to test playbook')
     string(name: 'DOCKER_RUN', defaultValue: '', description: 'Default inventory used to test playbook')
@@ -40,6 +39,7 @@ pipeline {
   }
   environment {
     JENKINS_CREDENTIALS = 'jenkins-ssh'
+    ANSIBLE_VAULT_PASS = "${params.ANSIBLE_VAULT_PASS}"
     DRY_RUN = "${params.DRY_RUN}"
     CLEAN_RUN = "${params.CLEAN_RUN}"
     DEBUG_RUN = "${params.DEBUG_RUN}"
@@ -57,10 +57,13 @@ pipeline {
   }
   stages {
     stage('Setup') {
+      agent {
+        label 'ansible-check&&ubuntu&&!albandri'
+      }
       steps {
         script {
           properties(createPropertyList())
-          setBuildName()
+          setBuildName("Ansible project description.")
           if (! isReleaseBranch()) { abortPreviousRunningBuilds() }
         }
       }
@@ -75,59 +78,28 @@ pipeline {
       }
       steps {
         script {
-          configFileProvider([configFile(fileId: 'vault.passwd',  targetLocation: 'vault.passwd', variable: '_')]) {
-            sh "./run-ansible-cmbd.sh"
-          }
-          publishHTML([
-            allowMissing: false,
-            alwaysLinkToLastBuild: false,
-            keepAll: true,
-            reportDir: "./overwiev/",
-            reportFiles: 'overview.html',
-            includes: '**/*',
-            reportName: 'Ansible CMDB Report',
-            reportTitles: "Ansible CMDB Report Index"
-          ])
-
-          junit "target/ansible-lint.xml"
-
-        }
+          runAnsibleCmbd(shell: "./scripts/run-ansible-cmbd.sh")
+        } // script
       }
     }
     stage('Documentation') {
+      agent {
+        label 'ansible-check&&ubuntu&&!albandri'
+      }
       // Creates documentation using Sphinx and publishes it on Jenkins
-      // Copy of the documentation is rsynced with kgrdb01
+      // Copy of the documentation is rsynced
       steps {
         script {
-          dir("docs") {
-            sh "source /opt/ansible/env35/bin/activate && make html"
-          }
-          publishHTML([
-            allowMissing: false,
-            alwaysLinkToLastBuild: false,
-            keepAll: true,
-            reportDir: "./docs/_build/html/",
-            reportFiles: 'index.html',
-            includes: '**/*',
-            reportName: 'Sphinx Docs',
-            reportTitles: "Sphinx Docs Index"
-          ])
-          if (isReleaseBranch()) {
-            // Initially, we will want to publish only one version,
-            // i.e. the latest one from develop branch.
-            dir("docs/_build/html") {
-              rsync([
-                source: "*",
-                destination: "jenkins@albandri:/kgr/release/docs/fusionrisk-ansible/",
-                credentialsId: "jenkins_unix_slaves"
-              ])
-            }
-          }
+          runSphinx(shell: "./build.sh", targetDirectory: "fusionrisk-ansible/")
         }
       }
     }
     stage('SonarQube analysis') {
+      agent {
+        label 'ansible-check&&ubuntu&&!albandri'
+      }
       environment {
+        SONAR_SCANNER_OPTS = "-Xmx4g"
         SONAR_USER_HOME = "$WORKSPACE"
       }
       steps {
@@ -228,35 +200,51 @@ pipeline {
             label 'docker-inside'
           }
           when {
-            expression { BRANCH_NAME ==~ /(release|master|develop)/ }
+            expression { BRANCH_NAME ==~ /(release-NO|master-NO|develop-NO)/ }
           }
           steps {
             script {
               if (! params.SKIP_DOCKER) {
 
-                configFileProvider([configFile(fileId: 'vault.passwd',  targetLocation: 'vault.passwd', variable: '_')]) {
+                tee('docker-build-ubuntu-16.04.log') {
 
-                  sh 'mkdir -p .ssh/ || true'
+                  configFileProvider([configFile(fileId: 'vault.passwd',  targetLocation: 'vault.passwd', variable: '_')]) {
 
-                  docker_build_args="--no-cache --pull --build-arg JENKINS_HOME=/home/jenkins --tag 1.0.4"
+                    sh 'mkdir -p .ssh/ || true'
 
-                  docker.withRegistry("${DOCKER_REGISTRY_URL}", "${DOCKER_REGISTRY_CREDENTIAL}") {
-                     withCredentials([
-                         [$class: 'UsernamePasswordMultiBinding',
-                         credentialsId: DOCKER_REGISTRY_CREDENTIAL,
-                         usernameVariable: 'USERNAME',
-                         passwordVariable: 'PASSWORD']
-                     ]) {
-                       def container = docker.build("${DOCKER_IMAGE}", "${docker_build_args} -f docker/ubuntu16/Dockerfile . ")
-                       container.inside {
-                         sh 'echo test'
-                       }
-                       docker.image("${DOCKER_IMAGE}").withRun("-u root", "/bin/bash") {c ->
-                         sh "docker logs ${c.id}"
-                       }
-                     }
-                  }
-                } // vault
+                    docker_build_args="--no-cache --pull --build-arg JENKINS_HOME=/home/jenkins --tag 1.0.4"
+
+                    docker.withRegistry("${DOCKER_REGISTRY_URL}", "${DOCKER_REGISTRY_CREDENTIAL}") {
+                       withCredentials([
+                           [$class: 'UsernamePasswordMultiBinding',
+                           credentialsId: DOCKER_REGISTRY_CREDENTIAL,
+                           usernameVariable: 'USERNAME',
+                           passwordVariable: 'PASSWORD']
+                       ]) {
+                         def container = docker.build("${DOCKER_REGISTRY}/${DOCKER_ORGANISATION}/${DOCKER_NAME}:1.0.4", "${docker_build_args} -f docker/ubuntu16/Dockerfile . ")
+                         container.inside {
+                           sh 'echo test'
+                         }
+                         docker.image("${DOCKER_REGISTRY}/${DOCKER_ORGANISATION}/${DOCKER_NAME}:1.0.4").withRun("-u root", "/bin/bash") {c ->
+
+                           logs = sh (
+                             script: "docker logs ${c.id}",
+                             returnStatus: true
+                           )
+
+                           echo "LOGS RETURN CODE : ${logs}"
+                           if (logs == 0) {
+                               echo "LOGS SUCCESS"
+                           } else {
+                               echo "LOGS FAILURE"
+                               sh "exit 1" // this fails the stage
+                               //currentBuild.result = 'FAILURE'
+                           }
+                         } // docker.image
+                       } // withCredentials
+                    } // withRegistry
+                  } // vault
+                } // tee
               }
             }
           }
@@ -265,53 +253,116 @@ pipeline {
           agent {
             label 'docker-inside'
           }
+          //when {
+          //  expression { BRANCH_NAME ==~ /(release|master|develop)/ }
+          //}
+          steps {
+            script {
+              if (! params.SKIP_DOCKER) {
+
+                tee('docker-build-ubuntu-18.04.log') {
+
+                    try {
+
+                      configFileProvider([configFile(fileId: 'vault.passwd',  targetLocation: 'vault.passwd', variable: '_')]) {
+
+                        sh 'mkdir -p .ssh/ || true'
+
+                        docker_build_args="--no-cache --pull --build-arg JENKINS_HOME=/home/jenkins --tag 1.0.11"
+
+                        docker.withRegistry("${DOCKER_REGISTRY_URL}", "${DOCKER_REGISTRY_CREDENTIAL}") {
+                           withCredentials([
+                               [$class: 'UsernamePasswordMultiBinding',
+                               credentialsId: DOCKER_REGISTRY_CREDENTIAL,
+                               usernameVariable: 'USERNAME',
+                               passwordVariable: 'PASSWORD']
+                           ]) {
+                            def container = docker.build("${DOCKER_REGISTRY}/${DOCKER_ORGANISATION}/${DOCKER_NAME}:1.0.11", "${docker_build_args} -f docker/ubuntu18/Dockerfile . ")
+                            container.inside {
+                              sh 'echo test'
+                            }
+
+                            //docker run -i -t --entrypoint /bin/bash ${myImg.imageName()}
+                            docker.image("${DOCKER_REGISTRY}/${DOCKER_ORGANISATION}/${DOCKER_NAME}:1.0.11").withRun("-u root --entrypoint='/entrypoint.sh'", "/bin/bash") {c ->
+                              logs = sh (
+                                script: "docker logs ${c.id}",
+                                returnStatus: true
+                              )
+
+                              echo "LOGS RETURN CODE : ${logs}"
+                              if (logs == 0) {
+                                  echo "LOGS SUCCESS"
+                              } else {
+                                  echo "LOGS FAILURE"
+                                  sh "exit 1" // this fails the stage
+                                  //currentBuild.result = 'FAILURE'
+                              }
+
+                            } // docker.image
+
+                          } // withCredentials
+                        } // withRegistry
+
+                        echo "TODO JUNIT"
+
+                        // TODO
+                        //junit "target/jenkins-full-*.xml"
+
+                      } // vault configFileProvider
+
+                    } catch (e) {
+                       echo 'Error: There were errors in tests. '+exc.toString()
+                       currentBuild.result = 'UNSTABLE'
+                       logs = "FAIL" // make sure other exceptions are recorded as failure too
+                       error 'There are errors in tests'
+                    } finally {
+                       echo "finally"
+                    } // finally
+
+
+                    cst = sh (
+                      script: "scripts/docker-test.sh || true",
+                      returnStatus: true
+                    )
+
+                    echo "CONTAINER STRUCTURE TEST RETURN CODE : ${cst}"
+                    if (cst == 0) {
+                        echo "CONTAINER STRUCTURE TEST SUCCESS"
+                    } else {
+                        echo "CONTAINER STRUCTURE TEST FAILURE"
+                        currentBuild.result = 'UNSTABLE'
+                    }
+
+                } // tee
+
+              }
+            }
+          }
+        }
+        stage('Sample project') {
+          agent {
+            label 'docker-inside'
+          }
           when {
             expression { BRANCH_NAME ==~ /(release|master|develop)/ }
           }
           steps {
             script {
-              if (! params.SKIP_DOCKER) {
 
-                configFileProvider([configFile(fileId: 'vault.passwd',  targetLocation: 'vault.passwd', variable: '_')]) {
-
-                  sh 'mkdir -p .ssh/ || true'
-
-                  docker_build_args="--no-cache --pull --build-arg JENKINS_HOME=/home/jenkins --tag 1.0.8"
-
-                  docker.withRegistry("${DOCKER_REGISTRY_URL}", "${DOCKER_REGISTRY_CREDENTIAL}") {
-                     withCredentials([
-                         [$class: 'UsernamePasswordMultiBinding',
-                         credentialsId: DOCKER_REGISTRY_CREDENTIAL,
-                         usernameVariable: 'USERNAME',
-                         passwordVariable: 'PASSWORD']
-                     ]) {
-                      def container = docker.build("${DOCKER_IMAGE}", "${docker_build_args} -f docker/ubuntu18/Dockerfile . ")
-                      container.inside {
-                        sh 'echo test'
-                      }
-
-                      //docker run -i -t --entrypoint /bin/bash ${myImg.imageName()}
-                      docker.image("${DOCKER_IMAGE}").withRun("-u root", "/bin/bash") {c ->
-                        sh "docker logs ${c.id}"
-                      }
-
-                      parallel "sample default maven project": {
-                        build_test = build(job:"TEST/nabla-servers-bower-sample/develop",
-                        wait: true,
-                        propagate: false).result
-                        if (build_test == 'FAILURE') {
-                            echo "First job failed"
-                            currentBuild.result = 'UNSTABLE' // of FAILURE
-                        }
-                      } // parallel
-                    }
+              try {
+                parallel "sample default maven project": {
+                  def e2e = build job:'nabla-servers-bower-sample/master', propagate: false, wait: true
+                  result = e2e.result
+                  if (result.equals("SUCCESS")) {
+                  } else {
+                     sh "exit 1" // this fails the stage
                   }
-
-                  // TODO
-                  //junit "target/jenkins-full-*.xml"
-
-                } // vault
+                } // parallel
+              } catch (e) {
+                 currentBuild.result = 'UNSTABLE'
+                 result = "FAIL" // make sure other exceptions are recorded as failure too
               }
+
             }
           }
         }
@@ -330,12 +381,17 @@ pipeline {
   }
   post {
     always {
-      archiveArtifacts artifacts: "**/*.log", onlyIfSuccessful: false, allowEmptyArchive: true
-      runHtmlPublishers(["LogParserPublisher", "AnalysisPublisher"])
+      node('docker-inside') {
+
+        runHtmlPublishers(["LogParserPublisher"])
+
+        archiveArtifacts artifacts: "**/*.log, target/ansible-lint*", onlyIfSuccessful: false, allowEmptyArchive: true
+      } // node
+
     }
     success {
       script {
-        if (! isReleaseBranch()) { cleanWs() }
+        if (! isReleaseBranch()) { wrapCleanWs() }
       }
     }
   } // post

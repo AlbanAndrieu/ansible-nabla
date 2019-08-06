@@ -1,8 +1,8 @@
 #!/bin/bash -e
 #set -xv
 
-export SCRIPT_NAME=$( basename $0 )
-export WORKING_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}"  )" && pwd  )"
+SCRIPT_NAME=$( basename $0 )
+WORKING_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}"  )" && pwd  )"
 
 PYTHON_MAJOR_VERSION=3.6
 export PYTHON_MAJOR_VERSION

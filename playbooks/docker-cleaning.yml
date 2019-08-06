@@ -1,5 +1,6 @@
-#ansible-playbook -i production -c local -v docker-cleaning.yml --ask-pass -vvvv | tee setup.log
-#ansible-playbook -i production -c local -v docker-cleaning.yml --limit albandri --ask-become-pass -vvvv | tee setup.log
+---
+#WARNING run it with -e ansible_python_interpreter="/opt/ansible/env35/bin/python3.5"
+#ansible-playbook -i inventory/production -v playbooks/docker-cleaning.yml --limit albandri -e ansible_python_interpreter="/opt/ansible/env35/bin/python3.5" -vvvv | tee setup.log
 
 - hosts: docker-cleaning
   become: true
@@ -40,30 +41,42 @@
 #Clean all containers
 #docker rm `docker ps --no-trunc -aq`
 
-# TODO below might be useless
-    - name: Remove unwanted dangling images
-      shell: "docker rmi $(docker images -f \"dangling=true\" -q)"
-      ignore_errors: true
-      changed_when: false
+# Below might be useless (duplicated) when running full cleaning
+#    - name: Remove unwanted dangling images
+#      shell: "docker rmi $(docker images -f dangling=true -q)"
+#      ignore_errors: true
+#      changed_when: false
 
-# TODO below might be useless
-    - name: Remove unwanted ‘dangling’ volumes
-      shell: "docker volume rm $(docker volume ls -qf dangling=true)"
-      ignore_errors: true
+# Below might be useless (duplicated) when running full cleaning
+#    - name: Remove unwanted ‘dangling’ volumes
+#      shell: "docker volume rm $(docker volume ls -qf dangling=true)"
+#      ignore_errors: true
+#      changed_when: false
+
+#    - name: Remove container who are running since more than 1 day
+#      shell: "docker kill $(docker ps | grep -E 'Up [0-9]+ days' | awk '{print $1}')"
+#      ignore_errors: true
+#      changed_when: false
+
+#TODO below is slow, we have to pull all the images again after
+    - name: Remove reclaimable images and volumes
+      command: "docker system prune --volumes -f"
       changed_when: false
+      ignore_errors: true
 
     - name: Remove hanging and old fusion-risk docker images
-      shell: "docker kill $(docker ps | grep -E 'Up [0-9]+ days' | awk '{print $1}') ; docker rmi $(docker image ls | grep -i nabla | grep -E 'days|weeks|months ago' | grep -v jenkins-slave | awk '{print $3}')"
+      shell: "docker rmi $(docker image ls | grep -i nabla | grep -E 'days|weeks|months ago' | grep -v jenkins-slave | awk '{print $3}')"
       ignore_errors: true
       changed_when: false
 
     - name: Pull ansible-jenkins-slave-docker latest images
       docker_image:
         name: nabla/ansible-jenkins-slave-docker
+        force: yes
         tag: latest
 
     - name: Check images is fully available
-      shell: "docker inspect -f . nabla/ansible-jenkins-slave-docker:latest"
+      command: "docker inspect -f . nabla/ansible-jenkins-slave-docker:latest"
       changed_when: false
 
 #docker ps -a -s

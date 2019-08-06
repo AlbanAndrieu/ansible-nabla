@@ -1,5 +1,5 @@
-#ansible-galaxy install -r requirements.yml -p ./roles/ --ignore-errors
-#ansible-playbook -i staging -v docker.yml --limit albandri.nabla.mobi --ask-become-pass -vvvv | tee setup.log
+---
+#ansible-playbook docker.yml -i production --limit albandri.nabla.mobi --ask-become-pass -vvvv | tee setup.log
 
 - hosts: all
   gather_facts: true

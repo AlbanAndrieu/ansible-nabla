@@ -14,6 +14,8 @@ if [ ${RC} -ne 0 ]; then
   exit 1
 fi
 
+${WORKING_DIR}/run-ansible-lint.sh
+
 # shellcheck source=./scripts/run-ansible.sh
 source "${WORKING_DIR}/run-ansible.sh"
 RC=$?
@@ -27,16 +29,9 @@ rm -Rf ${WORKING_DIR}/../${JUNIT_OUTPUT_DIR} || true
 mkdir ${WORKING_DIR}/../${JUNIT_OUTPUT_DIR}
 
 echo -e "${cyan} =========== ${NC}"
-echo -e "${green} Ansible lint ${NC}"
-echo -e "${magenta} ${ANSIBLE_LINT_CMD} -p ${WORKING_DIR}/../playbooks/${TARGET_PLAYBOOK} > ${WORKING_DIR}/../${JUNIT_OUTPUT_DIR}/ansible-lint.txt ${NC}"
-${ANSIBLE_LINT_CMD} -p ${WORKING_DIR}/../playbooks/${TARGET_PLAYBOOK} > ${WORKING_DIR}/../${JUNIT_OUTPUT_DIR}/ansible-lint.txt
-echo -e "${magenta} ansible-lint-junit ${WORKING_DIR}/../${JUNIT_OUTPUT_DIR}/ansible-lint.txt -o ${WORKING_DIR}/../${JUNIT_OUTPUT_DIR}/ansible-lint.xml ${NC}"
-ansible-lint-junit ${WORKING_DIR}/../${JUNIT_OUTPUT_DIR}/ansible-lint.txt -o ${WORKING_DIR}/../${JUNIT_OUTPUT_DIR}/ansible-lint.xml
-
-echo -e "${cyan} =========== ${NC}"
 echo -e "${green} Ansible server setup ${NC}"
-echo -e "${magenta} ${ANSIBLE_CMD} -i ${WORKING_DIR}/../inventory/${ANSIBLE_INVENTORY} -m setup --user=root -vvv --tree ${WORKING_DIR}/../${JUNIT_OUTPUT_DIR} all ${NC}"
-${ANSIBLE_CMD} -i ${WORKING_DIR}/../inventory/${ANSIBLE_INVENTORY} -m setup --user=root -vvvv --tree ${WORKING_DIR}/../${JUNIT_OUTPUT_DIR} all > inventory-setup.log 2>&1
+echo -e "${magenta} ${ANSIBLE_CMD} -i ${WORKING_DIR}/../inventory/${ANSIBLE_INVENTORY} -m setup -vvvv --tree ${WORKING_DIR}/../${JUNIT_OUTPUT_DIR} all ${NC}"
+${ANSIBLE_CMD} -i ${WORKING_DIR}/../inventory/${ANSIBLE_INVENTORY} -m setup -vvvv --tree ${WORKING_DIR}/../${JUNIT_OUTPUT_DIR} all > inventory-setup.log 2>&1
 RC=$?
 if [ ${RC} -ne 0 ]; then
   echo ""
@@ -49,8 +44,6 @@ fi
 
 echo -e "${cyan} =========== ${NC}"
 echo -e "${green} Ansible server inventory HTML generation ${NC}"
-rm -Rf ${WORKING_DIR}/../${ANSIBLE_INVENTORY_OUTPUT_DIR} || true
-mkdir ${WORKING_DIR}/../${ANSIBLE_INVENTORY_OUTPUT_DIR}
 ${ANSIBLE_CMBD_CMD} --version
 echo -e "${magenta} ${ANSIBLE_CMBD_CMD} -d -i ${WORKING_DIR}/../inventory/${ANSIBLE_INVENTORY} ${WORKING_DIR}/../${ANSIBLE_INVENTORY_OUTPUT_DIR} > overview.html ${NC}"
 ${ANSIBLE_CMBD_CMD} -d -i ${WORKING_DIR}/../inventory/${ANSIBLE_INVENTORY} ${WORKING_DIR}/../${ANSIBLE_INVENTORY_OUTPUT_DIR} > overview.html

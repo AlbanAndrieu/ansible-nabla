@@ -1,7 +1,7 @@
 ---
 
 - name: Apply security configuration
-  hosts: jenkins-slaves
+  hosts: security
   become: true
 
   roles:

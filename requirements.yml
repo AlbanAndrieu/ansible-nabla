@@ -517,10 +517,10 @@
   scm: 'git'
   version: 'master'
 
-#- src: 'https://github.com/geerlingguy/mac-dev-playbook'
-#  name: 'mac-dev-playbook'
-#  scm: 'git'
-#  version: 'master'
+- src: 'https://github.com/geerlingguy/mac-dev-playbook'
+  name: 'mac-dev-playbook'
+  scm: 'git'
+  version: 'master'
 
 - src: 'https://github.com/ocha/ansible-role-yarn'
   name: 'yarn'

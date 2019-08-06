@@ -21,7 +21,7 @@
   vars:
     docker_files_enable: false
     #docker_files_generated_directory: "../roles/alban.andrieu.jenkins-slave"
-    #jenkins_home: /home/jenkins
+    jenkins_home: /home/jenkins
     jenkins_user: jenkins
     #jenkins_group: docker
     jenkins_http_port: 8380
@@ -39,16 +39,15 @@
     npm_slimerjs_cdnurl: "{{ home_url }}:7070//download/slimerjs"
     shell_git:
       # Additional properties: 'shell_git_machine, shell_git_login, shell_git_email, shell_git_password, shell_git_name, shell_git_path, shell_git_ssl'.
-       - {
-         shell_git_machine: '82.231.208.223',
-         shell_git_login: 'AlbanAndrieu',
-         shell_git_email: 'alban.andrieu@free.fr',
-         shell_git_password: 'microsoft',
-         # Optional.
-         shell_git_name: 'Andrieu, Alban',
-         shell_git_path: '/usr/bin',
-         shell_git_ssl: false
-       }
+      - {
+        shell_git_machine: "82.231.208.223",
+        shell_git_login: "AlbanAndrieu",
+        shell_git_email: "alban.andrieu@free.fr",
+        #shell_git_password: "microsoft",
+        shell_git_name: "Andrieu, Alban",
+        shell_git_path: "/usr/bin",
+        shell_git_ssl: false
+        }
     jenkins_ssh_key_file: "~/.ssh/id_rsa"
     jenkins_ssh_authorized_keys_fingerprints:   # Set known authorized keys for ssh
     # Alban Andrieu
@@ -60,5 +59,3 @@
     jenkins_jdk8_enable: false
     epel_repo_enabled: false
     proxy_repo_enabled: false
-    #user: "albandri"
-    #home: "/workspace/users/albandri10"

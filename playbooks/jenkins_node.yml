@@ -36,12 +36,13 @@
       state: present
       nodeDescription: |
         Node automatically configured by Ansible.
-        Do not change configuration manually, use jenkins_node.yml playbook.
+        Do not change configuration manually, use jenkins_node.yml playbook instead.
       labels:
+      - flyweight
       - docker-inside
       - docker-compose
       - ubuntu16
-      numExecutors: 2
+      numExecutors: 1
       env:
       - key: OS_ARCH
         value: x86Linux
@@ -51,7 +52,7 @@
       x_auth:
         username: "{{ username }}"
         password: "{{ password }}"
-    with_sequence: start=75 end=82 format=00%i
+    with_sequence: start=75 end=82 format=TEST00%i
 
   - name: Reconfigure Jenkins nodes jenkins server WINDOWS
     jenkins_node:
@@ -59,7 +60,7 @@
       state: present
       nodeDescription: |
         Node automatically configured by Ansible.
-        Do not change configuration manually, use jenkins_node.yml playbook.
+        Do not change configuration manually, use jenkins_node.yml playbook instead.
       labels:
       - compil-winnt
       - compil-winnt-kles
@@ -83,9 +84,15 @@
         home: "C:\\Program Files\\Java\\jdk1.8.0_201"
       - key: "hudson.model.JDK$DescriptorImpl@jdk-17"
         home: "C:\\Program Files\\Java\\jdk1.7.0_80"
-      - key: "hudson.model.JDK$DescriptorImpl@jdk-18"
+      - key: "hudson.model.JDK$DescriptorImpl@jdk-18-latest"
         home: "C:\\tools\\jdk_8u201"
-      credentialsId: 1234
+      - key: "hudson.plugins.git.GitTool$DescriptorImpl@git-latest"
+        home: "C:\\Program Files\\Git\\bin\\git.exe"
+      - key: "hudson.plugins.git.GitTool$DescriptorImpl@git-system"
+        home: "C:\\Program Files\\Git\\git.exe"
+      - key: "hudson.plugins.git.GitTool$DescriptorImpl@git-windows"
+        home: "C:\\Program Files\\Git\\git.exe"
+      credentialsId: 1234 # jenkins@unix-slaves
       agentLauncher: "hudson.slaves.JNLPLauncher"
       remoteFS: "C:\\jenkins"
       x_jenkins_server: "nabla/jenkins"

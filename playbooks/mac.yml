@@ -94,7 +94,7 @@
       - flex
       - openssl
       - ant
-#      - maven
+      - maven@3.5
       - svn
       - unixodbc
 #brew rm unixodbc && brew rm freetds
@@ -113,6 +113,7 @@
       - gdb
 #echo "set startup-with-shell off" >> ~/.gdbinit
 #Below todo in default.config.yml disable homebrew/php
+      - adoptopenjdk8
     homebrew_taps:
       - homebrew/core
       - caskroom/cask
@@ -140,6 +141,11 @@
 - name: git | Initialize git-lfs
   shell: >
     git lfs install
+  become: true
+
+- name: maven | Initialize maven
+  shell: >
+    ln -s -f /usr/local/Cellar/maven@3.5/3.5.4/bin/mvn /usr/local/bin/mvn
   become: true
 
 #- import_playbook: jenkins-master.yml

@@ -155,16 +155,7 @@
   roles:
     - andrewrothstein.terraform
 
-#- name: Install kubernetes
-#  hosts: workstation
-#
-#  vars:
-#    docker_install_compose: false
-#    kubernetes_allow_pods_on_master: True
-#
-#  roles:
-#    - geerlingguy.docker
-#    - geerlingguy.kubernetes
+- import_playbook: kubernetes.yml
 
 #- import_playbook: collectd.yml
 

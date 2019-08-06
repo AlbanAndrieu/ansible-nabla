@@ -9,11 +9,11 @@
   vars:
     filebeat_output_elasticsearch_hosts:
 #      - "localhost:9200"
-      - "frbm:9200"
+      - "150.151.160.25:9200"
 
     filebeat_output_logstash_hosts:
 #      - "localhost:5044"
-      - "frbm:5044"
+      - "150.151.160.25:5044"
 
     filebeat_prospectors:
       - input_type: log
@@ -39,11 +39,11 @@
   vars:
     filebeat_output_elasticsearch_hosts:
 #      - "localhost:9200"
-      - "10.41.40.91:9200"
+      - "150.151.160.25:9200"
 
     filebeat_output_logstash_hosts:
 #      - "localhost:5044"
-      - "10.41.40.91:5044"
+      - "150.151.160.25:5044"
 
     filebeat_prospectors:
       - input_type: log
@@ -51,6 +51,8 @@
           - "/var/log/*.log"
 
     filebeat_enable_logging: true
+    filebeat_output_elasticsearch_enabled: true
+    filebeat_output_logstash_enabled: false
     #filebeat_log_level: warning
     filebeat_log_level: info
     filebeat_log_dir: /var/log/filebeat

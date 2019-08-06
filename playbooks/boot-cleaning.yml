@@ -1,0 +1,104 @@
+---
+#ansible-playbook playbooks/boot-cleaning.yml -i inventory/production --limit albandri -vvvv
+
+- hosts: all
+  gather_facts: true
+  gather_subset: hardware
+  tasks:
+    - name: group hosts by distribution
+      group_by: key="{{ ansible_distribution }}-{{ ansible_distribution_version }}"
+
+- hosts: RedHat-7*:RedHat-6*:RedHat-5*:CentOS-7*:CentOS-6*:Ubuntu-18*:Ubuntu-17*:Ubuntu-16*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
+  gather_facts: false
+  tasks:
+    - name: group hosts for supported distributions
+      group_by: key="supported"
+
+- hosts: "!supported"
+  gather_facts: false
+  tasks:
+    - name: fail for unsupported distribution
+      fail: msg="{{ ansible_distribution }} {{ ansible_distribution_version }}
+                 is not a supported OS for a Tower installation.  Supported
+                 OSes include Red Hat Enterprise Linux 6/7, CentOS 6/7, or
+                 Ubuntu 12.04/13.04/14.04/16.04/17.04/18.04."
+    - debug: msg="Version {{ ansible_distribution }} {{ ansible_distribution_version }} {{ ansible_architecture }}"
+
+- name: Boot cleaning
+  hosts: Ubuntu-18*:Ubuntu-17*:Ubuntu-16*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
+#  remote_user: root
+  become: true
+
+  tasks:
+    - name: Get kernel
+      command: uname -a
+      changed_when: false
+      register: kernel_result
+
+    - name: Print kernel
+      debug: msg="Kernel are {{ kernel_result }}"
+
+    - name: List the old kernel # noqa 301 306
+      shell: dpkg --list 'linux-image*'|awk '{ if ($1=="ii") print $2}'|grep -v `uname -r`
+
+    - name: Clean apt source git-lfs # noqa 302 305
+      shell: rm -f /etc/apt/sources.list.d/github_git-lfs.list
+      changed_when: false
+      ignore_errors: yes
+
+    - name: Clean apt source puppetlabs # noqa 302 305
+      shell: rm -f /etc/apt/sources.list.d/github_git-lfs.list
+      changed_when: false
+      ignore_errors: yes
+
+    - name: Update
+      apt:
+        update_cache: yes
+
+    - name: Autoremove
+      apt:
+        autoremove: yes
+
+#    - name: Clean kernel by hand
+      #shell: rm -rf /boot/*-4.4.0-{59,81,93,104,108,109,112,130,131,138,139}-*
+
+#find .  -regextype posix-egrep  -regex '^.*\-4\.4\.0\-(139|42)\-.*$'
+
+    - name: Clean kernel by hand (1)
+      find:
+        paths: /boot
+        patterns: ['^.*\-4\.4\.0\-(59|81|93|104|108|109|112|130|131|138|139)\-.*$']
+        file_type: file
+        age: 2w
+        use_regex: true
+      register: wildcard_files_to_delete
+
+    - name: Clean kernel by hand (2)
+      file:
+        path: "{{ item.path }}"
+        state: absent
+      with_items: "{{ wildcard_files_to_delete.files }}"
+
+    - name: Install fix # noqa 303
+      command: apt-get -f install
+      changed_when: false
+#      ignore_errors: yes
+
+    - name: Grub update-grub
+      command: update-grub
+      changed_when: false
+#      ignore_errors: yes
+
+#    - name: Autoclean
+#      apt:
+#        autoclean: yes
+
+#    - name: Cron | Purge kernel images @reboot special time
+#      cron:
+#        name: "Purge kernel images"
+#        special_time: reboot
+#        job: apt-get -y autoremove ; purge-old-kernels -y --keep 3 -q
+#        cron_file: "purge_kernel_images"
+#        user: root
+#      when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
+#      become: true

@@ -116,6 +116,7 @@ roles/Stouts.python
 roles/Stouts.collectd
 roles/andrewrothstein.terraform
 roles/andrewrothstein.unarchive-deps
+roles/andrewrothstein.kubernetes-helm
 roles/angstwad.docker-ubuntu
 roles/elliotweiser.osx-command-line-tools
 roles/geerlingguy.ansible-role-nodejs/

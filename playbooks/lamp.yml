@@ -23,7 +23,7 @@
     apache_create_vhosts: true
     #apache_vhosts_template: "vhosts.conf.j2"
     apache_vhosts:
-      - servername: "{{ansible_fqdn}}"
+      - servername: "{{ ansible_fqdn }}"
         documentroot: "/var/www/sample"
         allow_override: "FileInfo Indexes"
         options: "MultiViews Indexes SymLinksIfOwnerMatch IncludesNoExec"
@@ -35,7 +35,7 @@
             AuthUserFile /var/www/password-protected-directory/.htpasswd
           </Directory>
     apache_vhosts_ssl:
-      - servername: "{{ansible_fqdn}}"
+      - servername: "{{ ansible_fqdn }}"
         documentroot: "/var/www"
         #TODO
         #certificate_file: "/etc/ssl/{{ansible_fqdn}}/{{ansible_fqdn}}.pem"

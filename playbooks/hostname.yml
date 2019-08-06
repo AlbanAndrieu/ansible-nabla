@@ -14,7 +14,7 @@
 #       inventory_hostname: albandri.nabla.mobi
        hosts:
        # For docker
-         - { name: {{ hostname_hostname }}, ip: 127.0.1.1 }
+         - { name: "{{ hostname_hostname }}", ip: 127.0.1.1 }
          - { name: mydatabase, ip: 127.0.1.1 }
          - { name: myapache, ip: 127.0.1.1 }
        # For hardcoded servers
