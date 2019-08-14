@@ -1,6 +1,6 @@
+---
 # from galaxy
 #ansible-galaxy install -r requirements.yml -p ./roles/ --ignore-errors
----
 
 - src: 'https://github.com/AlbanAndrieu/ansible-administration'
   name: 'alban.andrieu.administration'
@@ -292,15 +292,20 @@
   scm: 'git'
   version: 'master'
 
-- src: 'https://github.com/AlbanAndrieu/ansible-role-elasticsearch'
-  name: 'geerlingguy.elasticsearch'
+- src: 'https://github.com/AlbanAndrieu/stack-docker'
+  name: 'elastic/stack-docker'
   scm: 'git'
   version: 'master'
 
-- src: 'https://github.com/AlbanAndrieu/ansible-role-elasticsearch-curator'
-  name: 'geerlingguy.elasticsearch-curator'
-  scm: 'git'
-  version: 'master'
+#- src: 'https://github.com/AlbanAndrieu/ansible-role-elasticsearch'
+#  name: 'geerlingguy.elasticsearch'
+#  scm: 'git'
+#  version: 'master'
+#
+#- src: 'https://github.com/AlbanAndrieu/ansible-role-elasticsearch-curator'
+#  name: 'geerlingguy.elasticsearch-curator'
+#  scm: 'git'
+#  version: 'master'
 
 - src: 'https://github.com/AlbanAndrieu/ansible-role-firewall'
   name: 'geerlingguy.firewall'
@@ -312,15 +317,15 @@
   scm: 'git'
   version: 'master'
 
-- src: 'https://github.com/AlbanAndrieu/ansible-role-kibana'
-  name: 'geerlingguy.kibana'
-  scm: 'git'
-  version: 'master'
-
-- src: 'https://github.com/AlbanAndrieu/ansible-role-logstash'
-  name: 'geerlingguy.logstash'
-  scm: 'git'
-  version: 'master'
+#- src: 'https://github.com/AlbanAndrieu/ansible-role-kibana'
+#  name: 'geerlingguy.kibana'
+#  scm: 'git'
+#  version: 'master'
+#
+#- src: 'https://github.com/AlbanAndrieu/ansible-role-logstash'
+#  name: 'geerlingguy.logstash'
+#  scm: 'git'
+#  version: 'master'
 
 - src: 'https://github.com/AlbanAndrieu/ansible-role-mysql'
   name: 'geerlingguy.mysql'
