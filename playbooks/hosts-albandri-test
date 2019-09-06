@@ -1,11 +1,11 @@
 [all]
 #127.0.0.1
 #albandri ansible_host=192.168.0.29 ansible_ssh_port=22 ansible_connection=ssh dtap=prod comment="Hosting by Alban Andrieu" ext_id="SRV_{{ host_id }}" groups="paris misc"
-albandri-test
+albandrieu
 
 #below is used only git lamp.yml
 [lamp]
-albandri-test
+albandrieu
 
 [ntp]
 #Same as all
@@ -14,72 +14,72 @@ albandri-test
 #Same as all
 
 [administration]
-#albandri-test
+#albandrieu
 
 [security]
-albandri-test
+albandrieu
 
 [cmake]
-albandri-test
+albandrieu
 
 [cpp]
-albandri-test
+albandrieu
 
 [java]
-albandri-test
+albandrieu
 
 [maven]
-albandri-test
+albandrieu
 
 [css]
-albandri-test
+albandrieu
 
 [chrome]
-albandri-test
+albandrieu
 
 [tomcat-servers]
-albandri-test
+albandrieu
 
 [jboss-servers]
-albandri-test
+albandrieu
 
 [nabla-servers]
-albandri-test
+albandrieu
 
 [apache-servers]
-albandri-test
+albandrieu
 
 [mysql-servers]
-albandri-test
+albandrieu
 
 [locale]
-albandri-test
+albandrieu
 
 [zabbix]
-albandri-test
+albandrieu
 
 [webmin]
-albandri-test
+albandrieu
 
 [zfs]
-albandri-test
-#albandri-test ansible_connection=local
+albandrieu
+#albandrieu ansible_connection=local
 
 [xvbf]
-albandri-test
+albandrieu
 
 [selenium]
-albandri-test
+albandrieu
 
 [jenkins-master]
-albandri-test
+albandrieu
 master ansible_ssh_host=192.168.11.33 ansible_ssh_port=22 ansible_connection=ssh ansible_user=vagrant
 
 [jenkins-master:vars]
 ansible_ssh_common_args='-o StrictHostKeyChecking=no'
 
 [jenkins-slaves]
-albandri-test
+albandrieu
 slave01 ansible_ssh_host=192.168.11.51 ansible_ssh_port=22 ansible_connection=ssh ansible_user=vagrant
 slave02 ansible_ssh_host=192.168.11.52 ansible_ssh_port=22 ansible_connection=ssh ansible_user=vagrant
 slave03 ansible_ssh_host=192.168.11.53 ansible_ssh_port=22 ansible_connection=ssh ansible_user=vagrant
@@ -90,16 +90,16 @@ ansible_ssh_common_args='-o StrictHostKeyChecking=no'
 jenkins_home='/jenkins'
 
 [jenkins-swarm]
-#albandri-test
+#albandrieu
 
 [jenkins-swarm:vars]
 ansible_ssh_common_args='-o StrictHostKeyChecking=no'
 
 [supervisors]
-albandri-test
+albandrieu
 
 [virtualbox]
-albandri-test
+albandrieu
 
 [vagrant_hosts:children]
 jenkins-master
@@ -107,16 +107,16 @@ jenkins-slaves
 #sonar
 
 [vagrant]
-albandri-test
+albandrieu
 
 [docker]
-albandri-test
+albandrieu
 #vagrant local box
 #192.168.33.10
 
 [docker-container]
 #ansible_python_interpreter="/usr/bin/python3.6"
-albandri-test
+albandrieu
 
 [docker-container:vars]
 repository="git@github.com:AlbanAndrieu/nabla-projects-interview-visma.git"
@@ -128,19 +128,19 @@ git_user="jenkins"
 
 [docker-container-oracle]
 #Issue on Redhat ansible_python_interpreter="/usr/local/bin/python3.5"
-albandri-test
+albandrieu
 
 [docker-cleaning]
-albandri-test
+albandrieu
 
 [kubernetes]
-albandri-test
+albandrieu
 
 [nodejs]
-albandri-test
+albandrieu
 
 [workstation]
-albandri-test
+albandrieu
 
 [workstation:vars]
 user=albandri
@@ -149,10 +149,10 @@ version=10
 #ansible_sudo_pass=todo
 
 [nexus]
-albandri-test
+albandrieu
 
 [sonar]
-albandri-test
+albandrieu
 sonarqube ansible_ssh_host=192.168.11.99 ansible_ssh_port=22 ansible_connection=ssh ansible_user=vagrant
 
 [sonar:vars]
@@ -171,17 +171,17 @@ ansible_ssh_common_args='-o StrictHostKeyChecking=no'
 #see workstation
 
 [eclipse]
-albandri-test ansible_host=10.41.40.91 ansible_user="root" jenkins_home=/jenkins jenkins_id=1001 jenkins_gid=1006 docker_gid=1007 data_gid=33 dtap=dev comment="Hosting by Alban Andrieu"
+albandrieu ansible_host=10.41.40.40 ansible_user="root" ansible_password="Banbou07" jenkins_home=/jenkins jenkins_id=1001 jenkins_gid=1006 docker_gid=1007 data_gid=33 dtap=dev comment="Hosting by Alban Andrieu"
 
 [logstash]
-albandri-test
+albandrieu
 
 [collectd]
-albandri-test
+albandrieu
 
 [windows]
 #10.0.2.15
-#albandri-test
+#albandrieu
 #PARD011996.nabla.mobi ansible_host=10.41.40.121 ansible_user="fru" ansible_password="Kondor_123" dtap=acc comment="Hosting by Alban Andrieu" ext_id="SRV_029" groups="workstation"
 #.\fru Kondor_123
 #FR1CSWFRBM0005.nabla.mobi ansible_host=10.21.185.152 ansible_python_interpreter="/usr/bin/python2.7" ansible_user="todo" ansible_password="todo" dtap=acc comment="Hosting by Alban Andrieu" ext_id="SRV_{{ host_id }}" groups="micloud paris"

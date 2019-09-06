@@ -61,6 +61,6 @@ echo -e "    docker exec -it sandbox /bin/bash"
 echo -e "    docker exec -u 0 -it sandbox env TERM=xterm-256color bash -l"
 echo -e ""
 
-./docker-test.sh
+${WORKING_DIR}/docker-test.sh
 
 exit 0

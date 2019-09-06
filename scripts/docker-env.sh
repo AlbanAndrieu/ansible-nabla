@@ -28,6 +28,5 @@ fi
 readonly DOCKER_REGISTRY=${DOCKER_REGISTRY:-"https://hub.docker.com/"}
 readonly DOCKER_ORGANISATION=${DOCKER_ORGANISATION:-"nabla"}
 readonly DOCKER_USERNAME=${DOCKER_USERNAME:-""}
-readonly DOCKER_NAME=${DOCKER_NAME:-"ansible-jenkins-slave-docker"}
-#readonly DOCKER_TAG="ubuntu:16.04"
-readonly DOCKER_TAG=${DOCKER_TAG:-"latest"}
+export DOCKER_NAME=${DOCKER_NAME:-"ansible-jenkins-slave-docker"}
+export DOCKER_TAG=${DOCKER_TAG:-"latest"}

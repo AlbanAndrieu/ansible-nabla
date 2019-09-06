@@ -233,7 +233,7 @@
   version: 'master'
 
 - src: 'https://github.com/AlbanAndrieu/devbox.chrome'
-  name: 'chrome'
+  name: 'devbox.chrome'
   scm: 'git'
   version: 'master'
 
@@ -542,10 +542,20 @@
   scm: 'git'
   version: 'master'
 
-- src: 'https://github.com/andrewrothstein/ansible-kubernetes-helm'
-  name: 'andrewrothstein.kubernetes-helm'
+- src: 'https://github.com/geerlingguy/ansible-role-varnish'
+  name: 'geerlingguy.packer'
   scm: 'git'
   version: 'master'
+
+- src: https://github.com/geerlingguy/ansible-role-kubernetes
+  name: 'geerlingguy.kubernetes'
+  scm: 'git'
+  version: 'master'
+
+- src: https://github.com/andrewrothstein/ansible-kubernetes-helm
+  name: 'andrewrothstein.kubernetes-helm'
+  scm: 'git'
+  version: 'master'  
 
 - src: 'https://github.com/andrewrothstein/ansible-kubectl'
   name: 'andrewrothstein.kubectl'

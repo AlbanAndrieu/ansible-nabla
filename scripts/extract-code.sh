@@ -90,8 +90,8 @@ git submodule add -f  https://github.com/ansiblebit/oracle-java java
 #pull request pending
 
 #git submodule deinit -f chrome
-#git clone https://github.com/alourie/devbox.chrome.git chrome
-git submodule add -f  https://github.com/AlbanAndrieu/devbox.chrome.git chrome
+#git clone https://github.com/alourie/devbox.chrome.git devbox.chrome
+#git submodule add -f  https://github.com/AlbanAndrieu/devbox.chrome.git chrome
 
 #git clone https://github.com/Stouts/Stouts.jenkins.git jenkins-master
 git submodule add -f  https://github.com/AlbanAndrieu/Stouts.jenkins.git jenkins-master
