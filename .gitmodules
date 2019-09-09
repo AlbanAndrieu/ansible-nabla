@@ -73,9 +73,6 @@
 [submodule "roles/alban.andrieu.cmake"]
 	path = roles/alban.andrieu.cmake
 	url = https://github.com/AlbanAndrieu/ansible-cmake.git
-[submodule "roles/alban.andrieu.webmin"]
-	path = roles/alban.andrieu.webmin
-	url = https://github.com/AlbanAndrieu/ansible-webmin.git
 [submodule "roles/alban.andrieu.zfs"]
 	path = roles/alban.andrieu.zfs
 	url = https://github.com/AlbanAndrieu/ansible-zfs.git
@@ -94,9 +91,6 @@
 [submodule "roles/alban.andrieu.subversion"]
 	path = roles/alban.andrieu.subversion
 	url = https://github.com/AlbanAndrieu/ansible-subversion.git
-[submodule "roles/alban.andrieu.css"]
-	path = roles/alban.andrieu.css
-	url = https://github.com/AlbanAndrieu/ansible-css.git
 [submodule "roles/alban.andrieu.shell"]
 	path = roles/alban.andrieu.shell
 	url = https://github.com/AlbanAndrieu/ansible-shell.git
@@ -133,9 +127,6 @@
 [submodule "roles/alban.andrieu.administration"]
 	path = roles/alban.andrieu.administration
 	url = https://github.com/AlbanAndrieu/ansible-administration.git
-[submodule "roles/alban.andrieu.workstation"]
-	path = roles/alban.andrieu.workstation
-	url = https://github.com/AlbanAndrieu/ansible-workstation.git
 [submodule "roles/alban.andrieu.dns"]
 	path = roles/alban.andrieu.dns
 	url = https://github.com/AlbanAndrieu/ansible-dns.git
