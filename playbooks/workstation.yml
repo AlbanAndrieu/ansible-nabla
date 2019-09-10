@@ -135,7 +135,7 @@
     - alban.andrieu.tomcat
 
   vars:
-      tomcat_version: "8"
+      tomcat_version: "9"
 
 - name: Install samba
   hosts: workstation
