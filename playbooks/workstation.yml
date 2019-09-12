@@ -155,7 +155,7 @@
   roles:
     - andrewrothstein.terraform
 
-- import_playbook: kubernetes.yml
+#- import_playbook: kubernetes.yml
 
 #- import_playbook: collectd.yml
 

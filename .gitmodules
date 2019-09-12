@@ -91,18 +91,12 @@
 [submodule "roles/alban.andrieu.subversion"]
 	path = roles/alban.andrieu.subversion
 	url = https://github.com/AlbanAndrieu/ansible-subversion.git
-[submodule "roles/alban.andrieu.shell"]
-	path = roles/alban.andrieu.shell
-	url = https://github.com/AlbanAndrieu/ansible-shell.git
 [submodule "roles/alban.andrieu.eclipse"]
 	path = roles/alban.andrieu.eclipse
 	url = https://github.com/AlbanAndrieu/ansible-eclipse.git
 [submodule "roles/alban.andrieu.jboss"]
 	path = roles/alban.andrieu.jboss
 	url = https://github.com/AlbanAndrieu/ansible-jboss.git
-[submodule "roles/alban.andrieu.windows"]
-	path = roles/alban.andrieu.windows
-	url = https://github.com/AlbanAndrieu/ansible-windows.git
 [submodule "roles/alban.andrieu.cpp"]
 	path = roles/alban.andrieu.cpp
 	url = https://github.com/AlbanAndrieu/ansible-cpp.git
