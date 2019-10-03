@@ -49,12 +49,12 @@ def main():
     module = AnsibleModule(
         argument_spec={
             'hostname': {
-                'type':    'str',
+                'type': 'str',
                 'default': 'localhost/jenkins',
 
             },
-            'auth':     {
-                'type':     'dict',
+            'auth': {
+                'type': 'dict',
                 'required': True,  # username, password
             },
         },

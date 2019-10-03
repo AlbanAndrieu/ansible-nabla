@@ -41,7 +41,7 @@ def delete_jenkins_node(params, verify=None):
     )
     headers = {
         'Jenkins-Crumb': params['x_token'],
-        'Content-Type':  'application/x-www-form-urlencoded',
+        'Content-Type': 'application/x-www-form-urlencoded',
     }
     response = requests.post(
         url_delete,
@@ -70,47 +70,47 @@ def configure_jenkins_node(params, verify=None):
     )
     headers = {
         'Jenkins-Crumb': params['x_token'],
-        'Content-Type':  'application/x-www-form-urlencoded',
+        'Content-Type': 'application/x-www-form-urlencoded',
     }
-    labelString = ' '.join(params['labels'])
+    labelstring = ' '.join(params['labels'])
     configuration = {
-        '':                  [
+        '': [
             params['agentLauncher'],
             params['retentionStrategy'],
         ],
-        'labelString':       labelString,
-        'launcher':          {
-            '':                               '3',
-            '$class':                         params['agentLauncher'],
-            'credentialsId':                  params['credentialsId'],
-            'host':                           params['hostname'],
-            'javaPath':                       '',
-            'jvmOptions':                     '',
-            'launchTimeoutSeconds':           '',
-            'maxNumRetries':                  '',
-            'port':                           params['port'],
-            'prefixStartSlaveCmd':            '',
-            'retryWaitTime':                  '',
+        'labelString': labelstring,
+        'launcher': {
+            '': '3',
+            '$class': params['agentLauncher'],
+            'credentialsId': params['credentialsId'],
+            'host': params['hostname'],
+            'javaPath': '',
+            'jvmOptions': '',
+            'launchTimeoutSeconds': '',
+            'maxNumRetries': '',
+            'port': params['port'],
+            'prefixStartSlaveCmd': '',
+            'retryWaitTime': '',
             'sshHostKeyVerificationStrategy': {
-                '$class':        params['sshHostKeyVerificationStrategy'],
+                '$class': params['sshHostKeyVerificationStrategy'],
                 'stapler-class': params['sshHostKeyVerificationStrategy'],
             },
-            'stapler-class':                  params['agentLauncher'],
-            'suffixStartSlaveCmd':            '',
+            'stapler-class': params['agentLauncher'],
+            'suffixStartSlaveCmd': '',
         },
-        'mode':              'NORMAL',
-        'name':              params['name'],
-        'nodeDescription':   params['nodeDescription'],
-        'nodeProperties':    {
+        'mode': 'NORMAL',
+        'name': params['name'],
+        'nodeDescription': params['nodeDescription'],
+        'nodeProperties': {
             'stapler-class-bag': 'true',
         },
-        'numExecutors':      params['numExecutors'],
-        'remoteFS':          params['remoteFS'],
+        'numExecutors': params['numExecutors'],
+        'remoteFS': params['remoteFS'],
         'retentionStrategy': {
-            '$class':        params['retentionStrategy'],
+            '$class': params['retentionStrategy'],
             'stapler-class': params['retentionStrategy'],
         },
-        'type':              params['type'],
+        'type': params['type'],
     }
     # this configuration part is created separately, because we do not want to add
     # environment in node configuration, if there are no env vars or no tools at all
@@ -232,70 +232,70 @@ def main():
     """
     module = AnsibleModule(
         argument_spec={
-            'name':         {
-                'type':     'str',
-                'default':  '',
+            'name': {
+                'type': 'str',
+                'default': '',
                 'required': False,
 
             },
-            'hostname':         {
-                'type':     'str',
+            'hostname': {
+                'type': 'str',
                 'required': True,
 
             },
-            'state':            {
+            'state': {
                 'default': 'present',
                 'choices': [
                     'present',
                     'absent',
                 ],
             },
-            'credentialsId':    {
+            'credentialsId': {
                 'type': 'str',
                 'default': '1234',  # jenkins@unix-slaves
 
             },
-            'agentLauncher':    {
+            'agentLauncher': {
                 'type': 'str',
                 'default': 'hudson.plugins.sshslaves.SSHLauncher',  # hudson.slaves.JNLPLauncher
             },
 
-            'nodeDescription':  {
+            'nodeDescription': {
                 'type': 'str',
                 'default': 'Jenkins node automatically created by Ansible',
 
             },
-            'labels':           {
+            'labels': {
                 'type': 'list',
                 'default': list(),
 
             },
-            'env':              {
+            'env': {
                 'type': 'list',
                 'default': list(),
 
             },
-            'tools':            {
+            'tools': {
                 'type': 'list',
                 'default': list(),
 
             },
-            'remoteFS':         {
+            'remoteFS': {
                 'type': 'str',
                 'default': '/home/jenkins',
 
             },
-            'numExecutors':     {
+            'numExecutors': {
                 'type': 'int',
                 'default': 1,
 
             },
-            'type':             {
+            'type': {
                 'type': 'str',
                 'default': 'hudson.slaves.DumbSlave',
 
             },
-            'retentionStrategy':             {
+            'retentionStrategy': {
                 'type': 'str',
                 'default': 'hudson.slaves.RetentionStrategy$Always',
             },
@@ -303,7 +303,7 @@ def main():
                 'type': 'str',
                 'default': 'NonVerifyingKeyVerificationStrategy',
             },
-            'port':             {
+            'port': {
                 'type': 'int',
                 'default': 22,
 
@@ -313,12 +313,12 @@ def main():
                 'default': 'localhost/jenkins',
 
             },
-            'x_auth':           {
-                'type':     'dict',
+            'x_auth': {
+                'type': 'dict',
                 'required': True,  # username, password
             },
-            'x_token':          {
-                'type':     'str',
+            'x_token': {
+                'type': 'str',
                 'required': True,
 
             },
