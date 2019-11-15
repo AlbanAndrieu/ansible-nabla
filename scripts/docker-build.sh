@@ -7,14 +7,18 @@ set -eo pipefail
 
 WORKING_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}"  )" && pwd  )"
 
+export DOCKER_TAG="1.0.1"
+
 # shellcheck source=/dev/null
 source "${WORKING_DIR}/docker-env.sh"
 
 #export DOCKER_NAME=${DOCKER_NAME:-"ansible-jenkins-slave-docker"}
-export DOCKER_TAG="1.0.1"
+export DOCKER_FILE="../docker/ubuntu18/Dockerfile"
 
 # shellcheck source=/dev/null
 source "${WORKING_DIR}/run-ansible.sh"
+
+WORKING_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}"  )" && pwd  )"
 
 if [ -n "${DOCKER_BUILD_ARGS}" ]; then
   echo -e "${green} DOCKER_BUILD_ARGS is defined ${happy_smiley} : ${DOCKER_BUILD_ARGS} ${NC}"
@@ -26,8 +30,8 @@ else
 fi
 
 echo -e "${green} Building docker image ${NC}"
-echo -e "${magenta} time docker build ${DOCKER_BUILD_ARGS} -f ${WORKING_DIR}/../docker/ubuntu18/Dockerfile -t \"$DOCKER_ORGANISATION/$DOCKER_NAME\" ${WORKING_DIR}/../ --tag \"$DOCKER_TAG\" ${NC}"
-time docker build ${DOCKER_BUILD_ARGS} -f ${WORKING_DIR}/../docker/ubuntu18/Dockerfile -t "${DOCKER_ORGANISATION}/${DOCKER_NAME}" ${WORKING_DIR}/../ --tag "${DOCKER_TAG}" | tee docker.log
+echo -e "${magenta} time docker build ${DOCKER_BUILD_ARGS} -f ${WORKING_DIR}/${DOCKER_FILE} -t \"$DOCKER_ORGANISATION/$DOCKER_NAME\" -t \"${DOCKER_ORGANISATION}/${DOCKER_NAME}:${DOCKER_TAG}\" ${WORKING_DIR}/../ ${NC}"
+time docker build ${DOCKER_BUILD_ARGS} -f ${WORKING_DIR}/${DOCKER_FILE} -t "${DOCKER_ORGANISATION}/${DOCKER_NAME}" -t "${DOCKER_ORGANISATION}/${DOCKER_NAME}:${DOCKER_TAG}" ${WORKING_DIR}/../ | tee docker.log
 RC=$?
 if [ ${RC} -ne 0 ]; then
   echo ""
@@ -44,6 +48,8 @@ echo -e ""
 echo -e "To push it"
 echo -e "    docker login ${DOCKER_REGISTRY} --username ${DOCKER_USERNAME} --password password"
 echo -e "    docker tag ${DOCKER_ORGANISATION}/${DOCKER_NAME}:latest ${DOCKER_REGISTRY}${DOCKER_ORGANISATION}/${DOCKER_NAME}:${DOCKER_TAG}"
+echo -e "    docker tag ${DOCKER_ORGANISATION}/${DOCKER_NAME}:latest ${DOCKER_REGISTRY}${DOCKER_ORGANISATION}/${DOCKER_NAME}:latest"
+echo -e "    docker history --no-trunc ${DOCKER_ORGANISATION}/${DOCKER_NAME}:latest > history.log"
 echo -e "    docker push ${DOCKER_REGISTRY}${DOCKER_ORGANISATION}/${DOCKER_NAME}"
 echo -e ""
 echo -e "To pull it"
@@ -61,6 +67,6 @@ echo -e "    docker exec -it sandbox /bin/bash"
 echo -e "    docker exec -u 0 -it sandbox env TERM=xterm-256color bash -l"
 echo -e ""
 
-${WORKING_DIR}/docker-test.sh
+"${WORKING_DIR}/docker-test.sh" "${DOCKER_NAME}"
 
 exit 0

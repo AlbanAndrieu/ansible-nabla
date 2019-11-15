@@ -2,14 +2,14 @@
 #set -xv
 
 case "$OSTYPE" in
-  linux*)   SYSTEM=LINUX;;
-  darwin*)  SYSTEM=OSX;;
-  win*)     SYSTEM=Windows;;
-  cygwin*)  SYSTEM=Cygwin;;
-  msys*)    SYSTEM=MSYS;;
-  bsd*)     SYSTEM=BSD;;
-  solaris*) SYSTEM=SOLARIS;;
-  *)        SYSTEM=UNKNOWN;;
+  linux*)   export SYSTEM=LINUX;;
+  darwin*)  export SYSTEM=OSX;;
+  win*)     export SYSTEM=Windows;;
+  cygwin*)  export SYSTEM=Cygwin;;
+  msys*)    export SYSTEM=MSYS;;
+  bsd*)     export SYSTEM=BSD;;
+  solaris*) export SYSTEM=SOLARIS;;
+  *)        export SYSTEM=UNKNOWN;;
 esac
 echo "SYSTEM : ${SYSTEM}"
 
@@ -35,8 +35,10 @@ elif [ -f /etc/SuSe-release ]; then
     # Older SuSE/etc.
     ...
 elif [ -f /etc/redhat-release ]; then
-    # Older Red Hat, CentOS, etc.
-    ...
+    # Older Red Hat, CentOS, Docker etc.
+    #less /etc/redhat-release
+    OS=$(uname -s) # Linux
+    VER=$(uname -r)
 else
     # Fall back to uname, e.g. "Linux <version>", also works for BSD, etc.
     OS=$(uname -s)

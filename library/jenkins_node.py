@@ -84,19 +84,20 @@ def configure_jenkins_node(params, verify=None):
             '$class': params['agentLauncher'],
             'credentialsId': params['credentialsId'],
             'host': params['hostname'],
-            'javaPath': '',
+            'javaPath': params['javaPath'],
             'jvmOptions': '',
             'launchTimeoutSeconds': '',
             'maxNumRetries': '',
             'port': params['port'],
             'prefixStartSlaveCmd': '',
+            'suffixStartSlaveCmd': '',
             'retryWaitTime': '',
             'sshHostKeyVerificationStrategy': {
                 '$class': params['sshHostKeyVerificationStrategy'],
+                'requireInitialManualTrust': 'true',
                 'stapler-class': params['sshHostKeyVerificationStrategy'],
             },
             'stapler-class': params['agentLauncher'],
-            'suffixStartSlaveCmd': '',
         },
         'mode': 'NORMAL',
         'name': params['name'],
@@ -111,6 +112,7 @@ def configure_jenkins_node(params, verify=None):
             'stapler-class': params['retentionStrategy'],
         },
         'type': params['type'],
+        'Jenkins-Crumb': params['x_token'],
     }
     # this configuration part is created separately, because we do not want to add
     # environment in node configuration, if there are no env vars or no tools at all
@@ -123,6 +125,13 @@ def configure_jenkins_node(params, verify=None):
             'locations': params['tools'],
         }
     data = 'json={}'.format(json.dumps(configuration))
+
+    # print(json.dumps(configuration))
+
+    # print("URL : {}.".format(url_update))
+
+    # print("Configuration : {}.".format(configuration))
+
     exists = requests.get(
         url_update,
         auth=auth,
@@ -218,8 +227,29 @@ def main():
             value: "$JAVA_HOME/bin:$PATH"
           tools:
           - key: "hudson.model.JDK$DescriptorImpl@java-latest"
-            home: "/usr/java/latest"
+            home: "/usr/java/jdk1.8.0_181-amd64"
+          - key: "org.jenkinsci.plugins.ansible.AnsibleInstallation$DescriptorImpl@ansible-latest"
+            home: "/usr/bin"
+          - key: "hudson.plugins.git.GitTool$DescriptorImpl@git-latest"
+            home: "/bin"
+          - key: "hudson.tasks.Ant$AntInstallation$DescriptorImpl@ant-latest"
+            home: "/bin/"
+          - key: "hudson.plugins.sonar.SonarRunnerInstallation$DescriptorImpl@Sonar-Scanner-3.2"
+            home: "/usr/local/sonar-runner/bin/"
+          - key: "com.thalesgroup.hudson.plugins.scons.SConsInstallation$DescriptorImpl@scons-latest"
+            home: "/bin/"
+          - key: "hudson.tasks.Maven$MavenInstallation$DescriptorImpl@maven-3.5.0"
+            home: "/usr/local/bin/"
+          - key: "hudson.model.JDK$DescriptorImpl@jdk8"
+            home: "/usr/java/default/bin/"
+          - key: "hudson.model.JDK$DescriptorImpl@openjdk8"
+            home: "/usr/java/todo/bin/"
+          - key: "jenkins.plugins.clangscanbuild.ClangScanBuildToolInstallation$ClangStaticAnalyzerToolDescriptor@clang-latest"
+            home: "/bin/"
+          - key: "com.cloudbees.jenkins.plugins.customtools.CustomTool$DescriptorImpl@ZAPROXY"
+            home: "/usr/bin/"
           credentialsId: 1234 # jenkins@unix-slaves
+          javaPath: "/usr/java/default/"
           remoteFS: /workspace/slave
           x_jenkins_server: "localhos:8383/jenkins"
           x_token: "{{ csrf.token }}"
@@ -253,13 +283,15 @@ def main():
             'credentialsId': {
                 'type': 'str',
                 'default': '1234',  # jenkins@unix-slaves
-
+            },
+            'javaPath': {
+                'type': 'str',
+                'default': '/usr/java/default/',
             },
             'agentLauncher': {
                 'type': 'str',
                 'default': 'hudson.plugins.sshslaves.SSHLauncher',  # hudson.slaves.JNLPLauncher
             },
-
             'nodeDescription': {
                 'type': 'str',
                 'default': 'Jenkins node automatically created by Ansible',
@@ -319,7 +351,8 @@ def main():
             },
             'x_token': {
                 'type': 'str',
-                'required': True,
+                'default': '',
+                'required': False,
 
             },
         },

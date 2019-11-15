@@ -5,7 +5,8 @@ WORKING_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}"  )" && pwd  )"
 
 # Forcing ansible cmd to use python3.6
 export PYTHON_MAJOR_VERSION=3.6
-# shellcheck source=./scripts/run-python.sh
+
+# shellcheck source=/dev/null
 source "${WORKING_DIR}/run-python.sh"
 RC=$?
 if [ ${RC} -ne 0 ]; then
@@ -16,7 +17,7 @@ fi
 
 ${WORKING_DIR}/run-ansible-lint.sh
 
-# shellcheck source=./scripts/run-ansible.sh
+# shellcheck source=/dev/null
 source "${WORKING_DIR}/run-ansible.sh"
 RC=$?
 if [ ${RC} -ne 0 ]; then

@@ -1,8 +1,10 @@
 #!/bin/bash
 
-export SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}"  )" && pwd  )"
+export WORKING_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}"  )" && pwd  )"
 
-source "$SCRIPT_DIR/step-0-color.sh"
+# source only if terminal supports color, otherwise use unset color vars
+# shellcheck source=/dev/null
+tput colors && source "${WORKING_DIR}/step-0-color.sh"
 
 function set_default
 {

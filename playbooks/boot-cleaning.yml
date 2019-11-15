@@ -40,6 +40,7 @@
 
     - name: List the old kernel # noqa 301 306
       shell: dpkg --list 'linux-image*'|awk '{ if ($1=="ii") print $2}'|grep -v `uname -r`
+      ignore_errors: yes
 
     - name: Clean apt source git-lfs # noqa 302 305
       shell: rm -f /etc/apt/sources.list.d/github_git-lfs.list
@@ -54,10 +55,13 @@
     - name: Update
       apt:
         update_cache: yes
+      ignore_errors: yes
 
     - name: Autoremove
       apt:
         autoremove: yes
+        purge: yes
+      ignore_errors: yes
 
 #    - name: Clean kernel by hand
       #shell: rm -rf /boot/*-4.4.0-{59,81,93,104,108,109,112,130,131,138,139}-*
@@ -89,9 +93,15 @@
       changed_when: false
 #      ignore_errors: yes
 
-#    - name: Autoclean
-#      apt:
-#        autoclean: yes
+    - name: Apt cleanup # noqa 301 306
+      file:
+        path: /var/lib/apt/lists/
+        state: absent
+      ignore_errors: yes
+
+    - name: Autoclean
+      apt:
+        autoclean: yes
 
 #    - name: Cron | Purge kernel images @reboot special time
 #      cron:
@@ -102,3 +112,28 @@
 #        user: root
 #      when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
 #      become: true
+
+
+#    - name: Reboot a slow machine that might have lots of updates to apply
+#      reboot:
+#        reboot_timeout: 3600
+
+    - name: Homebrew cleanup
+      command: brew cleanup
+      changed_when: false
+      become: true
+      become_user: jenkins
+      ignore_errors: yes
+
+    - name: Tmp cleanup by hand (1)
+      find:
+        paths: /tmp
+        file_type: file
+        age: 2d
+      register: tmp_files_to_delete
+
+    - name: Tmp kernel by hand (2)
+      file:
+        path: "{{ item.path }}"
+        state: absent
+      with_items: "{{ tmp_files_to_delete.files }}"

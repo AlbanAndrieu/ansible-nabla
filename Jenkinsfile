@@ -9,7 +9,8 @@
 
 def DOCKER_REGISTRY="docker.hub"
 def DOCKER_ORGANISATION="nabla"
-def DOCKER_TAG="latest"
+def DOCKER_TAG="1.0.1"
+def DOCKER_TAG_NEXT="1.0.2"
 def DOCKER_NAME="ansible-jenkins-slave"
 
 def DOCKER_REGISTRY_URL="https://${DOCKER_REGISTRY}"
@@ -268,7 +269,7 @@ pipeline {
 
                         sh 'mkdir -p .ssh/ || true'
 
-                        docker_build_args="--no-cache --pull --build-arg JENKINS_HOME=/home/jenkins --tag 1.0.11"
+                        docker_build_args="--no-cache --pull --build-arg JENKINS_HOME=/home/jenkins --tag latest"
 
                         docker.withRegistry("${DOCKER_REGISTRY_URL}", "${DOCKER_REGISTRY_CREDENTIAL}") {
                            withCredentials([
@@ -277,13 +278,13 @@ pipeline {
                                usernameVariable: 'USERNAME',
                                passwordVariable: 'PASSWORD']
                            ]) {
-                            def container = docker.build("${DOCKER_REGISTRY}/${DOCKER_ORGANISATION}/${DOCKER_NAME}:1.0.11", "${docker_build_args} -f docker/ubuntu18/Dockerfile . ")
+                            def container = docker.build("${DOCKER_ORGANISATION}/${DOCKER_NAME}:${DOCKER_TAG_NEXT}", "${docker_build_args} -f docker/ubuntu18/Dockerfile . ")
                             container.inside {
                               sh 'echo test'
                             }
 
                             //docker run -i -t --entrypoint /bin/bash ${myImg.imageName()}
-                            docker.image("${DOCKER_REGISTRY}/${DOCKER_ORGANISATION}/${DOCKER_NAME}:1.0.11").withRun("-u root --entrypoint='/entrypoint.sh'", "/bin/bash") {c ->
+                            docker.image("${DOCKER_ORGANISATION}/${DOCKER_NAME}:${DOCKER_TAG_NEXT}").withRun("-u root --entrypoint='/entrypoint.sh'", "/bin/bash") {c ->
                               logs = sh (
                                 script: "docker logs ${c.id}",
                                 returnStatus: true
@@ -328,6 +329,12 @@ pipeline {
                     echo "CONTAINER STRUCTURE TEST RETURN CODE : ${cst}"
                     if (cst == 0) {
                         echo "CONTAINER STRUCTURE TEST SUCCESS"
+                        if (isReleaseBranch() && !DRY_RUN) {
+                            echo "TODO : docker tag ${DOCKER_ORGANISATION}/${DOCKER_NAME}:${DOCKER_TAG_NEXT} ${DOCKER_REGISTRY}/${DOCKER_ORGANISATION}/${DOCKER_NAME}:${DOCKER_TAG_NEXT}"
+                            echo "TODO : docker tag ${DOCKER_ORGANISATION}/${DOCKER_NAME}:${DOCKER_TAG_NEXT} ${DOCKER_REGISTRY}/${DOCKER_ORGANISATION}/${DOCKER_NAME}:latest"
+                            echo "TODO : docker push ${DOCKER_REGISTRY}/${DOCKER_ORGANISATION}/${DOCKER_NAME}:${DOCKER_TAG_NEXT}"
+                            echo "TODO : docker push ${DOCKER_REGISTRY}/${DOCKER_ORGANISATION}/${DOCKER_NAME}:latest"
+                        }
                     } else {
                         echo "CONTAINER STRUCTURE TEST FAILURE"
                         currentBuild.result = 'UNSTABLE'
@@ -389,10 +396,8 @@ pipeline {
       } // node
 
     }
-    success {
-      script {
-        if (! isReleaseBranch()) { wrapCleanWs() }
-      }
-    }
+    cleanup {
+      wrapCleanWs()
+    } // cleanup
   } // post
 }

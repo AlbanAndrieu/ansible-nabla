@@ -37,7 +37,7 @@ else
   #curl -LO https://storage.googleapis.com/container-structure-test/latest/container-structure-test-linux-amd64 && chmod +x container-structure-test-linux-amd64 && sudo mv container-structure-test-linux-amd64 /usr/local/bin/container-structure-test
 fi
 
-echo -e "container-structure-test test --image ${DOCKER_REGISTRY}${DOCKER_ORGANISATION}/${DOCKER_NAME}:${DOCKER_TAG} --config ${WORKING_DIR}/../docker/ubuntu18/config.yaml ${NC}"
-/usr/local/bin/container-structure-test test --image "${DOCKER_REGISTRY}${DOCKER_ORGANISATION}/${DOCKER_NAME}:${DOCKER_TAG}" --config "${WORKING_DIR}/../docker/ubuntu18/config.yaml"
+echo -e "container-structure-test test --image ${DOCKER_ORGANISATION}/${DOCKER_NAME}:${DOCKER_TAG} --config ${WORKING_DIR}/../docker/ubuntu18/config.yaml ${NC}"
+/usr/local/bin/container-structure-test test --image "${DOCKER_ORGANISATION}/${DOCKER_NAME}:${DOCKER_TAG}" --config "${WORKING_DIR}/../docker/ubuntu18/config.yaml"
 
 exit 0

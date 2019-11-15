@@ -6,7 +6,7 @@ WORKING_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}"  )" && pwd  )"
 
 PYTHON_MAJOR_VERSION=3.6
 export PYTHON_MAJOR_VERSION
-# shellcheck source=./scripts/run-python.sh
+# shellcheck source=/dev/null
 source "${WORKING_DIR}/run-python.sh"
 RC=$?
 if [ ${RC} -ne 0 ]; then
@@ -15,7 +15,7 @@ if [ ${RC} -ne 0 ]; then
   exit 1
 fi
 
-# shellcheck source=./scripts/step-2-helpers-color.sh
+# shellcheck source=/dev/null
 source "${WORKING_DIR}/step-2-helpers-color.sh"
 
 set_default ANSIBLE_ROOT_DIR         "$( realpath ${WORKING_DIR} )/.."
