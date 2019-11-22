@@ -3,9 +3,7 @@
 
 - name: Apply common shell configuration
   hosts: workstation
-#  remote_user: root
   remote_user: albandri
-#  connection: local
   become: true
 
   roles:
