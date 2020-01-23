@@ -7,43 +7,41 @@
  * Test Ansible Playbooks by: ansible-lint, ansible-playbook on docker images
  */
 
-def DOCKER_REGISTRY="docker.hub"
-def DOCKER_ORGANISATION="nabla"
-def DOCKER_TAG="1.0.1"
-def DOCKER_TAG_NEXT="1.0.2"
-def DOCKER_NAME="ansible-jenkins-slave"
+String DOCKER_REGISTRY="docker.hub".trim()
+String DOCKER_ORGANISATION="nabla".trim()
+String DOCKER_TAG="1.0.1".trim()
+String DOCKER_TAG_NEXT="1.0.2".trim()
+String DOCKER_NAME="ansible-jenkins-slave".trim()
 
-def DOCKER_REGISTRY_URL="https://${DOCKER_REGISTRY}"
-def DOCKER_REGISTRY_CREDENTIAL='jenkins'
-def DOCKER_IMAGE="${DOCKER_REGISTRY}/${DOCKER_ORGANISATION}/${DOCKER_NAME}:${DOCKER_TAG}"
+String DOCKER_REGISTRY_URL="https://${DOCKER_REGISTRY}".trim()
+String DOCKER_REGISTRY_CREDENTIAL=env.DOCKER_REGISTRY_CREDENTIAL ?: "jenkins".trim()
+String DOCKER_IMAGE="${DOCKER_REGISTRY}/${DOCKER_ORGANISATION}/${DOCKER_NAME}:${DOCKER_TAG}".trim()
 
-def DOCKER_OPTS = [
-  '--dns-search=nabla.mobi',
-  '-v /etc/passwd:/etc/passwd:ro ',
-  '-v /etc/group:/etc/group:ro ',
-  '--entrypoint=\'\'',
-].join(" ")
+String DOCKER_OPTS_BASIC = getDockerOpts()
+String DOCKER_OPTS_COMPOSE = getDockerOpts(isDockerCompose: true, isLocalJenkinsUser: false)
 
 pipeline {
-  agent none
+  //agent none
+  agent {
+    label 'molecule'
+  }
   parameters {
     string(name: 'DRY_RUN', defaultValue: '--check', description: 'Default mode used to test playbook')
     string(name: 'DOCKER_RUN', defaultValue: '', description: 'Default inventory used to test playbook')
     string(name: 'ANSIBLE_INVENTORY', defaultValue: 'production', description: 'Default inventory used to test playbook')
-    string(name: 'TARGET_SLAVE', defaultValue: 'albandri', description: 'Default server used to test playbook')
-    string(name: 'TARGET_PLAYBOOK', defaultValue: 'jenkins-slave.yml', description: 'Default playbook to override')
+    string(name: 'TARGET_SLAVE', defaultValue: 'inventory/albandri', description: 'Default server used to test playbook')
+    string(name: 'TARGET_PLAYBOOK', defaultValue: 'playbooks/jenkins-slave.yml', description: 'Default playbook to override')
     string(name: 'ANSIBLE_VAULT_PASS', defaultValue: 'test123', description: 'Default vault password to override')
     booleanParam(name: 'CLEAN_RUN', defaultValue: false, description: 'Clean before run')
-    booleanParam(name: 'SKIP_LINT', defaultValue: true, description: 'Skip Linter - requires ansible galaxy roles, so it is time consuming')
+    booleanParam(name: 'SKIP_LINT', defaultValue: false, description: 'Skip Linter - requires ansible galaxy roles, so it is time consuming')
     booleanParam(name: 'SKIP_DOCKER', defaultValue: false, description: 'Skip Docker - requires image rebuild from scratch')
     booleanParam(name: 'MOLECULE_DEBUG', defaultValue: false, description: 'Enable --debug flag for molecule - does not affect executions of other tests')
   }
   environment {
-    JENKINS_CREDENTIALS = 'jenkins-ssh'
-    ANSIBLE_VAULT_PASS = "${params.ANSIBLE_VAULT_PASS}"
-    DRY_RUN = "${params.DRY_RUN}"
-    CLEAN_RUN = "${params.CLEAN_RUN}"
-    DEBUG_RUN = "${params.DEBUG_RUN}"
+    ANSIBLE_VAULT_PASS = "${params.ANSIBLE_VAULT_PASS}".trim()
+    DRY_RUN = "${params.DRY_RUN}".toBoolean()
+    CLEAN_RUN = "${params.CLEAN_RUN}".toBoolean()
+    DEBUG_RUN = "${params.DEBUG_RUN}".toBoolean()
     BRANCH_NAME = "${env.BRANCH_NAME}".replaceAll("feature/","")
     PROJECT_BRANCH = "${env.GIT_BRANCH}".replaceFirst("origin/","")
     BUILD_ID = "${env.BUILD_ID}"
@@ -59,7 +57,13 @@ pipeline {
   stages {
     stage('Setup') {
       agent {
-        label 'ansible-check&&ubuntu&&!albandri'
+        docker {
+          image DOCKER_IMAGE
+          alwaysPull true
+          reuseNode true
+          args DOCKER_OPTS_COMPOSE
+          label 'molecule'
+        }
       }
       steps {
         script {
@@ -72,10 +76,7 @@ pipeline {
     stage("Ansible CMDB Report") {
       // Runs ansible-cmdb and publishes the report
       agent {
-        label 'ansible-check&&ubuntu&&!albandri'
-      }
-      when {
-        expression { BRANCH_NAME ==~ /(release|master|develop)/ }
+        label 'molecule'
       }
       steps {
         script {
@@ -85,7 +86,13 @@ pipeline {
     }
     stage('Documentation') {
       agent {
-        label 'ansible-check&&ubuntu&&!albandri'
+        docker {
+          image DOCKER_IMAGE
+          alwaysPull true
+          reuseNode true
+          args DOCKER_OPTS_COMPOSE
+          label 'molecule'
+        }
       }
       // Creates documentation using Sphinx and publishes it on Jenkins
       // Copy of the documentation is rsynced
@@ -95,9 +102,31 @@ pipeline {
         }
       }
     }
+
+    stage('Cleaning tests') {
+      agent {
+        label 'molecule'
+      }
+      steps {
+        script {
+          configFileProvider([configFile(fileId: 'vault.passwd',  targetLocation: 'vault.passwd', variable: '_')]) {
+            ansiblePlaybook colorized: true,
+                credentialsId: 'jenkins_unix_slaves',
+                disableHostKeyChecking: true,
+                extras: '-e ansible_python_interpreter="/usr/bin/python2.7"',
+                forks: 5,
+                installation: 'ansible-latest',
+                inventory: "${ANSIBLE_INVENTORY}",
+                limit: "${TARGET_SLAVE}",
+                playbook: "${TARGET_PLAYBOOK}"
+          } // configFileProvider
+        } // script
+      } // steps
+    } // stage SonarQube analysis
+
     stage('SonarQube analysis') {
       agent {
-        label 'ansible-check&&ubuntu&&!albandri'
+        label 'molecule'
       }
       environment {
         SONAR_SCANNER_OPTS = "-Xmx4g"
@@ -188,7 +217,7 @@ pipeline {
       parallel {
         stage('Ansible Self-Config') {
           agent {
-            label 'docker-inside'
+            label 'molecule'
           }
           steps {
             script {
@@ -198,10 +227,10 @@ pipeline {
         }
         stage('Ubuntu 16.04') {
           agent {
-            label 'docker-inside'
+            label 'molecule'
           }
           when {
-            expression { BRANCH_NAME ==~ /(release-NO|master-NO|develop-NO)/ }
+            expression { BRANCH_NAME ==~ /(release|master|develop-NO)/ }
           }
           steps {
             script {
@@ -213,7 +242,7 @@ pipeline {
 
                     sh 'mkdir -p .ssh/ || true'
 
-                    docker_build_args="--no-cache --pull --build-arg JENKINS_HOME=/home/jenkins --tag 1.0.4"
+                    docker_build_args="--no-cache --pull --build-arg JENKINS_HOME=/home/jenkins --tag 1.0.0"
 
                     docker.withRegistry("${DOCKER_REGISTRY_URL}", "${DOCKER_REGISTRY_CREDENTIAL}") {
                        withCredentials([
@@ -222,11 +251,11 @@ pipeline {
                            usernameVariable: 'USERNAME',
                            passwordVariable: 'PASSWORD']
                        ]) {
-                         def container = docker.build("${DOCKER_REGISTRY}/${DOCKER_ORGANISATION}/${DOCKER_NAME}:1.0.4", "${docker_build_args} -f docker/ubuntu16/Dockerfile . ")
+                         def container = docker.build("${DOCKER_REGISTRY}/${DOCKER_ORGANISATION}/${DOCKER_NAME}:1.0.0", "${docker_build_args} -f docker/ubuntu16/Dockerfile . ")
                          container.inside {
                            sh 'echo test'
                          }
-                         docker.image("${DOCKER_REGISTRY}/${DOCKER_ORGANISATION}/${DOCKER_NAME}:1.0.4").withRun("-u root", "/bin/bash") {c ->
+                         docker.image("${DOCKER_REGISTRY}/${DOCKER_ORGANISATION}/${DOCKER_NAME}:1.0.0").withRun("-u root", "/bin/bash") {c ->
 
                            logs = sh (
                              script: "docker logs ${c.id}",
@@ -252,7 +281,7 @@ pipeline {
         }
         stage('Ubuntu 18.04') {
           agent {
-            label 'docker-inside'
+            label 'molecule'
           }
           //when {
           //  expression { BRANCH_NAME ==~ /(release|master|develop)/ }
@@ -269,7 +298,7 @@ pipeline {
 
                         sh 'mkdir -p .ssh/ || true'
 
-                        docker_build_args="--no-cache --pull --build-arg JENKINS_HOME=/home/jenkins --tag latest"
+                        docker_build_args="--no-cache --pull --build-arg JENKINS_HOME=/home/jenkins --tag ${DOCKER_TAG_NEXT}"
 
                         docker.withRegistry("${DOCKER_REGISTRY_URL}", "${DOCKER_REGISTRY_CREDENTIAL}") {
                            withCredentials([
@@ -311,7 +340,7 @@ pipeline {
 
                       } // vault configFileProvider
 
-                    } catch (e) {
+                    } catch (exc) {
                        echo 'Error: There were errors in tests. '+exc.toString()
                        currentBuild.result = 'UNSTABLE'
                        logs = "FAIL" // make sure other exceptions are recorded as failure too
@@ -320,9 +349,8 @@ pipeline {
                        echo "finally"
                     } // finally
 
-
                     cst = sh (
-                      script: "scripts/docker-test.sh || true",
+                      script: "scripts/docker-test.sh ${DOCKER_NAME} ${DOCKER_TAG_NEXT}",
                       returnStatus: true
                     )
 
@@ -330,10 +358,8 @@ pipeline {
                     if (cst == 0) {
                         echo "CONTAINER STRUCTURE TEST SUCCESS"
                         if (isReleaseBranch() && !DRY_RUN) {
-                            echo "TODO : docker tag ${DOCKER_ORGANISATION}/${DOCKER_NAME}:${DOCKER_TAG_NEXT} ${DOCKER_REGISTRY}/${DOCKER_ORGANISATION}/${DOCKER_NAME}:${DOCKER_TAG_NEXT}"
-                            echo "TODO : docker tag ${DOCKER_ORGANISATION}/${DOCKER_NAME}:${DOCKER_TAG_NEXT} ${DOCKER_REGISTRY}/${DOCKER_ORGANISATION}/${DOCKER_NAME}:latest"
-                            echo "TODO : docker push ${DOCKER_REGISTRY}/${DOCKER_ORGANISATION}/${DOCKER_NAME}:${DOCKER_TAG_NEXT}"
-                            echo "TODO : docker push ${DOCKER_REGISTRY}/${DOCKER_ORGANISATION}/${DOCKER_NAME}:latest"
+                            echo "TODO : docker tag ${DOCKER_ORGANISATION}/${DOCKER_NAME}:${DOCKER_TAG_NEXT} ${DOCKER_REGISTRY}/${DOCKER_ORGANISATION}/${DOCKER_NAME}:1.0.20"
+                            echo "TODO : docker push ${DOCKER_REGISTRY}/${DOCKER_ORGANISATION}/${DOCKER_NAME}:1.0.20"
                         }
                     } else {
                         echo "CONTAINER STRUCTURE TEST FAILURE"
@@ -348,7 +374,7 @@ pipeline {
         }
         stage('Sample project') {
           agent {
-            label 'docker-inside'
+            label 'molecule'
           }
           when {
             expression { BRANCH_NAME ==~ /(release|master|develop)/ }
@@ -373,22 +399,12 @@ pipeline {
             }
           }
         }
-        stage("CentOS 7") {
-          agent {
-            label 'docker-inside'
-          }
-          steps {
-            script {
-              println("TODO: test centos 7 building")
-            }
-          }
-        }
       }
     }
   }
   post {
     always {
-      node('docker-inside') {
+      node('molecule') {
 
         runHtmlPublishers(["LogParserPublisher"])
 
@@ -396,8 +412,8 @@ pipeline {
       } // node
 
     }
-    cleanup {
-      wrapCleanWs()
-    } // cleanup
+    //cleanup {
+    //  wrapCleanWsOnNode()
+    //} // cleanup
   } // post
 }

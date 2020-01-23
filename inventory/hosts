@@ -65,11 +65,6 @@ localhost ansible_user=root
 [jenkins-master:vars]
 ansible_ssh_common_args='-o StrictHostKeyChecking=no'
 
-[jenkins-LIQ-master]
-
-[jenkins-LIQ-master:vars]
-ansible_ssh_common_args='-o StrictHostKeyChecking=no'
-
 [jenkins-slaves]
 localhost ansible_user=root
 
@@ -110,11 +105,14 @@ ansible_ssh_common_args='-o StrictHostKeyChecking=no'
 [docker]
 #localhost ansible_user=root
 
+[kubernetes]
+localhost ansible_user=root
+
 [workstation]
 localhost ansible_user=root
 
 [checkmarx]
-#localhost
+#localhost ansible_user=root
 
 [windows]
 #localhost

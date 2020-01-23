@@ -31,8 +31,8 @@ mkdir ${WORKING_DIR}/../${JUNIT_OUTPUT_DIR}
 
 echo -e "${cyan} =========== ${NC}"
 echo -e "${green} Ansible server setup ${NC}"
-echo -e "${magenta} ${ANSIBLE_CMD} -i ${WORKING_DIR}/../inventory/${ANSIBLE_INVENTORY} -m setup -vvvv --tree ${WORKING_DIR}/../${JUNIT_OUTPUT_DIR} all ${NC}"
-${ANSIBLE_CMD} -i ${WORKING_DIR}/../inventory/${ANSIBLE_INVENTORY} -m setup -vvvv --tree ${WORKING_DIR}/../${JUNIT_OUTPUT_DIR} all > inventory-setup.log 2>&1
+echo -e "${magenta} ${ANSIBLE_CMD} -i ${WORKING_DIR}/../${ANSIBLE_INVENTORY} -m setup -vvvv --tree ${WORKING_DIR}/../${JUNIT_OUTPUT_DIR} all ${NC}"
+${ANSIBLE_CMD} -i ${WORKING_DIR}/../${ANSIBLE_INVENTORY} -m setup -vvvv --tree ${WORKING_DIR}/../${JUNIT_OUTPUT_DIR} all > inventory-setup.log 2>&1
 RC=$?
 if [ ${RC} -ne 0 ]; then
   echo ""
@@ -46,8 +46,8 @@ fi
 echo -e "${cyan} =========== ${NC}"
 echo -e "${green} Ansible server inventory HTML generation ${NC}"
 ${ANSIBLE_CMBD_CMD} --version
-echo -e "${magenta} ${ANSIBLE_CMBD_CMD} -d -i ${WORKING_DIR}/../inventory/${ANSIBLE_INVENTORY} ${WORKING_DIR}/../${ANSIBLE_INVENTORY_OUTPUT_DIR} > overview.html ${NC}"
-${ANSIBLE_CMBD_CMD} -d -i ${WORKING_DIR}/../inventory/${ANSIBLE_INVENTORY} ${WORKING_DIR}/../${ANSIBLE_INVENTORY_OUTPUT_DIR} > overview.html
+echo -e "${magenta} ${ANSIBLE_CMBD_CMD} -d -i ${WORKING_DIR}/../${ANSIBLE_INVENTORY} ${WORKING_DIR}/../${ANSIBLE_INVENTORY_OUTPUT_DIR} > overview.html ${NC}"
+${ANSIBLE_CMBD_CMD} -d -i ${WORKING_DIR}/../${ANSIBLE_INVENTORY} ${WORKING_DIR}/../${ANSIBLE_INVENTORY_OUTPUT_DIR} > overview.html
 RC=$?
 if [ ${RC} -ne 0 ]; then
   echo ""

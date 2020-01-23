@@ -13,7 +13,7 @@ tput colors && source "${WORKING_DIR}/step-0-color.sh"
 # shellcheck disable=SC2154
 echo -e "${magenta} Building TEST runtime image ${NC}"
 # shellcheck disable=SC2154
-echo -e "${green} pip install docker-compose==1.23.2 ${NC}"
+echo -e "${green} pip install docker-compose==1.25.0 ${NC}"
 
 if [ -n "${DOCKER_BUILD_ARGS}" ]; then
   # shellcheck disable=SC2154

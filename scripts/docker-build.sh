@@ -15,6 +15,10 @@ source "${WORKING_DIR}/docker-env.sh"
 #export DOCKER_NAME=${DOCKER_NAME:-"ansible-jenkins-slave-docker"}
 export DOCKER_FILE="../docker/ubuntu18/Dockerfile"
 
+echo -e "${green} Validating Docker ${NC}"
+hadolint "${WORKING_DIR}/${DOCKER_FILE}" || true
+dockerfile_lint --json --verbose --dockerfile "${WORKING_DIR}/${DOCKER_FILE}" || true
+
 # shellcheck source=/dev/null
 source "${WORKING_DIR}/run-ansible.sh"
 
@@ -39,6 +43,12 @@ if [ ${RC} -ne 0 ]; then
   exit 1
 else
   echo -e "${green} The build completed successfully. ${NC}"
+  echo -e "${magenta} Running docker history to docker history ${NC}"
+  echo -e "    docker history --no-trunc ${DOCKER_ORGANISATION}/${DOCKER_NAME}:latest > docker-history.log"
+  docker history --no-trunc ${DOCKER_ORGANISATION}/${DOCKER_NAME}:latest > docker-history.log
+  echo -e "${magenta} Running dive ${NC}"
+  echo -e "    dive ${DOCKER_ORGANISATION}/${DOCKER_NAME}:latest"
+  CI=true dive "${DOCKER_ORGANISATION}/${DOCKER_NAME}:latest" | tee docker-dive.log
 fi
 
 echo -e ""
@@ -49,7 +59,6 @@ echo -e "To push it"
 echo -e "    docker login ${DOCKER_REGISTRY} --username ${DOCKER_USERNAME} --password password"
 echo -e "    docker tag ${DOCKER_ORGANISATION}/${DOCKER_NAME}:latest ${DOCKER_REGISTRY}${DOCKER_ORGANISATION}/${DOCKER_NAME}:${DOCKER_TAG}"
 echo -e "    docker tag ${DOCKER_ORGANISATION}/${DOCKER_NAME}:latest ${DOCKER_REGISTRY}${DOCKER_ORGANISATION}/${DOCKER_NAME}:latest"
-echo -e "    docker history --no-trunc ${DOCKER_ORGANISATION}/${DOCKER_NAME}:latest > history.log"
 echo -e "    docker push ${DOCKER_REGISTRY}${DOCKER_ORGANISATION}/${DOCKER_NAME}"
 echo -e ""
 echo -e "To pull it"
@@ -67,6 +76,6 @@ echo -e "    docker exec -it sandbox /bin/bash"
 echo -e "    docker exec -u 0 -it sandbox env TERM=xterm-256color bash -l"
 echo -e ""
 
-"${WORKING_DIR}/docker-test.sh" "${DOCKER_NAME}"
+echo "${WORKING_DIR}/docker-test.sh" "${DOCKER_NAME}"
 
 exit 0

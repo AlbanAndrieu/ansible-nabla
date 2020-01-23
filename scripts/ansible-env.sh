@@ -39,7 +39,7 @@ if [ -n "${ANSIBLE_INVENTORY}" ]; then
   echo -e "${green} ANSIBLE_INVENTORY is defined ${happy_smiley} : ${ANSIBLE_INVENTORY} ${NC}"
 else
   echo -e "${red} ${double_arrow} Undefined build parameter ${head_skull} : ANSIBLE_INVENTORY, use the default one ${NC}"
-  export ANSIBLE_INVENTORY="production"
+  export ANSIBLE_INVENTORY="inventory/production"
   echo -e "${magenta} ANSIBLE_INVENTORY : ${ANSIBLE_INVENTORY} ${NC}"
 fi
 

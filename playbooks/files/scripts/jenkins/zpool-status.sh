@@ -24,7 +24,7 @@ i=0;
 j=0;
 first=0;
 
-for line in "$status"
+for line in $status
 do
 	for word in $line
 	do
