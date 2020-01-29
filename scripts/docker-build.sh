@@ -16,8 +16,10 @@ source "${WORKING_DIR}/docker-env.sh"
 export DOCKER_FILE="../docker/ubuntu18/Dockerfile"
 
 echo -e "${green} Validating Docker ${NC}"
-hadolint "${WORKING_DIR}/${DOCKER_FILE}" || true
-dockerfile_lint --json --verbose --dockerfile "${WORKING_DIR}/${DOCKER_FILE}" || true
+echo -e "${magenta} hadolint ${WORKING_DIR}/${DOCKER_FILE} ${NC}"
+hadolint "${WORKING_DIR}/${DOCKER_FILE}" || true | tee -a docker-hadolint.log
+echo -e "${magenta} dockerfile_lint --json --verbose --dockerfile ${WORKING_DIR}/${DOCKER_FILE} ${NC}"
+dockerfile_lint --json --verbose --dockerfile "${WORKING_DIR}/${DOCKER_FILE}"|| true | tee -a docker-dockerfilelint.log
 
 # shellcheck source=/dev/null
 source "${WORKING_DIR}/run-ansible.sh"

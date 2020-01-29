@@ -20,14 +20,16 @@
   hosts: docker
   become: true
   ignore_errors: true
+  tags:
+    - vm
 
   roles:
     - geerlingguy.pip
     - geerlingguy.docker
 
   vars:
-    docker_install_compose: true
-    docker_compose_version: "1.23.1"
+    docker_install_compose: false # using pip instead
+    docker_compose_version: "1.25.0"
      #TODO fix docker version
      #docker_edition: ce
      #docker_version: 18.06.0
@@ -55,6 +57,8 @@
 
 - hosts: docker
   become: true
+  tags:
+    - vm
 
   tasks:
     - name: Create a docker group

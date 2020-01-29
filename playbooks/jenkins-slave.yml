@@ -29,9 +29,9 @@
     jenkins_prefix: "/jenkins"
     jenkins_url: http://localhost:8380{{ jenkins_prefix }}
     jenkins_slave_directory: ["{{ jenkins_slave_home }}/slave","{{ jenkins_slave_home }}/slavearc"]
-    home_url: "http://home.nabla.mobi"
+    home_url: "http://home.albandrieu.com"
     nexus_url: "{{ home_url }}:8081"
-    bower_url: "http://home.nabla.mobi:5678"
+    bower_url: "http://albandrieu.com:5678"
     npm_nexus_npm_url: "{{ nexus_url }}/nexus/content/groups/npmjs-all/"
     npm_nexus_private_npm_url: ""
     npm_nexus_private_npm_data: []

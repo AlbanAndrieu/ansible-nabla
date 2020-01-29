@@ -1,20 +1,21 @@
 # This Dockerfile is used to build an image containing basic stuff to be used as a Jenkins slave build node.
 # Multistage build is not possible with Jenkins Docker Pipeline Plugin
-FROM selenium/standalone-chrome:3.141.59-yttrium
+FROM ubuntu:19.10
+#FROM selenium/standalone-chrome:latest
 
 ARG JENKINS_USER_HOME=${JENKINS_USER_HOME:-/home/jenkins}
 
 # dockerfile_lint - ignore
-LABEL Name="ansible-jenkins-slave" Version="1.0.0"
-LABEL description="Image used by Nabla products to build Java/Javascript and CPP\
- this image is running on Ubuntu 18.04."
+LABEL Name="ansible-jenkins-slave" Version="2.0.0"
+LABEL description="Image used by fusion-risk products to build Java/Javascript and CPP\
+ this image is running on Ubuntu 19.04."
 LABEL com.example.vendor="ACME Incorporated"
 
 # No interactive frontend during docker build
 ENV DEBIAN_FRONTEND=noninteractive \
     DEBCONF_NONINTERACTIVE_SEEN=true
 
-ENV HOME=${JENKINS_USER_HOME}
+ENV JENKINS_USER_HOME=${JENKINS_USER_HOME}
 
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
@@ -94,27 +95,23 @@ RUN mkdir -p /etc/ansible
 RUN echo "[local]\nlocalhost ansible_connection=local" > /etc/ansible/hosts
 ENV ANSIBLE_CONFIG=${JENKINS_USER_HOME}/ansible.cfg
 
-COPY ansible.cfg *.yml vault.passwd $JENKINS_USER_HOME/
-#group_vars .ssh playbooks/ansible.pub.key
-COPY playbooks/hosts $JENKINS_USER_HOME/
+COPY ansible.cfg *.yml vault.passwd playbooks/ansible.pub.key $JENKINS_USER_HOME/
 COPY inventory $JENKINS_USER_HOME/inventory
 COPY playbooks $JENKINS_USER_HOME/playbooks
-#COPY roles $JENKINS_USER_HOME/roles
-#COPY .ssh $JENKINS_USER_HOME/.ssh
-COPY package.json $JENKINS_USER_HOME/
-RUN chown jenkins:$(id -gn jenkins) $JENKINS_HOME $JENKINS_HOME/.*
+COPY roles $JENKINS_USER_HOME/roles
+COPY .ssh $JENKINS_USER_HOME/.ssh
+RUN chown jenkins:$(id -gn jenkins) $JENKINS_USER_HOME $JENKINS_USER_HOME/.*
 
 # Execute
 RUN ansible-galaxy install -r "$JENKINS_USER_HOME/requirements.yml" -p "$JENKINS_USER_HOME/roles/" --ignore-errors && \
  ansible-playbook "$JENKINS_USER_HOME/playbooks/jenkins-full.yml" -i "$JENKINS_USER_HOME/inventory/hosts" -c local \
- -e "workspace=/tmp" \
+ -e "jenkins_ssh_key_file={{ jenkins_home }}/.ssh/id_rsa" -e "workspace=/tmp" \
  -e "jenkins_jdk8_enable=true" \
-# -e "jenkins_ssh_key_file={{ jenkins_home }}/.ssh/id_rsa" \
 # -e "jdk_home=/usr/lib/jvm/java-8-openjdk-amd64/" \
  -e "jenkins_id=${UID}" -e "docker_gid=${GID}" \
  -e "nis_enabled=false" -e "automount_enabled=false" -e "dns_enabled=false" \
- --skip-tags=restart,vm,python35,objc \
-# --vault-id $JENKINS_USER_HOME/vault.passwd \
+ --skip-tags=restart,vm,python35,python36,objc \
+ --vault-id "$JENKINS_USER_HOME/vault.passwd" \
  -vvvv \
  && apt-get autoremove -y && apt-get clean && apt-get remove asciidoc -y && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /var/cache/man/* /var/log/* "$JENKINS_USER_HOME/vault.passwd" \
  && chown -R "jenkins:$(id -gn jenkins)" "$JENKINS_USER_HOME" && chmod -R 777 "${HOME}"
@@ -159,11 +156,10 @@ RUN chmod +x /entrypoint.sh && rm -fr /sbin/initctl && ln -s /entrypoint.sh /sbi
 USER jenkins
 ENV HOME=${JENKINS_USER_HOME}
 RUN mkdir ${HOME}/workspace && mkdir -p ${HOME}/.m2/repository && chmod 777 ${HOME}/ansible.log && chmod -R 777 ${HOME}/.cache
-#RUN mkdir ${HOME}/workspace && mkdir ${HOME}/.config && mkdir ${HOME}/.local && mkdir ${HOME}/.sonar && mkdir -p ${HOME}/.m2/repository && chmod -R 777 ${HOME}
 #RUN id jenkins && mkdir ${HOME}/.local && ls -lrtai $HOME/ && ls -lrtai $HOME/.sonar
 
 #BELOW npm install is adding 700Mb to the images
-RUN npm install --only=production && npm run update-webdriver
+#RUN npm install --only=production && npm run update-webdriver
 
 #RUN /microscanner ${MICROSCANNER_TOKEN} --continue-on-failure 2>&1 > ${HOME}/microscanner.log
 #RUN echo "No vulnerabilities!"
@@ -178,7 +174,6 @@ WORKDIR $HOME
 # Standard SSH port
 EXPOSE 22
 
-#VOLUME ["/sys/fs/cgroup", "/tmp", "/run"]
-
 ENTRYPOINT ["/entrypoint.sh"]
-CMD ["/usr/lib/systemd/systemd"]
+#CMD ["/bin/bash"]
+CMD ["/jenkins-slave-startup.sh"]

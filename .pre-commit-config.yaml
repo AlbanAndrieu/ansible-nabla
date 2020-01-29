@@ -1,6 +1,6 @@
 ---
-default_language_version:
-    python: python3.6  # Ubuntu 18.04.3
+#default_language_version:
+#    python: python3.6  # Ubuntu 18.04.3
 #    python: python3.7  # Ubuntu 19.04
 
 repos:
@@ -8,9 +8,9 @@ repos:
 #pre-commit-hooks is not working on both environment
 #You will have to switch
 # pre-commit-hooks.git from v2.1.0 to v2.4.0
-    rev: v2.1.0 # ok python3.6  # 18.04.3
+#    rev: v2.1.0 # ok python3.6  # 18.04.3
 #    rev: v2.2.3 # ok python3.6  # 19.04 but failing on 18.04.3
-#    rev: v2.4.0 # ok python3.7  # 19.04
+    rev: v2.4.0 # ok python3.6 on Ubuntu 18.04 AND python3.7 on Ubuntu 19.04
     hooks:
     -   id: trailing-whitespace
     -   id: end-of-file-fixer

@@ -25,7 +25,7 @@
     - debug: msg="Version {{ ansible_distribution }} {{ ansible_distribution_version }} {{ ansible_architecture }}"
 
 - name: Install java 8 License
-  hosts: Ubuntu-18*:Ubuntu-17*:Ubuntu-16*
+  hosts: Ubuntu-19*:Ubuntu-18*:Ubuntu-17*:Ubuntu-16*
   become: true
   ignore_errors: true
 
@@ -42,24 +42,35 @@
     - name: jdk11 | Accept Java 11 License
       debconf: name='oracle-java11-installer' question='shared/accepted-oracle-license-v1-1' value='true' vtype='select'
 
-# debian | ubuntu | Java 8
-- name: Install java
-  hosts: Ubuntu-18*:Ubuntu-17*:Ubuntu-16*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
-  become: true
-#  ignore_errors: true
+    - name: jdk12 | Accept Java 12 License
+      debconf: name='oracle-java12-installer' question='shared/accepted-oracle-license-v1-2' value='true' vtype='select'
 
-  roles:
-    - role: ansiblebit.oracle-java
-      oracle_java_use_defaults: yes
-      #oracle_java_apt_repository: 'deb http://ppa.launchpad.net/webupd8team/java/ubuntu bionic main'
-      #oracle_java_apt_repository_key: 'EA8CACC073C3DB2A'
-      #oracle_java_apt_repository: "ppa:webupd8team/java"
-      #oracle_java_apt_repository: "ppa:linuxuprising/java"
-      #oracle_java_deb_package: 'oracle-java8-installer'
-      #oracle_java_debconf_package_default: 'oracle-java8-set-default'
-      #oracle_java_home: "/usr/lib/jvm/java-8-oracle"
-      oracle_java_set_as_default: yes
-      oracle_java_state: latest
+# debian | ubuntu | Java 11
+
+#- name: Install java (1)
+#  hosts: Ubuntu-19*:Ubuntu-18*:Ubuntu-17*:Ubuntu-16*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
+#  become: true
+#
+#  tasks:
+#    - name: Create /var/cache/oracle-jdk11-installer-local/
+#      file: path=/var/cache/oracle-jdk11-installer-local/ state=directory mode=0755
+#      become: true
+#      become_user: root
+#
+#    - name: Get the JDK jar
+#      get_url: dest=/var/cache/oracle-jdk11-installer-local/jdk-11.0.5_linux-x64_bin.tar.gz url=http://FR1CSLFRBM0059.misys.global.ad/download/jdk/jdk-11.0.5_linux-x64_bin.tar.gz mode=0755
+#      become: true
+#      become_user: root
+#
+#- name: Install java (2)
+#  hosts: Ubuntu-19*:Ubuntu-18*:Ubuntu-17*:Ubuntu-16*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
+#  become: true
+#
+#  roles:
+#    - role: ansiblebit.oracle-java
+#      oracle_java_deb_package: 'oracle-java11-installer-local'
+#      oracle_java_debconf_package_default: 'oracle-java11-set-default-local'
+#      oracle_java_home: "/usr/lib/jvm/java-11-oracle"
 
 # redhat | centos 7 | Java 8
 - name: Install java
