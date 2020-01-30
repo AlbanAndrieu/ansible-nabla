@@ -89,9 +89,9 @@
 
 #- import_playbook: maven-legacy.yml
 
-- import_playbook: chrome.yml
+#- import_playbook: chrome.yml
 
-- import_playbook: selenium.yml
+#- import_playbook: selenium.yml
 
 #- import_playbook: javascript.yml
 
