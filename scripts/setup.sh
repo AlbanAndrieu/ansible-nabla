@@ -4,16 +4,16 @@
 WORKING_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}"  )" && pwd  )"
 
 # source only if terminal supports color, otherwise use unset color vars
-# shellcheck source=/dev/null
-tput colors && source "${WORKING_DIR}/step-0-color.sh"
+# shellcheck source=./script/step-0-color.sh
+source "${WORKING_DIR}/step-0-color.sh"
 
 # shellcheck source=/dev/null
 source "${WORKING_DIR}/ansible-env.sh"
 
-type -p ${ANSIBLE_PLAYBOOK_CMD} > /dev/null
+type -p "${ANSIBLE_PLAYBOOK_CMD}" > /dev/null
 RC=$?
 if [ ${RC} -ne 0 ]; then
-    echo -e "${red} \u00BB Oops! I cannot find ansible.  Please be sure to install ansible before proceeding. ${NC}"
+    echo -e "${red} \u00BB Oops! I cannot find ansible ${ANSIBLE_PLAYBOOK_CMD}.  Please be sure to install ansible before proceeding. ${NC}"
     echo -e "${red} \u00BB For guidance on installing ansible, consult http://docs.ansible.com/intro_installation.html. ${NC}"
     exit 1
 fi

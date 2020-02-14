@@ -15,7 +15,7 @@ if [ ${RC} -ne 0 ]; then
   exit 1
 fi
 
-${WORKING_DIR}/run-ansible-lint.sh
+"${WORKING_DIR}/run-ansible-lint.sh"
 
 # shellcheck source=/dev/null
 source "${WORKING_DIR}/run-ansible.sh"

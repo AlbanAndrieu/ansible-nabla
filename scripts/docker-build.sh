@@ -26,6 +26,8 @@ source "${WORKING_DIR}/run-ansible.sh"
 
 WORKING_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}"  )" && pwd  )"
 
+"${WORKING_DIR}/../clean.sh"
+
 if [ -n "${DOCKER_BUILD_ARGS}" ]; then
   echo -e "${green} DOCKER_BUILD_ARGS is defined ${happy_smiley} : ${DOCKER_BUILD_ARGS} ${NC}"
 else
@@ -41,6 +43,7 @@ time docker build ${DOCKER_BUILD_ARGS} -f ${WORKING_DIR}/${DOCKER_FILE} -t "${DO
 RC=$?
 if [ ${RC} -ne 0 ]; then
   echo ""
+  # shellcheck disable=SC2154
   echo -e "${red} ${head_skull} Sorry, build failed. ${NC}"
   exit 1
 else
@@ -50,7 +53,13 @@ else
   docker history --no-trunc ${DOCKER_ORGANISATION}/${DOCKER_NAME}:latest > docker-history.log
   echo -e "${magenta} Running dive ${NC}"
   echo -e "    dive ${DOCKER_ORGANISATION}/${DOCKER_NAME}:latest"
-  CI=true dive "${DOCKER_ORGANISATION}/${DOCKER_NAME}:latest" | tee docker-dive.log
+  CI=true dive "${DOCKER_ORGANISATION}/${DOCKER_NAME}:latest" | tee -a docker-dive.log
+  RC=$?
+  if [ ${RC} -ne 0 ]; then
+    echo ""
+    echo -e "${red} ${head_skull} Sorry, dive failed ${NC}"
+    #exit 1
+  fi
 fi
 
 echo -e ""
@@ -71,13 +80,34 @@ echo -e "    docker run -d -P ${DOCKER_ORGANISATION}/${DOCKER_NAME}"
 echo -e " - to attach your container directly to the host's network interfaces"
 echo -e "    docker run --net host -d -P ${DOCKER_ORGANISATION}/${DOCKER_NAME}"
 echo -e ""
+export JENKINS_USER_HOME=${JENKINS_USER_HOME:-/data1/home/jenkins/}
+export USER=${USER:-albandri}
+export GROUP=${GROUP:-docker}
+export DOCKER_UID=${DOCKER_UID:-1004}
+export DOCKER_GID=${DOCKER_GID:-999}
+# shellcheck disable=SC2059
+printf "\033[1;32mFROM UID:GID: ${DOCKER_UID}:${DOCKER_GID}- JENKINS_USER_HOME: ${JENKINS_USER_HOME} \033[0m\n" && \
+printf "\033[1;32mWITH $USER\ngroup: $GROUP \033[0m\n"
+
+echo -e "${green} User is. ${happy_smiley} ${NC}"
+id "${USER}"
+echo -e "${magenta} Add docker group to above user. ${happy_smiley} ${NC}"
+echo -e "${magenta} sudo usermod -a -G docker ${USER} ${NC}"
+
 echo -e "To run in interactive mode for debug:"
-echo -e "    docker run -it -u 1004:999 -v /etc/passwd:/etc/passwd:ro -v /etc/group:/etc/group:ro -v /var/run/docker.sock:/var/run/docker.sock --entrypoint /bin/bash ${DOCKER_ORGANISATION}/${DOCKER_NAME}:latest"
-echo -e "    docker run -it -d -u 1004:999 --name sandbox ${DOCKER_ORGANISATION}/${DOCKER_NAME}:latest cat"
+echo -e "    docker run -it -u ${DOCKER_UID}:${DOCKER_GID} --userns=host -v ${JENKINS_USER_HOME}:/home/jenkins -v /etc/passwd:/etc/passwd:ro -v /etc/group:/etc/group:ro -v /var/run/docker.sock:/var/run/docker.sock --entrypoint /bin/bash ${DOCKER_ORGANISATION}/${DOCKER_NAME}:latest"
+echo -e "    docker run -it -d -u ${DOCKER_UID}:${DOCKER_GID} --userns=host --name sandbox ${DOCKER_ORGANISATION}/${DOCKER_NAME}:latest cat"
 echo -e "    docker exec -it sandbox /bin/bash"
 echo -e "    docker exec -u 0 -it sandbox env TERM=xterm-256color bash -l"
 echo -e ""
 
-echo "${WORKING_DIR}/docker-test.sh" "${DOCKER_NAME}"
+echo -e "${magenta} Run CST test ${NC}"
+echo -e "${magenta} ${WORKING_DIR}/docker-test.sh ${DOCKER_NAME} ${NC}"
+
+echo -e ""
+echo -e "${green} Please valide the repo. ${happy_smiley} ${NC}"
+echo -e "${magenta} git tag ${DOCKER_TAG} ${NC}"
+echo -e "${magenta} git push origin --tags ${NC}"
+echo -e ""
 
 exit 0
