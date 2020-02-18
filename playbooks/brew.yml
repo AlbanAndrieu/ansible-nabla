@@ -1,5 +1,4 @@
 ---
-#cd  | tee setup.log
 
 - name: Install brew
   hosts: jenkins-slaves

@@ -1,5 +1,5 @@
 ---
-#ansible-playbook playbooks/boot-cleaning.yml -i inventory/production --limit albandri -vvvv
+#ansible-playbook playbooks/boot-cleaning.yml -i inventory/production --limit test.albandrieu.com -vvvv
 
 - hosts: all
   gather_facts: true
@@ -47,11 +47,6 @@
       shell: rm -f /etc/apt/sources.list.d/github_git-lfs.list
       changed_when: false
       ignore_errors: true
-
-    - name: Clean apt source puppetlabs # noqa 302 305
-      shell: rm -f /etc/apt/sources.list.d/github_git-lfs.list
-      changed_when: false
-      ignore_errors: yes
 
     - name: Update
       apt:

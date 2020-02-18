@@ -1,14 +1,14 @@
 ---
 #This script is used to configure your workstation (for developer)
 
-#ansible-playbook -i playbooks/hosts-albandri-test -v playbooks/chrome.yml --limit albandrieu -vvvv | tee setup.log
+#ansible-playbook -i playbooks/hosts -v playbooks/chrome.yml --limit albandrieu -vvvv | tee setup.log
 
 - name: Install chrome
-  hosts: jenkins-slaves
+  hosts: chrome
   become: true
 
   roles:
-     - role: devbox.chrome
+     - role: chrome
        google_talkplugin_enabled: false
        google_remotedesktop_enabled: true
-       google_agent_pkg_state: installed # Package states: present or installed or latest
+       google_agent_pkg_state: latest # Package states: absent, build-dep, fixed, latest, present
