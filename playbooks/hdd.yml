@@ -15,7 +15,7 @@
 
     - name: set freenas_ssh_target to default
       set_fact: freenas_ssh_target=nabla
-              
+
     - name: set freenas_ssh_host to default
       set_fact: freenas_ssh_host=192.168.1.24
 
@@ -25,7 +25,7 @@
     - name: Copy isci configuration.
       template:
         src: 192.168.1.24,3260.j2
-        dest: "/etc/iscsi/nodes/{{ freenas_ssh_target_global }}\:{{ freenas_ssh_target }}/{{ freenas_ssh_host }}\,{{ freenas_ssh_port }}"
+        dest: "/etc/iscsi/nodes/{{ freenas_ssh_target_global }}\\:{{ freenas_ssh_target }}/{{ freenas_ssh_host }}\\,{{ freenas_ssh_port }}"
         owner: root
         group: root
         mode: 0600
