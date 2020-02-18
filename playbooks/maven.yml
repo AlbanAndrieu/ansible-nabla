@@ -10,16 +10,5 @@
      - role: maven
 
   vars:
-       maven_path_to_lib_role: "{{ playbook_dir + '/../roles' }}"
-       maven_version: '3.5.0'
+       maven_version: 3.5.0
 
-- name: Install maven color
-  hosts: workstation
-#  remote_user: root
-#  accelerate: true
-
-  roles:
-     - role: maven-color
-
-  vars:
-       maven_color_maven_home: /opt/maven/apache-maven-3.5.0

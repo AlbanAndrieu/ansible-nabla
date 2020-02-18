@@ -1,41 +1,49 @@
-#ansible-playbook -i hosts -v docker.yml --limit albandri --ask-become-pass -vvvv | tee setup.log
-
-#- hosts: docker
-#  become: true
-#  pre_tasks:
-#  - name: Log into DockerHub
-#    docker_login:
-#      username: nabla
-#      password: todo
-#      email: alban.andrieu@free.fr
+---
+#ansible-playbook playbooks/docker.yml -i inventory/production --limit "test1.albandrieu.com,test2.albandrieu.com" -vvvv --ask-become-pass
 
 #- import_playbook: docker-ubuntu.yml
 
-#https://askubuntu.com/questions/477551/how-can-i-use-docker-without-sudo
-#sudo groupadd docker
-#sudo gpasswd -a ${USER} docker
-#sudo gpasswd -a jenkins docker
+#yum remove docker-ce
+#yum install https://download.docker.com/linux/centos/7/x86_64/stable/Packages/docker-ce-18.06.0.ce-3.el7.x86_64.rpm
+#yum install docker-ce-18.06.0.ce-3.el7.x86_64
+#yum install https://download.docker.com/linux/centos/7/x86_64/stable/Packages/docker-ce-17.12.1.ce-1.el7.centos.x86_64.rpm
 
-- name: Run docker
-  hosts: docker
+- name: Bootstrap docker onto server
+  hosts: Ubuntu-19*
   become: true
-  ignore_errors: true
+
+  pre_tasks:
+  - name: Install python 2 if not there
+    raw: |
+      rm -f /etc/apt/sources.list.d/download_docker_com_linux_ubuntu.list*
+
+  - name: Install docker repo
+    raw: |
+      curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+      
+  - name: Install docker repo
+    raw: |
+      add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable edge"
+    
+- name: Install docker
+  hosts: Ubuntu-19*:Ubuntu-18*:Ubuntu-17*:Ubuntu-16*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
+  #hosts: docker  
+  become: true
   tags:
     - vm
 
   roles:
-    - geerlingguy.pip
+#    - geerlingguy.pip
     - geerlingguy.docker
 
   vars:
     docker_install_compose: false # using pip instead
     docker_compose_version: "1.25.0"
-     #TODO fix docker version
-     #docker_edition: ce
-     #docker_version: 18.06.0
-     #docker_package: "docker-{{ docker_edition }}-{{ docker_version }}" # CentOS
-     #docker_package: "docker-{{ docker_edition }}={{ docker_version }}" # Ubuntu
-     #TODO make sure it does not conflit with jenkins-slave python35.yml and requirements-current-3.5.txt
+    docker_edition: ce
+    docker_version: 5:19.03.6~3-0~ubuntu-eoan
+    #docker_package: "docker-{{ docker_edition }}-{{ docker_version }}" # CentOS
+    docker_package: "docker-{{ docker_edition }}={{ docker_version }}" # Ubuntu
+     #TODO make sure it does not conflit with jenkins-slave python36.yml and requirements-current-3.6.txt
      #pip_install_packages:
      #  - name: docker
      #    version: "2.7.0"
@@ -55,6 +63,24 @@
      #  - docker
      #  - jenkins
 
+- name: Install docker
+  hosts: RedHat-7*:RedHat-6*:RedHat-5*:CentOS-7*:CentOS-6*
+  #hosts: docker
+  become: true
+  tags:
+    - vm
+
+  roles:
+    - geerlingguy.docker
+
+  vars:
+    docker_install_compose: false # using pip instead
+    docker_compose_version: "1.25.0"
+    docker_edition: ce
+    docker_version: 19.03.6
+    docker_package: "docker-{{ docker_edition }}-{{ docker_version }}" # CentOS
+    #docker_package: "docker-{{ docker_edition }}={{ docker_version }}" # Ubuntu
+  
 - hosts: docker
   become: true
   tags:
@@ -66,7 +92,7 @@
           name=docker
           state=present
       become: true
-      ignore_errors: true
+#      ignore_errors: true
 
     - name: Add user(s) to docker group
       user:
@@ -83,3 +109,4 @@
           state=present
       become: true
       ignore_errors: true
+

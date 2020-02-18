@@ -60,9 +60,9 @@
 #Syncing disks.
 
 #lsblk
-#mkfs.ext4 /dev/sdb1
+#mkfs.ext4 /dev/sdd1
 #sudo mkdir /data
-#mount /dev/sdb1 /data
+#mount /dev/sdd1 /data
 
 - hosts: jenkins-slaves
   become: true

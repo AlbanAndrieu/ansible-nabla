@@ -1,5 +1,4 @@
-#see https://blog.trifork.com/2013/04/02/ansible-example-playbook-to-setup-jenkins-slave/
-
+---
 #as albandri
 #ansible-playbook playbooks/jenkins-slave.yml -i inventory/production --limit albandri.nabla.mobi -vvvv -e python2_version="2.7"
 #ansible-playbook playbooks/jenkins-slave.yml -i inventory/production --limit albandri.nabla.mobi -vvvv
@@ -7,6 +6,28 @@
 #ansible all -m setup -i staging --limit albandri.nabla.mobi -vvvv
 
 #TODO ansible myhost --sudo -m raw -a "yum install -y python2 python-simplejson"
+
+- hosts: all
+  gather_facts: true
+  tasks:
+    - name: group hosts by distribution
+      group_by: key="{{ ansible_distribution }}-{{ ansible_distribution_version }}"
+
+- hosts: RedHat-7*:RedHat-6*:RedHat-5*:CentOS-7*:CentOS-6*:Ubuntu-17*:Ubuntu-16*:Ubuntu-15*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
+  gather_facts: false
+  tasks:
+    - name: group hosts for supported distributions
+      group_by: key="supported"
+
+- hosts: "!supported"
+  gather_facts: false
+  tasks:
+    - name: fail for unsupported distribution
+      fail: msg="{{ ansible_distribution }} {{ ansible_distribution_version }}
+                 is not a supported OS for a Tower installation.  Supported
+                 OSes include Red Hat Enterprise Linux 6/7/5, CentOS 6/7, or
+                 Ubuntu 12.04/12.04/14.04/16.04/17.04."
+    - debug: msg="Version {{ ansible_distribution }} {{ ansible_distribution_version }} {{ ansible_architecture }}"
 
 - name: Configure all jenkins slaves
   hosts: jenkins-slaves
@@ -21,34 +42,34 @@
   vars:
     docker_files_enable: false
     #docker_files_generated_directory: "../roles/alban.andrieu.jenkins-slave"
-    jenkins_home: /home/jenkins
-    jenkins_user: jenkins
-    #jenkins_group: docker
-    jenkins_http_port: 8380
-    jenkins_slave_home: /workspace
-    jenkins_prefix: "/jenkins"
-    jenkins_url: http://localhost:8380{{ jenkins_prefix }}
-    jenkins_slave_directory: ["{{ jenkins_slave_home }}/slave","{{ jenkins_slave_home }}/slavearc"]
-    home_url: "http://home.albandrieu.com"
+    docker_registry_user: nabla
+    shell_git:
+      # Additional properties: 'shell_git_machine, shell_git_login, shell_git_email, shell_git_password, shell_git_name, shell_git_path, shell_git_ssl'.
+      - {
+         shell_git_machine: "82.231.208.223",
+         shell_git_login: "AlbanAndrieu",
+         shell_git_email: "alban.andrieu@free.fr",
+         shell_git_password: "microsoft",
+         # Optional.
+         shell_git_name: "Andrieu, Alban",
+         shell_git_path: "/usr/bin",
+         shell_git_ssl: false
+        }
+    home_url: "http://albandrieu.com"
     nexus_url: "{{ home_url }}:8081"
-    bower_url: "http://albandrieu.com:5678"
+    bower_url: "{{ home_url }}:5678"
     npm_nexus_npm_url: "{{ nexus_url }}/nexus/content/groups/npmjs-all/"
     npm_nexus_private_npm_url: ""
     npm_nexus_private_npm_data: []
     npm_phantomjs_cdnurl: "{{ home_url }}:7070/download/phantomjs"
     npm_slimerjs_cdnurl: "{{ home_url }}:7070//download/slimerjs"
-    shell_git:
-      # Additional properties: 'shell_git_machine, shell_git_login, shell_git_email, shell_git_password, shell_git_name, shell_git_path, shell_git_ssl'.
-      - {
-        shell_git_machine: "82.231.208.223",
-        shell_git_login: "AlbanAndrieu",
-        shell_git_email: "alban.andrieu@free.fr",
-        #shell_git_password: "microsoft",
-        shell_git_name: "Andrieu, Alban",
-        shell_git_path: "/usr/bin",
-        shell_git_ssl: false
-        }
-    jenkins_ssh_key_file: "~/.ssh/id_rsa"
+    #jenkins_ssh_key_file: "~/.ssh/id_rsa"
+    jenkins_home: "/home/jenkins"
+    jenkins_group: docker
+    jenkins_http_port: 8686
+    jenkins_slave_home: /workspace
+    #jenkins_prefix: "/jenkins"
+    #jenkins_url: {{ home_url }}:{{ jenkins_http_port }}{{ jenkins_prefix }}
     jenkins_ssh_authorized_keys_fingerprints:   # Set known authorized keys for ssh
     # Alban Andrieu
       - "ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAIEAio3SOQ9yeK6QfKqSFNKyTasuzjStxWevG1Vz1wgJIxPF+KB0XoMAPD081J+Bzj2LCDRSWisNv2L4xv2jbFxW/Pl7NEakoX47eNx3U+Dxaf+szeWBTryYcDUGkduLV7G8Qncm0luIFd+HDIe/Qir1E2f56Qu2uuBNE6Tz5TFt1vc= Alban"

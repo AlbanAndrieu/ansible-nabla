@@ -1,9 +1,7 @@
 ---
-#ansible-playbook -i production -c local -v zabbix-agent.yml -vvvv --ask-become-pass  | tee setup.log
-#ansible-playbook -i production -v zabbix-agent.yml --limit albandri -vvvv --ask-become-pass
 
 - name: Debug
-  hosts: zabbix-agent-paris-linux
+  hosts: zabbix-agent-paris
   become: true
 
   pre_tasks:
@@ -24,7 +22,7 @@
 #      verbosity: 4
 
 - name: Install zabbix-agent
-  hosts: zabbix-agent-paris-linux
+  hosts: zabbix-agent-paris
   become: true
 
   roles:
@@ -43,9 +41,6 @@
         - NABLA Hosts
       zabbix_link_templates:
         - Template OS Linux
-#        - Performance Monitoring Linux
-#        - Template Jenkins User
-#        - Template OS Linux Extended
         - Template App SSH Service
 
 - name: Install zabbix-agent
@@ -69,7 +64,4 @@
         - NABLA Hosts
       zabbix_link_templates:
         - Template OS Linux
-#        - Performance Monitoring Linux
-#        - Template Jenkins User
-#        - Template OS Linux Extended
         - Template App SSH Service

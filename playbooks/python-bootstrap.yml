@@ -22,7 +22,7 @@
     - debug: msg="Version {{ ansible_distribution }} {{ ansible_distribution_version }} {{ ansible_architecture }}"
 
 - name: Bootstrap python onto server
-  hosts: Ubuntu-18*:Ubuntu-17*:Ubuntu-16*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
+  hosts: Ubuntu-19*:Ubuntu-18*:Ubuntu-17*:Ubuntu-16*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
   become: true
 
   pre_tasks:
@@ -33,6 +33,13 @@
     register: output
     changed_when: output.stdout | length > 0
 
+  - name: Install python pip if not there
+    raw: |
+      test -e /usr/local/bin/pip || \
+      (apt -y update && apt install -y python-pip)
+    register: output
+    changed_when: output.stdout | length > 0
+    
   - name: Install sudo if not there
     become: true
     raw: |
@@ -59,9 +66,6 @@
   roles:
     - geerlingguy.repo-epel
 
-# WARNING below seems no more to work
-# /etc/yum.repos.d/remi.repo put enable to 1
-# See https://www.tecmint.com/enable-remi-repository-in-centos-redhat-fedora/
 - name: Add repo configuration to all nodes
   hosts: RedHat-6*:CentOS-6*
   become: true
