@@ -24,18 +24,27 @@
 
     - name: Copy isci configuration.
       template:
-        src: 192.168.1.24,3260.j2
-        dest: "/etc/iscsi/nodes/{{ freenas_ssh_target_global }}\:{{ freenas_ssh_target }}/{{ freenas_ssh_host }}\,{{ freenas_ssh_port }}"
+        src: iscsid.conf.j2
+        dest: "/etc/iscsi/iscsid.conf"
         owner: root
         group: root
         mode: 0600
 #      notify: restart iscsi
+
+#    - name: Copy isci configuration.
+#      template:
+#        src: 192.168.1.24,3260.j2
+#        dest: "/etc/iscsi/nodes/{{ freenas_ssh_target_global }}\:{{ freenas_ssh_target }}/{{ freenas_ssh_host }}\,{{ freenas_ssh_port }}"
+#        owner: root
+#        group: root
+#        mode: 0600
+##      notify: restart iscsi
 # systemctl restart open-iscsi
 
 # TODO target albandri albandrieu
 
-
-#fdisk /dev/sdb
+# See https://www.tecmint.com/create-luns-using-lvm-in-iscsi-target/
+#fdisk -c /dev/sdd
 #Welcome to fdisk (util-linux 2.31.1).
 #Changes will remain in memory only, until you decide to write them.
 #Be careful before using the write command.
@@ -64,23 +73,33 @@
 #sudo mkdir /data
 #mount /dev/sdd1 /data
 
+#fdisk -l /dev/sdd
+
 - hosts: jenkins-slaves
   become: true
 
   tasks:
-
-    - name: hdd | Create sdb
-      command: pvcreate /dev/sdb
+  
+    - name: hdd | Create vg_iscsi volume group
+      command: umount /data && vgcreate vg_iscsi /dev/sdd1
+      changed_when: false
+      become: true
+      ignore_errors: true
+      
+#pvs && vgs && lvs      
+      
+    - name: hdd | Create sdd1
+      command: pvcreate /dev/sdd1
       changed_when: false
       become: true
       ignore_errors: true
 
-    - name: hdd | Extend sdb
-      command: vgextend vgubuntu /dev/sdb
-      when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and ansible_distribution_version not in ['12.04', '14.04']
-      changed_when: false
-      become: true
-      ignore_errors: true
+#    - name: hdd | Extend sdb
+#      command: vgextend vgubuntu /dev/sdb
+#      when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and ansible_distribution_version not in ['12.04', '14.04']
+#      changed_when: false
+#      become: true
+#      ignore_errors: true
 
     - name: hdd | Extend sdb
       command: vgextend VolGroup00 /dev/sdb
@@ -104,14 +123,14 @@
       ignore_errors: true
 
     - name: hdd | Create workspace filesystem
-      command: lvcreate -l 12805 -n workspace vgubuntu
+      command: lvcreate -L 500G -n workspace vg_iscsi
       when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and ansible_distribution_version not in ['12.04', '14.04']
       changed_when: false
       become: true
       ignore_errors: true
 
     - name: hdd | Create docker filesystem
-      command: lvcreate -l 12794 -n docker vgubuntu
+      command: lvcreate -L 100G -n docker vg_iscsi
       when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and ansible_distribution_version not in ['12.04', '14.04']
       changed_when: false
       become: true
@@ -152,15 +171,15 @@
       become: true
       ignore_errors: true
 
-    - name: hdd | Make workspace filesystem xfs
-      command: mkfs -t xfs /dev/vgubuntu/workspace
+    - name: hdd | Make workspace filesystem ext4
+      command: mkfs -t ext4 /dev/vg_iscsi/workspace
       when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and ansible_distribution_version not in ['12.04', '14.04']
       changed_when: false
       become: true
       ignore_errors: true
 
-    - name: hdd | Make docker filesystem xfs
-      command: mkfs -t xfs /dev/vgubuntu/docker
+    - name: hdd | Make docker filesystem ext4
+      command: mkfs -t ext4 /dev/vg_iscsi/docker
       when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and ansible_distribution_version not in ['12.04', '14.04']
       changed_when: false
       become: true
@@ -214,23 +233,23 @@
 # sudo mkdir /workspace
 # sudo mkdir /docker
 #
-# - name: hdd | Mount up device by label
-#   mount:
-#     path: /workspace
-#     src: /dev/rhel_fr1cslvcacrhel71/workspace
-#     fstype: ext4
-#     opts: auto
-#     passno: 2
-#     state: present
-#
-# - name: hdd | Mount up device by label
-#   mount:
-#     path: /docker
-#     src: /dev/rhel_fr1cslvcacrhel71/docker
-#     fstype: ext4
-#     opts: auto
-#     passno: 2
-#     state: present
+ - name: hdd | Mount up device by label data
+   mount:
+     path: /data
+     src: /dev/rhel_fr1cslvcacrhel71/workspace
+     fstype: ext4
+     opts: auto
+     passno: 2
+     state: present
+
+ - name: hdd | Mount up device by label
+   mount:
+     path: /docker
+     src: /dev/rhel_fr1cslvcacrhel71/docker
+     fstype: ext4
+     opts: auto
+     passno: 2
+     state: present
 
 # /etc/fstab
 # /dev/rhel_fr1cslvcacrhel71/workspace /workspace ext4 auto 0 2
