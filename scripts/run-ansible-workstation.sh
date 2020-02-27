@@ -7,8 +7,8 @@ fi
 
 WORKING_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}"  )" && pwd  )"
 
-#Just testing python3.6 but we are keeping python3.5, we will migrate to python3.6 little by little
-export PYTHON_MAJOR_VERSION=3.6
+#export PYTHON_MAJOR_VERSION=3.7
+
 # shellcheck source=/dev/null
 source "${WORKING_DIR}/run-python.sh"
 RC=$?
