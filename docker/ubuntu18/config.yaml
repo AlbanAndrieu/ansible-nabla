@@ -42,14 +42,13 @@ fileExistenceTests:
  - name: 'jenkins directory'
    path: '/home/jenkins'
    shouldExist: true
-   permissions: 'drwxrwxr-x'
+   permissions: 'drwxrwxrwx'
    uid: 2000
 
  - name: 'jenkins .bashrc'
    path: '/home/jenkins/.bashrc'
    shouldExist: true
-#   permissions: '-rwxr-xr-x'
-   permissions: '-rw-r--r--'
+   permissions: '-rwxrwxrwx'
    uid: 2000
    gid: 2000
 #   isExecutableBy: 'group'
@@ -57,14 +56,14 @@ fileExistenceTests:
  - name: 'jenkins settings.xml'
    path: '/home/jenkins/.m2/settings.xml'
    shouldExist: true
-   permissions: '-rwxr-xr-x'
+   permissions: '-rwxrwxrwx'
    uid: 2000
    gid: 2000
 
  - name: 'jenkins settings-security.xml'
    path: '/home/jenkins/.m2/settings-security.xml'
    shouldExist: true
-   permissions: '-rwxr-xr-x'
+   permissions: '-rwxrwxrwx'
    uid: 2000
    gid: 2000
 
@@ -100,7 +99,7 @@ fileExistenceTests:
    permissions: 'drwxrwxrwx'
 
  - name: 'bower'
-   path: '/usr/bin/bower'
+   path: '/usr/local/bin/bower'
    shouldExist: true
    permissions: 'Lrwxrwxrwx'
 
@@ -114,8 +113,8 @@ fileExistenceTests:
    shouldExist: true
    permissions: '-rwxr-xr-x'
 
- - name: 'node 11.15.0'
-   path: '/usr/local/n/versions/node/11.15.0/'
+ - name: 'node 11.12.0'
+   path: '/usr/local/n/versions/node/11.12.0/'
    shouldExist: true
    permissions: 'drwxr-xr-x'
 
@@ -160,14 +159,15 @@ commandTests:
  - name: "check git-lfs version"
    command: "git-lfs"
    args: ["--version"]
-   expectedOutput: ["git-lfs/2.9.*"]
+   expectedOutput: ["git-lfs/2.10.*"]
 
  - name: "git config"
-   command: "git config  "
-   args: ["--global", "--list"]
+   command: "git"
+   args: ["config", "--global", "--list"]
    expectedOutput: ["user.email=mgr.jenkins@finastra.com
 user.name=jenkins, mgr
 core.autocrlf=input
+core.longpaths=true
 maven-scm.maildomain=finastra.com
 maven-scm.forceusername=true
 http.sslverify=false"]
@@ -183,7 +183,7 @@ http.sslverify=false"]
  - name: "check openjdk 1.8.0"
    command: "${JAVA_HOME}/bin/java"
    args: ["-version"]
-   expectedError: ['openjdk version \"1\.8\.0_222\".*']
+   expectedError: ['openjdk version \"1\.8\.0_.*\".*']
 
 # - name: "check openjdk CA root imported"
 #   envVars:
@@ -192,10 +192,10 @@ http.sslverify=false"]
 #   command: "${JAVA_HOME}/bin/keytool -list -keystore ${JAVA_HOME}/jre/lib/security/cacerts -storepass changeit | grep -i uk1vswcert01"
 #   expectedOutput: ["misys, Jun 7, 2019, trustedCertEntry.*"]
 
- - name: "check node v11.15"
+ - name: "check node v11.12"
    command: "node"
    args: ["--version"]
-   expectedOutput: ["v11.15.*"]
+   expectedOutput: ["v11.12.*"]
 
  - name: "check nodejs v11.15"
    command: "nodejs"
@@ -217,10 +217,10 @@ http.sslverify=false"]
    args: ["--version"]
    expectedError: ['Python 2.7.*']
 
- - name: "check pip 19.3.1"
+ - name: "check pip version"
    command: "pip"
    args: ["--version"]
-   expectedOutput: ['pip 19.3.1 from /usr/local/lib/python2.7/dist-packages/pip (python 2.7)']
+   expectedOutput: ['pip 20.0.2 from /usr/local/lib/python2.7/dist-packages/pip (python 2.7).*']
 
  - name: "check python 3"
    command: "python3"
@@ -271,5 +271,5 @@ metadataTest:
   volumes: []
 #  volumes: ["/test"]
   entrypoint: [/entrypoint.sh]
-  cmd: ["/jenkins-slave-startup.sh"]
+  cmd: ["/usr/lib/systemd/systemd"]
   workdir: "/home/jenkins"

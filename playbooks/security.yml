@@ -8,6 +8,8 @@
     - geerlingguy.security
 
   vars:
+      sudoers_enabled: no
+      restart_ssh_enabled: false
       security_ssh_password_authentication: "yes"
       security_ssh_permit_root_login: "yes"
       security_ssh_x11_forwarding: "yes"

@@ -105,6 +105,7 @@ List of default variables available in the inventory:
 
 {% if ansigenome_info.facts|d() %}
 {% block facts %}
+
 List of internal variables used by the role:
 
 {{ ansigenome_info.facts | trim | indent(4, true) }}{% endblock %}{% endif %}

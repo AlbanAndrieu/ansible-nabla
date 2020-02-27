@@ -194,7 +194,7 @@ def main():
 
     :param int port: **default** *22*
 
-    :param str x_jenkins_server: **default** *"localhost/jenkins"*
+    :param str x_jenkins_server: **default** *"albandrieu.com:8686/jenkins"*
 
     :param dict x_auth: **Required** -
         credentials for Jenkins server, in the for of ``username``, ``password``.
@@ -251,7 +251,7 @@ def main():
           credentialsId: 1234 # jenkins@unix-slaves
           javaPath: "/usr/java/default/"
           remoteFS: /workspace/slave
-          x_jenkins_server: "localhos:8383/jenkins"
+          x_jenkins_server: "albandrieu.com:8686/jenkins"
           x_token: "{{ csrf.token }}"
           x_auth:
             username: "{{ username }}"
@@ -283,6 +283,7 @@ def main():
             'credentialsId': {
                 'type': 'str',
                 'default': '1234',  # jenkins@unix-slaves
+
             },
             'javaPath': {
                 'type': 'str',
@@ -342,7 +343,7 @@ def main():
             },
             'x_jenkins_server': {
                 'type': 'str',
-                'default': 'localhost/jenkins',
+                'default': 'albandrieu.com:8686/jenkins',
 
             },
             'x_auth': {

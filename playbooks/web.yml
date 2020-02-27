@@ -1,12 +1,13 @@
+---
 
-#ansible all -m setup -i production --limit FR1CSLFRBM0059.misys.global.ad,FR1CSLFRBM0060.misys.global.ad -vvvv
+#ansible all -m setup -i production --limit albandrieu.com -vvvv
 
-#ansible-playbook web.yml -i production --limit FR1CSLFRBM0059.misys.global.ad,FR1CSLFRBM0060.misys.global.ad -vvvv
+#ansible-playbook web.yml -i production --limit albandrieu.com, -vvvv
 # -e python2_version="2.7"
 
-#TODO ansible -i production FR1CSLFRBM0059.misys.global.ad --sudo --ask-become-pass -m raw -a "yum install -y python2 python-simplejson"
-#TODO ansible -i production FR1CSLFRBM0059.misys.global.ad --sudo --ask-become-pass -m raw -a "apt-get -f install && apt-get update"
-#TODO ansible -i production FR1CSLFRBM0059.misys.global.ad --sudo --ask-become-pass -m raw -a "apt-get install -y python python-simplejson"
+#TODO ansible -i production albandrieu.com --sudo --ask-become-pass -m raw -a "yum install -y python2 python-simplejson"
+#TODO ansible -i production albandrieu.com --sudo --ask-become-pass -m raw -a "apt-get -f install && apt-get update"
+#TODO ansible -i production albandrieu.com --sudo --ask-become-pass -m raw -a "apt-get install -y python python-simplejson"
 
 - hosts: all
   gather_facts: true
@@ -31,97 +32,29 @@
                  Ubuntu 12.04/13.04/14.04/16.04/17.04/18.04/19.04."
     - debug: msg="Version {{ ansible_distribution }} {{ ansible_distribution_version }} {{ ansible_architecture }}"
 
-- hosts: localhost
+#- hosts: localhost
+#
+#  tasks:
+#    - name: Install Ansible-Galaxy dependencies
+#      shell: ansible-galaxy install -r requirements.yml -p ./roles/
+#      #shell: ansible-galaxy install -r requirements.yml -p ./roles/ --ignore-errors --force
+#      ignore_errors: true
 
-  tasks:
-    - name: Install Ansible-Galaxy dependencies
-      shell: ansible-galaxy install -r requirements.yml -p ./roles/
-      #shell: ansible-galaxy install -r requirements.yml -p ./roles/ --ignore-errors --force
-      ignore_errors: true
-
-#Below is too make sure we can ssh all required hosts
-- name: determine ssh port
-  hosts: all
-  gather_facts: false
-
-  vars:
-    custom_ssh_port: 23
-
-  tasks:
-    - name: test default ssh port
-      local_action: wait_for port=22 timeout=5 host={{inventory_hostname}}
-      register: default_ssh
-      ignore_errors: true
-      check_mode: false
-    - name: set ansible_ssh_port to default
-      set_fact: ansible_ssh_port=22
-      when: default_ssh.elapsed < 5
-    - name: test ssh on high port
-      local_action: wait_for port={{custom_ssh_port}} timeout=5 host={{inventory_hostname}}
-      register: high_ssh
-      when: default_ssh.elapsed >= 5
-      ignore_errors: true
-    - name: set ansible_ssh_port high
-      set_fact: ansible_ssh_port={{custom_ssh_port}}
-      when: default_ssh.elapsed >= 5 and high_ssh.elapsed < 5
-
-#TODO ansible myhost --sudo -m raw -a "yum install -y python2 python-simplejson"
-
-- import_playbook: python.yml
-
-- name: Bootstrap python onto server
-  hosts: Ubuntu-17*:Ubuntu-16*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
-#  become: true
-
-  pre_tasks:
-  - name: Install python 2 if not there
-    become: true
-    raw: |
-      test -e /usr/bin/python || \
-      (apt -y update && apt install -y python-simplejson)
-    register: output
-    changed_when: output.stdout|trim() != ""
-
-  - name: Install sudo if not there
-    become: true
-    raw: |
-      test -e /usr/bin/sudo || apt install -y sudo
-    register: output
-    changed_when: output.stdout|trim() != ""
+- import_playbook: python-bootstrap.yml
 
 - import_playbook: hostname.yml
 
-- name: Apply nfs configuration to all nodes
-  hosts: jenkins-slaves
-  become: true
+#- import_playbook: networkfilesystem.yml
 
-  roles:
-    - geerlingguy.nfs
-
-- import_playbook: administration.yml
-
-- name: Apply common configuration to all nodes
-  hosts: jenkins-slaves
-  become: true
-
-  roles:
-    - common
+- import_playbook: common.yml
 
 - import_playbook: dns.yml
 
-- name: Apply security configuration
-  hosts: jenkins-slaves
-  become: true
+- import_playbook: python.yml
 
-  roles:
-    - security
+- import_playbook: administration.yml automount_enabled=false nis_enabled=false
 
-  vars:
-      security_ssh_password_authentication: "yes"
-      security_ssh_permit_root_login: "yes"
-      security_ssh_x11_forwarding: "yes"
-      security_fail2ban_enabled: false
-      security_autoupdate_enabled: false #make yum to get stuck later
+- import_playbook: security.yml
 
 - import_playbook: java.yml
 
@@ -147,44 +80,43 @@
 
 - import_playbook: lamp.yml
 
-- name: Configure and deploy the ALMTest application to apache
+- name: Configure and deploy the nabla application to apache
   hosts: apache-servers
   become: true
 
   roles:
-    - { role: web,
-       apache_listen_port: 80,
-       web_base_dir: "/var/www/~devel-test",
-       apache_owner: "jenkins",
-       apache_group: "www-data",
-       git_user: "jenkins",
-       share_user: "kgr_mvn",
-       share_group: "www-data",
-       repository: "ssh://git@scm-git-eur.misys.global.ad:7999/risk/fr-alm-site-test.git",
-       repository_version: "master",
-       }
+    - web
+
+  vars:
+      apache_listen_port: 80
+      web_base_dir: "/var/www/~devel"
+      apache_owner: "jenkins"
+      apache_group: "www-data"
+      git_user: "jenkins"
+      share_user: "jenkins"
+      share_group: "www-data"
+      repository: "git@github.com:AlbanAndrieu/nabla-site-apache.git"
+      repository_version: "master"
 
 #WARNING jenkins-master role has disabled a2dissite 000-default
 - name: Configure and deploy the nabla php sample application code to apache
-#  connection: local
   hosts: apache-servers
   become: true
 
   roles:
-    - { role: alban.andrieu.web,
-       apache_listen_port: 7075,
-       web_base_dir: "/var/www/sample",
-       #jenkins_proxy_port: "{{ apache_listen_port }}" #TODO why is it needed!!!
-       phpmyadmin_mysql_user: root,
-       phpmyadmin_mysql_password: microsoft,
-       phpmyadmin_mysql_port: "{{ apache_listen_port }}",
-       php_date_timezone: "Europe/Paris",
-       mysql_innodb_log_file_size: "5M",
-       mysql_root_username: root,
-       mysql_root_password: microsoft,
-       php_enable: no,
-       repository: "https://github.com/AlbanAndrieu/nabla-servers-bower-sample.git",
-       repository_version: "gh-pages",
-       docker_files_enable: no,
-       docker_files_generated_directory: "../roles/alban.andrieu.web",
-       }
+    - web
+
+  vars:
+      apache_listen_port: 7075,
+      web_base_dir: "/var/www/sample"
+      #jenkins_proxy_port: "{{ apache_listen_port }}" #TODO why is it needed!!!
+      phpmyadmin_mysql_user: root
+      phpmyadmin_mysql_password: microsoft
+      phpmyadmin_mysql_port: "{{ apache_listen_port }}"
+      php_date_timezone: "Europe/Paris"
+      mysql_innodb_log_file_size: "5M"
+      mysql_root_username: root
+      mysql_root_password: microsoft
+      php_enable: no
+      repository: "https://github.com/AlbanAndrieu/nabla-servers-bower-sample.git"
+      repository_version: "gh-pages"

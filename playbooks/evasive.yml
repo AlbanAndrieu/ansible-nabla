@@ -1,9 +1,8 @@
-#sudo ansible-playbook -i hosts-albandri -c local -v evasive.yml | tee setup.log
+---
 
 - name: Install evasive
   hosts: apache-servers
   remote_user: root
-#  connection: local
 
   roles:
     - role: alban.andrieu.evasive

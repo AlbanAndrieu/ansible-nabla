@@ -1,7 +1,9 @@
 ---
 #This script is used to configure your workstation (for developer)
 
-#ansible-playbook -i playbooks/hosts-albandri-test -v playbooks/workstation.yml --limit albandrieu -vvvv | tee setup.log
+#ansible-playbook -i pinventory/hosts -v playbooks/workstation.yml --limit albandrieu -vvvv | tee setup.log
+#for testing purpose
+#ansible-playbook -i inventory/hosts-albandrieu -c local -v playbooks/workstation.yml --check --diff --ask-become-pass -vvvv
 
 - hosts: all
   gather_facts: true
@@ -22,17 +24,17 @@
     - name: fail for unsupported distribution
       fail: msg="{{ ansible_distribution }} {{ ansible_distribution_version }}
                  is not a supported OS for a Tower installation.  Supported
-                 OSes include Red Hat Enterprise Linux 6/7, CentOS 6/7, or
-                 Ubuntu 12.04/13.04/14.04/16.04/17.04/18.04/19.04/19.04."
+                 OSes include Red Hat Enterprise Linux 5/6/7, CentOS 6/7, or
+                 Ubuntu 12.04/13.04/14.04/16.04/17.04/18.04/19.04."
     - debug: msg="Version {{ ansible_distribution }} {{ ansible_distribution_version }} {{ ansible_architecture }}"
 
 #- import_playbook: jenkins-full.yml workstation_enabled=true automount_enabled=true nis_enabled=true
 
 - import_playbook: maven.yml
 
-- name: Apply common configuration to all jenkins slaves
+- name: Apply workstation configuration
   hosts: workstation
-  remote_user: albandri
+#  remote_user: albandrieu
 #  connection: local
   become: true
 
@@ -62,7 +64,8 @@
     - alban.andrieu.virtualbox
 
   vars:
-      virtualbox_version: "5.1.30"
+      #virtualbox_version: "5.1.30"
+      virtualbox_version: "6.0.14-dfsg-1"
       virtualbox_package_name: virtualbox
 
 - name: Install vagrant
@@ -74,12 +77,13 @@
     - vagrant
 
   vars:
-      vagrant_version: "2.0.0"
+      vagrant_version: "2.2.7"
       vagrant_url: "https://releases.hashicorp.com/vagrant/{{ vagrant_version }}/vagrant_{{ vagrant_version }}_x86_64.deb"
 
 - name: Install locale
   hosts: locale
-
+  become: true
+  
   roles:
     - locale
 
@@ -97,35 +101,7 @@
 
 #- import_playbook: jenkins-master.yml
 
-- name: Apply solaris configuration to all nodes
-  hosts: workstation
-  gather_facts: false
-  become: true
-
-  roles:
-    - alban.andrieu.solaris
-
-  vars:
-    size: 2
-
-#- name: Register slaves to master
-#  hosts: jenkins-swarm
-#
-#  roles:
-#    - alban.andrieu.jenkins-swarm
-#
-#  vars:
-#    jenkins_slave_home: /kgr-mvn
-##    jenkins_slave_home: /kgr-mvn/Jenkins-slave/
-#    jenkins_slave_name: hostname0
-#    #jenkins_home: /jenkins
-#    jenkins_home: /data1/workspace/users/jenkins
-#    #jenkins_target_home: "/{{jenkins_target_user}}"
-#    jenkins_remote_username: admin
-#    jenkins_remote_password: admin
-#    jenkins_url: http://10.41.40.139:8380/jenkins
-#    jenkins_swarm_client_url: "http://FR1CSLFRBM0059.misys.global.ad/download/jenkins/"
-#    #jenkins_swarm_labels: "java java-medium java-small {{ ansible_os_family }}-{{ ansible_distribution_major_version }}-{{ ansible_distribution_version }}-{{ ansible_architecture }} kgrdb01"
+- import_playbook: solaris.yml
 
 # This playbook deploys a simple standalone Tomcat 7 server.
 - name: deploy Tomcat

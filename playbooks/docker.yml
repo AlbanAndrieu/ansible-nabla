@@ -33,7 +33,6 @@
     - vm
 
   roles:
-#    - geerlingguy.pip
     - geerlingguy.docker
 
   vars:

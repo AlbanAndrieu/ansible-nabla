@@ -4,6 +4,11 @@
 #localhost ansible_host=127.0.0.1 ansible_ssh_port=22 ansible_connection=ssh dtap=test comment="Hosting by Alban Andrieu" ext_id="SRV_{{ host_id }}" groups="paris misc"
 localhost ansible_user=root
 
+[all:vars]
+#ansible_connection=ssh
+#ansible_ssh_port=22
+jenkins_home=/home/jenkins
+
 #below is used only git lamp.yml
 [lamp]
 localhost
@@ -15,15 +20,16 @@ localhost
 #Same as all
 
 [administration]
-#localhost ansible_user=root
+localhost ansible_user=root
 
 [common]
 localhost ansible_user=root
 
 [hostname]
+#localhost
 
 [security]
-#localhost ansible_user=root
+localhost ansible_user=root
 
 [cmake]
 localhost ansible_user=root
@@ -58,13 +64,13 @@ localhost ansible_user=root
 #localhost ansible_user=root
 
 [nabla-servers]
-#localhost ansible_user=root
+localhost ansible_user=root
 
 [apache-servers]
-#localhost ansible_user=root
+localhost ansible_user=root
 
 [mysql-servers]
-#localhost ansible_user=root
+localhost ansible_user=root
 
 [webservers]
 #web3
@@ -74,25 +80,25 @@ localhost ansible_user=root
 localhost ansible_user=root
 
 [zabbix]
-#localhost ansible_user=root
+localhost ansible_user=root
 
 [zabbix-agent-paris]
-#localhost ansible_user=root
+localhost ansible_user=root
 
 [zabbix-agent-gdynia]
 #localhost ansible_user=root
 
 [webmin]
-#localhost ansible_user=root
+localhost ansible_user=root
 
 [zfs]
-#localhost ansible_user=root
+localhost ansible_user=root
 
 [xvbf]
 localhost ansible_user=root
 
 [jenkins-master]
-#localhost ansible_user=root
+localhost ansible_user=root
 
 [jenkins-master:vars]
 ansible_ssh_common_args='-o StrictHostKeyChecking=no'
@@ -100,21 +106,22 @@ ansible_ssh_common_args='-o StrictHostKeyChecking=no'
 [jenkins-slaves]
 localhost ansible_user=root
 
-[jenkins-slaves:vars]
-ansible_ssh_common_args='-o StrictHostKeyChecking=no'
-#jenkins_home='/jenkins'
+#[jenkins-slaves:vars]
+#ansible_ssh_common_args='-o StrictHostKeyChecking=no'
+#jenkins_home='/home/jenkins'
 
 [jenkins-swarm]
-#localhost ansible_user=root
+#localhost
 
 [jenkins-minimal]
 localhost ansible_user=root
 
 [jenkins-minimal:vars]
-ansible_ssh_common_args='-o StrictHostKeyChecking=no'
+ansible_ssh_user=jenkins
+ansible_ssh_pass=jenkins1234
 
 [opencl]
-#localhost ansible_user=root
+localhost ansible_user=root
 
 [supervisors]
 localhost ansible_user=root
@@ -123,15 +130,18 @@ localhost ansible_user=root
 localhost ansible_user=root
 
 [vagrant]
-#localhost ansible_user=root
+localhost ansible_user=root
 
 [vagrant_hosts:children]
 jenkins-master
 jenkins-slaves
 sonar
 
+[nodejs]
+localhost
+
 [docker]
-#localhost ansible_user=root
+localhost ansible_user=root
 
 [docker-container]
 #ansible_python_interpreter="/usr/bin/python3.6"
@@ -156,7 +166,7 @@ git_user="jenkins"
 localhost ansible_user=root
 
 [sonar]
-#localhost ansible_user=root
+localhost ansible_user=root
 
 [sonar:vars]
 ansible_ssh_common_args='-o StrictHostKeyChecking=no'
@@ -177,7 +187,7 @@ ansible_ssh_common_args='-o StrictHostKeyChecking=no'
 #see workstation
 
 [checkmarx]
-#localhost ansible_user=root
+#localhost
 
 [jmeter]
 #see workstation
@@ -195,11 +205,9 @@ localhost ansible_user=root
 #localhost
 
 [windows:vars]
-#ansible_user=vagrant
-#ansible_password=vagrant
-ansible_port=5986
+#ansible_port=5985 # not ssl
 ansible_connection=winrm
-#ansible_winrm_server_cert_validation=ignore
+ansible_winrm_server_cert_validation=ignore
 ansible_winrm_transport=ssl
 
 [test-boxes]
@@ -212,7 +220,7 @@ ansible_winrm_transport=ssl
 #localhost ansible_connection=local
 
 [workstation:vars]
-#user=albandri
+user=albandrieu
 #group=rms
 user=root
 group=root

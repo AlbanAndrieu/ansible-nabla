@@ -1,12 +1,11 @@
-#ansible-playbook -i hosts -v owasp-wte.yml --limit albandri --ask-become-pass -vvvv | tee setup.log
+---
 
 - name: Install OWASP tools
   hosts: workstation
   remote_user: root
-#  accelerate: true
 
   roles:
-    - { role: alban.andrieu.owasp-wte,
-        docker_files_enable: no,
-        docker_files_generated_directory: "../roles/alban.andrieu.owasp-wte"
-      }
+    - alban.andrieu.owasp-wte
+
+#  vars:
+#       private_bower_version: "1.1.9"
