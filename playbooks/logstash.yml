@@ -1,25 +1,5 @@
+---
 #sudo ansible-playbook -i hosts-albandri -c local -v logstash.yml | tee setup.log
-
-- hosts: all
-  gather_facts: true
-  tasks:
-    - name: group hosts by distribution
-      group_by: key="{{ ansible_distribution }}-{{ ansible_distribution_version }}"
-
-- hosts: RedHat-7*:RedHat-6*:CentOS-6*:Ubuntu-12.04:Ubuntu-14.04
-  gather_facts: false
-  tasks:
-    - name: group hosts for supported distributions
-      group_by: key="supported"
-
-- hosts: "!supported"
-  gather_facts: false
-  tasks:
-    - name: fail for unsupported distribution
-      fail: msg="{{ ansible_distribution }} {{ ansible_distribution_version }}
-                 is not a supported OS for a Tower installation.  Supported
-                 OSes include Red Hat Enterprise Linux 6/7, CentOS 6, or
-                 Ubuntu 12.04/14.04."
 
 #See corresponding vagrant file
 
@@ -92,7 +72,6 @@
 #       kibana_elasticsearch_url: ""
        kibana_username: kibana
        kibana_password: microsoft
-       nginx_user: root
        kibana_domain: home.nabla.mobi
        kibana_server_name: home.nabla.mobi
        es_address: http://{{ kibana_domain}}/es/

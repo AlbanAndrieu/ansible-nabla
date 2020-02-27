@@ -15,7 +15,7 @@
 
     - name: set freenas_ssh_target to default
       set_fact: freenas_ssh_target=nabla
-              
+
     - name: set freenas_ssh_host to default
       set_fact: freenas_ssh_host=192.168.1.24
 
@@ -75,19 +75,19 @@
 
 #fdisk -l /dev/sdd
 
-- hosts: jenkins-slaves
+- hosts: iscsi
   become: true
 
   tasks:
-  
+
     - name: hdd | Create vg_iscsi volume group
       command: umount /data && vgcreate vg_iscsi /dev/sdd1
       changed_when: false
       become: true
       ignore_errors: true
-      
-#pvs && vgs && lvs      
-      
+
+#pvs && vgs && lvs
+
     - name: hdd | Create sdd1
       command: pvcreate /dev/sdd1
       changed_when: false
@@ -233,23 +233,23 @@
 # sudo mkdir /workspace
 # sudo mkdir /docker
 #
- - name: hdd | Mount up device by label data
-   mount:
-     path: /data
-     src: /dev/rhel_fr1cslvcacrhel71/workspace
-     fstype: ext4
-     opts: auto
-     passno: 2
-     state: present
+    - name: hdd | Mount up device by label data
+      mount:
+        path: /data
+        src: /dev/rhel_fr1cslvcacrhel71/workspace
+        fstype: ext4
+        opts: auto
+        passno: 2
+        state: present
 
- - name: hdd | Mount up device by label
-   mount:
-     path: /docker
-     src: /dev/rhel_fr1cslvcacrhel71/docker
-     fstype: ext4
-     opts: auto
-     passno: 2
-     state: present
+    - name: hdd | Mount up device by label
+      mount:
+        path: /docker
+        src: /dev/rhel_fr1cslvcacrhel71/docker
+        fstype: ext4
+        opts: auto
+        passno: 2
+        state: present
 
 # /etc/fstab
 # /dev/rhel_fr1cslvcacrhel71/workspace /workspace ext4 auto 0 2
@@ -259,6 +259,31 @@
 # /dev/vgubuntu/workspace /workspace xfs auto 0 2
 # /dev/vgubuntu/docker /docker xfs defaults,usrquota,prjquota  0   0
 # /dev/VolGroup00/workspace /workspace ext4 auto 0 2
+
+- name: Fstab configuration
+  hosts: iscsi
+  become: true
+
+  tasks:
+    - name: set freenas_ssh_target_global to default
+      set_fact: freenas_ssh_target_global=iqn.2011-03.com.albandrieu.istgt
+
+    - name: set freenas_ssh_target to default
+      set_fact: freenas_ssh_target=nabla
+
+    - name: set freenas_ssh_host to default
+      set_fact: freenas_ssh_host=192.168.1.24
+
+    - name: set freenas_ssh_port to default
+      set_fact: freenas_ssh_port=3260
+
+    - name: Copy fstab configuration.
+      template:
+        src: fstab.j2
+        dest: "/etc/fstab"
+        owner: root
+        group: root
+        mode: 0600
 
 # Check entry in /etc/fstab
 # sudo mount /workspace

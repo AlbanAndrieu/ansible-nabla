@@ -27,7 +27,7 @@ def main():
     Result of this module needs to be recorded, so that token can be in follow-up plays.
     Typically, result can be recorded as ``result`` and retrieved back as ``result.token``,
 
-    :param str hostname: **default** *"localhost/jenkins"* -
+    :param str hostname: **default** *"albandrieu.com:8686/jenkins"* -
        full address of Jenkins server.
        If Jenkins server is not running on default route ('/'), relative route needs to be provided as well.
 
@@ -38,7 +38,7 @@ def main():
     .. code-block:: yaml
 
         jenkins_csrf_token:
-          hostname: "localhost:8383/jenkins"
+          hostname: "albandrieu.com:8686/jenkins"
           auth:
             username: "jenkins"
             password: "password"
@@ -50,7 +50,7 @@ def main():
         argument_spec={
             'hostname': {
                 'type': 'str',
-                'default': 'localhost/jenkins',
+                'default': 'albandrieu.com:8686/jenkins',
 
             },
             'auth': {

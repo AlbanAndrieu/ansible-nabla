@@ -1,5 +1,17 @@
 ---
-#sudo ansible-playbook -i hosts-albandri -c local -v nabla.yml -vvvv --ask-become-pass | tee setup.log
+#ansible-playbook -i hosts-albandrieu -c local -v playbooks/nabla.yml --check --diff --ask-become-pass -vvvv
+
+- name: Assert platform is supported
+  hosts: all
+  remote_user: root
+  gather_facts: true
+
+  tasks:
+    - name: Assert platform is supported
+      assert:
+        that:
+          - ansible_os_family in ['Debian', 'RedHat', 'CentOS', 'Windows', 'Solaris']
+          - ansible_architecture in ['x86_64']
 
 - hosts: all
   gather_facts: true
@@ -7,7 +19,7 @@
     - name: group hosts by distribution
       group_by: key="{{ ansible_distribution }}-{{ ansible_distribution_version }}"
 
-- hosts: RedHat-7*:RedHat-6*:RedHat-5*:CentOS-7*:CentOS-6*:Ubuntu-17*:Ubuntu-16*:Ubuntu-15*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
+- hosts: RedHat-7*:RedHat-6*:RedHat-5*:CentOS-7*:CentOS-6*:Ubuntu-19*:Ubuntu-18*:Ubuntu-17*:Ubuntu-16*:Ubuntu-15*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
   gather_facts: false
   tasks:
     - name: group hosts for supported distributions
@@ -19,82 +31,30 @@
     - name: fail for unsupported distribution
       fail: msg="{{ ansible_distribution }} {{ ansible_distribution_version }}
                  is not a supported OS for a Tower installation.  Supported
-                 OSes include Red Hat Enterprise Linux 6/7/5, CentOS 6, or
-                 Ubuntu 12.04/13.04/14.04/15.04/16.04/17.04."
+                 OSes include Red Hat Enterprise Linux 6/7/5, CentOS 6/7, or
+                 Ubuntu 12.04/13.04/14.04/15.04/16.04/17.04/18.04/19.04."
     - debug: msg="Version {{ ansible_distribution }} {{ ansible_distribution_version }} {{ ansible_architecture }}"
 
-- hosts: localhost
-
-  tasks:
-    - name: Install Ansible-Galaxy dependencies
-      shell: ansible-galaxy install -r requirements.yml -p ./roles/
-      #shell: ansible-galaxy install -r requirements.yml -p ./roles/ --ignore-errors --force
-      ignore_errors: yes
-
-- name: Bootstrap python onto server
-  hosts: Ubuntu-17*:Ubuntu-16*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
-#  become: true
-
-  pre_tasks:
-  - name: Install python 2 if not there
-    raw: |
-      test -e /usr/bin/python || \
-      (apt -y update && apt install -y python-simplejson)
-    register: output
-    changed_when: output.stdout|trim() != ""
-
-  - name: Install sudo if not there
-    become: true
-    raw: |
-      test -e /usr/bin/sudo || apt install -y sudo
-    register: output
-    changed_when: output.stdout|trim() != ""
-
-- name: Add repo configuration to all nodes
-  hosts: RedHat-7*:RedHat-6*:CentOS-6*
-  gather_facts: false
-  remote_user: root
-#  connection: local
-
-  roles:
-    - geerlingguy.repo-epel
-    - geerlingguy.repo-remi
-
-#- name: Apply hostname configuration
-#  hosts: all
-#  remote_user: root
-##  connection: local
+# USELESS playbook will fail before
+#- hosts: localhost
 #
-#  roles:
-#    - alban.andrieu.hostname
+#  tasks:
+#    - name: Install Ansible-Galaxy dependencies
+#      shell: ansible-galaxy install -r ../requirements.yml -p ../roles/
+#      #shell: ansible-galaxy install -r ../requirements.yml -p ../roles/ --ignore-errors --force
+#      ignore_errors: true
 
-- name: Apply common configuration to all nodes
-  hosts: Ubuntu-17*:Ubuntu-16*:Ubuntu-15*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
-  gather_facts: false
-  remote_user: root
-#  connection: local
+- import_playbook: python-bootstrap.yml
 
-  roles:
-    - alban.andrieu.common
+- import_playbook: common.yml
 
-  vars:
-       apt_notification_email: "alban.andrieu@free.fr"
-       apt_upgrade_system_enabled: no
+- import_playbook: dns.yml
 
-- include: dns.yml
+- import_playbook: python.yml
 
-#Below ntp role is included in administration role
-#- name: Apply ntp configuration to all nodes
-#  hosts: all
-#  gather_facts: false
-#  remote_user: root
-##  connection: local
-#
-#  roles:
-#    - geerlingguy.ntp
-#
-#  vars:
-#       ntp_timezone: Europe/Paris
+- import_playbook: hostname.yml
+
+- import_playbook: administration.yml automount_enabled=false nis_enabled=false
 
 #- import_playbook: firewall.yml
 
@@ -122,51 +82,6 @@
        login_umask: 077
        login_usergroups_enab: 'no'
 
-#Below cmake role is included in cpp role
-#- name: Install cmake
-#  hosts: cmake
-#  remote_user: root
-##  connection: local
-#
-#  roles:
-#    - alban.andrieu.cmake
-
-#Below scons role is included in cpp role
-#- name: Install scons
-#  hosts: scons
-#  remote_user: root
-##  connection: local
-#
-#  roles:
-#    - alban.andrieu.scons
-
-#Below gcc role is included in cpp role
-- name: Install gcc
-  hosts: gcc
-  remote_user: root
-#  connection: local
-
-  roles:
-    - alban.andrieu.gcc
-
-  vars:
-      gcc_version: "=4:4.8.2-1ubuntu6"
-      gcc_priority: 10
-
-- name: Install cpp
-  hosts: cpp
-  remote_user: root
-#  connection: local
-
-  roles:
-    - alban.andrieu.cpp
-
-  vars:
-      cppunit_version: "1.13-0"
-      boost_version: "1.54"
-
-- import_playbook: java.yml
-
 #- name: Install virtualbox
 #  hosts: virtualbox
 #  remote_user: root
@@ -191,16 +106,6 @@
        vagrant_libvirt_enabled: false
        vagrant_windows_enabled: false
 #      vagrant_url: https://dl.bintray.com/mitchellh/vagrant/vagrant_1.6.3_x86_64.deb
-
-- name: Install docker
-  hosts: docker
-  remote_user: root
-#  connection: local
-  roles:
-    - docker
-
-  vars:
-       docker_opts: "-H tcp://127.0.0.1:4243 -H unix:///var/run/docker.sock --dns 8.8.8.8 --dns 8.8.4.4 --storage-driver=overlay"
 
 - name: Install locale
   hosts: locale
@@ -227,7 +132,6 @@
 - name: Install xvbf
   hosts: xvbf
   remote_user: root
-#  connection: local
 
   roles:
     - alban.andrieu.xvbf
@@ -235,7 +139,6 @@
 - name: Install selenium
   hosts: selenium
   remote_user: root
-#  connection: local
 
   roles:
      - alban.andrieu.selenium
@@ -248,19 +151,6 @@
 #
 #  roles:
 #    - alban.andrieu.zfs
-
-#Use below only if you want your servers to be part of build farm
-- name: Apply administration configuration to all nodes
-  hosts: Ubuntu-17*:Ubuntu-16*:Ubuntu-15*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
-  gather_facts: false
-  remote_user: root
-  connection: local
-
-  roles:
-    - alban.andrieu.administration
-
-  vars:
-       ntp_timezone: Europe/Paris
 
 #Below dropbox is included in workstation role
 #- name: Install dropbox
@@ -279,26 +169,6 @@
 
 #- import_playbook: workstation.yml
 
-#- name: Apply swarm configuration to all jenkins slaves
-#  hosts: jenkins-swarm
-#  remote_user: root
-##  connection: local
-#
-#  vars_prompt:
-#  - name: jenkins_username
-#    prompt: "What is your jenkins user?"
-#    private: no
-#  - name: jenkins_password
-#    prompt: "What is your jenkins password?"
-#    private: yes
-#
-#  roles:
-#    - jenkins-swarm
-#
-#  vars:
-#       docker_files_enable: yes,
-#       docker_files_generated_directory: "../roles/alban.andrieu.jenkins-swarm",
-
 #- import_playbook: nexus.yml
 
 # This playbook deploys a simple standalone Tomcat 7 server.
@@ -315,13 +185,7 @@
 
 # This playbook deploys a simple standalone JBoss server.
 
-- name: Deploy Jboss
-  hosts: jboss-servers
-  remote_user: root
-#  connection: local
-
-  roles:
-    - alban.andrieu.jboss
+#- import_playbook: jboss.yml
 
 #- import_playbook: lamp.yml
 
@@ -347,42 +211,27 @@
        docker_files_enable: yes
        docker_files_generated_directory: "../roles/alban.andrieu.web"
 
-- name: Install pagespeed
-  hosts: apache-servers
-  remote_user: root
-#  connection: local
-  roles:
-    - role: alban.andrieu.pagespeed
+- import_playbook: pagespeed.yml
 
-  vars:
-       apache_listen_port: 7070
-       pagespeed_package_arch: "amd64"
+- import_playbook: evasive.yml
 
-- name: Install evasive
-  hosts: apache-servers
-  remote_user: root
-#  connection: local
-  roles:
-    - role: alban.andrieu.evasive
-
-  vars:
-       apache_listen_port: 7070
-
-- name: Install awstats
-  hosts: apache-servers
-  remote_user: root
-#  connection: local
-  roles:
-    - role: alban.andrieu.awstats
-
-  vars:
-       apache_listen_port: 7070
+- import_playbook: awstats.yml
 
 #- import_playbook: jenkins-master.yml
 
+- import_playbook: java.yml
+
 - import_playbook: maven.yml
 
-#- import_playbook: jenkins-slave.yml
+- import_playbook: chrome.yml google_talkplugin_enabled=false
+
+- import_playbook: docker.yml # must be before jenkins-slave
+
+- import_playbook: jenkins-slave.yml
+
+#- import_playbook: nodejs.yml
+
+- import_playbook: xvbf.yml
 
 - name: Install css
   hosts: css
@@ -392,14 +241,10 @@
   roles:
     - alban.andrieu.css
 
-- import_playbook: chrome.yml
-
-- import_playbook: nodejs.yml
-
 - name: configure supervisor
   hosts: supervisors
   remote_user: root
-#  connection: local
+
   roles:
     - role: supervisor
 
@@ -415,7 +260,7 @@
 #- name: configure supervisor
 #  hosts: supervisors
 #  remote_user: root
-##  connection: local
+#
 #  roles:
 #    - role: supervisor
 #      name: fitness
@@ -430,14 +275,13 @@
 #- name: Install conky
 #  hosts: workstation
 #  remote_user: root
-##  connection: local
+#
 #  roles:
 #    - role: alban.andrieu.conky
 
 - name: Install git
   hosts: workstation
   remote_user: root
-#  connection: local
 
   roles:
     - role: geerlingguy.git
@@ -493,33 +337,11 @@
 #      #user: "albandri"
 #      #home: "/workspace/users/albandri10"
 
-- name: Install sublimetext
-  connection: local
-  hosts: workstation
-  remote_user: root
-#  accelerate: true
-  roles:
-    - { role: alban.andrieu.sublimetext,
-      }
+- import_playbook: sublimetext.yml
 
-#- name: Install zap
-#  connection: local
-#  hosts: workstation
-#  remote_user: root
-#
-#  roles:
-#    - role: alban.andrieu.zap
-#
-#  vars:
-#      docker_files_generated_directory: "../roles/alban.andrieu.zap"
-#      docker_files_enable: yes
+- import_playbook: zap.yml
 
-- name: Install jmeter
-  connection: local
-  hosts: workstation
-  remote_user: root
-  roles:
-    - role: alban.andrieu.jmeter
+- import_playbook: jmeter.yml
 
 #- name: Install mon
 #  hosts: workstation
@@ -538,30 +360,8 @@
 #      user: root
 #      home: "/root"
 
-- name: Install jdiskreport
-  connection: local
-  hosts: workstation
-  remote_user: root
-#  accelerate: true
+- import_playbook: jdiskreport.yml
 
-  roles:
-    - { role: alban.andrieu.jdiskreport,
-      }
+- import_playbook: private-bower.yml
 
-- name: Install private-bower
-  connection: local
-  hosts: workstation
-  remote_user: root
-#  accelerate: true
-  roles:
-    - { role: alban.andrieu.private-bower,
-      }
-
-- name: Install OWASP tools
-  connection: local
-  hosts: workstation
-  remote_user: root
-#  accelerate: true
-  roles:
-    - { role: alban.andrieu.owasp-wte,
-      }
+- import_playbook: owasp-wte.yml

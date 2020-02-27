@@ -1,17 +1,16 @@
-#ansible-playbook -i hosts-albandri -c local -v jmeter.yml -vvvv --ask-become-pass | tee setup.log
+---
 
 - name: Install jmeter
   connection: local
   hosts: workstation
-#  remote_user: root
-#  accelerate: true
 
   roles:
-    - { role: alban.andrieu.jmeter,
-        jmeter_plugins_standard_enabled: yes,
-        jmeter_plugins_extras_enabled: yes,
-        jmeter_plugins_extraslibs_enabled: yes,
-        jmeter_plugins_webdriver_enabled: yes,
-        jmeter_plugins_hadoop_enabled: no,
-        jmeter_serveragent_enabled: yes,
-      }
+    - role: alban.andrieu.zap
+
+  vars:
+      jmeter_plugins_standard_enabled: yes
+      jmeter_plugins_extras_enabled: yes
+      jmeter_plugins_extraslibs_enabled: yes
+      jmeter_plugins_webdriver_enabled: yes
+      jmeter_plugins_hadoop_enabled: no
+      jmeter_serveragent_enabled: yes

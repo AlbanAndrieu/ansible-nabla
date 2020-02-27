@@ -1,4 +1,4 @@
-#ansible-playbook -i inventory/hosts -c local -v playbooks/private-bower.yml --ask-become-pass  | tee setup.log
+---
 
 - name: Install private-bower
   hosts: workstation

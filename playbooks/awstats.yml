@@ -1,12 +1,11 @@
-#sudo ansible-playbook -i hosts-albandri -c local -v awstats.yml | tee setup.log
+---
 
 - name: Install awstats
   hosts: apache-servers
   remote_user: root
-#  connection: local
 
   roles:
     - role: alban.andrieu.awstats
 
   vars:
-       apache_listen_port: 7070
+      apache_listen_port: 7070

@@ -20,14 +20,14 @@
   - name: Install docker repo
     raw: |
       curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-      
+
   - name: Install docker repo
     raw: |
       add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable edge"
-    
+
 - name: Install docker
   hosts: Ubuntu-19*:Ubuntu-18*:Ubuntu-17*:Ubuntu-16*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
-  #hosts: docker  
+  #hosts: docker
   become: true
   tags:
     - vm
@@ -80,7 +80,7 @@
     docker_version: 19.03.6
     docker_package: "docker-{{ docker_edition }}-{{ docker_version }}" # CentOS
     #docker_package: "docker-{{ docker_edition }}={{ docker_version }}" # Ubuntu
-  
+
 - hosts: docker
   become: true
   tags:
@@ -109,4 +109,3 @@
           state=present
       become: true
       ignore_errors: true
-

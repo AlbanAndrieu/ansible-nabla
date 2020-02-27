@@ -1,5 +1,6 @@
 [MASTER]
 jobs=4
+load-plugins=pylint_junit
 
 [MESSAGES CONTROL]
 confidence=

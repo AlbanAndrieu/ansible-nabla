@@ -24,9 +24,10 @@ env:
 sudo: required
 #dist: trusty
 dist: bionic
+
 branches:
   only:
-   - master
+  - master
 virtualenv:
   system_site_packages: false
 before_install:
@@ -65,17 +66,16 @@ script:
   - echo "${ANSIBLE_VAULT_PASS}" > vault.passwd
 
   # Check the role/playbook's syntax.
-  - ansible-playbook --syntax-check -i inventory/hosts ./playbooks/nabla.yml --connection=local -e "python_versions=[2.7]" -e "docker_gid=${DOCKER_GID}" -e "jenkins_id=${JENKINS_UID}" -e "git_user=root" --skip-tags restart
+  - ansible-playbook --syntax-check -i inventory/hosts playbooks/nabla.yml --connection=local -e "python_versions=[2.7]" -e "jenkins_group=docker" -e "docker_gid=${DOCKER_GID}" -e "jenkins_id=${JENKINS_UID}" -e "git_user=root" --skip-tags restart
 
   # First run
   # Run the role/playbook with ansible-playbook.
-#  - travis_wait 30
-  - ansible-playbook -i inventory/hosts ./playbooks/nabla.yml --connection=local -e "python_versions=[2.7]"  -e "docker_gid=${DOCKER_GID}" -e "jenkins_id=${JENKINS_UID}" -e "git_user=root" --skip-tags restart
+  - travis_wait 30 ansible-playbook -i inventory/hosts playbooks/nabla.yml --connection=local -e "python_versions=[2.7]" -e "jenkins_group=docker" -e "docker_gid=${DOCKER_GID}" -e "jenkins_id=${JENKINS_UID}" -e "git_user=root" --skip-tags restart
 
   # Second run Idempotence test
   # Run the role/playbook again, checking to make sure it's idempotent.
 #  - >
-#    ansible-playbook -i ./playbooks/hosts ./playbooks/nabla.yml --connection=local  -e "python_versions=[2.7]"  -e "git_user=root"
+#    ansible-playbook -i inventory/hosts ./playbooks/nabla.yml --connection=local  -e "python_versions=[2.7]" -e "git_user=root"
 #    | grep -q 'changed=0.*failed=0'
 #    && (echo 'Idempotence test: pass' && exit 0)
 #    || (echo 'Idempotence test: fail' && exit 1)
