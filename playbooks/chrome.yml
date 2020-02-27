@@ -1,7 +1,4 @@
 ---
-#This script is used to configure your workstation (for developer)
-
-#ansible-playbook -i playbooks/hosts -v playbooks/chrome.yml --limit albandrieu -vvvv | tee setup.log
 
 - name: Install chrome
   hosts: chrome

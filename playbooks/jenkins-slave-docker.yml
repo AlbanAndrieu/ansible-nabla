@@ -51,7 +51,7 @@
 #      shell: ansible-galaxy install -r ../requirements.yml -p ../roles/
 #      #shell: ansible-galaxy install -r ../requirements.yml -p ../roles/ --ignore-errors --force
 #      ignore_errors: true
-      
+
 - import_playbook: python-bootstrap.yml
 
 - import_playbook: common.yml
@@ -61,7 +61,7 @@
 - import_playbook: python.yml
 
 #Below ntp role is included in administration role
-- name: Apply ntp configuration to all nodes
+- name: Apply ntp configuration
   hosts: all
   gather_facts: false
   remote_user: root
@@ -93,13 +93,15 @@
 
 - import_playbook: chrome.yml google_talkplugin_enabled=false
 
+- import_playbook: docker.yml # must be before jenkins-slave
+
 - import_playbook: jenkins-slave.yml
+
+- import_playbook: nodejs.yml
 
 #- import_playbook: cpp.yml
 
 #- import_playbook: certificate.yml
-
-#- import_playbook: docker.yml
 
 - import_playbook: xvbf.yml
 
