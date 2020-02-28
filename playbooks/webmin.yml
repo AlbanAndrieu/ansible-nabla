@@ -6,7 +6,7 @@
 #  accelerate: true
 
   roles:
-    - { role: alban.andrieu.webmin,
-        docker_files_enable: yes,
-        docker_files_generated_directory: "../roles/alban.andrieu.webmin"
-      }
+    - alban.andrieu.webmin
+
+#  vars:
+#   jenkins_home=/home/jenkins

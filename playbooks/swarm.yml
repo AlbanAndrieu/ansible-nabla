@@ -1,0 +1,18 @@
+
+#- name: Register slaves to master
+#  hosts: jenkins-swarm
+#
+#  roles:
+#    - alban.andrieu.jenkins-swarm
+#
+#  vars:
+#    jenkins_slave_home: /media/jenkins-slave/
+#    jenkins_slave_name: hostname0
+#    #jenkins_home: /jenkins
+#    jenkins_home=/home/jenkins
+#    #jenkins_target_home: "/{{jenkins_target_user}}"
+#    jenkins_remote_username: admin
+#    jenkins_remote_password: admin
+#    jenkins_url: http://10.41.40.139:8686/jenkins
+#    jenkins_swarm_client_url: "http://albandrieu.com/download/jenkins/"
+#    #jenkins_swarm_labels: "java java-medium java-small {{ ansible_os_family }}-{{ ansible_distribution_major_version }}-{{ ansible_distribution_version }}-{{ ansible_architecture }} kgrdb01"

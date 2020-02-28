@@ -1,28 +1,105 @@
 ---
 
-#ansible-playbook playbooks/hdd.yml -i inventory/production --limit FR1CSLFRBM0085.misys.global.ad,FR1CSLFRBM0086.misys.global.ad -vvvv
+#ansible-playbook playbooks/hdd.yml -i inventory/production --limit albandrieu.albandrieu.com -vvvv
 
 # WARNING below order is important
 
 #TODO reboot if you do not see sdb
+- name: Iscsi configuration
+  hosts: iscsi
+  become: true
 
-- hosts: jenkins-slaves
+  tasks:
+    - name: set freenas_ssh_target_global to default
+      set_fact: freenas_ssh_target_global=iqn.2011-03.com.albandrieu.istgt
+
+    - name: set freenas_ssh_target to default
+      set_fact: freenas_ssh_target=nabla
+
+    - name: set freenas_ssh_host to default
+      set_fact: freenas_ssh_host=192.168.1.24
+
+    - name: set freenas_ssh_port to default
+      set_fact: freenas_ssh_port=3260
+
+    - name: Copy isci configuration.
+      template:
+        src: iscsid.conf.j2
+        dest: "/etc/iscsi/iscsid.conf"
+        owner: root
+        group: root
+        mode: 0600
+#      notify: restart iscsi
+
+#    - name: Copy isci configuration.
+#      template:
+#        src: 192.168.1.24,3260.j2
+#        dest: "/etc/iscsi/nodes/{{ freenas_ssh_target_global }}\:{{ freenas_ssh_target }}/{{ freenas_ssh_host }}\,{{ freenas_ssh_port }}"
+#        owner: root
+#        group: root
+#        mode: 0600
+##      notify: restart iscsi
+# systemctl restart open-iscsi
+
+# TODO target albandri albandrieu
+
+# See https://www.tecmint.com/create-luns-using-lvm-in-iscsi-target/
+#fdisk -c /dev/sdd
+#Welcome to fdisk (util-linux 2.31.1).
+#Changes will remain in memory only, until you decide to write them.
+#Be careful before using the write command.
+#
+#Device does not contain a recognized partition table.
+#Created a new DOS disklabel with disk identifier 0x06091fe8.
+#
+#Command (m for help): n
+#Partition type
+#   p   primary (0 primary, 0 extended, 4 free)
+#   e   extended (container for logical partitions)
+#Select (default p): p
+#Partition number (1-4, default 1):
+#First sector (2048-4194303, default 2048):
+#Last sector, +sectors or +size{K,M,G,T,P} (2048-4194303, default 4194303):
+#
+#Created a new partition 1 of type 'Linux' and of size 2 GiB.
+#
+#Command (m for help): w
+#The partition table has been altered.
+#Calling ioctl() to re-read partition table.
+#Syncing disks.
+
+#lsblk
+#mkfs.ext4 /dev/sdd1
+#sudo mkdir /data
+#mount /dev/sdd1 /data
+
+#fdisk -l /dev/sdd
+
+- hosts: iscsi
   become: true
 
   tasks:
 
-    - name: hdd | Create sdb
-      command: pvcreate /dev/sdb
+    - name: hdd | Create vg_iscsi volume group
+      command: umount /data && vgcreate vg_iscsi /dev/sdd1
       changed_when: false
       become: true
       ignore_errors: true
 
-    - name: hdd | Extend sdb
-      command: vgextend fr1vslub1604-vg /dev/sdb
-      when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and ansible_distribution_version not in ['12.04', '14.04']
+#pvs && vgs && lvs
+
+    - name: hdd | Create sdd1
+      command: pvcreate /dev/sdd1
       changed_when: false
       become: true
       ignore_errors: true
+
+#    - name: hdd | Extend sdb
+#      command: vgextend vgubuntu /dev/sdb
+#      when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and ansible_distribution_version not in ['12.04', '14.04']
+#      changed_when: false
+#      become: true
+#      ignore_errors: true
 
     - name: hdd | Extend sdb
       command: vgextend VolGroup00 /dev/sdb
@@ -46,14 +123,14 @@
       ignore_errors: true
 
     - name: hdd | Create workspace filesystem
-      command: lvcreate -l 12805 -n workspace fr1vslub1604-vg
+      command: lvcreate -L 500G -n workspace vg_iscsi
       when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and ansible_distribution_version not in ['12.04', '14.04']
       changed_when: false
       become: true
       ignore_errors: true
 
     - name: hdd | Create docker filesystem
-      command: lvcreate -l 12794 -n docker fr1vslub1604-vg
+      command: lvcreate -L 100G -n docker vg_iscsi
       when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and ansible_distribution_version not in ['12.04', '14.04']
       changed_when: false
       become: true
@@ -94,15 +171,15 @@
       become: true
       ignore_errors: true
 
-    - name: hdd | Make workspace filesystem xfs
-      command: mkfs -t xfs /dev/fr1vslub1604-vg/workspace
+    - name: hdd | Make workspace filesystem ext4
+      command: mkfs -t ext4 /dev/vg_iscsi/workspace
       when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and ansible_distribution_version not in ['12.04', '14.04']
       changed_when: false
       become: true
       ignore_errors: true
 
-    - name: hdd | Make docker filesystem xfs
-      command: mkfs -t xfs /dev/fr1vslub1604-vg/docker
+    - name: hdd | Make docker filesystem ext4
+      command: mkfs -t ext4 /dev/vg_iscsi/docker
       when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and ansible_distribution_version not in ['12.04', '14.04']
       changed_when: false
       become: true
@@ -143,7 +220,6 @@
       become: true
       ignore_errors: true
 
-#
 # lvcreate -l 12805 -n workspace rhel_fr1cslvcacrhel71
 # lvcreate -l 12805 -n docker rhel_fr1cslvcacrhel71
 #
@@ -157,32 +233,57 @@
 # sudo mkdir /workspace
 # sudo mkdir /docker
 #
-# - name: hdd | Mount up device by label
-#   mount:
-#     path: /workspace
-#     src: /dev/rhel_fr1cslvcacrhel71/workspace
-#     fstype: ext4
-#     opts: auto
-#     passno: 2
-#     state: present
-#
-# - name: hdd | Mount up device by label
-#   mount:
-#     path: /docker
-#     src: /dev/rhel_fr1cslvcacrhel71/docker
-#     fstype: ext4
-#     opts: auto
-#     passno: 2
-#     state: present
+    - name: hdd | Mount up device by label data
+      mount:
+        path: /data
+        src: /dev/rhel_fr1cslvcacrhel71/workspace
+        fstype: ext4
+        opts: auto
+        passno: 2
+        state: present
+
+    - name: hdd | Mount up device by label
+      mount:
+        path: /docker
+        src: /dev/rhel_fr1cslvcacrhel71/docker
+        fstype: ext4
+        opts: auto
+        passno: 2
+        state: present
 
 # /etc/fstab
 # /dev/rhel_fr1cslvcacrhel71/workspace /workspace ext4 auto 0 2
 # /dev/rhel_fr1cslvcacrhel71/docker /docker ext4 auto 0 2
 # /dev/rhel_fr1cslvcacrhel71/workspace /workspace xfs auto 0 2
 # /dev/rhel_fr1cslvcacrhel71/docker /docker xfs defaults,usrquota,prjquota  0   0
-# /dev/fr1vslub1604-vg/workspace /workspace xfs auto 0 2
-# /dev/fr1vslub1604-vg/docker /docker xfs defaults,usrquota,prjquota  0   0
+# /dev/vgubuntu/workspace /workspace xfs auto 0 2
+# /dev/vgubuntu/docker /docker xfs defaults,usrquota,prjquota  0   0
 # /dev/VolGroup00/workspace /workspace ext4 auto 0 2
+
+- name: Fstab configuration
+  hosts: iscsi
+  become: true
+
+  tasks:
+    - name: set freenas_ssh_target_global to default
+      set_fact: freenas_ssh_target_global=iqn.2011-03.com.albandrieu.istgt
+
+    - name: set freenas_ssh_target to default
+      set_fact: freenas_ssh_target=nabla
+
+    - name: set freenas_ssh_host to default
+      set_fact: freenas_ssh_host=192.168.1.24
+
+    - name: set freenas_ssh_port to default
+      set_fact: freenas_ssh_port=3260
+
+    - name: Copy fstab configuration.
+      template:
+        src: fstab.j2
+        dest: "/etc/fstab"
+        owner: root
+        group: root
+        mode: 0600
 
 # Check entry in /etc/fstab
 # sudo mount /workspace

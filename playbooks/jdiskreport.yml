@@ -1,10 +1,9 @@
-#sudo ansible-playbook -i hosts-albandri -c local -v jdiskreport.yml | tee setup.log
+---
 
 - name: Install jdiskreport
   hosts: workstation
-#  remote_user: root
-#  accelerate: true
-
   roles:
-    - { role: alban.andrieu.jdiskreport,
-      }
+    - role: alban.andrieu.jdiskreport
+
+#  vars:
+#       apache_listen_port: 7070

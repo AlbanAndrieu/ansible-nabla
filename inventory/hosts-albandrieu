@@ -171,12 +171,15 @@ ansible_ssh_common_args='-o StrictHostKeyChecking=no'
 #see workstation
 
 [eclipse]
-albandrieu ansible_host=10.41.40.40 ansible_user="root" ansible_password="Banbou07" jenkins_home=/jenkins jenkins_id=1001 jenkins_gid=1006 docker_gid=1007 data_gid=33 dtap=dev comment="Hosting by Alban Andrieu"
+albandrieu ansible_host=10.41.40.52 ansible_user="root" ansible_password="Banbou07" jenkins_home=/jenkins jenkins_id=1001 jenkins_gid=1006 docker_gid=1007 data_gid=33 dtap=dev comment="Hosting by Alban Andrieu"
 
 [logstash]
 albandrieu
 
 [collectd]
+albandrieu
+
+[iscsi]
 albandrieu
 
 [windows]

@@ -7,7 +7,7 @@ if [ -n "${TARGET_SLAVE}" ]; then
   echo -e "${green} TARGET_SLAVE is defined ${happy_smiley} : ${TARGET_SLAVE} ${NC}"
 else
   echo -e "${red} ${double_arrow} Undefined build parameter ${head_skull} : TARGET_SLAVE, use the default one ${NC}"
-  export TARGET_SLAVE=albandri
+  export TARGET_SLAVE=test.albandrieu.com
   echo -e "${magenta} TARGET_SLAVE : ${TARGET_SLAVE} ${NC}"
 fi
 
@@ -39,7 +39,7 @@ if [ -n "${ANSIBLE_INVENTORY}" ]; then
   echo -e "${green} ANSIBLE_INVENTORY is defined ${happy_smiley} : ${ANSIBLE_INVENTORY} ${NC}"
 else
   echo -e "${red} ${double_arrow} Undefined build parameter ${head_skull} : ANSIBLE_INVENTORY, use the default one ${NC}"
-  export ANSIBLE_INVENTORY="production"
+  export ANSIBLE_INVENTORY="inventory/production"
   echo -e "${magenta} ANSIBLE_INVENTORY : ${ANSIBLE_INVENTORY} ${NC}"
 fi
 

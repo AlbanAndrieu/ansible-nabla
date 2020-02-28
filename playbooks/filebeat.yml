@@ -1,3 +1,6 @@
+---
+
+#ansible-playbook -i inventory/production -v playbooks/filebeat.yml --limit albandri -vvvv | tee setup.log
 
 - name: Install filebeat
   hosts: jenkins-master
@@ -39,11 +42,11 @@
   vars:
     filebeat_output_elasticsearch_hosts:
 #      - "localhost:9200"
-      - "150.151.160.25:9200"
+      - "192.168.1.24:9200"
 
     filebeat_output_logstash_hosts:
 #      - "localhost:5044"
-      - "150.151.160.25:5044"
+      - "192.168.1.24:5044"
 
     filebeat_prospectors:
       - input_type: log
@@ -57,3 +60,23 @@
     filebeat_log_level: info
     filebeat_log_dir: /var/log/filebeat
     filebeat_log_filename: info.log
+
+- name: Override filebeat.yml
+  hosts: jenkins-slaves
+  become: true
+
+  tasks:
+    - name: set filebeat_ssh_host to default
+      set_fact: filebeat_ssh_host=192.168.1.24
+
+    - name: set filebeat_ssh_port to default
+      set_fact: filebeat_ssh_port=9200
+
+    - name: Copy Filebeat configuration.
+      template:
+        src: filebeat.yml.j2
+        dest: "/etc/filebeat/filebeat.yml"
+        owner: root
+        group: root
+        mode: 0644
+#      notify: restart filebeat

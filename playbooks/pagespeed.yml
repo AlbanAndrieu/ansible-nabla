@@ -1,12 +1,12 @@
-#sudo ansible-playbook -i hosts-albandri -c local -v pagespeed.yml | tee setup.log
+---
 
 - name: Install pagespeed
   hosts: apache-servers
   remote_user: root
-#  connection: local
 
   roles:
     - role: alban.andrieu.pagespeed
 
   vars:
        apache_listen_port: 7070
+       pagespeed_package_arch: "amd64"

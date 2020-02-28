@@ -4,16 +4,13 @@
 WORKING_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}"  )" && pwd  )"
 
 # source only if terminal supports color, otherwise use unset color vars
-# shellcheck source=/dev/null
-tput colors && source "${WORKING_DIR}/step-0-color.sh"
-
-#mkdir ./target/ || true
-#cp ${WORKING_DIR}/target/test.war ./target/
+# shellcheck source=./script/step-0-color.sh
+source "${WORKING_DIR}/step-0-color.sh"
 
 # shellcheck disable=SC2154
 echo -e "${magenta} Building TEST runtime image ${NC}"
 # shellcheck disable=SC2154
-echo -e "${green} pip install docker-compose==1.23.2 ${NC}"
+echo -e "${green} pip install docker-compose==1.25.0 ${NC}"
 
 if [ -n "${DOCKER_BUILD_ARGS}" ]; then
   # shellcheck disable=SC2154
@@ -67,7 +64,7 @@ else
   echo -e "${magenta} DOCKER_FILE : ${DOCKER_FILE} ${NC}"
 fi
 
-readonly DOCKER_REGISTRY=${DOCKER_REGISTRY:-"https://hub.docker.com/"}
+readonly DOCKER_REGISTRY=${DOCKER_REGISTRY:-"hub.docker.com/"}
 readonly DOCKER_ORGANISATION=${DOCKER_ORGANISATION:-"nabla"}
 readonly DOCKER_USERNAME=${DOCKER_USERNAME:-""}
 export DOCKER_NAME=${DOCKER_NAME:-"ansible-jenkins-slave-docker"}

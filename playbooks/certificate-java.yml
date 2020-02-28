@@ -23,13 +23,13 @@
 #      java_certificate_port: 8999
 
     - role: java-certificate
-      ignore_errors: yes
+      ignore_errors: true
       java_path: "/usr/java/latest/"
       java_certificate_host: google.com
       java_certificate_port: 443
 
     - role: java-certificate
-      ignore_errors: yes
+      ignore_errors: true
       java_path: "/usr/java/latest/"
       java_certificate_host: github.com
       java_certificate_port: 443
@@ -43,33 +43,41 @@
 
 # Default standard oracle java 8
     - role: java-certificate
-      ignore_errors: yes
+      ignore_errors: true
       java_path: "/usr/lib/jvm/java-8-oracle/"
       java_certificate_host: google.com
       java_certificate_port: 443
 
     - role: java-certificate
-      ignore_errors: yes
+      ignore_errors: true
       java_path: "/usr/lib/jvm/java-8-oracle/"
-      java_certificate_host: github.com
-      java_certificate_port: 443
-
-# Default standard oracle java 7
-    - role: java-certificate
-      ignore_errors: yes
-      java_path: "/usr/lib/jvm/java-7-oracle/"
-      java_certificate_host: google.com
-      java_certificate_port: 443
-
-    - role: java-certificate
-      ignore_errors: yes
-      java_path: "/usr/lib/jvm/java-7-oracle/"
       java_certificate_host: github.com
       java_certificate_port: 443
 
 # Dependency check
     - role: java-certificate
-      ignore_errors: yes
+      ignore_errors: true
       java_path: "/usr/lib/jvm/java-8-oracle/"
+      java_certificate_host: api.nodesecurity.io
+      java_certificate_port: 443
+
+# Default standard openjdk java 8
+# /usr/lib/jvm/java-8-openjdk-amd64/ java-openjdk
+    - role: java-certificate
+      ignore_errors: true
+      java_path: "/usr/lib/jvm/java-openjdk"
+      java_certificate_host: google.com
+      java_certificate_port: 443
+
+    - role: java-certificate
+      ignore_errors: true
+      java_path: "/usr/lib/jvm/java-openjdk"
+      java_certificate_host: github.com
+      java_certificate_port: 443
+
+# Dependency check
+    - role: java-certificate
+      ignore_errors: true
+      java_path: "/usr/lib/jvm/java-openjdk"
       java_certificate_host: api.nodesecurity.io
       java_certificate_port: 443

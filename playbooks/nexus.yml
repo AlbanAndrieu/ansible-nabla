@@ -1,26 +1,5 @@
-#sudo ansible-playbook -i hosts-albandri -c local -v nexus.yml -vvvv | tee setup.log
-
-- hosts: all
-  gather_facts: true
-  tasks:
-    - name: group hosts by distribution
-      group_by: key="{{ ansible_distribution }}-{{ ansible_distribution_version }}"
-
-- hosts: RedHat-7*:RedHat-6*:RedHat-5*:CentOS-7*:CentOS-6*:Ubuntu-17*:Ubuntu-16*:Ubuntu-15*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
-  gather_facts: false
-  tasks:
-    - name: group hosts for supported distributions
-      group_by: key="supported"
-
-- hosts: "!supported"
-  gather_facts: false
-  tasks:
-    - name: fail for unsupported distribution
-      fail: msg="{{ ansible_distribution }} {{ ansible_distribution_version }}
-                 is not a supported OS for a Tower installation.  Supported
-                 OSes include Red Hat Enterprise Linux 6/7/5, CentOS 6, or
-                 Ubuntu 12.04/13.04/14.04/15.04/16.04/17.04."
-    - debug: msg="Version {{ ansible_distribution }} {{ ansible_distribution_version }} {{ ansible_architecture }}"
+---
+# sudo ansible-playbook -i hosts-albandri -c local -v playbooks/nexus.yml -vvvv | tee setup.log
 
 - name: Install nexus
   hosts: nexus
@@ -31,7 +10,7 @@
 
   vars:
       nexus_home: "/usr/local/{{nexus_user}}"
-      #nexus_version: "2.7.1"
+      #nexus_version: "3.21.1-01"
 
       ## Repositories Section
       nexus_repositories :
@@ -215,7 +194,7 @@
            indexable                                       : "true"
            searchable                                      : "true"
            localStorage                                    : "file"
-           remoteStorage                                   : "http://home.nabla.mobi:8085/nexus/content/groups/public/"
+           remoteStorage                                   : "http://albandrieu.com:8081/nexus/content/groups/public/"
            externalConfiguration_proxyMode                 : "ALLOW"
            externalConfiguration_artifactMaxAge            : "1440"
            externalConfiguration_itemMaxAge                : "1440"
@@ -238,7 +217,7 @@
            indexable                                       : "true"
            searchable                                      : "true"
            localStorage                                    : "file"
-           remoteStorage                                   : "http://home.nabla.mobi:8085/nexus/content/repositories/releases/"
+           remoteStorage                                   : "http://albandrieu.com:8081/nexus/content/repositories/releases/"
            externalConfiguration_proxyMode                 : "ALLOW"
            externalConfiguration_artifactMaxAge            : "1440"
            externalConfiguration_itemMaxAge                : "1440"
@@ -261,7 +240,7 @@
            indexable                                       : "true"
            searchable                                      : "true"
            localStorage                                    : "file"
-           remoteStorage                                   : "http://home.nabla.mobi:8085/nexus/content/repositories/snapshots/"
+           remoteStorage                                   : "http://albandrieu.com:8081/nexus/content/repositories/snapshots/"
            externalConfiguration_proxyMode                 : "ALLOW"
            externalConfiguration_artifactMaxAge            : "1440"
            externalConfiguration_itemMaxAge                : "1440"

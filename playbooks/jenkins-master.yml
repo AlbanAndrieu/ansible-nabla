@@ -20,7 +20,7 @@
       docker_files_generated_directory: "../roles/jenkins-master"
       jenkins_proxy: apache
       jenkins_user: jenkins
-      jenkins_version: 2.150.2
+      jenkins_version: 2.190.3
       jenkins_proxy_hostname: localhost
 #      jenkins_ssh_key_file: "{{resources_to}}/resources/jenkins/ssh_key"    # (you can manage remote files with Stouts.resources role)
       jenkins_ssh_key_file: "~/.ssh/id_rsa"
@@ -185,7 +185,6 @@
         - "checkstyle"
         - "mttr"
         - "ssh-slaves"
-        - "swarm"
         - "ssh-credentials"
         - "Exclusion"
         - "subversion"

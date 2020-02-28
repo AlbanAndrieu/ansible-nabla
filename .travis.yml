@@ -6,7 +6,10 @@ python:
 #  - 3.4
 #  - 3.5
   - 3.6
+services:
+  - docker
 cache:
+  bundler:
   directories:
     - $HOME/.cache/pip
 env:
@@ -17,16 +20,20 @@ env:
     - secure: TGUihI8NZudZK09yhYmP3DF2YarY4d9ljgm+sArpvc7Ga7NvU7A2GxJm6KJ6ZAxBd/K+R89vo6fRWQma4ZFOjbi/TLabDgWJVD+aabhY5n1gPBDuoz/N7At3v4Ws1qD4M3Bj8+ds+ye1q+0MEDy+AYko8+UUhgLEvsbGUI9d4PY=
   matrix:
 #  - ANSIBLE_VERSION=latest
-    - ANSIBLE_VERSION=2.7.2
+    - ANSIBLE_VERSION=2.7.14
 sudo: required
-dist: trusty
+#dist: trusty
+dist: bionic
+
 branches:
   only:
-    - master
+  - master
+virtualenv:
+  system_site_packages: false
 before_install:
- - sudo apt-get update -qq
- - sudo apt-get install -qq python-apt python-pycurl
- - sudo apt-get install -qq curl
+  - sudo apt-get update -qq
+  - sudo apt-get install -qq python-apt python-pycurl
+  - sudo apt-get install -qq curl
 install:
   # Install Ansible.
   - if [ "$ANSIBLE_VERSION" = "latest" ]; then pip install ansible; else pip install ansible==$ANSIBLE_VERSION; fi
@@ -42,10 +49,10 @@ install:
 script:
   # Check ansible version
   - ansible --version
-  #- export ANSIBLE_ROLES_PATH="../"
 
   # Add ansible.cfg to pick up roles path.
   #- "{ echo '[defaults]'; echo 'roles_path = ./roles'; } >> ansible.cfg"
+  #- export ANSIBLE_ROLES_PATH="../"
 
   # Prepare tests
   # Add user jenkins to the image
@@ -56,18 +63,19 @@ script:
   # Set password for the jenkins user (you may want to alter this).
 #  - sudo echo "jenkins:jenkins1234" | sudo chpasswd
 
+  - echo "${ANSIBLE_VAULT_PASS}" > vault.passwd
+
   # Check the role/playbook's syntax.
-  - ansible-playbook --syntax-check -i ./playbooks/hosts ./playbooks/nabla.yml --connection=local -e "python_versions=[2.7]" -e "docker_gid=${DOCKER_GID}" -e "jenkins_id=${JENKINS_UID}" -e "git_user=root" --skip-tags restart
+  - ansible-playbook --syntax-check -i inventory/hosts playbooks/nabla.yml --connection=local -e "python_versions=[2.7]" -e "jenkins_group=docker" -e "docker_gid=${DOCKER_GID}" -e "jenkins_id=${JENKINS_UID}" -e "git_user=root" --skip-tags restart
 
   # First run
   # Run the role/playbook with ansible-playbook.
-#  - travis_wait 30
-  - ansible-playbook -i ./playbooks/hosts ./playbooks/nabla.yml --connection=local -e "python_versions=[2.7]"  -e "docker_gid=${DOCKER_GID}" -e "jenkins_id=${JENKINS_UID}" -e "git_user=root" --skip-tags restart
+  - travis_wait 30 ansible-playbook -i inventory/hosts playbooks/nabla.yml --connection=local -e "python_versions=[2.7]" -e "jenkins_group=docker" -e "docker_gid=${DOCKER_GID}" -e "jenkins_id=${JENKINS_UID}" -e "git_user=root" --skip-tags restart
 
   # Second run Idempotence test
   # Run the role/playbook again, checking to make sure it's idempotent.
 #  - >
-#    ansible-playbook -i ./playbooks/hosts ./playbooks/nabla.yml --connection=local  -e "python_versions=[2.7]"  -e "git_user=root"
+#    ansible-playbook -i inventory/hosts ./playbooks/nabla.yml --connection=local  -e "python_versions=[2.7]" -e "git_user=root"
 #    | grep -q 'changed=0.*failed=0'
 #    && (echo 'Idempotence test: pass' && exit 0)
 #    || (echo 'Idempotence test: fail' && exit 1)
@@ -76,14 +84,10 @@ script:
 #  - sudo /etc/init.d/nexus status || exit 1
 #  - sudo /etc/init.d/mon status || exit 1
 
-  # Test whether server is running correctly.
-#  - curl http://localhost/
-
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
   email:
     recipients:
       - alban.andrieu@nabla.mobi
-#      - other@example.com
-    on_success: [always|never|change] # default: change
-    on_failure: [always|never|change] # default: always
+    on_success: [always|never|change]         # default: change
+    on_failure: [always|never|change]         # default: always

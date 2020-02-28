@@ -1,12 +1,6 @@
 ---
 
-#- name: Apply nfs configuration to all nodes
-#  hosts: RedHat-7*:RedHat-6*:RedHat-5*:CentOS-6*:Ubuntu-12*:Ubuntu-13*:Ubuntu-14*
-#  gather_facts: false
-#  remote_user: root
-#
-#  roles:
-#    - geerlingguy.nfs
+- import_playbook: networkfilesystem.yml
 
 - name: Apply administration configuration to all nodes
   hosts: administration
@@ -19,13 +13,26 @@
   vars:
 #      automount_enabled: true
 #      nis_enabled: true
-      nisserver: nissrv01
-      mailserver: smtp.nabla.mobi
-      defaultdomain: home.nabla.mobi
+      nisserver: nabla
+      mailserver: smtp.gmail.com
+      defaultdomain: albandrieu.com
       mountpoints: {
-       /nabla/dev                  : "nabla-nfs:/nabla/dev",
-       /nabla/release              : "nabla-nfs:/nabla/release",
+       /media/ftp                  : "nabla:/mnt/dpool/media/ftp",
+       /media/download             : "nabla:/mnt/dpool/media/download",
+       /media/movie                : "nabla:/mnt/dpool/media/movie ",
+       /media/music                : "nabla:/mnt/dpool/media/music",
+       /media/photo                : "nabla:/mnt/dpool/media/photo",
+       /media/serie                : "nabla:/mnt/dpool/media/serie",
+       /media/torrentfile          : "nabla:/mnt/dpool/media/torrentfile",
+       /media/video                : "nabla:/mnt/dpool/media/video",
+       /media/webdav               : "nabla:/mnt/dpool/media/webdav",
+       /media/image                : "nabla:/mnt/dpool/image",
+       /media/archive              : "nabla:/mnt/dpool/archive",
+       /media/backup               : "nabla:/mnt/dpool/backup",
+       /media/jenkins              : "nabla:/mnt/dpool/jenkins",
+       /media/jenkins-slave        : "nabla:/mnt/dpool/jenkins-slave",
+       /workspace-tmp              : "nabla:/mnt/dpool/workspace",
       }
 
 #Show what is mounted
-#showmount -e fr1svmnas12-nfs
+#showmount -e nabla

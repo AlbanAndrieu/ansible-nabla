@@ -1,17 +1,40 @@
 # file: hosts
 
 [all]
+#localhost ansible_host=127.0.0.1 ansible_ssh_port=22 ansible_connection=ssh dtap=test comment="Hosting by Alban Andrieu" ext_id="SRV_{{ host_id }}" groups="paris misc"
 localhost ansible_user=root
 
+[all:vars]
+#ansible_connection=ssh
+#ansible_ssh_port=22
+jenkins_home=/home/jenkins
+
+#below is used only git lamp.yml
+[lamp]
+localhost
+
+[ntp]
+#Same as all
+
+[dns]
+#Same as all
+
 [administration]
-#localhost ansible_user=root
+localhost ansible_user=root
 
 [common]
 localhost ansible_user=root
 
 [hostname]
+#localhost
 
 [security]
+localhost ansible_user=root
+
+[cmake]
+localhost ansible_user=root
+
+[cpp]
 localhost ansible_user=root
 
 [java]
@@ -40,6 +63,15 @@ localhost ansible_user=root
 #webserver1
 #localhost ansible_user=root
 
+[nabla-servers]
+localhost ansible_user=root
+
+[apache-servers]
+localhost ansible_user=root
+
+[mysql-servers]
+localhost ansible_user=root
+
 [webservers]
 #web3
 localhost ansible_user=root
@@ -47,44 +79,49 @@ localhost ansible_user=root
 [locale]
 localhost ansible_user=root
 
+[zabbix]
+localhost ansible_user=root
+
 [zabbix-agent-paris]
-#localhost ansible_user=root
+localhost ansible_user=root
 
 [zabbix-agent-gdynia]
 #localhost ansible_user=root
 
 [webmin]
-#localhost ansible_user=root
+localhost ansible_user=root
+
+[zfs]
+localhost ansible_user=root
 
 [xvbf]
 localhost ansible_user=root
 
 [jenkins-master]
-#localhost ansible_user=root
+localhost ansible_user=root
 
 [jenkins-master:vars]
-ansible_ssh_common_args='-o StrictHostKeyChecking=no'
-
-[jenkins-LIQ-master]
-
-[jenkins-LIQ-master:vars]
 ansible_ssh_common_args='-o StrictHostKeyChecking=no'
 
 [jenkins-slaves]
 localhost ansible_user=root
 
-[jenkins-slaves:vars]
-ansible_ssh_common_args='-o StrictHostKeyChecking=no'
-#jenkins_home='/jenkins'
+#[jenkins-slaves:vars]
+#ansible_ssh_common_args='-o StrictHostKeyChecking=no'
+#jenkins_home='/home/jenkins'
+
+[jenkins-swarm]
+#localhost
 
 [jenkins-minimal]
 localhost ansible_user=root
 
 [jenkins-minimal:vars]
-ansible_ssh_common_args='-o StrictHostKeyChecking=no'
+ansible_ssh_user=jenkins
+ansible_ssh_pass=jenkins1234
 
 [opencl]
-#localhost ansible_user=root
+localhost ansible_user=root
 
 [supervisors]
 localhost ansible_user=root
@@ -93,10 +130,43 @@ localhost ansible_user=root
 localhost ansible_user=root
 
 [vagrant]
-#localhost ansible_user=root
+localhost ansible_user=root
+
+[vagrant_hosts:children]
+jenkins-master
+jenkins-slaves
+sonar
+
+[nodejs]
+localhost
+
+[docker]
+localhost ansible_user=root
+
+[docker-container]
+#ansible_python_interpreter="/usr/bin/python3.6"
+#localhost
+
+[docker-container:vars]
+repository="git@github.com:AlbanAndrieu/nabla-projects-interview-visma.git"
+#repository_version=HEAD
+repository_version="develop"
+#repository_target_dir="{{ lookup('env','WORKSPACE') }}/"
+repository_target_dir="/workspace/slave/workspace/"
+git_user="jenkins"
+
+[docker-container-oracle]
+#Issue on Redhat ansible_python_interpreter="/usr/local/bin/python3.5"
+#localhost
+
+[docker-cleaning]
+#localhost
+
+[kubernetes]
+localhost ansible_user=root
 
 [sonar]
-#localhost ansible_user=root
+localhost ansible_user=root
 
 [sonar:vars]
 ansible_ssh_common_args='-o StrictHostKeyChecking=no'
@@ -107,24 +177,65 @@ ansible_ssh_common_args='-o StrictHostKeyChecking=no'
 [nexus]
 #localhost ansible_user=root
 
-[docker]
-#localhost ansible_user=root
+[shell]
+#see workstation
 
-[workstation]
-localhost ansible_user=root
+[zap]
+#see workstation
+
+[dropbox]
+#see workstation
 
 [checkmarx]
 #localhost
 
+[jmeter]
+#see workstation
+
+[eclipse]
+#see workstation
+
+[logstash]
+localhost ansible_user=root
+
+[collectd]
+localhost ansible_user=root
+
 [windows]
 #localhost
 
-[vagrant_hosts:children]
-jenkins-master
-jenkins-slaves
-sonar
+[windows:vars]
+#ansible_port=5985 # not ssl
+ansible_connection=winrm
+ansible_winrm_server_cert_validation=ignore
+ansible_winrm_transport=ssl
+
+[test-boxes]
+#vagrant local box
+#192.168.33.10
+#192.168.33.11
+#192.168.33.12
+
+[workstation]
+#localhost ansible_connection=local
+
+[workstation:vars]
+user=albandrieu
+#group=rms
+user=root
+group=root
+#version=10
+#ansible_sudo_pass=todo
+install_kernel_extras=false
 
 [solaris]
+#localhost ansible_user=root
+#sun4v is a blade server. Logical Domains LDOM
+#sparc-sun4sol-u6-1-sun4v ansible_user=jenkins ansible_python_interpreter="/opt/csw/bin/python"
+#sun4u is a normal rack server.
+#sparc-sun4sol-u6-1-sun4u ansible_user=root ansible_python_interpreter="/usr/local/bin/python2.7"
+#x86linux
+#x86-sun4sol-u6-1 ansible_user=test group=other ansible_python_interpreter="/usr/local/bin/python2.7" ansible_sudo_pass=Test_123 ansible_ssh_user="root" ansible_ssh_pass="Test_123"
 
 [solaris:vars]
 user=jenkins

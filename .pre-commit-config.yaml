@@ -1,10 +1,16 @@
 ---
-default_language_version:
-    python: python3.6
+#default_language_version:
+#    python: python3.6  # Ubuntu 18.04.3
+#    python: python3.7  # Ubuntu 19.04
 
 repos:
 -   repo: https://github.com/pre-commit/pre-commit-hooks.git
-    rev: v2.1.0
+#pre-commit-hooks is not working on both environment
+#You will have to switch
+# pre-commit-hooks.git from v2.1.0 to v2.4.0
+#    rev: v2.1.0 # ok python3.6  # 18.04.3
+#    rev: v2.2.3 # ok python3.6  # 19.04 but failing on 18.04.3
+    rev: v2.4.0 # ok python3.6 on Ubuntu 18.04 AND python3.7 on Ubuntu 19.04
     hooks:
     -   id: trailing-whitespace
     -   id: end-of-file-fixer
@@ -37,7 +43,7 @@ repos:
     -   id: name-tests-test
         exclude: >
                   (?x)^(
-                      .*/molecule/default/tests/test_default.py
+                      .*/molecule/default/tests/test_default.py|
                   )$
     -   id: no-commit-to-branch
         args: [--branch, develop, --branch, master, --branch, release/*]
@@ -49,26 +55,25 @@ repos:
         args: [--max-line-length=120]
     -   id: file-contents-sorter
 -   repo: https://github.com/pre-commit/pre-commit.git
-    rev: v1.16.1
+    rev: v1.20.0
     hooks:
     -   id: validate_manifest
 -   repo: https://github.com/asottile/reorder_python_imports.git
-    rev: v1.4.0
+    rev: v1.8.0
     hooks:
     -   id: reorder-python-imports
-#        language_version: python2.7
 -   repo: https://github.com/asottile/add-trailing-comma
-    rev: v1.0.0
+    rev: v1.5.0
     hooks:
     -   id: add-trailing-comma
 -   repo: https://github.com/willthames/ansible-lint.git
-    rev: v4.1.0
+    rev: v4.2.0
     hooks:
     -   id: ansible-lint
         files: \.(yaml|yml)$
         exclude: '.travis.yml'
--   repo: git://github.com/doublify/pre-commit-hindent
-    sha: master
+-   repo: https://github.com/doublify/pre-commit-hindent.git
+    rev: master
     hooks:
     -   id: hindent
 -   repo: https://github.com/detailyang/pre-commit-shell
@@ -80,14 +85,10 @@ repos:
         exclude: >
                   (?x)^(
                       mvnw|
-                      hooks
+                      hooks|
                   )$
-#-   repo: git://github.com/doublify/pre-commit-clang-format
-#    sha: 994f99b6498e9c76341367ecaf76c69dfb4ea4f2
-#    hooks:
-#    -   id: clang-format
 -   repo: https://github.com/asottile/pyupgrade
-    rev: v1.17.1
+    rev: v1.25.1
     hooks:
     -   id: pyupgrade
 -   repo: https://github.com/pre-commit/mirrors-autopep8
@@ -102,3 +103,22 @@ repos:
     rev: v0.1.2
     hooks:
     -   id: encryption-check
+-   repo: https://github.com/Lucas-C/pre-commit-hooks-nodejs
+    rev: v1.1.0
+    hooks:
+    -   id: htmlhint
+        # optional custom config:
+        args: [--config, .htmlhintrc]
+    -   id: markdown-toc
+        # optional custom config:
+        args: [--indent, "  "]
+    -   id: dockerfile_lint
+        # optional custom config:
+        args: [--json, --verbose, --dockerfile]
+-   repo: https://github.com/AlbanAndrieu/nabla-hooks.git
+    rev: master
+    hooks:
+    -   id: git-branches-check
+        always_run: true
+        args: [--max=3]
+        verbose: true

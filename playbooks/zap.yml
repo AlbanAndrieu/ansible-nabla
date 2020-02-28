@@ -1,15 +1,11 @@
-#sudo ansible-playbook -i hosts-albandri -c local -v zap.yml | tee setup.log
+---
 
 - name: Install zap
   connection: local
   hosts: workstation
-#  remote_user: root
-#  accelerate: true
 
   roles:
-    - { role: alban.andrieu.zap,
-        docker_files_enable: yes,
-        docker_files_generated_directory: "../roles/alban.andrieu.zap"
-        #user: "albandri",
-        #home: "/workspace/users/albandri10"
-      }
+    - role: alban.andrieu.zap
+
+#  vars:
+#       apache_listen_port: 7070

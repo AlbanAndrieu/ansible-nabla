@@ -232,10 +232,9 @@
   scm: 'git'
   version: 'master'
 
-- src: 'https://github.com/AlbanAndrieu/devbox.chrome'
-  name: 'devbox.chrome'
-  scm: 'git'
-  version: 'master'
+- src: https://github.com/AlbanAndrieu/devbox.chrome.git
+  name: chrome
+  version: master
 
 - src: 'https://github.com/AlbanAndrieu/Stouts.collectd'
   name: 'collectd'
@@ -572,10 +571,9 @@
   scm: 'git'
   version: 'master'
 
-- src: 'https://github.com/andrewrothstein/ansible-terraform'
-  name: 'andrewrothstein.terraform'
-  scm: 'git'
-  version: 'master'
+- src: https://github.com/andrewrothstein/ansible-terraform.git
+  name: andrewrothstein.terraform
+  version: master
 
 - src: 'https://github.com/ANXS/perl'
   name: 'anxs.perl'

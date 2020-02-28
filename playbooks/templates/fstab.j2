@@ -1,0 +1,33 @@
+# /etc/fstab: static file system information.
+#
+# Use 'blkid' to print the universally unique identifier for a
+# device; this may be used with UUID= as a more robust way to name devices
+# that works even if disks are added and removed. See fstab(5).
+#
+# <file system> <mount point>   <type>  <options>       <dump>  <pass>
+/dev/mapper/vgubuntu-root /               ext4    errors=remount-ro 0       1
+# /boot was on /dev/sda2 during installation
+UUID=f4c9f5b4-85f9-4480-be97-f2340df5c836 /boot           ext4    defaults        0       2
+# /boot/efi was on /dev/sda1 during installation
+UUID=4B0B-41D7  /boot/efi       vfat    umask=0077      0       1
+/dev/mapper/vgubuntu-swap_1 none            swap    sw              0       0
+# iscsi mounted
+#/dev/sdd1       /data       ext4    defaults,auto,_netdev 0 0
+/dev/vg_iscsi/docker       /docker       ext4    defaults,auto,_netdev 0 0
+/dev/vg_iscsi/workspace       /workspace        ext4    defaults,auto,_netdev 0 0
+/dev/sdb1       /home/albandri       ext4    defaults,auto,_netdev 0 0
+#/dev/sdc1       /workspace/users/albandrieu       ext4    defaults,auto,_netdev 0 0
+nabla:/mnt/dpool/media/ftp /media/ftp nfs rw 0 0
+nabla:/mnt/dpool/media/download /media/download nfs rw 0 0
+nabla:/mnt/dpool/media/music /media/music nfs rw 0 0
+nabla:/mnt/dpool/media/photo /media/photo nfs rw 0 0
+nabla:/mnt/dpool/media/serie /media/serie nfs rw 0 0
+nabla:/mnt/dpool/media/torrentfile /media/torrentfile nfs rw 0 0
+nabla:/mnt/dpool/media/video /media/video nfs rw 0 0
+nabla:/mnt/dpool/media/webdav /media/webdav nfs rw 0 0
+nabla:/mnt/dpool/image /media/image nfs defaults 0 0
+nabla:/mnt/dpool/archive /media/archive nfs rw 0 0
+nabla:/mnt/dpool/backup /media/backup nfs rw 0 0
+nabla:/mnt/dpool/jenkins /media/jenkins nfs rw 0 0
+nabla:/mnt/dpool/jenkins-slave /media/jenkins-slave nfs rw 0 0
+nabla:/mnt/dpool/workspace /workspace-tmp nfs rw 0 0

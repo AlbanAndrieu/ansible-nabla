@@ -1,6 +1,22 @@
 #!/bin/bash
 #set -xve
 
+WORKING_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}"  )" && pwd  )"
+
+# Forcing ansible cmd to use python3.6
+export PYTHON_MAJOR_VERSION=3.6
+
+#sudo apt-get install python${PYTHON_MAJOR_VERSION}-dev || true
+
+# shellcheck source=/dev/null
+source "${WORKING_DIR}/run-python.sh"
+RC=$?
+if [ ${RC} -ne 0 ]; then
+  echo ""
+  echo -e "${red} ${head_skull} Sorry, python 3.6 basics failed ${NC}"
+  exit 1
+fi
+
 echo -e "${red} Configure workstation ${NC}"
 
 if [ -d "${WORKSPACE}/ansible" ]; then
@@ -20,8 +36,8 @@ export PROFILE_TASKS_TASK_OUTPUT_LIMIT=all
 
 echo -e "${cyan} =========== ${NC}"
 echo -e "${green} Display setup ${NC}"
-echo -e "${magenta} ${ANSIBLE_CMD} -m setup ${TARGET_SLAVE} -i ${WORKING_DIR}/../inventory/${ANSIBLE_INVENTORY} -vvvv ${NC}"
-${ANSIBLE_CMD} -m setup ${TARGET_SLAVE} -i ${WORKING_DIR}/../inventory/${ANSIBLE_INVENTORY} -vvvv
+echo -e "${magenta} ${ANSIBLE_CMD} -m setup ${TARGET_SLAVE} -i ${WORKING_DIR}/../${ANSIBLE_INVENTORY} -vvvv ${NC}"
+${ANSIBLE_CMD} -m setup ${TARGET_SLAVE} -i ${WORKING_DIR}/../${ANSIBLE_INVENTORY} -vvvv
 RC=$?
 if [ ${RC} -ne 0 ]; then
   echo ""

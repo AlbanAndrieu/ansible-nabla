@@ -62,6 +62,7 @@ in a production environment.
 {% endif %}
 
 {% if ansigenome_info.galaxy_id|d() %}
+
 {% block installation %}
 ### Installation
 
@@ -118,6 +119,7 @@ List of default variables available in the inventory:
 
 {% if ansigenome_info.facts|d() %}
 {% block facts %}
+
 List of internal variables used by the role:
 
 {{ ansigenome_info.facts | trim | indent(4, true) }}{% endblock %}{% endif %}

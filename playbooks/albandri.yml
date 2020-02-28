@@ -1,10 +1,11 @@
+---
 #ansible-playbook -i hosts-albandri -v albandri.yml --limit albandri-laptop-work -c local --ask-become-pass -vvvv | tee setup.log
 # -c local  --ask-pass --ask-become-pass --sudo
 #ansible all -m setup -i hosts-albandri --limit albandri-laptop-work -vvvv
 
 - name: Assert platform is supported
   hosts: all
-  remote_user: albandri
+  remote_user: root
   gather_facts: true
 
   tasks:
@@ -51,7 +52,7 @@
     - name: group hosts by distribution
       group_by: key="{{ ansible_distribution }}-{{ ansible_distribution_version }}"
 
-- hosts: RedHat-7*:RedHat-6*:RedHat-5*:CentOS-7*:CentOS-6*:Ubuntu-17*:Ubuntu-16*:Ubuntu-15*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
+- hosts: RedHat-7*:RedHat-6*:RedHat-5*:CentOS-7*:CentOS-6*:Ubuntu-19*:Ubuntu-18*:Ubuntu-17*:Ubuntu-16*:Ubuntu-15*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
   gather_facts: false
   tasks:
     - name: group hosts for supported distributions
@@ -63,122 +64,28 @@
     - name: fail for unsupported distribution
       fail: msg="{{ ansible_distribution }} {{ ansible_distribution_version }}
                  is not a supported OS for a Tower installation.  Supported
-                 OSes include Red Hat Enterprise Linux 6/7/5, CentOS 6, or
-                 Ubuntu 12.04/13.04/14.04/15.04/16.04/17.04."
+                 OSes include Red Hat Enterprise Linux 6/7/5, CentOS 6/7, or
+                 Ubuntu 12.04/13.04/14.04/15.04/16.04/17.04/18.04/19.04."
     - debug: msg="Version {{ ansible_distribution }} {{ ansible_distribution_version }} {{ ansible_architecture }}"
 
-- hosts: localhost
+- import_playbook: python-bootstrap.yml
 
-  tasks:
-    - name: Install Ansible-Galaxy dependencies
-      shell: ansible-galaxy install -r requirements.yml -p ./roles/
-      #shell: ansible-galaxy install -r requirements.yml -p ./roles/ --ignore-errors --force
-      ignore_errors: yes
+- import_playbook: common.yml
 
-- name: Bootstrap python onto server
-  hosts: Ubuntu-17*:Ubuntu-16*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
-#  become: true
+- import_playbook: dns.yml
 
-  pre_tasks:
-  - name: Install python 2 if not there
-    raw: |
-      test -e /usr/bin/python || \
-      (apt -y update && apt install -y python-simplejson)
-    register: output
-    changed_when: output.stdout|trim() != ""
+- import_playbook: python.yml
 
-  - name: Install sudo if not there
-    become: true
-    raw: |
-      test -e /usr/bin/sudo || apt install -y sudo
-    register: output
-    changed_when: output.stdout|trim() != ""
-
-- name: Add repo configuration to all nodes
-  hosts: RedHat-7*:RedHat-6*:CentOS-7*:CentOS-6*
-  gather_facts: false
-  remote_user: albandri
-
-  roles:
-    - geerlingguy.repo-epel
-    - geerlingguy.repo-remi
-
-#- name: Apply hostname configuration
-#  hosts: all
-#  remote_user: albandri
-#
-#
-#  roles:
-#    - alban.andrieu.hostname
-#
-#  vars:
-#       hostname_hostname_loopback: "{{ ansible_hostname }} nabla"
-
-- name: Apply common configuration to all nodes
-  hosts: Ubuntu-18*:Ubuntu-17*:Ubuntu-16*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
-  gather_facts: false
-  remote_user: albandri
-
-
-  roles:
-    - alban.andrieu.common
-
-  vars:
-       apt_notification_email: "alban.andrieu@free.fr"
-       apt_upgrade_system_enabled: no
-
-- include: dns.yml
-
-- include: python.yml
-
-#Below ntp role is included in administration role
-- name: Apply ntp configuration to all nodes
-  hosts: all
-  gather_facts: false
-  remote_user: albandri
-  become: true
-
-
-  roles:
-    - geerlingguy.ntp
-
-  vars:
-       ntp_timezone: Europe/Paris
-
-#Use below only if you want your servers to be part of build farm
-- name: Apply administration configuration to all nodes
-  hosts: Ubuntu-17*:Ubuntu-16*:Ubuntu-14*:Ubuntu-12*
-  gather_facts: false
-  remote_user: albandri
-
-
-  roles:
-    - alban.andrieu.administration
+- import_playbook: administration.yml automount_enabled=false nis_enabled=false
 
 - include: firewall.yml
 
-- name: Apply security configuration
-  hosts: security
-  remote_user: albandri
-  become: true
-
-
-  roles:
-    - security
-
-  vars:
-      sudoers_enabled: no
-      restart_ssh_enabled: false
-      security_ssh_password_authentication: "yes"
-      security_ssh_permit_root_login: "yes"
-      security_ssh_x11_forwarding: "yes"
-      security_fail2ban_enabled: false
-      security_autoupdate_enabled: false #make yum to get stuck later
+- include: security.yml
 
 #Below cmake role is included in cpp role
 #- name: Install cmake
 #  hosts: cmake
-#  remote_user: albandri
+#  remote_user: root
 #
 #
 #  roles:
@@ -187,7 +94,7 @@
 #Below scons role is included in cpp role
 #- name: Install scons
 #  hosts: scons
-#  remote_user: albandri
+#  remote_user: root
 #
 #
 #  roles:
@@ -201,7 +108,7 @@
 
 #- name: Install virtualbox
 #  hosts: virtualbox
-#  remote_user: albandri
+#  remote_user: root
 #
 #
 #  roles:
@@ -222,33 +129,21 @@
 
 - name: Install locale
   hosts: locale
-  remote_user: albandri
+  remote_user: root
 
   roles:
     - locale
 
 - import_playbook: zabbix-agent.yml
 
-- name: Install xvbf
-  hosts: xvbf
-  remote_user: albandri
+- import_playbook: xvbf
 
-
-  roles:
-    - alban.andrieu.xvbf
-
-- name: Install selenium
-  hosts: selenium
-  remote_user: albandri
-
-
-  roles:
-     - alban.andrieu.selenium
+- import_playbook: selenium
 
 #
 #- name: Install zfs
 #  hosts: zfs
-#  remote_user: albandri
+#  remote_user: root
 #
 #
 #  roles:
@@ -257,7 +152,7 @@
 #Below dropbox is included in workstation role
 #- name: Install dropbox
 #  hosts: workstation
-#  remote_user: albandri
+#  remote_user: root
 ##  sudo: yes
 ##  sudo_user: "{{ user }}"
 #
@@ -271,7 +166,7 @@
 
 - name: Install workstation add-on
   hosts: workstation
-  remote_user: albandri
+  remote_user: root
 
 
   roles:
@@ -288,7 +183,7 @@
 
 #- name: Apply swarm configuration to all jenkins slaves
 #  hosts: jenkins-swarm
-#  remote_user: albandri
+#  remote_user: root
 #
 #
 #  vars_prompt:
@@ -308,7 +203,7 @@
 
 - name: Install webmin
   hosts: webmin
-  remote_user: albandri
+  remote_user: root
 
 
   roles:
@@ -318,7 +213,7 @@
       docker_files_enable: no
       docker_files_generated_directory: "../roles/alban.andrieu.webmin"
 
-- import_playbook: nexus.yml
+#- import_playbook: nexus.yml
 
 - import_playbook: tomcat.yml
 
@@ -331,7 +226,7 @@
 #WARNING jenkins-master role has disabled a2dissite 000-default
 - name: Configure and deploy the nabla php sample application code to apache
   hosts: nabla-servers
-  remote_user: albandri
+  remote_user: root
 
 
   roles:
@@ -350,36 +245,11 @@
        docker_files_enable: yes
        docker_files_generated_directory: "../roles/alban.andrieu.web"
 
-- name: Install pagespeed
-  hosts: apache-servers
-  remote_user: albandri
+- import_playbook: pagespeed.yml
 
-  roles:
-    - role: alban.andrieu.pagespeed
+- import_playbook: evasive.yml
 
-  vars:
-       apache_listen_port: 7070
-       pagespeed_package_arch: "amd64"
-
-- name: Install evasive
-  hosts: apache-servers
-  remote_user: albandri
-
-  roles:
-    - role: alban.andrieu.evasive
-
-  vars:
-       apache_listen_port: 7070
-
-- name: Install awstats
-  hosts: apache-servers
-  remote_user: albandri
-
-  roles:
-    - role: alban.andrieu.awstats
-
-  vars:
-       apache_listen_port: 7070
+- import_playbook: awstats.yml
 
 - import_playbook: jenkins-master.yml
 
@@ -389,7 +259,7 @@
 
 - name: Install css
   hosts: css
-  remote_user: albandri
+  remote_user: root
 
   roles:
     - alban.andrieu.css
@@ -404,7 +274,7 @@
 
 - name: configure supervisor
   hosts: supervisors
-  remote_user: albandri
+  remote_user: root
 
   roles:
     - role: supervisor
@@ -420,7 +290,7 @@
 
 #- name: configure supervisor
 #  hosts: supervisors
-#  remote_user: albandri
+#  remote_user: root
 #
 #  roles:
 #    - role: supervisor
@@ -435,22 +305,21 @@
 #Below cmake conky is included in workstation role
 #- name: Install conky
 #  hosts: workstation
-#  remote_user: albandri
+#  remote_user: root
 #
 #  roles:
 #    - role: alban.andrieu.conky
 
 - name: Install git
   hosts: workstation
-  remote_user: albandri
-
+  remote_user: root
 
   roles:
     - role: geerlingguy.git
 
 - name: Install subversion
   hosts: workstation
-  remote_user: albandri
+  remote_user: root
   ignore_errors: true
 
   roles:
@@ -463,7 +332,7 @@
 - name: Apply common shell configuration
   hosts: workstation
 #  remote_user: root
-  remote_user: albandri
+  remote_user: root
 
 #  become: true
 
@@ -517,7 +386,7 @@
 #- name: Install eclipse
 
 #  hosts: workstation
-#  remote_user: albandri
+#  remote_user: root
 #
 #  roles:
 #    - role: alban.andrieu.eclipse
@@ -529,13 +398,14 @@
 #      #user: "albandri"
 #      #home: "/workspace/users/albandri10"
 
+- import_playbook: sublimetext.yml
+
 - import_playbook: zap.yml
 
 - import_playbook: jmeter.yml
 
 - name: Install mon
   hosts: workstation
-  remote_user: albandri
 
 
   roles:

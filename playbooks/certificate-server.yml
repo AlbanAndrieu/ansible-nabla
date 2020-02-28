@@ -21,7 +21,7 @@
   #become: no # become is not working with local_action
 #  run_once: true
 #  strategy: debug
-#  ignore_errors: yes
+  ignore_errors: yes
 
   roles:
     - role: ssl-certificate

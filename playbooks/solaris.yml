@@ -29,10 +29,9 @@
 - name: Apply common configuration to solaris nodes
   hosts: solaris
   become: true
-  #connection: local
 
   roles:
     - alban.andrieu.solaris
 
-#  vars:
-#    size: 2
+  vars:
+    size: 2
