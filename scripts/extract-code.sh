@@ -3,6 +3,10 @@
 
 WORKING_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}"  )" && pwd  )"
 
+# source only if terminal supports color, otherwise use unset color vars
+# shellcheck source=/dev/null
+source "${WORKING_DIR}/step-0-color.sh"
+
 #create a git local repo
 #touch README.md
 #git init
@@ -11,7 +15,11 @@ WORKING_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}"  )" && pwd  )"
 #git remote add origin https://github.com/AlbanAndrieu/ansible-swarm.git
 #git push -u origin master
 
-git clone https://github.com/AlbanAndrieu/ansible-nabla.git ansible-nabla
+echo -e "${magenta} git clone https://github.com/AlbanAndrieu/ansible-nabla.git ${HOME}/ansible-nabla"
+
+#first run in ansible-nabla root
+cd "${HOME}/ansible-nabla"
+ansible-galaxy install -r requirements.yml -p ./roles/ --ignore-errors
 
 git pull && git submodule init && git submodule update && git submodule status
 #git fetch --recurse-submodules
@@ -19,13 +27,13 @@ git pull && git submodule init && git submodule update && git submodule status
 git submodule foreach git checkout master
 git submodule foreach git pull origin master
 
-git submodule add https://github.com/AlbanAndrieu/ansigenome.git
+#git submodule add https://github.com/AlbanAndrieu/ansigenome.git
 
-ansible-galaxy install -r ../requirements.yml -p ../roles/ --ignore-errors
+#mkdir roles
 
-mkdir roles
+cd "${HOME}/ansible-nabla/roles"
 
-cd roles
+exit 0
 
 #git clone https://github.com/debops/ansible-role-ansible.git ansible
 #git submodule deinit -f ansible
@@ -150,7 +158,7 @@ git submodule add -f  https://github.com/AlbanAndrieu/ansible-scons.git alban.an
 git submodule add -f  https://github.com/AlbanAndrieu/ansible-gcc.git alban.andrieu.gcc
 git submodule add -f  https://github.com/AlbanAndrieu/ansible-cpp.git alban.andrieu.cpp
 
-#git submodule deinit -f shell
+#git submodule deinit -f alban.andrieu.shell
 git submodule add -f  https://github.com/AlbanAndrieu/ansible-shell.git alban.andrieu.shell
 
 #git submodule deinit -f eclipse

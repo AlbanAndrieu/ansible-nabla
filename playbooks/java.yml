@@ -1,5 +1,5 @@
 ---
-#ansible-playbook -i staging -v playbooks/java.yml --limit albandri.nabla.mobi --ask-become-pass -vvvv | tee setup.log
+#ansible-playbook -i ./inventory/production -v playbooks/java.yml --limit test3.albandrieu.com --ask-become-pass -vvvv | tee setup.log
 
 - hosts: all
   gather_facts: true

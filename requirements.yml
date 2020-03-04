@@ -17,9 +17,8 @@
   scm: 'git'
   version: 'master'
 
-- src: 'https://github.com/AlbanAndrieu/ansible-common'
-  name: 'alban.andrieu.common'
-  scm: 'git'
+- src: https://github.com/AlbanAndrieu/ansible-common.git
+  name: alban.andrieu.common
   version: 'master'
 
 - src: 'https://github.com/AlbanAndrieu/ansible-conky'
