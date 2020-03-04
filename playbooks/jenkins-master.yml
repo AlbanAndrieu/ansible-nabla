@@ -1,3 +1,4 @@
+---
 
 - import_playbook: hostname.yml
 
@@ -20,11 +21,11 @@
       docker_files_generated_directory: "../roles/jenkins-master"
       jenkins_proxy: apache
       jenkins_user: jenkins
-      jenkins_version: 2.190.3
+      jenkins_version: 2.204.2
       jenkins_proxy_hostname: localhost
 #      jenkins_ssh_key_file: "{{resources_to}}/resources/jenkins/ssh_key"    # (you can manage remote files with Stouts.resources role)
       jenkins_ssh_key_file: "~/.ssh/id_rsa"
-      jenkins_http_port: 8380
+      jenkins_http_port: 8686
       jenkins_http_host: "{{ ansible_fqdn }}"
       #jenkins_proxy_port: 7070
       jenkins_proxy_ssl: true
@@ -76,7 +77,6 @@
         - "scm-sync-configuration"
         - "deploy"
         - "naginator"
-#        - "docker-plugin"
         - "build-publisher"
         - "sonar"
         - "xvfb"
@@ -100,7 +100,6 @@
         - "checkmarx"
         - "selenium"
         - "matrix-combinations-parameter"
-#        - "sonatype-ci"
         - "jobtype-column"
         - "findbugs"
         - "batch-task"
@@ -213,7 +212,6 @@
         - "dependencyanalyzer"
         - "analysis-collector"
         - "analysis-core"
-#        - "insight-ci"
         - "description-setter"
         - "chosen-views-tabbar"
         - "port-allocator"
@@ -264,7 +262,6 @@
         - "log-parser"
         - "locale"
         - "all-changes"
-#        - "dependencyanalyzer"
         - "WebSVN2"
         - "SquishPlugin"
         - "slave-status"

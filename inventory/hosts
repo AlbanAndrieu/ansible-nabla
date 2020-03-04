@@ -224,7 +224,7 @@ user=albandrieu
 #group=rms
 user=root
 group=root
-#version=10
+#shell_default_version=10
 #ansible_sudo_pass=todo
 install_kernel_extras=false
 
