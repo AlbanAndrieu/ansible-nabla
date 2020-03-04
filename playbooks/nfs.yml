@@ -1,0 +1,26 @@
+---
+
+#ansible-playbook playbooks/nfs.yml -i inventory/production --limit albandrieu.com -vvvv
+
+- name: NFS configuration
+  hosts: nfs
+  become: true
+
+  tasks:
+    - name: Copy nfs configuration.
+      template:
+        src: nfs-common.j2
+        dest: "/etc/default/nfs-common"
+        owner: root
+        group: root
+        mode: 0644
+        
+    - name: Copy idmapd configuration.
+      template:
+        src: idmapd.conf.j2
+        dest: "/etc/idmapd.conf"
+        owner: root
+        group: root
+        mode: 0644       
+#      notify: restart portmap
+#      notify: restart rpcbind
