@@ -2,6 +2,7 @@
 
 - name: Install nfs
   hosts: jenkins-slaves
+  become: true
 
   roles:
     - geerlingguy.nfs

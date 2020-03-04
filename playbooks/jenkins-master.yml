@@ -1,3 +1,5 @@
+---
+# ansible-playbook -i inventory/hosts-albandri -c local -v playbooks/jenkins-master.yml --ask-become-pass -vvvv | tee setup.log
 
 - import_playbook: hostname.yml
 
@@ -20,17 +22,18 @@
       docker_files_generated_directory: "../roles/jenkins-master"
       jenkins_proxy: apache
       jenkins_user: jenkins
-      jenkins_version: 2.190.3
+      jenkins_version: 2.204.3
       jenkins_proxy_hostname: localhost
 #      jenkins_ssh_key_file: "{{resources_to}}/resources/jenkins/ssh_key"    # (you can manage remote files with Stouts.resources role)
       jenkins_ssh_key_file: "~/.ssh/id_rsa"
-      jenkins_http_port: 8380
+      jenkins_http_port: 8686
       jenkins_http_host: "{{ ansible_fqdn }}"
       #jenkins_proxy_port: 7070
       jenkins_proxy_ssl: true
       jenkins_proxy_ssl_certificate: "{{ jenkins_http_host }}.cer"
       jenkins_proxy_ssl_key: "/etc/ssl/{{ jenkins_http_host }}/almonde-jenkins.key"
       jenkins_home: /jenkins
+      jenkins_target_home: /jenkins
       jenkins_maxopenfiles: 65535
       #See jenkins tuning https://jenkins.io/blog/2016/11/21/gc-tuning/?utm_source=feedburner&utm_medium=twitter&utm_campaign=Feed%3A+ContinuousBlog+%28Jenkins%29
       #-Xmx8096m -XX:MaxPermSize=2048m -Djava.awt.headless=true -Djava.util.Arrays.useLegacyMergeSort=true -Dhudson.slaves.WorkspaceList=-

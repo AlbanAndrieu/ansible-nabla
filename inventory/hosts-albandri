@@ -73,17 +73,17 @@ albandri
 
 [jenkins-master]
 albandri
-master ansible_ssh_host=192.168.11.33 ansible_ssh_port=22 ansible_connection=ssh ansible_user=vagrant
+#master ansible_ssh_host=192.168.11.33 ansible_ssh_port=22 ansible_connection=ssh ansible_user=vagrant
 
 [jenkins-master:vars]
 ansible_ssh_common_args='-o StrictHostKeyChecking=no'
 
 [jenkins-slaves]
 albandri
-slave01 ansible_ssh_host=192.168.11.51 ansible_ssh_port=22 ansible_connection=ssh ansible_user=vagrant
-slave02 ansible_ssh_host=192.168.11.52 ansible_ssh_port=22 ansible_connection=ssh ansible_user=vagrant
-slave03 ansible_ssh_host=192.168.11.53 ansible_ssh_port=22 ansible_connection=ssh ansible_user=vagrant
-slave04 ansible_ssh_host=192.168.11.54 ansible_ssh_port=22 ansible_connection=ssh ansible_user=vagrant
+#slave01 ansible_ssh_host=192.168.11.51 ansible_ssh_port=22 ansible_connection=ssh ansible_user=vagrant
+#slave02 ansible_ssh_host=192.168.11.52 ansible_ssh_port=22 ansible_connection=ssh ansible_user=vagrant
+#slave03 ansible_ssh_host=192.168.11.53 ansible_ssh_port=22 ansible_connection=ssh ansible_user=vagrant
+#slave04 ansible_ssh_host=192.168.11.54 ansible_ssh_port=22 ansible_connection=ssh ansible_user=vagrant
 
 [jenkins-slaves:vars]
 ansible_ssh_common_args='-o StrictHostKeyChecking=no'
@@ -153,7 +153,7 @@ albandri
 
 [sonar]
 albandri
-sonarqube ansible_ssh_host=192.168.11.99 ansible_ssh_port=22 ansible_connection=ssh ansible_user=vagrant
+#sonarqube ansible_ssh_host=192.168.11.99 ansible_ssh_port=22 ansible_connection=ssh ansible_user=vagrant
 
 [sonar:vars]
 ansible_ssh_common_args='-o StrictHostKeyChecking=no'
@@ -172,7 +172,6 @@ ansible_ssh_common_args='-o StrictHostKeyChecking=no'
 
 [eclipse]
 albandri
-albandri-test.misys.global.ad ansible_host=10.41.40.91 ansible_user="root" jenkins_home=/jenkins jenkins_id=1001 jenkins_gid=1006 docker_gid=1007 data_gid=33 dtap=dev comment="Hosting by Alban Andrieu"
 
 [logstash]
 albandri

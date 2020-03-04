@@ -1,6 +1,6 @@
 ---
 
-- import_playbook: networkfilesystem.yml
+- import_playbook: nfs.yml
 
 - name: Apply administration configuration to all nodes
   hosts: administration

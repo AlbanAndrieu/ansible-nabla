@@ -6,6 +6,8 @@ python:
 #  - 3.4
 #  - 3.5
   - 3.6
+  - 3.7
+
 services:
   - docker
 cache:
@@ -20,10 +22,13 @@ env:
     - secure: TGUihI8NZudZK09yhYmP3DF2YarY4d9ljgm+sArpvc7Ga7NvU7A2GxJm6KJ6ZAxBd/K+R89vo6fRWQma4ZFOjbi/TLabDgWJVD+aabhY5n1gPBDuoz/N7At3v4Ws1qD4M3Bj8+ds+ye1q+0MEDy+AYko8+UUhgLEvsbGUI9d4PY=
   matrix:
 #  - ANSIBLE_VERSION=latest
-    - ANSIBLE_VERSION=2.7.14
+  - ANSIBLE_VERSION=2.7.14
+  - ANSIBLE_VERSION=2.9.4
+
 sudo: required
 #dist: trusty
-dist: bionic
+dist: travis_lts
+#dist: bionic
 
 branches:
   only:
@@ -38,6 +43,8 @@ install:
   # Install Ansible.
   - if [ "$ANSIBLE_VERSION" = "latest" ]; then pip install ansible; else pip install ansible==$ANSIBLE_VERSION; fi
   - if [ "$ANSIBLE_VERSION" = "latest" ]; then pip install ansible-lint; fi
+
+  - pip3 install molecule==3.0.2
 
   # Update Ansible submodule.
   - git pull && git submodule init
@@ -68,14 +75,18 @@ script:
   # Check the role/playbook's syntax.
   - ansible-playbook --syntax-check -i inventory/hosts playbooks/nabla.yml --connection=local -e "python_versions=[2.7]" -e "jenkins_group=docker" -e "docker_gid=${DOCKER_GID}" -e "jenkins_id=${JENKINS_UID}" -e "git_user=root" --skip-tags restart
 
+  # Molecule test
+  # - molecule test
+
   # First run
   # Run the role/playbook with ansible-playbook.
   - travis_wait 30 ansible-playbook -i inventory/hosts playbooks/nabla.yml --connection=local -e "python_versions=[2.7]" -e "jenkins_group=docker" -e "docker_gid=${DOCKER_GID}" -e "jenkins_id=${JENKINS_UID}" -e "git_user=root" --skip-tags restart
 
   # Second run Idempotence test
   # Run the role/playbook again, checking to make sure it's idempotent.
-#  - >
 #    ansible-playbook -i inventory/hosts ./playbooks/nabla.yml --connection=local  -e "python_versions=[2.7]" -e "git_user=root"
+#  - >
+#    tail ${idempotence}
 #    | grep -q 'changed=0.*failed=0'
 #    && (echo 'Idempotence test: pass' && exit 0)
 #    || (echo 'Idempotence test: fail' && exit 1)
@@ -85,7 +96,13 @@ script:
 #  - sudo /etc/init.d/mon status || exit 1
 
 notifications:
-  webhooks: https://galaxy.ansible.com/api/v1/notifications/
+  webhooks:
+    urls:
+      - https://webhooks.gitter.im/e/47b10b81867bd0063cf5
+      - https://galaxy.ansible.com/api/v1/notifications/
+    on_success: change
+    on_failure: always
+    on_start: false
   email:
     recipients:
       - alban.andrieu@nabla.mobi

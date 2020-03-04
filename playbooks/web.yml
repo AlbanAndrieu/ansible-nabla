@@ -44,7 +44,7 @@
 
 - import_playbook: hostname.yml
 
-#- import_playbook: networkfilesystem.yml
+#- import_playbook: nfs.yml
 
 - import_playbook: common.yml
 
