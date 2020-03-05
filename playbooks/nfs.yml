@@ -1,11 +1,8 @@
 ---
 
 - name: Install nfs
-  hosts: jenkins-slaves
+  hosts: workstation
   become: true
 
   roles:
     - geerlingguy.nfs
-
-#  vars:
-#    selenium_server_major_version: "2.42"

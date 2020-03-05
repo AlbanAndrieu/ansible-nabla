@@ -7,7 +7,7 @@ set -eo pipefail
 
 WORKING_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}"  )" && pwd  )"
 
-export DOCKER_TAG="1.0.1"
+export DOCKER_TAG="1.0.8"
 
 # shellcheck source=/dev/null
 source "${WORKING_DIR}/docker-env.sh"
@@ -27,6 +27,9 @@ source "${WORKING_DIR}/run-ansible.sh"
 WORKING_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}"  )" && pwd  )"
 
 "${WORKING_DIR}/../clean.sh"
+
+echo -e "${green} Insalling roles version ${NC}"
+${ANSIBLE_GALAXY_CMD} install -r requirements.yml -p ./roles/ --ignore-errors
 
 if [ -n "${DOCKER_BUILD_ARGS}" ]; then
   echo -e "${green} DOCKER_BUILD_ARGS is defined ${happy_smiley} : ${DOCKER_BUILD_ARGS} ${NC}"

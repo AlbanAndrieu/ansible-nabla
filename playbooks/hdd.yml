@@ -1,6 +1,6 @@
 ---
 
-#ansible-playbook playbooks/hdd.yml -i inventory/production --limit albandrieu.albandrieu.com -vvvv
+#ansible-playbook playbooks/hdd.yml -i inventory/production --limit albandrieu.com -vvvv
 
 # WARNING below order is important
 

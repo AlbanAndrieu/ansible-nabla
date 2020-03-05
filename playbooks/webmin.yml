@@ -2,11 +2,7 @@
 
 - name: Install webmin
   hosts: webmin
-#  remote_user: root
-#  accelerate: true
+  become: true
 
   roles:
     - alban.andrieu.webmin
-
-#  vars:
-#   jenkins_home=/home/jenkins

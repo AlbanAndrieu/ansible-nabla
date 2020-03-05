@@ -73,17 +73,18 @@ albandrieu
 
 [jenkins-master]
 albandrieu
-master ansible_ssh_host=192.168.11.33 ansible_ssh_port=22 ansible_connection=ssh ansible_user=vagrant
+#master ansible_ssh_host=192.168.1.62 ansible_ssh_port=22 ansible_connection=ssh #ansible_user=vagrant
 
 [jenkins-master:vars]
 ansible_ssh_common_args='-o StrictHostKeyChecking=no'
 
 [jenkins-slaves]
 albandrieu
-slave01 ansible_ssh_host=192.168.11.51 ansible_ssh_port=22 ansible_connection=ssh ansible_user=vagrant
-slave02 ansible_ssh_host=192.168.11.52 ansible_ssh_port=22 ansible_connection=ssh ansible_user=vagrant
-slave03 ansible_ssh_host=192.168.11.53 ansible_ssh_port=22 ansible_connection=ssh ansible_user=vagrant
-slave04 ansible_ssh_host=192.168.11.54 ansible_ssh_port=22 ansible_connection=ssh ansible_user=vagrant
+apache ansible_ssh_host=192.168.1.61 ansible_ssh_port=22 ansible_connection=ssh #ansible_user=vagrant
+#slave01 ansible_ssh_host=192.168.1.61 ansible_ssh_port=22 ansible_connection=ssh #ansible_user=vagrant
+#slave02 ansible_ssh_host=192.168.11.52 ansible_ssh_port=22 ansible_connection=ssh ansible_user=vagrant
+#slave03 ansible_ssh_host=192.168.11.53 ansible_ssh_port=22 ansible_connection=ssh ansible_user=vagrant
+#slave04 ansible_ssh_host=192.168.11.54 ansible_ssh_port=22 ansible_connection=ssh ansible_user=vagrant
 
 [jenkins-slaves:vars]
 ansible_ssh_common_args='-o StrictHostKeyChecking=no'
@@ -143,10 +144,9 @@ albandrieu
 albandrieu
 
 [workstation:vars]
-user=albandri
+user=albandrieu
 group=docker
-version=10
-#ansible_sudo_pass=todo
+shell_default_version=30
 
 [nexus]
 albandrieu

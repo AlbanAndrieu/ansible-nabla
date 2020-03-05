@@ -85,11 +85,11 @@
   become: true
 
   roles:
-    - web
+    - alban.andrieu.web
 
   vars:
       apache_listen_port: 80
-      web_base_dir: "/var/www/~devel"
+      web_base_dir: "/var/www/nabla-site-apache"
       apache_owner: "jenkins"
       apache_group: "www-data"
       git_user: "jenkins"
@@ -104,11 +104,11 @@
   become: true
 
   roles:
-    - web
+    - alban.andrieu.web
 
   vars:
       apache_listen_port: 7075,
-      web_base_dir: "/var/www/sample"
+      web_base_dir: "/var/www/nabla-servers-bower-sample"
       #jenkins_proxy_port: "{{ apache_listen_port }}" #TODO why is it needed!!!
       phpmyadmin_mysql_user: root
       phpmyadmin_mysql_password: microsoft

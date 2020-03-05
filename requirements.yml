@@ -17,9 +17,8 @@
   scm: 'git'
   version: 'master'
 
-- src: 'https://github.com/AlbanAndrieu/ansible-common'
-  name: 'alban.andrieu.common'
-  scm: 'git'
+- src: https://github.com/AlbanAndrieu/ansible-common.git
+  name: alban.andrieu.common
   version: 'master'
 
 - src: 'https://github.com/AlbanAndrieu/ansible-conky'
@@ -117,10 +116,9 @@
   scm: 'git'
   version: 'master'
 
-- src: 'https://github.com/AlbanAndrieu/ansible-pagespeed'
-  name: 'alban.andrieu.pagespeed'
-  scm: 'git'
-  version: 'master'
+- src: https://github.com/AlbanAndrieu/ansible-pagespeed.git
+  name: alban.andrieu.pagespeed
+  version: master
 
 - src: 'https://github.com/AlbanAndrieu/ansible-phpvirtualbox'
   name: 'alban.andrieu.phpvirtualbox'
@@ -182,15 +180,13 @@
   scm: 'git'
   version: 'master'
 
-- src: 'https://github.com/AlbanAndrieu/ansible-web'
-  name: 'alban.andrieu.web'
-  scm: 'git'
-  version: 'master'
+- src: https://github.com/AlbanAndrieu/ansible-web.git
+  name: alban.andrieu.web
+  version: master
 
-- src: 'https://github.com/AlbanAndrieu/ansible-webmin'
-  name: 'alban.andrieu.webmin'
-  scm: 'git'
-  version: 'master'
+- src: https://github.com/AlbanAndrieu/ansible-webmin.git
+  name: alban.andrieu.webmin
+  version: master
 
 - src: 'https://github.com/AlbanAndrieu/ansible-windows'
   name: 'alban.andrieu.windows'
