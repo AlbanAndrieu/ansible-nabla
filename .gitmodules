@@ -91,9 +91,6 @@
 [submodule "roles/alban.andrieu.subversion"]
 	path = roles/alban.andrieu.subversion
 	url = https://github.com/AlbanAndrieu/ansible-subversion.git
-[submodule "roles/alban.andrieu.eclipse"]
-	path = roles/alban.andrieu.eclipse
-	url = https://github.com/AlbanAndrieu/ansible-eclipse.git
 [submodule "roles/alban.andrieu.jboss"]
 	path = roles/alban.andrieu.jboss
 	url = https://github.com/AlbanAndrieu/ansible-jboss.git
