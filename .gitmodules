@@ -28,9 +28,6 @@
 [submodule "roles/security"]
 	path = roles/security
 	url = https://github.com/AlbanAndrieu/ansible-role-security.git
-[submodule "roles/nexus"]
-	path = roles/nexus
-	url = https://github.com/AlbanAndrieu/ansible-sonatype_nexus.git
 [submodule "roles/monit"]
 	path = roles/monit
 	url = https://github.com/ANXS/monit

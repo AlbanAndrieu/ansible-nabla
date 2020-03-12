@@ -75,7 +75,7 @@
     docker_compose_version: "1.25.0"
     docker_edition: ce
     #docker_version: 5:19.03.6~3-0~ubuntu-eoan # https://github.com/docker/for-linux/issues/833
-    docker_version: 5:19.03.6~3-0~ubuntu-eoan
+    docker_version: 5:19.03.7~3-0~ubuntu-eoan
     docker_package: "docker-{{ docker_edition }}={{ docker_version }}" # Ubuntu
 
 - name: Install docker
@@ -100,12 +100,12 @@
   tags:
     - vm
 
-  tasks:  
+  tasks:
     - name: docker | Copy the docker.service script
       template: src=docker.service.j2 dest=/lib/systemd/system/docker.service owner=root group=root mode=0644
       become: true
       changed_when: false
-    
+
     - name: docker | Create a docker group
       group:
           name=docker

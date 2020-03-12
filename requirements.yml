@@ -46,10 +46,9 @@
   scm: 'git'
   version: 'master'
 
-- src: 'https://github.com/AlbanAndrieu/ansible-eclipse'
-  name: 'alban.andrieu.eclipse'
-  scm: 'git'
-  version: 'master'
+- src: https://github.com/AlbanAndrieu/ansible-eclipse.git
+  name: alban.andrieu.eclipse
+  version: master
 
 - src: 'https://github.com/AlbanAndrieu/ansible-evasive'
   name: 'alban.andrieu.evasive'
@@ -427,10 +426,9 @@
 #  scm: 'git'
 #  version: 'master'
 
-- src: 'https://github.com/AlbanAndrieu/ansible-sonatype_nexus'
-  name: 'nexus'
-  scm: 'git'
-  version: 'master'
+- src: https://github.com/AlbanAndrieu/ansible-sonatype_nexus.git
+  name: nexus
+  version: master
 
 - src: 'https://github.com/AlbanAndrieu/ansible-role-nodejs'
   name: 'geerlingguy.nodejs'

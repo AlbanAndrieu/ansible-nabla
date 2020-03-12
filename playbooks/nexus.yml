@@ -1,10 +1,11 @@
 ---
-# ansible-playbook -i inventory/hosts-albandri -c local -v playbooks/nexus.yml -vvvv | tee setup.log
+# ansible-playbook -i inventory/hosts-albandrieu -c local -v playbooks/nexus.yml -vvvv --ask-become-pass -vvvv  | tee setup.log
 
 - name: Install nexus
   hosts: nexus
-  remote_user: root
-
+#  remote_user: root
+  become: true
+  
   roles:
     - role: nexus
 
