@@ -12,7 +12,7 @@
        defaultdomain: albandrieu.com
        search: albandrieu.com
        #defaultsearch: albandrieu.com nabla.freeboxos.fr freeboxos.fr home.albandrieu.com
-       defaultsearch: home albandrieu.com nabla.hopto.org
+       defaultsearch: home misys.global.ad albandrieu.com nabla.hopto.org
        dns_nameservers:
          - "10.21.200.3" # work dns
          - "10.21.200.2" # work dns

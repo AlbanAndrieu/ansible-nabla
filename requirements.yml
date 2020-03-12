@@ -401,10 +401,9 @@
   scm: 'git'
   version: 'master'
 
-- src: 'https://github.com/AlbanAndrieu/Stouts.jenkins'
-  name: 'jenkins-master'
-  scm: 'git'
-  version: 'master'
+- src: https://github.com/AlbanAndrieu/Stouts.jenkins.git
+  name: jenkins-master
+  version: master
 
 - src: 'https://github.com/Oefenweb/ansible-locales'
   name: 'locale'

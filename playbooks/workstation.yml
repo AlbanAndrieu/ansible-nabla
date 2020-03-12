@@ -53,6 +53,7 @@
        variety_group: "{{ group }}"
        dropbox_owner: "{{ user }}"
        dropbox_group: "{{ group }}"
+       jenkins_user: "{{ user }}"
 
 - import_playbook: chrome.yml
 
