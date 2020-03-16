@@ -112,9 +112,6 @@
 [submodule "roles/alban.andrieu.administration"]
 	path = roles/alban.andrieu.administration
 	url = https://github.com/AlbanAndrieu/ansible-administration.git
-[submodule "roles/alban.andrieu.dns"]
-	path = roles/alban.andrieu.dns
-	url = https://github.com/AlbanAndrieu/ansible-dns.git
 [submodule "roles/alban.andrieu.synergy"]
 	path = roles/alban.andrieu.synergy
 	url = https://github.com/AlbanAndrieu/ansible-synergy.git
