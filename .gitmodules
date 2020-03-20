@@ -133,9 +133,6 @@
 [submodule "roles/--force"]
 	path = roles/--force
 	url = https://github.com/AlbanAndrieu/ansible-role-mysql.git
-[submodule "roles/geerlingguy.mysql"]
-	path = roles/geerlingguy.mysql
-	url = https://github.com/AlbanAndrieu/ansible-role-mysql.git
 [submodule "roles/geerlingguy.phpmyadmin"]
 	path = roles/geerlingguy.phpmyadmin
 	url = https://github.com/AlbanAndrieu/ansible-role-phpmyadmin.git

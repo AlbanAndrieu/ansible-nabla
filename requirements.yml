@@ -321,10 +321,9 @@
 #  scm: 'git'
 #  version: 'master'
 
-- src: 'https://github.com/AlbanAndrieu/ansible-role-mysql'
-  name: 'geerlingguy.mysql'
-  scm: 'git'
-  version: 'master'
+- src: https://github.com/geerlingguy/ansible-role-mysql.git
+  name: geerlingguy.mysql
+  version: master
 
 #- src: 'https://github.com/geerlingguy/ansible-role-php-xdebug'
 #  name: 'geerlingguy.php-xdebugl'
@@ -405,10 +404,9 @@
   name: jenkins-master
   version: master
 
-- src: 'https://github.com/Oefenweb/ansible-locales'
-  name: 'locale'
-  scm: 'git'
-  version: 'master'
+- src: https://github.com/Oefenweb/ansible-locales.git
+  name: locale
+  version: master
 
 - src: 'https://github.com/AlbanAndrieu/ansible-role-maven'
   name: 'maven'
@@ -544,10 +542,13 @@
   scm: 'git'
   version: 'master'
 
-- src: https://github.com/andrewrothstein/ansible-kubernetes-helm
-  name: 'andrewrothstein.kubernetes-helm'
-  scm: 'git'
-  version: 'master'
+- src: https://github.com/andrewrothstein/ansible-unarchive-deps.git
+  version: master
+  name: andrewrothstein.unarchive-deps
+  
+- src: https://github.com/andrewrothstein/ansible-kubernetes-helm.git
+  version: master
+  name: andrewrothstein.kubernetes-helm
 
 - src: 'https://github.com/andrewrothstein/ansible-kubectl'
   name: 'andrewrothstein.kubectl'
