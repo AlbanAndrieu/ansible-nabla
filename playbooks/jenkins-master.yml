@@ -18,8 +18,6 @@
     - jenkins-master
 
   vars:
-      docker_files_enable: true
-      docker_files_generated_directory: "../roles/jenkins-master"
       jenkins_proxy: apache
       jenkins_user: jenkins
       jenkins_version: 2.204.3

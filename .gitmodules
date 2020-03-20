@@ -40,9 +40,6 @@
 [submodule "roles/geerlingguy.repo-remi"]
 	path = roles/geerlingguy.repo-remi
 	url = https://github.com/geerlingguy/ansible-role-repo-remi.git
-[submodule "roles/geerlingguy.apache"]
-	path = roles/geerlingguy.apache
-	url = https://github.com/geerlingguy/ansible-role-apache.git
 [submodule "roles/geerlingguy.php"]
 	path = roles/geerlingguy.php
 	url = https://github.com/geerlingguy/ansible-role-php.git
