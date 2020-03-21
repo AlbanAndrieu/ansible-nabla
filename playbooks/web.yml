@@ -74,9 +74,9 @@
 
 - import_playbook: yarn.yml
 
-- import_playbook: jenkins-slave.yml
+#- import_playbook: jenkins-slave.yml
 
-- import_playbook: docker.yml
+#- import_playbook: docker.yml
 
 - import_playbook: lamp.yml
 
@@ -89,6 +89,8 @@
 
   vars:
       apache_listen_port: 80
+      php_default_version_debian: "7.3"
+      __php_mysql_package: "php7.3-mysql"
       web_base_dir: "/var/www/nabla-site-apache"
       apache_owner: "jenkins"
       apache_group: "www-data"
@@ -108,6 +110,8 @@
 
   vars:
       apache_listen_port: 7075,
+      php_default_version_debian: "7.3"
+      __php_mysql_package: "php7.3-mysql"
       web_base_dir: "/var/www/nabla-servers-bower-sample"
       #jenkins_proxy_port: "{{ apache_listen_port }}" #TODO why is it needed!!!
       phpmyadmin_mysql_user: root

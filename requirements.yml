@@ -281,15 +281,15 @@
 #  scm: 'git'
 #  version: 'master'
 
-- src: 'https://github.com/AlbanAndrieu/ansible-role-apache'
-  name: 'geerlingguy.apache'
-  scm: 'git'
-  version: 'master'
-
-- src: 'https://github.com/AlbanAndrieu/stack-docker'
-  name: 'elastic/stack-docker'
-  scm: 'git'
-  version: 'master'
+- src: https://github.com/geerlingguy/ansible-role-apache.git
+  name: geerlingguy.apache
+  version: master
+ 
+# Below replaced by https://github.com/geerlingguy/ansible-role-apache.git
+#- src: 'https://github.com/AlbanAndrieu/ansible-role-apache'
+#  name: 'geerlingguy.apache'
+#  scm: 'git'
+#  version: 'master'
 
 #- src: 'https://github.com/AlbanAndrieu/ansible-role-elasticsearch'
 #  name: 'geerlingguy.elasticsearch'
@@ -340,25 +340,32 @@
   scm: 'git'
   version: 'master'
 
-- src: 'https://github.com/AlbanAndrieu/ansible-role-php'
-  name: 'geerlingguy.php'
-  scm: 'git'
-  version: 'master'
+#- src: 'https://github.com/AlbanAndrieu/ansible-role-php'
+#  name: 'geerlingguy.php'
+#  scm: 'git'
+#  version: 'master'
+
+- src: https://github.com/geerlingguy/ansible-role-php.git
+  name: geerlingguy.php
+  version: master
 
 #- src: 'https://github.com/geerlingguy/ansible-role-php-versions'
 #  name: 'geerlingguy.php-versions'
 #  scm: 'git'
 #  version: 'master'
 
-- src: 'https://github.com/geerlingguy/ansible-role-php-mysql'
-  name: 'geerlingguy.php-mysql'
-  scm: 'git'
-  version: 'master'
+- src: https://github.com/geerlingguy/ansible-role-php-mysql.git
+  name: geerlingguy.php-mysql
+  version: master
 
-- src: 'https://github.com/AlbanAndrieu/ansible-role-phpmyadmin'
-  name: 'geerlingguy.phpmyadmin'
-  scm: 'git'
-  version: 'master'
+- src: https://github.com/geerlingguy/ansible-role-phpmyadmin.git
+  name: geerlingguy.phpmyadmin
+  version: master
+  
+#- src: 'https://github.com/AlbanAndrieu/ansible-role-phpmyadmin'
+#  name: 'geerlingguy.phpmyadmin'
+#  scm: 'git'
+#  version: 'master'
 
 - src: 'https://github.com/AlbanAndrieu/ansible-role-redis'
   name: 'geerlingguy.redis'
@@ -576,5 +583,10 @@
 
 - src: 'https://github.com/jermon/ansible-role-cpan'
   name: 'jermon.ansible-role-cpan'
+  scm: 'git'
+  version: 'master'
+
+- src: 'https://github.com/AlbanAndrieu/stack-docker'
+  name: 'elastic/stack-docker'
   scm: 'git'
   version: 'master'
