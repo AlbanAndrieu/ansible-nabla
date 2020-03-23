@@ -1,9 +1,9 @@
 ---
 #as albandri
-#ansible-playbook playbooks/jenkins-slave.yml -i inventory/production --limit albandri.nabla.mobi -vvvv -e python2_version="2.7"
-#ansible-playbook playbooks/jenkins-slave.yml -i inventory/production --limit albandri.nabla.mobi -vvvv
+#ansible-playbook playbooks/jenkins-slave.yml -i inventory/production --limit albandri.albandrieu.com -vvvv -e python2_version="2.7"
+#ansible-playbook playbooks/jenkins-slave.yml -i inventory/production --limit albandri.albandrieu.com -vvvv
 
-#ansible all -m setup -i staging --limit albandri.nabla.mobi -vvvv
+#ansible all -m setup -i staging --limit albandri.albandrieu.com -vvvv
 
 #TODO ansible myhost --sudo -m raw -a "yum install -y python2 python-simplejson"
 

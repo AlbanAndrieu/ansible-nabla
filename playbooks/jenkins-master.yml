@@ -19,7 +19,7 @@
     - jenkins-master
 
   vars:
-      jenkins_proxy: apache
+      jenkins_proxy: "" # apache
       jenkins_user: jenkins
       jenkins_version: 2.204.3
       jenkins_proxy_hostname: localhost
@@ -29,7 +29,7 @@
       #jenkins_http_host: "{{ ansible_fqdn }}"
       jenkins_http_host: 127.0.0.1 
       #jenkins_proxy_port: 7070
-      jenkins_proxy_ssl: true
+      jenkins_proxy_ssl: false
       jenkins_proxy_ssl_certificate: "{{ jenkins_http_host }}.cer"
       jenkins_proxy_ssl_key: "/etc/ssl/{{ jenkins_http_host }}/almonde-jenkins.key"
       jenkins_home: /jenkins

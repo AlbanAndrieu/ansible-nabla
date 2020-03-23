@@ -185,10 +185,10 @@ albandrieu
 [windows]
 #10.0.2.15
 #albandrieu
-#PARD011996.nabla.mobi ansible_host=10.41.40.121 ansible_user="fru" ansible_password="Kondor_123" dtap=acc comment="Hosting by Alban Andrieu" ext_id="SRV_029" groups="workstation"
+#PARD011996.albandrieu.com ansible_host=10.41.40.121 ansible_user="fru" ansible_password="Kondor_123" dtap=acc comment="Hosting by Alban Andrieu" ext_id="SRV_029" groups="workstation"
 #.\fru Kondor_123
-#FR1CSWFRBM0005.nabla.mobi ansible_host=10.21.185.152 ansible_python_interpreter="/usr/bin/python2.7" ansible_user="todo" ansible_password="todo" dtap=acc comment="Hosting by Alban Andrieu" ext_id="SRV_{{ host_id }}" groups="micloud paris"
-#GDNCSWFRDEV0009.nabla.mobi ansible_host=10.22.64.181 ansible_python_interpreter="/usr/bin/python2.7" ansible_user="todo" ansible_password="todo" dtap=acc comment="Hosting by Alban Andrieu" ext_id="SRV_{{ host_id }}" groups="micloud paris"
+#FR1CSWFRBM0005.albandrieu.com ansible_host=10.21.185.152 ansible_python_interpreter="/usr/bin/python2.7" ansible_user="todo" ansible_password="todo" dtap=acc comment="Hosting by Alban Andrieu" ext_id="SRV_{{ host_id }}" groups="micloud paris"
+#GDNCSWFRDEV0009.albandrieu.com ansible_host=10.22.64.181 ansible_python_interpreter="/usr/bin/python2.7" ansible_user="todo" ansible_password="todo" dtap=acc comment="Hosting by Alban Andrieu" ext_id="SRV_{{ host_id }}" groups="micloud paris"
 
 [windows:vars]
 #ansible_user=vagrant

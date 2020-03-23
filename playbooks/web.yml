@@ -78,18 +78,25 @@
 
 #- import_playbook: docker.yml
 
-- import_playbook: lamp.yml
+- hosts: apache-servers
+  gather_facts: true  
+  become: true
+  
+  tasks:
+    - debug: var=hostvars[inventory_hostname]['ansible_default_ipv4']['address']
 
 - name: Configure and deploy the nabla application to apache
   hosts: apache-servers
+  gather_facts: true  
   become: true
 
   roles:
     - alban.andrieu.web
 
   vars:
-      apache_listen_port: 80
+      apache_listen_port: 7075
       php_default_version_debian: "7.3"
+      php_mysql_package: "php7.3-mysql"
       __php_mysql_package: "php7.3-mysql"
       web_base_dir: "/var/www/nabla-site-apache"
       apache_owner: "jenkins"
@@ -103,14 +110,16 @@
 #WARNING jenkins-master role has disabled a2dissite 000-default
 - name: Configure and deploy the nabla php sample application code to apache
   hosts: apache-servers
+  gather_facts: true  
   become: true
 
   roles:
     - alban.andrieu.web
 
   vars:
-      apache_listen_port: 7075,
+      apache_listen_port: 7075
       php_default_version_debian: "7.3"
+      php_mysql_package: "php7.3-mysql"
       __php_mysql_package: "php7.3-mysql"
       web_base_dir: "/var/www/nabla-servers-bower-sample"
       #jenkins_proxy_port: "{{ apache_listen_port }}" #TODO why is it needed!!!
@@ -124,3 +133,5 @@
       php_enable: no
       repository: "https://github.com/AlbanAndrieu/nabla-servers-bower-sample.git"
       repository_version: "gh-pages"
+
+- import_playbook: lamp.yml

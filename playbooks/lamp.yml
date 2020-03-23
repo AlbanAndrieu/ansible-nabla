@@ -1,14 +1,15 @@
+---
 
 #ansible all -m setup -i hosts-albandri --limit albandri -vvvv
 
-#ansible-playbook lamp.yml -i hosts-albandri --limit albandri -vvvv
+# ansible-playbook -i inventory/hosts-albandrieu -c local -v playbooks/lamp.yml --ask-become-pass -vvvv
 
 - name: Configure and deploy php to apache
   hosts: apache-servers
   become: true
 
   vars:
-    apache_listen_port: 80
+    apache_listen_port: 7075
     apache_listen_ip: "*"
     apache_global_vhost_settings: |
       DirectoryIndex index.php index.html
@@ -39,11 +40,15 @@
         documentroot: "/var/www"
         #TODO
         #certificate_file: "/etc/ssl/{{ansible_fqdn}}/{{ansible_fqdn}}.pem"
-        certificate_file: "/etc/webmin/miniserv.cert"
+        #certificate_file: "/etc/webmin/miniserv.cert"
+        certificate_file: "/etc/webmin/miniserv.pem"
         certificate_key_file: "/etc/webmin/miniserv.pem"
         # Optional.
         #certificate_chain_file: "/etc/ssl/{{ansible_fqdn}}/certificate_chain.crt"
-    php_version: '7.2'
+    php_default_version_debian: "7.3"
+    php_mysql_package: "php7.3-mysql"
+    __php_mysql_package: "php7.3-mysql"        
+    php_version: '7.3'
     php_memory_limit: "128M"
     php_max_execution_time: "90"
     php_upload_max_filesize: "256M"
@@ -62,7 +67,8 @@
     - geerlingguy.php
 #    - geerlingguy.php-xdebug
     - geerlingguy.php-mysql
-    - geerlingguy.phpmyadmin
+# TODO fix    
+#    - geerlingguy.phpmyadmin
 
 - hosts: apache-servers
   become: true
