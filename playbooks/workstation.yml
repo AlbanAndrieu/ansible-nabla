@@ -57,47 +57,13 @@
 
 - import_playbook: chrome.yml
 
-- name: Install virtualbox
-  hosts: virtualbox
-  become: true
+- import_playbook: virtualbox.yml
 
-  roles:
-    - alban.andrieu.virtualbox
+- import_playbook: vagrant.yml
 
-  vars:
-      #virtualbox_version: "5.1.30"
-      virtualbox_version: "6.0.14-dfsg-1"
-      virtualbox_package_name: virtualbox
+- import_playbook: locale.yml
 
-- name: Install vagrant
-  hosts: vagrant
-  become: true
-  ignore_errors: true
-
-  roles:
-    - vagrant
-
-  vars:
-      vagrant_version: "2.2.7"
-      vagrant_url: "https://releases.hashicorp.com/vagrant/{{ vagrant_version }}/vagrant_{{ vagrant_version }}_x86_64.deb"
-
-- name: Install locale
-  hosts: locale
-  become: true
-
-  roles:
-    - locale
-
-- name: Install css
-  hosts: css
-
-  roles:
-    - alban.andrieu.css
-
-  vars:
-#      ruby_version: "2.3.1"
-#      ruby_version: "2.5.5p157" # Ubuntu 19
-      ruby_version: ""
+- import_playbook: css.yml
 
 - import_playbook: webmin.yml
 

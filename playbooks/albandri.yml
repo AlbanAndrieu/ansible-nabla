@@ -127,18 +127,13 @@
 
 - import_playbook: docker.yml
 
-- name: Install locale
-  hosts: locale
-  remote_user: root
-
-  roles:
-    - locale
+- import_playbook: locale.yml
 
 - import_playbook: zabbix-agent.yml
 
-- import_playbook: xvbf
+- import_playbook: xvbf.yml
 
-- import_playbook: selenium
+- import_playbook: selenium.yml
 
 #
 #- name: Install zfs
@@ -257,16 +252,7 @@
 
 - import_playbook: jenkins-slave.yml
 
-- name: Install css
-  hosts: css
-  remote_user: root
-
-  roles:
-    - alban.andrieu.css
-
-  vars:
-#       ruby_version: 2.3.1
-       ruby_version: "2.2"
+- import_playbook: css.yml
 
 - import_playbook: chrome.yml
 

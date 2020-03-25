@@ -115,9 +115,6 @@
 [submodule "roles/alban.andrieu.hostname"]
 	path = roles/alban.andrieu.hostname
 	url = https://github.com/AlbanAndrieu/ansible-hostname.git
-[submodule "roles/locale"]
-	path = roles/locale
-	url = https://github.com/AlbanAndrieu/ansible-locale.git
 [submodule "roles/--force"]
 	path = roles/--force
 	url = https://github.com/AlbanAndrieu/ansible-role-mysql.git

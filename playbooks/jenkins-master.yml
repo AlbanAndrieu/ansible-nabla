@@ -33,6 +33,7 @@
       jenkins_proxy_ssl_certificate: "{{ jenkins_http_host }}.cer"
       jenkins_proxy_ssl_key: "/etc/ssl/{{ jenkins_http_host }}/almonde-jenkins.key"
       jenkins_home: /jenkins
+      restart_policy: unless-stopped
       jenkins_target_home: /jenkins
       jenkins_maxopenfiles: 65535
       #See jenkins tuning https://jenkins.io/blog/2016/11/21/gc-tuning/?utm_source=feedburner&utm_medium=twitter&utm_campaign=Feed%3A+ContinuousBlog+%28Jenkins%29

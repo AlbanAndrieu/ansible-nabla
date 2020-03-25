@@ -17,8 +17,9 @@
       vagrant_hosts_enabled: true
       vagrant_share_enabled: true
       vagrant_winrm_enabled: true
-#      vagrant_version: "2.0.0"
-
+#      vagrant_version: "2.2.7"
+#      vagrant_url: "https://releases.hashicorp.com/vagrant/{{ vagrant_version }}/vagrant_{{ vagrant_version }}_x86_64.deb"
+      
 #- name: Install vagrant user
 #  hosts: vagrant
 #  remote_user: root

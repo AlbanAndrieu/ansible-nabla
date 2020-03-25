@@ -107,13 +107,7 @@
        vagrant_windows_enabled: false
 #      vagrant_url: https://dl.bintray.com/mitchellh/vagrant/vagrant_1.6.3_x86_64.deb
 
-- name: Install locale
-  hosts: locale
-  remote_user: root
-#  connection: local
-
-  roles:
-    - locale
+- import_playbook: locale.yml
 
 #- import_playbook: zabbix.yml
 
@@ -233,13 +227,7 @@
 
 - import_playbook: xvbf.yml
 
-- name: Install css
-  hosts: css
-  remote_user: root
-#  connection: local
-
-  roles:
-    - alban.andrieu.css
+- import_playbook: css.yml
 
 - name: configure supervisor
   hosts: supervisors

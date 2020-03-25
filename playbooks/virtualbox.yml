@@ -1,4 +1,6 @@
-#ansible-playbook -i playbooks/hosts-albandri-test -v playbooks/virtualbox.yml --limit albandri-test -vvvv
+---
+
+# ansible-playbook -i playbooks/hosts-albandri-test -v playbooks/virtualbox.yml --limit albandri-test -vvvv
 
 - name: Install virtualbox
   hosts: virtualbox
@@ -9,7 +11,8 @@
     - alban.andrieu.virtualbox
 
   vars:
-    virtualbox_version: "5.2.26"
+    #virtualbox_version: "5.2.26"
+    virtualbox_version: "6.0.14-dfsg-1"
     virtualbox_package_name: virtualbox
     virtualbox_users:
       - "jenkins"

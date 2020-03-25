@@ -24,8 +24,9 @@
     apache_create_vhosts: true
     #apache_vhosts_template: "vhosts.conf.j2"
     apache_vhosts:
-      - servername: "{{ ansible_fqdn }}"
-        documentroot: "/var/www/sample"
+      #- servername: "{{ ansible_fqdn }}"
+      - servername: "albandrieu.com"
+        documentroot: "/var/www/nabla-site-apache"
         allow_override: "FileInfo Indexes"
         options: "MultiViews Indexes SymLinksIfOwnerMatch IncludesNoExec"
         extra_parameters: |
@@ -36,8 +37,9 @@
             AuthUserFile /var/www/password-protected-directory/.htpasswd
           </Directory>
     apache_vhosts_ssl:
-      - servername: "{{ ansible_fqdn }}"
-        documentroot: "/var/www"
+      #- servername: "{{ ansible_fqdn }}"
+      - servername: "albandrieu.com"
+        documentroot: "/var/www/nabla-site-apache"
         #TODO
         #certificate_file: "/etc/ssl/{{ansible_fqdn}}/{{ansible_fqdn}}.pem"
         #certificate_file: "/etc/webmin/miniserv.cert"
