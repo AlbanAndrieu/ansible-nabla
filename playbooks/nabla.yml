@@ -146,21 +146,6 @@
 #  roles:
 #    - alban.andrieu.zfs
 
-#Below dropbox is included in workstation role
-#- name: Install dropbox
-#  hosts: workstation
-#  remote_user: root
-##  sudo: yes
-##  sudo_user: "{{ user }}"
-##  connection: local
-#
-#  roles:
-#    - dropbox
-#
-#  vars:
-#       docker_files_enable: yes
-#       docker_files_generated_directory: "../roles/alban.andrieu.dropbox"
-
 #- import_playbook: workstation.yml
 
 #- import_playbook: nexus.yml
@@ -229,33 +214,7 @@
 
 - import_playbook: css.yml
 
-- name: configure supervisor
-  hosts: supervisors
-  remote_user: root
-
-  roles:
-    - role: supervisor
-
-# start a basic python http server on port 8000
-  vars:
-      name: webserver
-      command: python -m SimpleHTTPServer 8000
-      directory: /opt/test
-# user is the same as base_admin_username
-      user: root
-      stopsignal: HUP
-
-#- name: configure supervisor
-#  hosts: supervisors
-#  remote_user: root
-#
-#  roles:
-#    - role: supervisor
-#      name: fitness
-#      command: /workspace/xebium/run.sh
-#      directory: /workspace/xebium
-## user is the same as base_admin_username
-#      user: ubuntu
+#- import_playbook: supervisor.yml
 
 #- import_playbook: sonar.yml
 

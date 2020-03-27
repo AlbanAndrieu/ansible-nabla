@@ -40,10 +40,9 @@
   scm: 'git'
   version: 'master'
 
-- src: 'https://github.com/AlbanAndrieu/ansible-dropbox'
-  name: 'alban.andrieu.dropbox'
-  scm: 'git'
-  version: 'master'
+- src: https://github.com/AlbanAndrieu/ansible-dropbox.git
+  name: alban.andrieu.dropbox
+  version: master
 
 - src: https://github.com/AlbanAndrieu/ansible-eclipse.git
   name: alban.andrieu.eclipse

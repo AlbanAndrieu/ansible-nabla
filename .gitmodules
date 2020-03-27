@@ -64,9 +64,6 @@
 [submodule "roles/alban.andrieu.xvbf"]
 	path = roles/alban.andrieu.xvbf
 	url = https://github.com/AlbanAndrieu/ansible-xvbf.git
-[submodule "roles/alban.andrieu.dropbox"]
-	path = roles/alban.andrieu.dropbox
-	url = https://github.com/AlbanAndrieu/ansible-dropbox.git
 [submodule "roles/alban.andrieu.selenium"]
 	path = roles/alban.andrieu.selenium
 	url = https://github.com/AlbanAndrieu/ansible-selenium.git

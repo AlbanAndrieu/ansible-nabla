@@ -32,6 +32,8 @@
 
 - import_playbook: maven.yml
 
+- import_playbook: dropbox.yml
+
 - name: Apply workstation configuration
   hosts: workstation
 #  remote_user: albandrieu
@@ -42,7 +44,6 @@
     - alban.andrieu.workstation
 
   vars:
-       dropbox_user_directory: "/workspace/Dropbox"
        dropbox_user_host: "2366450895"
        dash_enabled: no
        webapps_enabled: no
