@@ -4,9 +4,6 @@
 [submodule "roles/ansible"]
 	path = roles/ansible
 	url = https://github.com/debops/ansible-role-ansible.git
-[submodule "roles/supervisor"]
-	path = roles/supervisor
-	url = https://github.com/AlbanAndrieu/ansible-supervisor_task.git
 [submodule "roles/vagrant"]
 	path = roles/vagrant
 	url = https://github.com/AlbanAndrieu/ansible-vagrant-role.git

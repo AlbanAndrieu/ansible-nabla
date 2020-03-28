@@ -472,10 +472,9 @@
   scm: 'git'
   version:  'master'
 
-- src: 'https://github.com/AlbanAndrieu/ansible-supervisor_task'
-  name: 'supervisor'
-  scm: 'git'
-  version: 'master'
+- src: https://github.com/AlbanAndrieu/ansible-supervisor_task.git
+  name: supervisor
+  version: master
 
 - src: 'https://github.com/AlbanAndrieu/ansible-vagrant-role'
   name: 'vagrant'
