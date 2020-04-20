@@ -56,7 +56,7 @@ else
   docker history --no-trunc ${DOCKER_ORGANISATION}/${DOCKER_NAME}:latest > docker-history.log
   echo -e "${magenta} Running dive ${NC}"
   echo -e "    dive ${DOCKER_ORGANISATION}/${DOCKER_NAME}:latest"
-  CI=true dive "${DOCKER_ORGANISATION}/${DOCKER_NAME}:latest" | tee -a docker-dive.log
+  CI=true dive "${DOCKER_ORGANISATION}/${DOCKER_NAME}:latest" || true | tee -a docker-dive.log
   RC=$?
   if [ ${RC} -ne 0 ]; then
     echo ""

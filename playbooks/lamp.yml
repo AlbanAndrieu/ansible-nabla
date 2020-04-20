@@ -41,12 +41,14 @@
       - servername: "albandrieu.com"
         documentroot: "/var/www/nabla-site-apache"
         #TODO
-        #certificate_file: "/etc/ssl/{{ansible_fqdn}}/{{ansible_fqdn}}.pem"
+        #certificate_file: "/etc/ssl/{{ ansible_fqdn }}/{{ ansible_fqdn }}.pem"
         #certificate_file: "/etc/webmin/miniserv.cert"
-        certificate_file: "/etc/webmin/miniserv.pem"
-        certificate_key_file: "/etc/webmin/miniserv.pem"
+        #certificate_file: "/etc/webmin/miniserv.pem"
+        certificate_file: "/etc/ssl/private/{{ ansible_fqdn }}.pem"
+        #certificate_key_file: "/etc/webmin/miniserv.pem"
+        certificate_key_file: "/etc/ssl/private/{{ ansible_fqdn }}.pem"
         # Optional.
-        #certificate_chain_file: "/etc/ssl/{{ansible_fqdn}}/certificate_chain.crt"
+        #certificate_chain_file: "/etc/ssl/{{ ansible_fqdn }}/certificate_chain.crt"
     php_default_version_debian: "7.3"
     php_mysql_package: "php7.3-mysql"
     __php_mysql_package: "php7.3-mysql"        

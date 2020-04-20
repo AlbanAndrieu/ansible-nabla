@@ -20,10 +20,9 @@
   name: alban.andrieu.common
   version: 'master'
 
-- src: 'https://github.com/AlbanAndrieu/ansible-conky'
-  name: 'alban.andrieu.conky'
-  scm: 'git'
-  version: 'master'
+- src: https://github.com/AlbanAndrieu/ansible-conky.git
+  name: alban.andrieu.conky
+  version: master
 
 - src: 'https://github.com/AlbanAndrieu/ansible-cpp'
   name: 'alban.andrieu.cpp'
@@ -559,10 +558,9 @@
   scm: 'git'
   version: 'master'
 
-- src: 'https://github.com/geerlingguy/ansible-role-clamav'
-  name: 'geerlingguy.clamav'
-  scm: 'git'
-  version: 'master'
+- src: https://github.com/geerlingguy/ansible-role-clamav.git
+  name: geerlingguy.clamav
+  version: master
 
 - src: 'https://github.com/geerlingguy/ansible-role-packer'
   name: 'geerlingguy.varnish'

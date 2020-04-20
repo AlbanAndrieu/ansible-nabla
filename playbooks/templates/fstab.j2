@@ -20,8 +20,9 @@ UUID=4B0B-41D7  /boot/efi       vfat    umask=0077      0       1
 nabla:/mnt/dpool/media/ftp /media/ftp nfs4 defaults,user,auto,noatime,bg,rsize=16384,wsize=16384 0 0
 nabla:/mnt/dpool/media/download /media/download nfs4 defaults,user,auto,noatime,bg,rsize=16384,wsize=16384 0 0
 nabla:/mnt/dpool/media/music /media/music nfs4 defaults,user,auto,noatime,bg,rsize=16384,wsize=16384 0 0
+#nabla:/mnt/dpool/media/movie /media/movie nfs4 defaults,user,auto,noatime,bg,rsize=16384,wsize=16384 0 0
 nabla:/mnt/dpool/media/photo /media/photo nfs4 defaults,user,auto,noatime,bg,rsize=16384,wsize=16384 0 0
-nabla:/mnt/dpool/media/serie /media/serie nfs4 defaults,user,auto,noatime,bg,rsize=16384,wsize=16384 0 0
+#nabla:/mnt/dpool/media/serie /media/serie nfs4 defaults,user,auto,noatime,bg,rsize=16384,wsize=16384 0 0
 nabla:/mnt/dpool/media/torrentfile /media/torrentfile nfs4 defaults,user,auto,noatime,bg,rsize=16384,wsize=16384 0 0
 nabla:/mnt/dpool/media/video /media/video nfs4 defaults,user,auto,noatime,bg,rsize=16384,wsize=16384 0 0
 nabla:/mnt/dpool/media/webdav /media/webdav nfs4 defaults,user,auto,noatime,bg,rsize=16384,wsize=16384 0 0
@@ -31,3 +32,8 @@ nabla:/mnt/dpool/backup /media/backup nfs4 defaults,user,auto,noatime,bg,rsize=1
 nabla:/mnt/dpool/jenkins /media/jenkins nfs4 defaults,user,auto,noatime,bg,rsize=16384,wsize=16384 0 0
 nabla:/mnt/dpool/jenkins-slave /media/jenkins-slave nfs4 defaults,user,auto,noatime,bg,rsize=16384,wsize=16384 0 0
 nabla:/mnt/dpool/workspace /workspace-tmp nfs4 defaults,user,auto,noatime,bg,rsize=16384,wsize=16384 0 0
+
+#https://repository-nabla.forge.cloudbees.com/release/  /mnt/nabla-release davfs rw,user,noauto,conf=/etc/davfs2/davfs2.conf,uid=$UID 0 0
+#https://repository-nabla.forge.cloudbees.com/snapshot/  /mnt/nabla-snapshot davfs rw,user,noauto,conf=/etc/davfs2/davfs2.conf,uid=$UID 0 0
+
+/swapfile   none    swap    sw    0   0

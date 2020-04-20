@@ -96,7 +96,7 @@ ENV ANSIBLE_CONFIG=${JENKINS_USER_HOME}/ansible.cfg
 
 COPY ansible.cfg *.yml vault.passwd $JENKINS_USER_HOME/
 #group_vars .ssh playbooks/ansible.pub.key
-COPY playbooks/hosts $JENKINS_USER_HOME/
+#COPY playbooks/hosts $JENKINS_USER_HOME/
 COPY inventory $JENKINS_USER_HOME/inventory
 COPY playbooks $JENKINS_USER_HOME/playbooks
 #COPY roles $JENKINS_USER_HOME/roles
@@ -142,6 +142,11 @@ RUN curl -L -o /tmp/kubectl  https://storage.googleapis.com/kubernetes-release/r
 
 #RUN apt-get install kubelet kubeadm
 
+ENV DOCKERIZE_VERSION v0.6.1
+RUN curl -L https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz --output dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz\
+    && tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
+    && rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
+
 ADD https://get.aquasec.com/microscanner /
 RUN chmod +x /microscanner
 
@@ -163,7 +168,7 @@ RUN mkdir ${HOME}/workspace && mkdir -p ${HOME}/.m2/repository && chmod 777 ${HO
 #RUN id jenkins && mkdir ${HOME}/.local && ls -lrtai $HOME/ && ls -lrtai $HOME/.sonar
 
 #BELOW npm install is adding 700Mb to the images
-RUN npm install --only=production && npm run update-webdriver
+#RUN npm install --only=production && npm run update-webdriver
 
 #RUN /microscanner ${MICROSCANNER_TOKEN} --continue-on-failure 2>&1 > ${HOME}/microscanner.log
 #RUN echo "No vulnerabilities!"
@@ -181,4 +186,5 @@ EXPOSE 22
 #VOLUME ["/sys/fs/cgroup", "/tmp", "/run"]
 
 ENTRYPOINT ["/entrypoint.sh"]
-CMD ["/usr/lib/systemd/systemd"]
+CMD ["bash"]
+#CMD ["/usr/lib/systemd/systemd"]

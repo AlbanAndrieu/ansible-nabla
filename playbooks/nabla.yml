@@ -94,73 +94,31 @@
 #      virtualbox_package_name: virtualbox
 #      virtualbox_dkms_enable: no
 
-- name: Install vagrant
-  hosts: vagrant
-  remote_user: root
-#  connection: local
 
-  roles:
-    - vagrant
+- import_playbook: vagrant.yml
 
-  vars:
-       vagrant_libvirt_enabled: false
-       vagrant_windows_enabled: false
-#      vagrant_url: https://dl.bintray.com/mitchellh/vagrant/vagrant_1.6.3_x86_64.deb
+#  vars:
+#       vagrant_libvirt_enabled: false
+#       vagrant_windows_enabled: false
+##      vagrant_url: https://dl.bintray.com/mitchellh/vagrant/vagrant_1.6.3_x86_64.deb
 
 - import_playbook: locale.yml
 
 #- import_playbook: zabbix.yml
 
-- name: Install webmin
-  hosts: webmin
-  remote_user: root
-#  connection: local
+- import_playbook: webmin.yml
 
-  roles:
-    - alban.andrieu.webmin
+- import_playbook: xvbf.yml
 
-  vars:
-      docker_files_enable: yes
-      docker_files_generated_directory: "../roles/alban.andrieu.webmin"
+- import_playbook: selenium.yml
 
-- name: Install xvbf
-  hosts: xvbf
-  remote_user: root
-
-  roles:
-    - alban.andrieu.xvbf
-
-- name: Install selenium
-  hosts: selenium
-  remote_user: root
-
-  roles:
-     - alban.andrieu.selenium
-
-#
-#- name: Install zfs
-#  hosts: zfs
-#  remote_user: root
-##  connection: local
-#
-#  roles:
-#    - alban.andrieu.zfs
+#- import_playbook: zfs.yml
 
 #- import_playbook: workstation.yml
 
 #- import_playbook: nexus.yml
 
-# This playbook deploys a simple standalone Tomcat 7 server.
-- name: Deploy Tomcat
-  hosts: tomcat-servers
-  remote_user: root
-#  connection: local
-
-  roles:
-    - alban.andrieu.tomcat
-
-  vars:
-       tomcat_started_check_enable: no
+- import_playbook: tomcat.yml
 
 # This playbook deploys a simple standalone JBoss server.
 

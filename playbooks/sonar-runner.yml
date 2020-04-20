@@ -10,6 +10,7 @@
     - role: geerlingguy.sonar-runner
 
   vars:
-      sonar_runner_download_url: https://sonarsource.bintray.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.2.0.1873.zip
-      sonar_runner_download_file: sonar-runner-dist-4.2.zip
-      sonar_runner_expanded_file: sonar-scanner-4.2.0.1873
+      #sonar_runner_download_url: https://sonarsource.bintray.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.2.0.1873.zip
+      sonar_runner_download_url: https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.2.0.1873.zip
+      sonar_runner_download_file: sonar-scanner-cli-4.2.0.1873.zip
+      sonar_runner_expanded_file: sonar-scanner-4.3.0.2102

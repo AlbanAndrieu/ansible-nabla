@@ -135,14 +135,7 @@
 
 - import_playbook: selenium.yml
 
-#
-#- name: Install zfs
-#  hosts: zfs
-#  remote_user: root
-#
-#
-#  roles:
-#    - alban.andrieu.zfs
+#- import_playbook: zfs.yml
 
 - import_playbook: dropbox.yml
 
@@ -182,17 +175,7 @@
 #       docker_files_enable: yes,
 #       docker_files_generated_directory: "../roles/alban.andrieu.jenkins-swarm",
 
-- name: Install webmin
-  hosts: webmin
-  remote_user: root
-
-
-  roles:
-    - alban.andrieu.webmin
-
-  vars:
-      docker_files_enable: no
-      docker_files_generated_directory: "../roles/alban.andrieu.webmin"
+- import_playbook: webmin.yml
 
 #- import_playbook: nexus.yml
 
