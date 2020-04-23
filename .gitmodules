@@ -118,9 +118,6 @@
 [submodule "roles/alban.andrieu.solaris"]
 	path = roles/alban.andrieu.solaris
 	url = https://github.com/AlbanAndrieu/ansible-solaris.git
-[submodule "roles/alban.andrieu.jdiskreport"]
-	path = roles/alban.andrieu.jdiskreport
-	url = https://github.com/AlbanAndrieu/ansible-jdiskreport.git
 [submodule "roles/alban.andrieu.private-bower"]
 	path = roles/alban.andrieu.private-bower
 	url = https://github.com/AlbanAndrieu/ansible-private-bower.git

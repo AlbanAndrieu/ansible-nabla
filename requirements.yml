@@ -77,10 +77,9 @@
   scm: 'git'
   version: 'master'
 
-- src: 'https://github.com/AlbanAndrieu/ansible-jdiskreport'
-  name: 'alban.andrieu.jdiskreport'
-  scm: 'git'
-  version: 'master'
+- src: https://github.com/AlbanAndrieu/ansible-jdiskreport.git
+  name: alban.andrieu.jdiskreport
+  version: master
 
 - src: 'https://github.com/AlbanAndrieu/ansible-jenkins-slave'
   name: 'alban.andrieu.jenkins-slave'
@@ -281,7 +280,7 @@
 - src: https://github.com/geerlingguy/ansible-role-apache.git
   name: geerlingguy.apache
   version: master
- 
+
 # Below replaced by https://github.com/geerlingguy/ansible-role-apache.git
 #- src: 'https://github.com/AlbanAndrieu/ansible-role-apache'
 #  name: 'geerlingguy.apache'
@@ -358,7 +357,7 @@
 - src: https://github.com/geerlingguy/ansible-role-phpmyadmin.git
   name: geerlingguy.phpmyadmin
   version: master
-  
+
 #- src: 'https://github.com/AlbanAndrieu/ansible-role-phpmyadmin'
 #  name: 'geerlingguy.phpmyadmin'
 #  scm: 'git'
@@ -548,7 +547,7 @@
 - src: https://github.com/andrewrothstein/ansible-unarchive-deps.git
   version: master
   name: andrewrothstein.unarchive-deps
-  
+
 - src: https://github.com/andrewrothstein/ansible-kubernetes-helm.git
   version: master
   name: andrewrothstein.kubernetes-helm
