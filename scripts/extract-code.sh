@@ -25,6 +25,7 @@ git pull origin master --allow-unrelated-histories
 git pull && git submodule init && git submodule update && git submodule status
 #git fetch --recurse-submodules
 #git submodule foreach git fetch
+git submodule foreach git pull origin master
 git submodule foreach git checkout master
 git submodule foreach git pull origin master
 

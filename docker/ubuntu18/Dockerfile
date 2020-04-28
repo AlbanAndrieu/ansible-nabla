@@ -5,7 +5,8 @@ FROM selenium/standalone-chrome:3.141.59-yttrium
 ARG JENKINS_USER_HOME=${JENKINS_USER_HOME:-/home/jenkins}
 
 # dockerfile_lint - ignore
-LABEL Name="ansible-jenkins-slave" Version="1.0.0"
+MAINTAINER Alban Andrieu "https://github.com/AlbanAndrieu"
+LABEL Name="ansible-jenkins-slave" Version="1.0.9"
 LABEL description="Image used by Nabla products to build Java/Javascript and CPP\
  this image is running on Ubuntu 18.04."
 LABEL com.example.vendor="ACME Incorporated"
@@ -46,8 +47,8 @@ RUN ln -fs /usr/share/zoneinfo/${TZ} /etc/localtime && locale-gen en_US.UTF-8
 
 # error with pip==19.3.1
 # error with ansible==2.9.1 and 2.8.6, ok with 2.7.14
-RUN python3 -m pip install --upgrade pip==19.2.3 \
-    && pip3 install ansible==2.7.9 zabbix-api==0.5.4
+RUN python3 -m pip install --upgrade pip==20.0.2 \
+    && pip3 install ansible==2.7.14 zabbix-api==0.5.4
 
 RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
 RUN add-apt-repository \
@@ -58,7 +59,7 @@ RUN add-apt-repository \
 RUN apt-get update -qq && apt-get install -qqy docker-ce=5:19.03.4~3-0~ubuntu-bionic && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 #RUN curl -sL https://deb.nodesource.com/setup_11.x | bash - && \
-#    apt-get update && apt-get install -y nodejs=8.10.0~dfsg-2ubuntu0.4 && apt-get clean && rm -rf /var/lib/apt/lists/* && \
+#    apt-get update && apt-get install -y nodejs=8.10.0~dfsg-2ubuntu0.4 npm=3.5.2-0ubuntu4 && apt-get clean && rm -rf /var/lib/apt/lists/* && \
 #    npm install -g bower@1.8.8 grunt@1.0.4 grunt-cli@1.3.2 nsp@3.2.1 webdriver-manager@12.1.7 yarn@1.19.1 yo@3.1.1 json2csv@4.3.3 phantomas@1.20.1 shrinkwrap@0.4.0 newman@4.5.5 xunit-viewer@5.1.11 dockerfile_lint@0.3.3;
 
 ARG USER=${USER:-jenkins}
@@ -66,7 +67,7 @@ ARG GROUP=${GROUP:-docker}
 ARG UID=${UID:-2000}
 ARG GID=${GID:-2000}
 RUN printf "\033[1;32mFROM UID:GID: ${UID}:${GID}- JENKINS_USER_HOME: ${JENKINS_USER_HOME} \033[0m\n" && \
-    printf "\033[1;32mWITH $USER\ngroup: $GROUP \033[0m\n"
+    printf "\033[1;32mWITH user: $USER\ngroup: $GROUP \033[0m\n"
 
 RUN groupmod -g ${GID} docker
 #RUN cat /etc/group | grep docker || true
@@ -94,18 +95,23 @@ RUN mkdir -p /etc/ansible
 RUN echo "[local]\nlocalhost ansible_connection=local" > /etc/ansible/hosts
 ENV ANSIBLE_CONFIG=${JENKINS_USER_HOME}/ansible.cfg
 
-COPY ansible.cfg *.yml vault.passwd $JENKINS_USER_HOME/
-#group_vars .ssh playbooks/ansible.pub.key
-#COPY playbooks/hosts $JENKINS_USER_HOME/
+ARG ANSIBLE_VAULT_PASS=${ANSIBLE_VAULT_PASS:-"microsoft"}
+#ENV ANSIBLE_VAULT_PASS=${ANSIBLE_VAULT_PASS:-"microsoft"}
+RUN echo "ANSIBLE_VAULT_PASS : ${ANSIBLE_VAULT_PASS}"
+RUN echo "${ANSIBLE_VAULT_PASS}" > $JENKINS_USER_HOME/vault.passwd && cat $JENKINS_USER_HOME/vault.passwd
+#COPY vault.passwd $JENKINS_USER_HOME/vault.passwd
+#COPY ansible.cfg
+COPY *.yml $JENKINS_USER_HOME/
 COPY inventory $JENKINS_USER_HOME/inventory
 COPY playbooks $JENKINS_USER_HOME/playbooks
 #COPY roles $JENKINS_USER_HOME/roles
 #COPY .ssh $JENKINS_USER_HOME/.ssh
 COPY package.json $JENKINS_USER_HOME/
-RUN chown jenkins:$(id -gn jenkins) $JENKINS_HOME $JENKINS_HOME/.*
+#RUN id jenkins && ls -lrta $JENKINS_USER_HOME/
+RUN chown jenkins:$(id -gn jenkins) $JENKINS_USER_HOME $JENKINS_USER_HOME/.*
 
 # Execute
-RUN ansible-galaxy install -r "$JENKINS_USER_HOME/requirements.yml" -p "$JENKINS_USER_HOME/roles/" --ignore-errors && \
+RUN ansible-galaxy install -r "$JENKINS_USER_HOME/requirements.yml" -p "$JENKINS_USER_HOME/.ansible/roles/" --ignore-errors && \
  ansible-playbook "$JENKINS_USER_HOME/playbooks/jenkins-full.yml" -i "$JENKINS_USER_HOME/inventory/hosts" -c local \
  -e "workspace=/tmp" \
  -e "jenkins_jdk8_enable=true" \
@@ -113,11 +119,11 @@ RUN ansible-galaxy install -r "$JENKINS_USER_HOME/requirements.yml" -p "$JENKINS
 # -e "jdk_home=/usr/lib/jvm/java-8-openjdk-amd64/" \
  -e "jenkins_id=${UID}" -e "docker_gid=${GID}" \
  -e "nis_enabled=false" -e "automount_enabled=false" -e "dns_enabled=false" \
- --skip-tags=restart,vm,python35,objc \
-# --vault-id $JENKINS_USER_HOME/vault.passwd \
+ --skip-tags=restart,vm,python35,python36,objc \
+ --vault-id $JENKINS_USER_HOME/vault.passwd \
  -vvvv \
- && apt-get autoremove -y && apt-get clean && apt-get remove asciidoc -y && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /var/cache/man/* /var/log/* "$JENKINS_USER_HOME/vault.passwd" \
- && chown -R "jenkins:$(id -gn jenkins)" "$JENKINS_USER_HOME" && chmod -R 777 "${HOME}"
+ && apt-get autoremove -y && apt-get clean && apt-get remove asciidoc -y && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /var/cache/man/* /var/log/* "$JENKINS_USER_HOME/roles" "$JENKINS_USER_HOME/vault.passwd" \
+ && chown -R "jenkins:$(id -gn jenkins)" "$JENKINS_USER_HOME" && chmod -R 777 "${JENKINS_USER_HOME}"
 
 # Install a basic SSH server
 #RUN sed -i 's|session    required     pam_loginuid.so|session    optional     pam_loginuid.so|g' /etc/pam.d/sshd
@@ -125,8 +131,8 @@ RUN ansible-galaxy install -r "$JENKINS_USER_HOME/requirements.yml" -p "$JENKINS
 
 RUN ifconfig | awk '/inet addr/{print substr($2,6)}' ## Display IP address (optional)
 
-ENV HELM_VERSION v2.16.1
-ENV KUBECTL_VERSION v1.17.2
+ARG HELM_VERSION=${HELM_VERSION:-"v2.16.1"}
+ARG KUBECTL_VERSION=${KUBECTL_VERSION:-"v1.17.2"}
 ENV FILENAME helm-${HELM_VERSION}-linux-amd64.tar.gz
 ENV HELM_URL https://storage.googleapis.com/kubernetes-helm/${FILENAME}
 
@@ -138,11 +144,11 @@ RUN curl -L -o /tmp/${FILENAME} ${HELM_URL} \
 RUN curl -L -o /tmp/kubectl  https://storage.googleapis.com/kubernetes-release/release/v1.16.1/bin/linux/amd64/kubectl \
   && chmod +x /tmp/kubectl \
   && mv /tmp/kubectl /bin/kubectl \
-  && rm -rf /tmp
+  && rm -rf /tmp/*
 
 #RUN apt-get install kubelet kubeadm
 
-ENV DOCKERIZE_VERSION v0.6.1
+ARG DOCKERIZE_VERSION=${DOCKERIZE_VERSION:-"v0.6.1"}
 RUN curl -L https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz --output dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz\
     && tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
     && rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
@@ -160,10 +166,25 @@ ADD entrypoint.sh /
 #RUN chmod +x /jenkins-slave-startup.sh /entrypoint.sh && rm -fr /sbin/initctl && ln -s /jenkins-slave-startup.sh /sbin/initctl
 RUN chmod +x /entrypoint.sh && rm -fr /sbin/initctl && ln -s /entrypoint.sh /sbin/initctl
 
+ARG AGENT_VERSION=${AGENT_VERSION:-"4.3"}
+ARG AGENT_WORKDIR=${JENKINS_USER_HOME}/agent
+
+RUN curl --create-dirs -fsSLo /usr/share/jenkins/agent.jar https://repo.jenkins-ci.org/public/org/jenkins-ci/main/remoting/${AGENT_VERSION}/remoting-${AGENT_VERSION}.jar \
+  && chmod 755 /usr/share/jenkins \
+  && chmod 644 /usr/share/jenkins/agent.jar \
+  && ln -sf /usr/share/jenkins/agent.jar /usr/share/jenkins/slave.jar
+
+COPY jenkins-agent.sh /usr/local/bin/jenkins-agent
+RUN chmod +x /usr/local/bin/jenkins-agent && \
+    ln -s /usr/local/bin/jenkins-agent /usr/local/bin/jenkins-slave
+
+ENV AGENT_WORKDIR=${AGENT_WORKDIR}
+RUN mkdir ${JENKINS_USER_HOME}/.jenkins && mkdir -p ${AGENT_WORKDIR}
+
 # drop back to the regular jenkins user - good practice
 USER jenkins
 ENV HOME=${JENKINS_USER_HOME}
-RUN mkdir ${HOME}/workspace && mkdir -p ${HOME}/.m2/repository && chmod 777 ${HOME}/ansible.log && chmod -R 777 ${HOME}/.cache
+RUN mkdir ${HOME}/workspace && mkdir -p ${HOME}/.m2/repository && chmod -R 777 ${HOME}/.cache
 #RUN mkdir ${HOME}/workspace && mkdir ${HOME}/.config && mkdir ${HOME}/.local && mkdir ${HOME}/.sonar && mkdir -p ${HOME}/.m2/repository && chmod -R 777 ${HOME}
 #RUN id jenkins && mkdir ${HOME}/.local && ls -lrtai $HOME/ && ls -lrtai $HOME/.sonar
 
@@ -178,12 +199,11 @@ RUN mkdir ${HOME}/workspace && mkdir -p ${HOME}/.m2/repository && chmod 777 ${HO
 #USER root
 
 # Working dir
-WORKDIR $HOME
+WORKDIR $JENKINS_USER_HOME
 
-# Standard SSH port
-EXPOSE 22
+EXPOSE 80
 
-#VOLUME ["/sys/fs/cgroup", "/tmp", "/run"]
+VOLUME ["/sys/fs/cgroup", "/tmp", "/run"]
 
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["bash"]
