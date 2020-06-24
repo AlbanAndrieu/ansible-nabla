@@ -1,21 +1,16 @@
 #!/usr/bin/env groovy
-@Library('nabla-pipeline-scripts') _
+@Library(value='jenkins-pipeline-scripts@master', changelog=false) _
 
-/*
- * Fusion Risk Ansible
- *
- * Test Ansible Playbooks by: ansible-lint, ansible-playbook on docker images
- */
-
-String DOCKER_REGISTRY="docker.hub".trim()
+String DOCKER_REGISTRY="index.docker.io/v1".trim()
 String DOCKER_ORGANISATION="nabla".trim()
-String DOCKER_TAG="1.0.1".trim()
-String DOCKER_TAG_NEXT="1.0.2".trim()
-String DOCKER_NAME="ansible-jenkins-slave".trim()
+String DOCKER_TAG="1.0.11".trim()
+String DOCKER_TAG_NEXT="1.0.12".trim()
+String DOCKER_NAME="ansible-jenkins-slave-docker".trim()
 
 String DOCKER_REGISTRY_URL="https://${DOCKER_REGISTRY}".trim()
-String DOCKER_REGISTRY_CREDENTIAL=env.DOCKER_REGISTRY_CREDENTIAL ?: "jenkins".trim()
-String DOCKER_IMAGE="${DOCKER_REGISTRY}/${DOCKER_ORGANISATION}/${DOCKER_NAME}:${DOCKER_TAG}".trim()
+String DOCKER_REGISTRY_URL="https://${DOCKER_REGISTRY}".trim()
+String DOCKER_REGISTRY_CREDENTIAL=env.DOCKER_REGISTRY_CREDENTIAL ?: "hub-docker-nabla".trim()
+String DOCKER_IMAGE="${DOCKER_ORGANISATION}/${DOCKER_NAME}:${DOCKER_TAG}".trim()
 
 String DOCKER_OPTS_BASIC = getDockerOpts()
 String DOCKER_OPTS_COMPOSE = getDockerOpts(isDockerCompose: true, isLocalJenkinsUser: false)

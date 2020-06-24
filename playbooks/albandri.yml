@@ -279,6 +279,7 @@
            shell_git_email: 'alban.andrieu@free.fr',
            shell_git_password: 'microsoft',
            shell_git_name: "Andrieu, Alban",
+           shell_git_maildomain: "free.fr",
            shell_git_path: '/usr/bin',
            shell_git_ssl: false,
            shell_git_meld_enabled: yes,

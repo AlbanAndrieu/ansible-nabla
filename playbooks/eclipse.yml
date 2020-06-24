@@ -1,6 +1,5 @@
 ---
 
-#ansible-playbook -i inventory/hosts-albandrieu -c local -v playbooks/eclipse.yml -vvvv --limit albandrieu | tee setup.log
 #ansible-playbook -i inventory/hosts-albandrieu -c local -v playbooks/eclipse.yml -vvvv --limit albandrieu --ask-become-pass | tee setup.log
 
 - name: Install eclipse

@@ -52,6 +52,7 @@
          shell_git_password: "microsoft",
          # Optional.
          shell_git_name: "Andrieu, Alban",
+         shell_git_maildomain: "free.fr",
          shell_git_path: "/usr/bin",
          shell_git_ssl: false
         }

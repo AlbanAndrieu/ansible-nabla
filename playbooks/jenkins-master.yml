@@ -27,7 +27,7 @@
       jenkins_ssh_key_file: "~/.ssh/id_rsa"
       jenkins_http_port: 8686
       #jenkins_http_host: "{{ ansible_fqdn }}"
-      jenkins_http_host: 127.0.0.1 
+      jenkins_http_host: 127.0.0.1
       #jenkins_proxy_port: 7070
       jenkins_proxy_ssl: false
       jenkins_proxy_ssl_certificate: "{{ jenkins_http_host }}.cer"
@@ -274,6 +274,7 @@
           shell_git_email: "alban.andrieu@free.fr",
           shell_git_password: "microsoft",
           shell_git_name: "Andrieu, Alban",
+          shell_git_maildomain: "free.fr",
           shell_git_path: "/usr/bin",
           shell_git_ssl: false,
           shell_git_meld_enabled: true,
