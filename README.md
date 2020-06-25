@@ -12,7 +12,8 @@ Then run the playbook, like this:
 
 	ansible-playbook -i hosts -c local -v nabla.yml -vvvv
 	or
-	setup.sh
+	export ANSIBLE_VAULT_PASS=todo
+	./scripts/docker-build.sh
 
 When the playbook run completes, you should be able to work on any NABLA project, on the target machines.
 
@@ -45,21 +46,21 @@ Run `git commit -am 'Add key' --no-verify`
 
 ### Docker image
 
-See [ansible-jenkins-slave](https://hub.docker.com/r/nabla/ansible-jenkins-slave-docker/)
+See [ansible-nabla](https://hub.docker.com/r/nabla/ansible-nabla/) or [ansible-jenkins-slave-docker](https://hub.docker.com/r/nabla/ansible-jenkins-slave-docker/)
 
 #### Pull image
 ```
-docker pull nabla/ansible-jenkins-slave
+docker pull nabla/ansible-nabla:1.0.3
 ```
 #### Start container
 ```
 #Sample using container to buid my local workspace
-docker run -t -d -w /sandbox/project-to-build -v /workspace/users/albandri30/:/sandbox/project-to-build:rw --name sandbox nabla/ansible-jenkins-slave:latest cat
+docker run -t -d -w /sandbox/project-to-build -v /workspace/users/albandri30/:/sandbox/project-to-build:rw --name sandbox nabla/ansible-nabla:latest cat
 #More advance sample using jenkins user on my workstation in order to get bash completion, git-radar and most of the dev tools I need
 # -v/data1/home/albandri/.git-radar/:/home/jenkins/.git-radar/
-docker run -it -u 1004:999 --rm --net=host --pid=host --dns-search=nabla.mobi --init -v /workspace:/workspace -v /jenkins:/home/jenkins -v /etc/passwd:/etc/passwd:ro -v /etc/group:/etc/group:ro -v /etc/bash_completion.d:/etc/bash_completion.d:ro --name sandbox nabla/ansible-jenkins-slave:latest -s
+docker run -it -u 1004:999 --rm --net=host --pid=host --dns-search=nabla.mobi --init -v /workspace:/workspace -v /jenkins:/home/jenkins -v /etc/passwd:/etc/passwd:ro -v /etc/group:/etc/group:ro -v /etc/bash_completion.d:/etc/bash_completion.d:ro --name sandbox nabla/ansible-nabla:latest -s
 #Now if I want to use my user albandri (1000) instead of jenkins
-docker run -it -u 1000:999 --rm --net=host --pid=host --dns-search=nabla.mobi --init -w /sandbox/project-to-build -v /workspace/users/albandri30/:/sandbox/project-to-build:rw -v /workspace:/workspace -v /data1/home/albandri/:/home/jenkins -v /etc/passwd:/etc/passwd:ro -v /etc/group:/etc/group:ro -v /etc/bash_completion.d:/etc/bash_completion.d:ro --name sandbox nabla/ansible-jenkins-slave:latest /bin/bash
+docker run -it -u 1000:999 --rm --net=host --pid=host --dns-search=nabla.mobi --init -w /sandbox/project-to-build -v /workspace/users/albandri30/:/sandbox/project-to-build:rw -v /workspace:/workspace -v /data1/home/albandri/:/home/jenkins -v /etc/passwd:/etc/passwd:ro -v /etc/group:/etc/group:ro -v /etc/bash_completion.d:/etc/bash_completion.d:ro --name sandbox nabla/ansible-nabla:latest /bin/bash
 
 ```
 #### Build
@@ -75,9 +76,9 @@ docker rm sandbox
 
 ### Build & development
 
-Run `./run-ansible-workstation.sh` for building like Jenkins.
-Run `./setup.sh` for building.
-Run `./docker-build.sh` for building docker image.
+Run `./scripts/run-ansible-workstation.sh` for building like Jenkins.
+Run `./scripts/setup.sh` for building.
+Run `./scripts/docker-build.sh` for building docker image.
 
 #### Dependency Graph
 
