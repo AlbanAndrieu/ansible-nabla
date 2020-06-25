@@ -37,7 +37,7 @@ repos:
                   (?x)^(
                       .ssh/id_rsa|
                       roles/jenkins-master/defaults/main.yml|
-                      roles/jenkins-master/README.md
+                      roles/jenkins-master/README.md|
                   )$
     -   id: double-quote-string-fixer
     -   id: name-tests-test
@@ -113,7 +113,6 @@ repos:
         # optional custom config:
         args: [--indent, "  "]
     -   id: dockerfile_lint
-        # optional custom config:
         args: [--json, --verbose, --dockerfile]
 -   repo: https://github.com/AlbanAndrieu/nabla-hooks.git
     rev: master

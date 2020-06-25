@@ -80,3 +80,5 @@ min-public-methods=2
 
 [EXCEPTIONS]
 overgeneral-exceptions=Exception
+[REPORTS]
+output-format=junit

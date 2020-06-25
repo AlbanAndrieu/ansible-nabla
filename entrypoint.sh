@@ -1,8 +1,6 @@
 #!/bin/bash
 set -e
 
-#/usr/local/bin/fixuid
-
 # shellcheck disable=SC2001
 #ALIAS_CMD="$(echo "$0" | sed -e 's?/sbin/??')"
 #
@@ -19,6 +17,17 @@ set -e
 #    exec "$@"
 #fi
 
+echo "$0: DEBUG : $1"
+
+# loop around arguments string
+for ARG in "$*"; do
+    echo "ARGS ITEM: $ARG"
+done
+# loop around arguments vector
+for ARG in "$@"; do
+    echo "ARGV ITEM: $ARG"
+done
+
 case "$1" in
     list )
         exec service --status-all
@@ -30,9 +39,11 @@ case "$1" in
         exec service $2 $1
         ;;
     debug )
-        exec /usr/local/bin/fixuid && bash
-        ;;        
-    \?)
+        /usr/local/bin/fixuid && bash
+        ;;
+    # match anything
+    *)
+        echo "EXEC : $@"
         exec "$@"
         #exit 0
         ;;
