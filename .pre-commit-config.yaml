@@ -122,7 +122,7 @@ repos:
     -   id: dockerfile_lint
         args: [--json, --verbose, --dockerfile]
 -   repo: https://github.com/AlbanAndrieu/nabla-hooks.git
-    rev: v1.0.1
+    rev: master
     hooks:
     -   id: git-branches-check
         always_run: true
