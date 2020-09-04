@@ -21,9 +21,11 @@
       shell: "echo $WORKSPACE"
       environment:
         WORKSPACE: "{{ repository_target_dir }}"
+      changed_when: false
 
     - name: Echo WORKSPACE again
       shell: "echo $WORKSPACE"
+      changed_when: false
 
     - name: Copy the code from repository
       git: repo={{ repository }} version={{ repository_version }} dest={{ repository_target_dir }}/dockerfile-fusionrisk

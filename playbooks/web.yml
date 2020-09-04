@@ -79,15 +79,15 @@
 #- import_playbook: docker.yml
 
 - hosts: apache-servers
-  gather_facts: true  
+  gather_facts: true
   become: true
-  
+
   tasks:
     - debug: var=hostvars[inventory_hostname]['ansible_default_ipv4']['address']
 
 - name: Configure and deploy the nabla application to apache
   hosts: apache-servers
-  gather_facts: true  
+  gather_facts: true
   become: true
 
   roles:
@@ -110,7 +110,7 @@
 #WARNING jenkins-master role has disabled a2dissite 000-default
 - name: Configure and deploy the nabla php sample application code to apache
   hosts: apache-servers
-  gather_facts: true  
+  gather_facts: true
   become: true
 
   roles:

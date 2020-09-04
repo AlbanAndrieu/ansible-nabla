@@ -5,14 +5,14 @@
   hosts: nexus
 #  remote_user: root
   become: true
-  
+
   roles:
     - role: nexus
 
   vars:
       nexus_home: "/usr/local/{{ nexus_user }}"
       nexus_version_major : "3"
-      nexus_version_minor : "0.0-03"      
+      nexus_version_minor : "0.0-03"
       nexus_user : nexus3
       nexus_group : nexus3
       nexus_service_name: "nexus-{{ nexus_version }}"
@@ -322,7 +322,7 @@
            externalConfiguration_downloadRemoteIndex       : "false"
            externalConfiguration_checksumPolicy            : "WARN"
            externalConfiguration_repositoryPolicy          : "RELEASE"
-           
+
          - id                                              : "alm-artifacts-homemade-release"
            name                                            : "WORK Repositories"
            providerRole                                    : "org.sonatype.nexus.proxy.repository.Repository"

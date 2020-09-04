@@ -3,7 +3,7 @@
 - name: Install zfs
   hosts: zfs
   remote_user: root
-  become: true  
+  become: true
 #  connection: local
 
   roles:

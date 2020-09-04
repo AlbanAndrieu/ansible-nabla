@@ -3,11 +3,11 @@
 # This playbook can be run using vagrant (on virtual box).
 - name: configure supervisor
   hosts: supervisors
-  remote_user: root  
+  remote_user: root
   become: true
 
   roles:
-#    - role: supervisor    
+#    - role: supervisor
 #      name: jenkins
 #      command: python -m SimpleHTTPServer 8686
 #      directory: /opt/jenkins
@@ -27,5 +27,3 @@
 #      command: /workspace/xebium/run.sh
 #      directory: /workspace/xebium
 #      user: ubuntu
-
-      

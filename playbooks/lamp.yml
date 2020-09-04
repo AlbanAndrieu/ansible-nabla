@@ -51,7 +51,7 @@
         #certificate_chain_file: "/etc/ssl/{{ ansible_fqdn }}/certificate_chain.crt"
     php_default_version_debian: "7.3"
     php_mysql_package: "php7.3-mysql"
-    __php_mysql_package: "php7.3-mysql"        
+    __php_mysql_package: "php7.3-mysql"
     php_version: '7.3'
     php_memory_limit: "128M"
     php_max_execution_time: "90"
@@ -71,7 +71,7 @@
     - geerlingguy.php
 #    - geerlingguy.php-xdebug
     - geerlingguy.php-mysql
-# TODO fix    
+# TODO fix
 #    - geerlingguy.phpmyadmin
 
 - hosts: apache-servers
