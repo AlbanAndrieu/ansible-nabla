@@ -104,7 +104,7 @@
         - path: /opt/ansible/env35
           python: python3.5
 
-- name: Install python 3 and 3.6
+- name: Install python 3 and 3.6 to 3.8
   hosts: Ubuntu-18*:Ubuntu-16*
   become: true
   ignore_errors: true
@@ -114,7 +114,6 @@
 
   vars:
       python_versions: [3, 3.6, 3.7, 3.8]
-      # python_ppa: no # TODO for Ubuntu-19
       python_install: [numpy, pylint, pandas]
       python_virtualenv_user: jenkins
       python_virtualenvs:
@@ -124,8 +123,24 @@
           python: python3.7
         - path: /opt/ansible/env36
           python: python3.6
-        - path: /opt/ansible/env35
-          python: python3.5
+
+- name: Install python 3 and 3.7 to 3.8
+  hosts: Ubuntu-20*:Ubuntu-19*
+  become: true
+  ignore_errors: true
+
+  roles:
+    - python
+
+  vars:
+      python_versions: [3, 3.7, 3.8]
+      python_install: [numpy, pylint, pandas]
+      python_virtualenv_user: jenkins
+      python_virtualenvs:
+        - path: /opt/ansible/env38
+          python: python3.8
+        - path: /opt/ansible/env37
+          python: python3.7
 
 # Only python 2.6 is installed as default for python2 we need python 2.7
 - name: Install python 2.7
@@ -202,7 +217,7 @@
           python: python3.6
 
 - name: Install python requirements
-  hosts: RedHat-8*:RedHat-7*:RedHat-6*:RedHat-5*:CentOS-7*:CentOS-6*:Ubuntu-20*:Ubuntu-19*:Ubuntu-18*:Ubuntu-17*:Ubuntu-16*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
+  hosts: RedHat-8*:RedHat-7*:RedHat-6*:RedHat-5*:CentOS-7*:CentOS-6*:Ubuntu-17*:Ubuntu-16*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
   become: true
 
   tasks:
@@ -229,7 +244,7 @@
         - python35
       environment:
         PATH: "{{ ansible_env.PATH }}:{{ ansible_user_dir }}/.local/bin"
-      #ignore_errors: true  # RedHat 7.6 have now python 3.6 as default, 3.5 targeted to be deprecated
+      ignore_errors: true  # RedHat 7.6 and Ubuntu 18 have now python 3.6 as default, 3.5 targeted to be deprecated
 
     - name: python3.6 | Create venv and install requirements
       pip:
