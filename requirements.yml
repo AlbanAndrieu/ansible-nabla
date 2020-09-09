@@ -472,10 +472,9 @@
   name: supervisor
   version: master
 
-- src: 'https://github.com/AlbanAndrieu/ansible-vagrant-role'
-  name: 'vagrant'
-  scm: 'git'
-  version: 'master'
+- src: https://github.com/AlbanAndrieu/ansible-vagrant-role.git
+  name: vagrant
+  version: master
 
 - src: 'https://github.com/AlbanAndrieu/ansible-galaxy.ubuntu.virtualbox'
   name: 'alban.andrieu.virtualbox'

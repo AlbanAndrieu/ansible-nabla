@@ -73,8 +73,8 @@ git submodule add -f  https://github.com/AlbanAndrieu/ansible-galaxy.ubuntu.virt
 #git clone https://github.com/aw/ansible-galaxy-vagrant.git vagrant-user
 #git submodule add -f  https://github.com/AlbanAndrieu/ansible-galaxy-vagrant.git vagrant-user
 
+git submodule deinit -f vagrant
 #git clone https://github.com/klynch/ansible-vagrant-role.git vagrant
-#TODO switch
 git submodule add -f  https://github.com/AlbanAndrieu/ansible-vagrant-role.git vagrant
 
 #TODO control vagrant with ansible https://github.com/robparrott/ansible-vagrant

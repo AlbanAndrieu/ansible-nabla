@@ -1,5 +1,5 @@
 ---
-#ansible-playbook playbooks/vagrant.yml -i inventory/production --limit albandri-test -vvvv
+#ansible-playbook playbooks/vagrant.yml -i inventory/hosts-albandrieu --limit albandrieu --vault-password-file ./vault.passwd -vvvv
 
 - name: Install vagrant
   hosts: vagrant
