@@ -70,17 +70,7 @@
 #       sudoers_enabled: no
 #       restart_ssh_enabled: false
 
-- name: Apply login configuration
-  hosts: security
-  remote_user: root
-#  connection: local
-
-  roles:
-    - ansible-login
-
-  vars:
-       login_umask: 077
-       login_usergroups_enab: 'no'
+#- import_playbook: login.yml
 
 #- name: Install virtualbox
 #  hosts: virtualbox

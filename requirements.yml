@@ -213,10 +213,10 @@
   scm: 'git'
   version: 'master'
 
-- src: 'https://github.com/AlbanAndrieu/ansible-login'
-  name: 'ansible-login'
-  scm: 'git'
-  version: 'master'
+#- src: 'https://github.com/AlbanAndrieu/ansible-login'
+- src: https://github.com/weareinteractive/ansible-login.git
+  name: ansible-login
+  version: master
 
 - src: 'https://github.com/AlbanAndrieu/ansible-newrelic'
   name: 'newrelic'
