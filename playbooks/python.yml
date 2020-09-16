@@ -1,8 +1,5 @@
 ---
 
-#ansible-playbook -i inventory/production -v playbooks/python.yml --limit TEST1,TEST2,TEST3 -e ansible_python_interpreter="/usr/bin/python2.7" -vvvv | tee setup.log
-#WARNING -e ansible_python_interpreter="/usr/bin/python2.7" is not working the first time
-
 - hosts: all
   gather_facts: true
   gather_subset: hardware
@@ -37,9 +34,21 @@
         state: "{{ jenkins_pkg_state|default('present') }}"
       when: ((ansible_distribution == 'CentOS') and ansible_distribution_major_version == '6')
       with_items:
-        - "https://centos6.iuscommunity.org/ius-release.rpm"
+        #- "https://centos6.iuscommunity.org/ius-release.rpm"
+         - "https://repo.ius.io/ius-release-el6.rpm"
       become: true
 
+    - name: Install python repo (RedHat and CentOS based)
+      yum:
+        name: "{{ item }}"
+        state: "{{ jenkins_pkg_state|default('present') }}"
+      when: ((ansible_distribution == 'CentOS') and ansible_distribution_major_version == '7')
+      with_items:
+        #- "https://centos7.iuscommunity.org/ius-release.rpm"
+        - "https://repo.ius.io/ius-release-el7.rpm"
+      become: true
+
+#TODO at first run there is no jenkins user, so it will not work properly
 - hosts: RedHat-8*:RedHat-7*:RedHat-6*:RedHat-5*:CentOS-7*:CentOS-6*:Ubuntu-20*:Ubuntu-19*:Ubuntu-18*:Ubuntu-17*:Ubuntu-16*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
   become: true
 
@@ -62,7 +71,6 @@
       #when: item.stat.exists == false
       with_items:
         - { path: 'ansible' }
-        #- { path: 'scons' }
       become: true
       changed_when: false
       tags:
@@ -74,19 +82,19 @@
         dest: "{{ ansible_user_dir }}"
       with_items:
         - "requirements-current-2.7.txt"
-        - "requirements-current-3.5.txt"
+#        - "requirements-current-3.5.txt"
         - "requirements-current-3.6.txt"
         - "requirements-current-3.6-uninstall.txt"
         - "requirements-current-3.7.txt"
         - "requirements-current-3.7-uninstall.txt"
         - "requirements-current-3.8.txt"
-        #- "requirements-current-3.8-uninstall.txt"
+        - "requirements-current-3.8-uninstall.txt"
       tags:
         - venv
         - requirements
 
-- name: Install python 2 and 3.5
-  hosts: Ubuntu-12*:Ubuntu-13*:Ubuntu-14*:Ubuntu-16*:Ubuntu-18*:Ubuntu-19*
+- name: Install python 2.7
+  hosts: Ubuntu-20*:Ubuntu-19*:Ubuntu-18*:Ubuntu-17*:Ubuntu-16*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
   become: true
   ignore_errors: true
 
@@ -94,15 +102,13 @@
     - python
 
   vars:
-      python_versions: [2.7, 3.5]
+      python_versions: [2.7]
       # python_ppa: no # TODO for Ubuntu-19
       python_install: [numpy, pylint, pandas]
       python_virtualenv_user: jenkins
       python_virtualenvs:
         - path: /opt/ansible/env
           python: python2.7
-        - path: /opt/ansible/env35
-          python: python3.5
 
 - name: Install python 3 and 3.6 to 3.8
   hosts: Ubuntu-18*:Ubuntu-16*
@@ -159,8 +165,6 @@
       python_virtualenvs:
         - path: /opt/ansible/env
           python: python2.7
-        - path: /opt/scons/env
-          python: python2.7
 
 - name: Install python 2
   hosts: RedHat-7*:CentOS-7*
@@ -178,12 +182,11 @@
       python_virtualenvs:
         - path: /opt/ansible/env
           python: python2.7
-        - path: /opt/scons/env
-          python: python2.7
 
 - name: Install python 3.5
   hosts: RedHat-8*:RedHat-7*:RedHat-6*:RedHat-5*:CentOS-7*:CentOS-6*:CentOS-5*
   become: true
+  ignore_errors: true
 
   roles:
     - python
@@ -233,32 +236,6 @@
       environment:
         PATH: "{{ ansible_env.PATH }}:{{ ansible_user_dir }}/.local/bin"
 
-    - name: python3.5 | Create venv and install requirements
-      pip:
-        requirements: "{{ ansible_user_dir }}/requirements-current-3.5.txt"
-        virtualenv: /opt/ansible/env35
-        virtualenv_python: "python3.5"
-      tags:
-        - venv
-        - requirements
-        - python35
-      environment:
-        PATH: "{{ ansible_env.PATH }}:{{ ansible_user_dir }}/.local/bin"
-      ignore_errors: true  # RedHat 7.6 and Ubuntu 18 have now python 3.6 as default, 3.5 targeted to be deprecated
-
-    - name: python3.6 | Create venv and install requirements
-      pip:
-        requirements: "{{ ansible_user_dir }}/requirements-current-3.6.txt"
-        virtualenv: /opt/ansible/env36
-        virtualenv_python: "python3.6"
-      tags:
-        - venv
-        - requirements
-        - python36
-      environment:
-        PATH: "{{ ansible_env.PATH }}:{{ ansible_user_dir }}/.local/bin"
-      #ignore_errors: true  # CentOS issue installing python3.6u
-
     - name: python3.6 | Create venv and remove requirements
       pip:
         name: "argparse"
@@ -272,18 +249,19 @@
       environment:
         PATH: "{{ ansible_env.PATH }}:{{ ansible_user_dir }}/.local/bin"
 
-    - name: python3.7 | Create venv and install requirements
+
+    - name: python3.6 | Create venv and install requirements
       pip:
-        requirements: "{{ ansible_user_dir }}/requirements-current-3.7.txt"
-        virtualenv: /opt/ansible/env37
-        virtualenv_python: "python3.7"
+        requirements: "{{ ansible_user_dir }}/requirements-current-3.6.txt"
+        virtualenv: /opt/ansible/env36
+        virtualenv_python: "python3.6"
       tags:
         - venv
         - requirements
-        - python37
+        - python36
       environment:
         PATH: "{{ ansible_env.PATH }}:{{ ansible_user_dir }}/.local/bin"
-      ignore_errors: true
+      ignore_errors: true  # CentOS issue installing python3.6u
 
     - name: python3.7 | Create venv and remove requirements
       pip:
@@ -297,6 +275,20 @@
         - python36
       environment:
         PATH: "{{ ansible_env.PATH }}:{{ ansible_user_dir }}/.local/bin"
+      #ignore_errors: true
+
+    - name: python3.7 | Create venv and install requirements
+      pip:
+        requirements: "{{ ansible_user_dir }}/requirements-current-3.7.txt"
+        virtualenv: /opt/ansible/env37
+        virtualenv_python: "python3.7"
+      tags:
+        - venv
+        - requirements
+        - python37
+      environment:
+        PATH: "{{ ansible_env.PATH }}:{{ ansible_user_dir }}/.local/bin"
+      ignore_errors: true
 
 # Since Ubuntu 19 we do not maintain python 3.5 and 3.6
 - hosts: Ubuntu-20*:Ubuntu-19*:Ubuntu-18*
@@ -315,41 +307,29 @@
       environment:
         PATH: "{{ ansible_env.PATH }}:{{ ansible_user_dir }}/.local/bin"
 
-#    - name: python3.7 | Create venv and install requirements
-#      pip:
-#        requirements: "{{ ansible_user_dir }}/requirements-current-3.7.txt"
-#        virtualenv: /opt/ansible/env37
-#        virtualenv_python: "python3.7"
-#      tags:
-#        - venv
-#        - requirements
-#        - python37
-#      environment:
-#        PATH: "{{ ansible_env.PATH }}:{{ ansible_user_dir }}/.local/bin"
-#      ignore_errors: true
-#
-#    - name: python3.7 | Create venv and remove requirements
-#      pip:
-#        name: "argparse"
-#        state: "absent"
-#        virtualenv: /opt/ansible/env37
-#        virtualenv_python: "python3.7"
-#      tags:
-#        - venv
-#        - requirements
-#        - python37
-#      environment:
-#        PATH: "{{ ansible_env.PATH }}:{{ ansible_user_dir }}/.local/bin"
-
-    - name: python3.8 | Create venv and install requirements
+    - name: python3.7 | Create venv and remove requirements
       pip:
-        requirements: "{{ ansible_user_dir }}/requirements-current-3.8.txt"
-        virtualenv: /opt/ansible/env38
-        virtualenv_python: "python3.8"
+        name: "argparse"
+        state: "absent"
+        virtualenv: /opt/ansible/env37
+        virtualenv_python: "python3.7"
       tags:
         - venv
         - requirements
-        - python38
+        - python37
+      environment:
+        PATH: "{{ ansible_env.PATH }}:{{ ansible_user_dir }}/.local/bin"
+      ignore_errors: true
+
+    - name: python3.7 | Create venv and install requirements
+      pip:
+        requirements: "{{ ansible_user_dir }}/requirements-current-3.7.txt"
+        virtualenv: /opt/ansible/env37
+        virtualenv_python: "python3.7"
+      tags:
+        - venv
+        - requirements
+        - python37
       environment:
         PATH: "{{ ansible_env.PATH }}:{{ ansible_user_dir }}/.local/bin"
       ignore_errors: true
@@ -367,7 +347,20 @@
       environment:
         PATH: "{{ ansible_env.PATH }}:{{ ansible_user_dir }}/.local/bin"
 
-- hosts: RedHat-7*:RedHat-6*:RedHat-5*:CentOS-7*:CentOS-6*:Ubuntu-20*:Ubuntu-19*:Ubuntu-18*:Ubuntu-17*:Ubuntu-16*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
+    - name: python3.8 | Create venv and install requirements
+      pip:
+        requirements: "{{ ansible_user_dir }}/requirements-current-3.8.txt"
+        virtualenv: /opt/ansible/env38
+        virtualenv_python: "python3.8"
+      tags:
+        - venv
+        - requirements
+        - python38
+      environment:
+        PATH: "{{ ansible_env.PATH }}:{{ ansible_user_dir }}/.local/bin"
+      #ignore_errors: true
+
+- hosts: RedHat-8*:RedHat-7*:RedHat-6*:RedHat-5*:CentOS-7*:CentOS-6*:Ubuntu-20*:Ubuntu-19*:Ubuntu-18*:Ubuntu-17*:Ubuntu-16*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
   become: true
 
   tasks:
