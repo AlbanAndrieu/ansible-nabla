@@ -1,4 +1,8 @@
 exclude_paths:
+  - ./.travis.yml
+  - ./playbooks/group_vars/all/
+  - ./playbooks/mac.yml
+  - ./playbooks/jenkins-node.yml
   - ./roles/alban.andrieu.virtualbox/
   - ./roles/alban.andrieu.webmin/
   - ./roles/Stouts.python/

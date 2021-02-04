@@ -18,7 +18,13 @@ String DOCKER_OPTS_COMPOSE = getDockerOpts(isDockerCompose: true, isLocalJenkins
 pipeline {
   //agent none
   agent {
-    label 'molecule'
+    docker {
+      image DOCKER_IMAGE
+      alwaysPull true
+      reuseNode true
+      args DOCKER_OPTS_COMPOSE
+      label 'molecule'
+    }
   }
   parameters {
     string(name: 'DRY_RUN', defaultValue: '--check', description: 'Default mode used to test playbook')
@@ -31,15 +37,21 @@ pipeline {
     booleanParam(name: 'SKIP_LINT', defaultValue: false, description: 'Skip Linter - requires ansible galaxy roles, so it is time consuming')
     booleanParam(name: 'SKIP_DOCKER', defaultValue: false, description: 'Skip Docker - requires image rebuild from scratch')
     booleanParam(name: 'MOLECULE_DEBUG', defaultValue: false, description: 'Enable --debug flag for molecule - does not affect executions of other tests')
+    booleanParam(defaultValue: false, description: 'Build only to have package. no test / no docker', name: 'BUILD_ONLY')
+    booleanParam(defaultValue: false, description: 'Run molecule tests', name: 'BUILD_MOLECULE')
+    booleanParam(defaultValue: true, description: 'Build jenkins docker images', name: 'BUILD_DOCKER')
+    booleanParam(defaultValue: false, description: 'Build with sonar', name: 'BUILD_SONAR')
+    booleanParam(defaultValue: true, description: 'Test cleaning', name: 'BUILD_CLEANING')
+    booleanParam(defaultValue: false, description: 'Test cmdb', name: 'BUILD_CMDB')
+    booleanParam(defaultValue: true, description: 'Run sphinx', name: 'BUILD_DOC')
   }
   environment {
-    ANSIBLE_VAULT_PASS = "${params.ANSIBLE_VAULT_PASS}".trim()
     DRY_RUN = "${params.DRY_RUN}".toBoolean()
     CLEAN_RUN = "${params.CLEAN_RUN}".toBoolean()
     DEBUG_RUN = "${params.DEBUG_RUN}".toBoolean()
-    BRANCH_NAME = "${env.BRANCH_NAME}".replaceAll("feature/","")
-    PROJECT_BRANCH = "${env.GIT_BRANCH}".replaceFirst("origin/","")
-    BUILD_ID = "${env.BUILD_ID}"
+    //BRANCH_NAME = "${env.BRANCH_NAME}".replaceAll("feature/","")
+    //PROJECT_BRANCH = "${env.GIT_BRANCH}".replaceFirst("origin/","")
+    //BUILD_ID = "${env.BUILD_ID}"
   }
   options {
     disableConcurrentBuilds()
@@ -51,27 +63,35 @@ pipeline {
   }
   stages {
     stage('Setup') {
-      agent {
-        docker {
-          image DOCKER_IMAGE
-          alwaysPull true
-          reuseNode true
-          args DOCKER_OPTS_COMPOSE
-          label 'molecule'
-        }
-      }
       steps {
         script {
           properties(createPropertyList())
           setBuildName("Ansible project description.")
-          if (! isReleaseBranch()) { abortPreviousRunningBuilds() }
+
+          lock("${params.TARGET_SLAVE}") {
+            echo "Lock on ${params.TARGET_SLAVE} released" // we do not have many molecule label
+            sh "rm -f *.log || true"
+          } // lock
         }
       }
     }
+    stage("Ansible pre-commit check") {
+      steps {
+        script {
+          // TODO testPreCommit
+          tee("pre-commit.log") {
+            sh "#!/bin/bash \n" +
+              "whoami \n" +
+              "source ./scripts/run-python.sh\n" +
+              "pre-commit run -a || true\n" +
+              "find . -name 'kube.*' -type f -follow -exec kubectl --kubeconfig {} cluster-info \\; || true\n"
+          } // tee
+        } // script
+      }
+    } // stage pre-commit
     stage("Ansible CMDB Report") {
-      // Runs ansible-cmdb and publishes the report
-      agent {
-        label 'molecule'
+      when {
+        expression { params.BUILD_ONLY == false && params.BUILD_CMDB == true }
       }
       steps {
         script {
@@ -80,129 +100,125 @@ pipeline {
       }
     }
     stage('Documentation') {
-      agent {
-        docker {
-          image DOCKER_IMAGE
-          alwaysPull true
-          reuseNode true
-          args DOCKER_OPTS_COMPOSE
-          label 'molecule'
-        }
+      when {
+        expression { params.BUILD_ONLY == false && params.BUILD_DOC == true }
       }
       // Creates documentation using Sphinx and publishes it on Jenkins
       // Copy of the documentation is rsynced
       steps {
         script {
-          runSphinx(shell: "./build.sh", targetDirectory: "fusionrisk-ansible/")
+          runSphinx(shell: "../scripts/run-python.sh && ./build.sh", targetDirectory: "fusionrisk-ansible/")
         }
       }
     }
 
     stage('Cleaning tests') {
-      agent {
-        label 'molecule'
+      when {
+        expression { env.BRANCH_NAME ==~ /release\/.+|master|develop|PR-.*|feature\/.*|bugfix\/.*/ }
+        expression { params.BUILD_ONLY == false && params.BUILD_CLEANING == true }
       }
       steps {
         script {
-          configFileProvider([configFile(fileId: 'vault.passwd',  targetLocation: 'vault.passwd', variable: '_')]) {
-            ansiblePlaybook colorized: true,
-                credentialsId: 'jenkins_unix_slaves',
-                disableHostKeyChecking: true,
-                extras: '-e ansible_python_interpreter="/usr/bin/python2.7"',
-                forks: 5,
-                installation: 'ansible-latest',
-                inventory: "${ANSIBLE_INVENTORY}",
-                limit: "${TARGET_SLAVE}",
-                playbook: "${TARGET_PLAYBOOK}"
-          } // configFileProvider
+          if (JENKINS_URL ==~ /.*aandrieu.*|.*albandri.*|.*test.*|.*localhost.*/ ) {
+		        configFileProvider([configFile(fileId: 'vault.passwd',  targetLocation: 'vault.passwd', variable: 'ANSIBLE_VAULT_PASS')]) {
+		          ansiblePlaybook colorized: true,
+		              credentialsId: 'jenkins_unix_slaves',
+		              disableHostKeyChecking: true,
+		              extras: '-e ansible_python_interpreter="/usr/bin/python2.7"',
+		              forks: 5,
+		              installation: 'ansible-latest',
+		              inventory: "${params.ANSIBLE_INVENTORY}",
+		              limit: "${params.TARGET_SLAVE}",
+		              playbook: "${params.TARGET_PLAYBOOK}"
+		        } // configFileProvider
+
+            echo "Init result: ${currentBuild.result}"
+            echo "Init currentResult: ${currentBuild.currentResult}"
+
+          } // JENKINS_URL
         } // script
       } // steps
-    } // stage SonarQube analysis
+    } // stage Cleaning tests
 
     stage('SonarQube analysis') {
-      agent {
-        label 'molecule'
-      }
       environment {
         SONAR_SCANNER_OPTS = "-Xmx4g"
         SONAR_USER_HOME = "$WORKSPACE"
       }
+      when {
+        expression { env.BRANCH_NAME ==~ /release\/.+|master|develop|PR-.*|feature\/.*|bugfix\/.*/ }
+        expression { params.BUILD_ONLY == false && params.BUILD_SONAR == true }
+      }
       steps {
         script {
-          withSonarQubeWrapper(verbose: true, skipMaven: true, repository: "ansible-nabla") {
-
-          }
+          withSonarQubeWrapper(verbose: true, 
+            skipMaven: true, 
+            repository: "ansible-nabla")
         }
       } // steps
     } // stage SonarQube analysis
     stage('Molecule - Java') {
-      agent {
-        label 'molecule'
+      when {
+        expression { env.BRANCH_NAME ==~ /release\/.+|master|develop|PR-.*|feature\/.*|bugfix\/.*/ }
+        expression { params.BUILD_MOLECULE == true && params.BUILD_ONLY == false }
       }
       steps {
         script {
 
-          testAnsibleRole("ansiblebit.oracle-java")
+          testAnsibleRole(roleName: "ansiblebit.oracle-java")
 
         }
       }
     } // stage
     stage('Molecule') {
+      when {
+        expression { env.BRANCH_NAME ==~ /release\/.+|master|develop|PR-.*|feature\/.*|bugfix\/.*/ }
+        expression { params.BUILD_MOLECULE == true && params.BUILD_ONLY == false }
+      }
       //environment {
       //  MOLECULE_DEBUG="${params.MOLECULE_DEBUG ? '--debug' : ' '}"  // syntax: important to have the space ' '
       //}
       parallel {
         stage("administration") {
-          agent {
-            label 'molecule'
-          }
           steps {
             script {
-              testAnsibleRole("administration")
+              testAnsibleRole(roleName: "administration")
             }
           }
         }
         stage("common") {
-          agent {
-            label 'molecule'
-          }
           steps {
             script {
-              testAnsibleRole("common")
+              testAnsibleRole(roleName: "common")
             }
           }
         }
         stage("security") {
-          agent {
-            label 'molecule'
-          }
           steps {
             script {
-              testAnsibleRole("security")
+              testAnsibleRole(roleName: "security")
             }
           }
         }
       }
     }
     stage('Molecule parallel') {
+      when {
+        expression { env.BRANCH_NAME ==~ /release\/.+|master|develop|PR-.*|feature\/.*|bugfix\/.*/ }
+        expression { params.BUILD_MOLECULE == true && params.BUILD_ONLY == false }
+      }
       parallel {
         stage("cleaning") {
-          agent {
-            label 'molecule'
-          }
           steps {
             script {
-              testAnsibleRole("cleaning")
+              testAnsibleRole(roleName: "cleaning")
             }
           }
         }
         stage("DNS") {
-          agent {
-            label 'molecule'
-          }
           steps {
             script {
-              testAnsibleRole("dns")
+              testAnsibleRole(roleName: "dns")
             }
           }
         }
@@ -210,22 +226,10 @@ pipeline {
     }
     stage('Docker') {
       parallel {
-        stage('Ansible Self-Config') {
-          agent {
-            label 'molecule'
-          }
-          steps {
-            script {
-              println("TODO: test ansible role by self configuration of docker images")
-            }
-          }
-        }
         stage('Ubuntu 16.04') {
-          agent {
-            label 'molecule'
-          }
           when {
-            expression { BRANCH_NAME ==~ /(release|master|develop-NO)/ }
+            expression { env.BRANCH_NAME ==~ /release\/.+|master|develop/ }
+            expression { params.BUILD_ONLY == false && params.BUILD_DOCKER == true }
           }
           steps {
             script {
@@ -275,12 +279,10 @@ pipeline {
           }
         }
         stage('Ubuntu 18.04') {
-          agent {
-            label 'molecule'
+          when {
+            expression { env.BRANCH_NAME ==~ /release\/.+|master|develop|PR-.*|feature\/.*|bugfix\/.*/ }
+            expression { params.BUILD_ONLY == false && params.BUILD_DOCKER == true }
           }
-          //when {
-          //  expression { BRANCH_NAME ==~ /(release|master|develop)/ }
-          //}
           steps {
             script {
               if (! params.SKIP_DOCKER) {
@@ -289,49 +291,52 @@ pipeline {
 
                     try {
 
-                      configFileProvider([configFile(fileId: 'vault.passwd',  targetLocation: 'vault.passwd', variable: '_')]) {
+                      configFileProvider([configFile(fileId: 'vault.passwd',  targetLocation: 'vault.passwd', variable: 'ANSIBLE_VAULT_PASS')]) {
 
                         sh 'mkdir -p .ssh/ || true'
 
-                        docker_build_args="--no-cache --pull --build-arg JENKINS_HOME=/home/jenkins --tag ${DOCKER_TAG_NEXT}"
+                        DOCKER_BUILD_ARGS=" --pull --build-arg ANSIBLE_VAULT_PASS=${ANSIBLE_VAULT_PASS}"
 
-                        docker.withRegistry("${DOCKER_REGISTRY_URL}", "${DOCKER_REGISTRY_CREDENTIAL}") {
-                           withCredentials([
-                               [$class: 'UsernamePasswordMultiBinding',
-                               credentialsId: DOCKER_REGISTRY_CREDENTIAL,
-                               usernameVariable: 'USERNAME',
-                               passwordVariable: 'PASSWORD']
-                           ]) {
-                            def container = docker.build("${DOCKER_ORGANISATION}/${DOCKER_NAME}:${DOCKER_TAG_NEXT}", "${docker_build_args} -f docker/ubuntu18/Dockerfile . ")
-                            container.inside {
-                              sh 'echo test'
+                        if (env.CLEAN_RUN == true) {
+                          DOCKER_BUILD_ARGS+=" --no-cache"
+                        }
+
+                         withCredentials([
+                             [$class: 'UsernamePasswordMultiBinding',
+                             credentialsId: DOCKER_REGISTRY_CREDENTIAL,
+                             usernameVariable: 'USERNAME',
+                             passwordVariable: 'PASSWORD']
+                         ]) {
+                          def container = docker.build("${DOCKER_ORGANISATION}/${DOCKER_NAME}:${DOCKER_TAG_NEXT}", "${DOCKER_BUILD_ARGS} -f docker/ubuntu18/Dockerfile . ")
+                          container.inside {
+                            sh 'echo test'
+                          }
+
+                          //docker run -i -t --entrypoint /bin/bash ${myImg.imageName()}
+                          docker.image("${DOCKER_ORGANISATION}/${DOCKER_NAME}:${DOCKER_TAG_NEXT}").withRun("-u root --entrypoint='/entrypoint.sh'", "/bin/bash") {c ->
+                            logs = sh (
+                              script: "docker logs ${c.id}",
+                              returnStatus: true
+                            )
+
+                            echo "LOGS RETURN CODE : ${logs}"
+                            if (logs == 0) {
+                                echo "LOGS SUCCESS"
+                            } else {
+                                echo "LOGS FAILURE"
+                                sh "exit 1" // this fails the stage
+                                //currentBuild.result = 'FAILURE'
                             }
 
-                            //docker run -i -t --entrypoint /bin/bash ${myImg.imageName()}
-                            docker.image("${DOCKER_ORGANISATION}/${DOCKER_NAME}:${DOCKER_TAG_NEXT}").withRun("-u root --entrypoint='/entrypoint.sh'", "/bin/bash") {c ->
-                              logs = sh (
-                                script: "docker logs ${c.id}",
-                                returnStatus: true
-                              )
+                          } // docker.image
 
-                              echo "LOGS RETURN CODE : ${logs}"
-                              if (logs == 0) {
-                                  echo "LOGS SUCCESS"
-                              } else {
-                                  echo "LOGS FAILURE"
-                                  sh "exit 1" // this fails the stage
-                                  //currentBuild.result = 'FAILURE'
-                              }
-
-                            } // docker.image
-
-                          } // withCredentials
-                        } // withRegistry
+                        } // withCredentials
 
                         echo "TODO JUNIT"
 
                         // TODO
                         //junit "target/jenkins-full-*.xml"
+                        //junit "ansible-lint.xml, pylint-junit-result.xml"
 
                       } // vault configFileProvider
 
@@ -345,17 +350,13 @@ pipeline {
                     } // finally
 
                     cst = sh (
-                      script: "scripts/docker-test.sh ${DOCKER_NAME} ${DOCKER_TAG_NEXT}",
+                      script: "bash scripts/docker-test.sh ${DOCKER_NAME} ${DOCKER_TAG_NEXT}",
                       returnStatus: true
                     )
 
                     echo "CONTAINER STRUCTURE TEST RETURN CODE : ${cst}"
                     if (cst == 0) {
                         echo "CONTAINER STRUCTURE TEST SUCCESS"
-                        if (isReleaseBranch() && !DRY_RUN) {
-                            echo "TODO : docker tag ${DOCKER_ORGANISATION}/${DOCKER_NAME}:${DOCKER_TAG_NEXT} ${DOCKER_REGISTRY}/${DOCKER_ORGANISATION}/${DOCKER_NAME}:1.0.20"
-                            echo "TODO : docker push ${DOCKER_REGISTRY}/${DOCKER_ORGANISATION}/${DOCKER_NAME}:1.0.20"
-                        }
                     } else {
                         echo "CONTAINER STRUCTURE TEST FAILURE"
                         currentBuild.result = 'UNSTABLE'
@@ -368,32 +369,22 @@ pipeline {
           }
         }
         stage('Sample project') {
-          agent {
-            label 'molecule'
-          }
           when {
             expression { BRANCH_NAME ==~ /(release|master|develop)/ }
           }
           steps {
             script {
 
-              try {
-                parallel "sample default maven project": {
-                  def e2e = build job:'nabla-servers-bower-sample/master', propagate: false, wait: true
-                  result = e2e.result
-                  if (result.equals("SUCCESS")) {
-                  } else {
-                     sh "exit 1" // this fails the stage
-                  }
-                } // parallel
-              } catch (e) {
-                 currentBuild.result = 'UNSTABLE'
-                 result = "FAIL" // make sure other exceptions are recorded as failure too
-              }
+              if (JENKINS_URL ==~ /https:\/\/albandrieu.*\/jenkins\/|https:\/\/todo.*\/jenkins\// ) {
+                echo "JENKINS is supported"
+                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                  build job:'nabla-servers-bower-sample/master', propagate: false, wait: true
+                }
+              } // JENKINS_URL
 
             }
           }
-        }
+        } // stage Sample project
       }
     }
   }
@@ -401,11 +392,10 @@ pipeline {
     always {
       node('molecule') {
 
-        runHtmlPublishers(["LogParserPublisher"])
+        withLogParser(failBuildOnError:false, unstableOnWarning: false)
 
-        archiveArtifacts artifacts: "**/*.log, target/ansible-lint*", onlyIfSuccessful: false, allowEmptyArchive: true
       } // node
-
+      archiveArtifacts artifacts: "*.log, .scannerwork/*.log, roles/*.log, target/ansible-lint*", onlyIfSuccessful: false, allowEmptyArchive: true
     }
     //cleanup {
     //  wrapCleanWsOnNode()
