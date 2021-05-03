@@ -19,7 +19,7 @@
     - name: group hosts by distribution
       group_by: key="{{ ansible_distribution }}-{{ ansible_distribution_version }}"
 
-- hosts: RedHat-7*:RedHat-6*:RedHat-5*:CentOS-7*:CentOS-6*:Ubuntu-19*:Ubuntu-18*:Ubuntu-17*:Ubuntu-16*:Ubuntu-15*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
+- hosts: RedHat-7*:RedHat-6*:RedHat-5*:CentOS-7*:CentOS-6*:Ubuntu-20*:Ubuntu-19*:Ubuntu-18*:Ubuntu-17*:Ubuntu-16*:Ubuntu-15*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
   gather_facts: false
   tasks:
     - name: group hosts for supported distributions
@@ -70,17 +70,7 @@
 #       sudoers_enabled: no
 #       restart_ssh_enabled: false
 
-- name: Apply login configuration
-  hosts: security
-  remote_user: root
-#  connection: local
-
-  roles:
-    - ansible-login
-
-  vars:
-       login_umask: 077
-       login_usergroups_enab: 'no'
+#- import_playbook: login.yml
 
 #- name: Install virtualbox
 #  hosts: virtualbox
@@ -94,94 +84,31 @@
 #      virtualbox_package_name: virtualbox
 #      virtualbox_dkms_enable: no
 
-- name: Install vagrant
-  hosts: vagrant
-  remote_user: root
-#  connection: local
 
-  roles:
-    - vagrant
+- import_playbook: vagrant.yml
 
-  vars:
-       vagrant_libvirt_enabled: false
-       vagrant_windows_enabled: false
-#      vagrant_url: https://dl.bintray.com/mitchellh/vagrant/vagrant_1.6.3_x86_64.deb
+#  vars:
+#       vagrant_libvirt_enabled: false
+#       vagrant_windows_enabled: false
+##      vagrant_url: https://dl.bintray.com/mitchellh/vagrant/vagrant_1.6.3_x86_64.deb
 
-- name: Install locale
-  hosts: locale
-  remote_user: root
-#  connection: local
-
-  roles:
-    - locale
+- import_playbook: locale.yml
 
 #- import_playbook: zabbix.yml
 
-- name: Install webmin
-  hosts: webmin
-  remote_user: root
-#  connection: local
+- import_playbook: webmin.yml
 
-  roles:
-    - alban.andrieu.webmin
+- import_playbook: xvbf.yml
 
-  vars:
-      docker_files_enable: yes
-      docker_files_generated_directory: "../roles/alban.andrieu.webmin"
+- import_playbook: selenium.yml
 
-- name: Install xvbf
-  hosts: xvbf
-  remote_user: root
-
-  roles:
-    - alban.andrieu.xvbf
-
-- name: Install selenium
-  hosts: selenium
-  remote_user: root
-
-  roles:
-     - alban.andrieu.selenium
-
-#
-#- name: Install zfs
-#  hosts: zfs
-#  remote_user: root
-##  connection: local
-#
-#  roles:
-#    - alban.andrieu.zfs
-
-#Below dropbox is included in workstation role
-#- name: Install dropbox
-#  hosts: workstation
-#  remote_user: root
-##  sudo: yes
-##  sudo_user: "{{ user }}"
-##  connection: local
-#
-#  roles:
-#    - dropbox
-#
-#  vars:
-#       docker_files_enable: yes
-#       docker_files_generated_directory: "../roles/alban.andrieu.dropbox"
+#- import_playbook: zfs.yml
 
 #- import_playbook: workstation.yml
 
 #- import_playbook: nexus.yml
 
-# This playbook deploys a simple standalone Tomcat 7 server.
-- name: Deploy Tomcat
-  hosts: tomcat-servers
-  remote_user: root
-#  connection: local
-
-  roles:
-    - alban.andrieu.tomcat
-
-  vars:
-       tomcat_started_check_enable: no
+- import_playbook: tomcat.yml
 
 # This playbook deploys a simple standalone JBoss server.
 
@@ -233,41 +160,9 @@
 
 - import_playbook: xvbf.yml
 
-- name: Install css
-  hosts: css
-  remote_user: root
-#  connection: local
+- import_playbook: css.yml
 
-  roles:
-    - alban.andrieu.css
-
-- name: configure supervisor
-  hosts: supervisors
-  remote_user: root
-
-  roles:
-    - role: supervisor
-
-# start a basic python http server on port 8000
-  vars:
-      name: webserver
-      command: python -m SimpleHTTPServer 8000
-      directory: /opt/test
-# user is the same as base_admin_username
-      user: root
-      stopsignal: HUP
-
-#- name: configure supervisor
-#  hosts: supervisors
-#  remote_user: root
-#
-#  roles:
-#    - role: supervisor
-#      name: fitness
-#      command: /workspace/xebium/run.sh
-#      directory: /workspace/xebium
-## user is the same as base_admin_username
-#      user: ubuntu
+#- import_playbook: supervisor.yml
 
 #- import_playbook: sonar.yml
 

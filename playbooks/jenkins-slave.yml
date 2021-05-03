@@ -1,33 +1,11 @@
 ---
 #as albandri
-#ansible-playbook playbooks/jenkins-slave.yml -i inventory/production --limit albandri.nabla.mobi -vvvv -e python2_version="2.7"
-#ansible-playbook playbooks/jenkins-slave.yml -i inventory/production --limit albandri.nabla.mobi -vvvv
+#ansible-playbook playbooks/jenkins-slave.yml -i inventory/production --limit albandri.albandrieu.com -vvvv -e python2_version="2.7"
+#ansible-playbook playbooks/jenkins-slave.yml -i inventory/production --limit albandri.albandrieu.com -vvvv
 
-#ansible all -m setup -i staging --limit albandri.nabla.mobi -vvvv
+#ansible all -m setup -i staging --limit albandri.albandrieu.com -vvvv
 
 #TODO ansible myhost --sudo -m raw -a "yum install -y python2 python-simplejson"
-
-- hosts: all
-  gather_facts: true
-  tasks:
-    - name: group hosts by distribution
-      group_by: key="{{ ansible_distribution }}-{{ ansible_distribution_version }}"
-
-- hosts: RedHat-7*:RedHat-6*:RedHat-5*:CentOS-7*:CentOS-6*:Ubuntu-17*:Ubuntu-16*:Ubuntu-15*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
-  gather_facts: false
-  tasks:
-    - name: group hosts for supported distributions
-      group_by: key="supported"
-
-- hosts: "!supported"
-  gather_facts: false
-  tasks:
-    - name: fail for unsupported distribution
-      fail: msg="{{ ansible_distribution }} {{ ansible_distribution_version }}
-                 is not a supported OS for a Tower installation.  Supported
-                 OSes include Red Hat Enterprise Linux 6/7/5, CentOS 6/7, or
-                 Ubuntu 12.04/12.04/14.04/16.04/17.04."
-    - debug: msg="Version {{ ansible_distribution }} {{ ansible_distribution_version }} {{ ansible_architecture }}"
 
 - name: Configure all jenkins slaves
   hosts: jenkins-slaves
@@ -52,6 +30,7 @@
          shell_git_password: "microsoft",
          # Optional.
          shell_git_name: "Andrieu, Alban",
+         shell_git_maildomain: "free.fr",
          shell_git_path: "/usr/bin",
          shell_git_ssl: false
         }

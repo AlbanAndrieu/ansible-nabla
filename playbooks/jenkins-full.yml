@@ -10,7 +10,7 @@
     - name: group hosts by distribution
       group_by: key="{{ ansible_distribution }}-{{ ansible_distribution_version }}"
 
-- hosts: RedHat-7*:RedHat-6*:RedHat-5*:CentOS-7*:CentOS-6*:Ubuntu-19*:Ubuntu-18*:Ubuntu-17*:Ubuntu-16*:Ubuntu-15*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
+- hosts: RedHat-7*:RedHat-6*:RedHat-5*:CentOS-7*:CentOS-6*:Ubuntu-20*:Ubuntu-19*:Ubuntu-18*:Ubuntu-17*:Ubuntu-16*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
   gather_facts: false
   tasks:
     - name: group hosts for supported distributions
@@ -115,7 +115,7 @@
 
 - import_playbook: jenkins-slave.yml
 
-- import_playbook: zabbix-agent.yml
+#- import_playbook: zabbix-agent.yml
 
 - import_playbook: cron.yml
 
@@ -123,4 +123,4 @@
 
 - import_playbook: filebeat.yml
 
-- import_playbook: opencl.yml
+#- import_playbook: opencl.yml

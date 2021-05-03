@@ -23,18 +23,18 @@
   tasks:
     - name: set jenkins_slave_home to default
       set_fact: jenkins_slave_home: /workspace
-        
+
     - name: Request CSRF token from Jenkins
       jenkins_csrf_token:
         auth:
           username: "{{ username }}"
           password: "{{ password }}"
       register: csrf
-    
+
     - name: Debug Jenkins-Crumb
       debug:
         msg: "CSRF token: {{ csrf.token }}"
-    
+
     - name: Reconfigure docker-inside and docker-compose nodes UBUNTU 16
       jenkins_node:
         hostname: "{{ item }}"
@@ -58,7 +58,7 @@
           username: "{{ username }}"
           password: "{{ password }}"
       with_sequence: start=75 end=82 format=TEST00%i
-    
+
     - name: Reconfigure Jenkins nodes jenkins server WINDOWS
       jenkins_node:
         hostname: "{{ item }}"
@@ -108,7 +108,7 @@
       with_items:
       - TEST1
       - TEST2
-    
+
     - name: Delete nodes from Jenkins
       jenkins_node:
         hostname: "{{ item }}"

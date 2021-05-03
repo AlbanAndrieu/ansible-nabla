@@ -39,7 +39,7 @@
   vars:
     nvidia_driver_version: 352.41
     #nvidia_driver_version: 304.132
-    base_url: "http://home.nabl.mobi/download/opencl"
+    base_url: "http://albandrieu.com/download/opencl"
     kmod_install: true
 
     #modprobe -v nvidia-uvm

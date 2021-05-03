@@ -127,42 +127,17 @@
 
 - import_playbook: docker.yml
 
-- name: Install locale
-  hosts: locale
-  remote_user: root
-
-  roles:
-    - locale
+- import_playbook: locale.yml
 
 - import_playbook: zabbix-agent.yml
 
-- import_playbook: xvbf
+- import_playbook: xvbf.yml
 
-- import_playbook: selenium
+- import_playbook: selenium.yml
 
-#
-#- name: Install zfs
-#  hosts: zfs
-#  remote_user: root
-#
-#
-#  roles:
-#    - alban.andrieu.zfs
+#- import_playbook: zfs.yml
 
-#Below dropbox is included in workstation role
-#- name: Install dropbox
-#  hosts: workstation
-#  remote_user: root
-##  sudo: yes
-##  sudo_user: "{{ user }}"
-#
-#
-#  roles:
-#    - dropbox
-#
-#  vars:
-#       docker_files_enable: yes
-#       docker_files_generated_directory: "../roles/alban.andrieu.dropbox"
+- import_playbook: dropbox.yml
 
 - name: Install workstation add-on
   hosts: workstation
@@ -173,7 +148,6 @@
     - alban.andrieu.workstation
 
   vars:
-       dropbox_user_directory: "/workspace/Dropbox"
        dropbox_user_host: "2366450895"
        nodejs_enabled: false
        variety_owner: "{{ user }}"
@@ -201,17 +175,7 @@
 #       docker_files_enable: yes,
 #       docker_files_generated_directory: "../roles/alban.andrieu.jenkins-swarm",
 
-- name: Install webmin
-  hosts: webmin
-  remote_user: root
-
-
-  roles:
-    - alban.andrieu.webmin
-
-  vars:
-      docker_files_enable: no
-      docker_files_generated_directory: "../roles/alban.andrieu.webmin"
+- import_playbook: webmin.yml
 
 #- import_playbook: nexus.yml
 
@@ -257,48 +221,13 @@
 
 - import_playbook: jenkins-slave.yml
 
-- name: Install css
-  hosts: css
-  remote_user: root
-
-  roles:
-    - alban.andrieu.css
-
-  vars:
-#       ruby_version: 2.3.1
-       ruby_version: "2.2"
+- import_playbook: css.yml
 
 - import_playbook: chrome.yml
 
 - import_playbook: nodejs.yml
 
-- name: configure supervisor
-  hosts: supervisors
-  remote_user: root
-
-  roles:
-    - role: supervisor
-
-# start a basic python http server on port 8000
-  vars:
-      name: webserver
-      command: python -m SimpleHTTPServer 8000
-      directory: /opt/test
-# user is the same as base_admin_username
-      user: root
-      stopsignal: HUP
-
-#- name: configure supervisor
-#  hosts: supervisors
-#  remote_user: root
-#
-#  roles:
-#    - role: supervisor
-#      name: fitness
-#      command: /workspace/xebium/run.sh
-#      directory: /workspace/xebium
-## user is the same as base_admin_username
-#      user: ubuntu
+- import_playbook: supervisor.yml
 
 - import_playbook: sonar.yml
 
@@ -350,6 +279,7 @@
            shell_git_email: 'alban.andrieu@free.fr',
            shell_git_password: 'microsoft',
            shell_git_name: "Andrieu, Alban",
+           shell_git_maildomain: "free.fr",
            shell_git_path: '/usr/bin',
            shell_git_ssl: false,
            shell_git_meld_enabled: yes,

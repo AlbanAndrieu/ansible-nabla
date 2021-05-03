@@ -1,16 +1,15 @@
 ---
 # from galaxy
-#ansible-galaxy install -r requirements.yml -p ./roles/ --ignore-errors
+# ansible-galaxy install -r requirements.yml -p ./roles/ --ignore-errors
 
 - src: 'https://github.com/AlbanAndrieu/ansible-administration'
   name: 'alban.andrieu.administration'
   scm: 'git'
   version: 'master'
 
-- src: 'https://github.com/AlbanAndrieu/ansible-awstats'
-  name: 'alban.andrieu.awstats'
-  scm: 'git'
-  version: 'master'
+- src: https://github.com/AlbanAndrieu/ansible-awstats.git
+  name: alban.andrieu.awstats
+  version: master
 
 - src: 'https://github.com/AlbanAndrieu/ansible-cmake'
   name: 'alban.andrieu.cmake'
@@ -40,15 +39,13 @@
   scm: 'git'
   version: 'master'
 
-- src: 'https://github.com/AlbanAndrieu/ansible-dropbox'
-  name: 'alban.andrieu.dropbox'
-  scm: 'git'
-  version: 'master'
+- src: https://github.com/AlbanAndrieu/ansible-dropbox.git
+  name: alban.andrieu.dropbox
+  version: master
 
-- src: 'https://github.com/AlbanAndrieu/ansible-eclipse'
-  name: 'alban.andrieu.eclipse'
-  scm: 'git'
-  version: 'master'
+- src: https://github.com/AlbanAndrieu/ansible-eclipse.git
+  name: alban.andrieu.eclipse
+  version: master
 
 - src: 'https://github.com/AlbanAndrieu/ansible-evasive'
   name: 'alban.andrieu.evasive'
@@ -80,10 +77,9 @@
   scm: 'git'
   version: 'master'
 
-- src: 'https://github.com/AlbanAndrieu/ansible-jdiskreport'
-  name: 'alban.andrieu.jdiskreport'
-  scm: 'git'
-  version: 'master'
+- src: https://github.com/AlbanAndrieu/ansible-jdiskreport.git
+  name: alban.andrieu.jdiskreport
+  version: master
 
 - src: 'https://github.com/AlbanAndrieu/ansible-jenkins-slave'
   name: 'alban.andrieu.jenkins-slave'
@@ -217,10 +213,10 @@
   scm: 'git'
   version: 'master'
 
-- src: 'https://github.com/AlbanAndrieu/ansible-login'
-  name: 'ansible-login'
-  scm: 'git'
-  version: 'master'
+#- src: 'https://github.com/AlbanAndrieu/ansible-login'
+- src: https://github.com/weareinteractive/ansible-login.git
+  name: ansible-login
+  version: master
 
 - src: 'https://github.com/AlbanAndrieu/ansible-newrelic'
   name: 'newrelic'
@@ -281,15 +277,15 @@
 #  scm: 'git'
 #  version: 'master'
 
-- src: 'https://github.com/AlbanAndrieu/ansible-role-apache'
-  name: 'geerlingguy.apache'
-  scm: 'git'
-  version: 'master'
+- src: https://github.com/geerlingguy/ansible-role-apache.git
+  name: geerlingguy.apache
+  version: master
 
-- src: 'https://github.com/AlbanAndrieu/stack-docker'
-  name: 'elastic/stack-docker'
-  scm: 'git'
-  version: 'master'
+# Below replaced by https://github.com/geerlingguy/ansible-role-apache.git
+#- src: 'https://github.com/AlbanAndrieu/ansible-role-apache'
+#  name: 'geerlingguy.apache'
+#  scm: 'git'
+#  version: 'master'
 
 #- src: 'https://github.com/AlbanAndrieu/ansible-role-elasticsearch'
 #  name: 'geerlingguy.elasticsearch'
@@ -321,10 +317,9 @@
 #  scm: 'git'
 #  version: 'master'
 
-- src: 'https://github.com/AlbanAndrieu/ansible-role-mysql'
-  name: 'geerlingguy.mysql'
-  scm: 'git'
-  version: 'master'
+- src: https://github.com/geerlingguy/ansible-role-mysql.git
+  name: geerlingguy.mysql
+  version: master
 
 #- src: 'https://github.com/geerlingguy/ansible-role-php-xdebug'
 #  name: 'geerlingguy.php-xdebugl'
@@ -341,40 +336,45 @@
   scm: 'git'
   version: 'master'
 
-- src: 'https://github.com/AlbanAndrieu/ansible-role-php'
-  name: 'geerlingguy.php'
-  scm: 'git'
-  version: 'master'
+#- src: 'https://github.com/AlbanAndrieu/ansible-role-php'
+#  name: 'geerlingguy.php'
+#  scm: 'git'
+#  version: 'master'
+
+- src: https://github.com/geerlingguy/ansible-role-php.git
+  name: geerlingguy.php
+  version: master
 
 #- src: 'https://github.com/geerlingguy/ansible-role-php-versions'
 #  name: 'geerlingguy.php-versions'
 #  scm: 'git'
 #  version: 'master'
 
-- src: 'https://github.com/geerlingguy/ansible-role-php-mysql'
-  name: 'geerlingguy.php-mysql'
-  scm: 'git'
-  version: 'master'
+- src: https://github.com/geerlingguy/ansible-role-php-mysql.git
+  name: geerlingguy.php-mysql
+  version: master
 
-- src: 'https://github.com/AlbanAndrieu/ansible-role-phpmyadmin'
-  name: 'geerlingguy.phpmyadmin'
-  scm: 'git'
-  version: 'master'
+- src: https://github.com/geerlingguy/ansible-role-phpmyadmin.git
+  name: geerlingguy.phpmyadmin
+  version: master
+
+#- src: 'https://github.com/AlbanAndrieu/ansible-role-phpmyadmin'
+#  name: 'geerlingguy.phpmyadmin'
+#  scm: 'git'
+#  version: 'master'
 
 - src: 'https://github.com/AlbanAndrieu/ansible-role-redis'
   name: 'geerlingguy.redis'
   scm: 'git'
   version: 'master'
 
-- src: 'https://github.com/geerlingguy/ansible-role-repo-epel'
-  name: 'geerlingguy.repo-epel'
-  scm: 'git'
-  version: 'master'
+- src: https://github.com/geerlingguy/ansible-role-repo-epel.git
+  name: geerlingguy.repo-epel
+  version: master
 
-- src: 'https://github.com/geerlingguy/ansible-role-repo-remi'
-  name: 'geerlingguy.repo-remi'
-  scm: 'git'
-  version: 'master'
+- src: https://github.com/geerlingguy/ansible-role-repo-remi.git
+  name: geerlingguy.repo-remi
+  version: master
 
 - src: 'https://github.com/geerlingguy/ansible-role-samba'
   name: 'geerlingguy.samba'
@@ -401,15 +401,13 @@
   scm: 'git'
   version: 'master'
 
-- src: 'https://github.com/AlbanAndrieu/Stouts.jenkins'
-  name: 'jenkins-master'
-  scm: 'git'
-  version: 'master'
+- src: https://github.com/AlbanAndrieu/Stouts.jenkins.git
+  name: jenkins-master
+  version: master
 
-- src: 'https://github.com/Oefenweb/ansible-locales'
-  name: 'locale'
-  scm: 'git'
-  version: 'master'
+- src: https://github.com/Oefenweb/ansible-locales.git
+  name: locale
+  version: master
 
 - src: 'https://github.com/AlbanAndrieu/ansible-role-maven'
   name: 'maven'
@@ -426,10 +424,9 @@
 #  scm: 'git'
 #  version: 'master'
 
-- src: 'https://github.com/AlbanAndrieu/ansible-sonatype_nexus'
-  name: 'nexus'
-  scm: 'git'
-  version: 'master'
+- src: https://github.com/AlbanAndrieu/ansible-sonatype_nexus.git
+  name: nexus
+  version: master
 
 - src: 'https://github.com/AlbanAndrieu/ansible-role-nodejs'
   name: 'geerlingguy.nodejs'
@@ -471,15 +468,13 @@
   scm: 'git'
   version:  'master'
 
-- src: 'https://github.com/AlbanAndrieu/ansible-supervisor_task'
-  name: 'supervisor'
-  scm: 'git'
-  version: 'master'
+- src: https://github.com/AlbanAndrieu/ansible-supervisor_task.git
+  name: supervisor
+  version: master
 
-- src: 'https://github.com/AlbanAndrieu/ansible-vagrant-role'
-  name: 'vagrant'
-  scm: 'git'
-  version: 'master'
+- src: https://github.com/AlbanAndrieu/ansible-vagrant-role.git
+  name: vagrant
+  version: master
 
 - src: 'https://github.com/AlbanAndrieu/ansible-galaxy.ubuntu.virtualbox'
   name: 'alban.andrieu.virtualbox'
@@ -531,10 +526,9 @@
   scm: 'git'
   version: 'master'
 
-- src: 'https://github.com/kamaln7/ansible-swapfile'
-  name: 'ansible-swapfile'
-  scm: 'git'
-  version: 'master'
+- src: https://github.com/Oefenweb/ansible-swapfile.git
+  version: master
+  name: ansible-swapfile
 
 - src: 'https://github.com/geerlingguy/ansible-role-varnish'
   name: 'geerlingguy.packer'
@@ -546,20 +540,22 @@
   scm: 'git'
   version: 'master'
 
-- src: https://github.com/andrewrothstein/ansible-kubernetes-helm
-  name: 'andrewrothstein.kubernetes-helm'
-  scm: 'git'
-  version: 'master'
+- src: https://github.com/andrewrothstein/ansible-unarchive-deps.git
+  version: master
+  name: andrewrothstein.unarchive-deps
+
+- src: https://github.com/andrewrothstein/ansible-kubernetes-helm.git
+  version: master
+  name: andrewrothstein.kubernetes-helm
 
 - src: 'https://github.com/andrewrothstein/ansible-kubectl'
   name: 'andrewrothstein.kubectl'
   scm: 'git'
   version: 'master'
 
-- src: 'https://github.com/geerlingguy/ansible-role-clamav'
-  name: 'geerlingguy.clamav'
-  scm: 'git'
-  version: 'master'
+- src: https://github.com/geerlingguy/ansible-role-clamav.git
+  name: geerlingguy.clamav
+  version: master
 
 - src: 'https://github.com/geerlingguy/ansible-role-packer'
   name: 'geerlingguy.varnish'
@@ -579,3 +575,10 @@
   name: 'jermon.ansible-role-cpan'
   scm: 'git'
   version: 'master'
+
+- src: 'https://github.com/AlbanAndrieu/stack-docker'
+  name: 'elastic/stack-docker'
+  scm: 'git'
+  version: 'master'
+
+# TODO https://github.com/Stouts/Stouts.openvpn

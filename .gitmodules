@@ -4,21 +4,12 @@
 [submodule "roles/ansible"]
 	path = roles/ansible
 	url = https://github.com/debops/ansible-role-ansible.git
-[submodule "roles/supervisor"]
-	path = roles/supervisor
-	url = https://github.com/AlbanAndrieu/ansible-supervisor_task.git
-[submodule "roles/vagrant"]
-	path = roles/vagrant
-	url = https://github.com/AlbanAndrieu/ansible-vagrant-role.git
 [submodule "roles/docker"]
 	path = roles/docker
 	url = https://github.com/AlbanAndrieu/docker.ubuntu.git
 [submodule "roles/maven"]
 	path = roles/maven
 	url = https://github.com/AlbanAndrieu/ansible-maven.git
-[submodule "roles/jenkins-master"]
-	path = roles/jenkins-master
-	url = https://github.com/AlbanAndrieu/Stouts.jenkins.git
 [submodule "roles/sonar"]
 	path = roles/sonar
 	url = https://github.com/AlbanAndrieu/ansible-sonar.git
@@ -28,9 +19,6 @@
 [submodule "roles/security"]
 	path = roles/security
 	url = https://github.com/AlbanAndrieu/ansible-role-security.git
-[submodule "roles/nexus"]
-	path = roles/nexus
-	url = https://github.com/AlbanAndrieu/ansible-sonatype_nexus.git
 [submodule "roles/monit"]
 	path = roles/monit
 	url = https://github.com/ANXS/monit
@@ -46,15 +34,6 @@
 [submodule "roles/geerlingguy.repo-remi"]
 	path = roles/geerlingguy.repo-remi
 	url = https://github.com/geerlingguy/ansible-role-repo-remi.git
-[submodule "roles/geerlingguy.apache"]
-	path = roles/geerlingguy.apache
-	url = https://github.com/geerlingguy/ansible-role-apache.git
-[submodule "roles/geerlingguy.php"]
-	path = roles/geerlingguy.php
-	url = https://github.com/geerlingguy/ansible-role-php.git
-[submodule "roles/geerlingguy.php-mysql"]
-	path = roles/geerlingguy.php-mysql
-	url = https://github.com/geerlingguy/ansible-role-php-mysql.git
 [submodule "roles/geerlingguy.samba"]
 	path = roles/geerlingguy.samba
 	url = https://github.com/geerlingguy/ansible-role-samba.git
@@ -79,9 +58,6 @@
 [submodule "roles/alban.andrieu.xvbf"]
 	path = roles/alban.andrieu.xvbf
 	url = https://github.com/AlbanAndrieu/ansible-xvbf.git
-[submodule "roles/alban.andrieu.dropbox"]
-	path = roles/alban.andrieu.dropbox
-	url = https://github.com/AlbanAndrieu/ansible-dropbox.git
 [submodule "roles/alban.andrieu.selenium"]
 	path = roles/alban.andrieu.selenium
 	url = https://github.com/AlbanAndrieu/ansible-selenium.git
@@ -91,9 +67,6 @@
 [submodule "roles/alban.andrieu.subversion"]
 	path = roles/alban.andrieu.subversion
 	url = https://github.com/AlbanAndrieu/ansible-subversion.git
-[submodule "roles/alban.andrieu.eclipse"]
-	path = roles/alban.andrieu.eclipse
-	url = https://github.com/AlbanAndrieu/ansible-eclipse.git
 [submodule "roles/alban.andrieu.jboss"]
 	path = roles/alban.andrieu.jboss
 	url = https://github.com/AlbanAndrieu/ansible-jboss.git
@@ -121,12 +94,6 @@
 [submodule "roles/alban.andrieu.administration"]
 	path = roles/alban.andrieu.administration
 	url = https://github.com/AlbanAndrieu/ansible-administration.git
-[submodule "roles/alban.andrieu.dns"]
-	path = roles/alban.andrieu.dns
-	url = https://github.com/AlbanAndrieu/ansible-dns.git
-[submodule "roles/alban.andrieu.synergy"]
-	path = roles/alban.andrieu.synergy
-	url = https://github.com/AlbanAndrieu/ansible-synergy.git
 [submodule "roles/alban.andrieu.jenkins-swarm"]
 	path = roles/alban.andrieu.jenkins-swarm
 	url = https://github.com/AlbanAndrieu/ansible-jenkins-swarm.git
@@ -139,30 +106,15 @@
 [submodule "roles/alban.andrieu.hostname"]
 	path = roles/alban.andrieu.hostname
 	url = https://github.com/AlbanAndrieu/ansible-hostname.git
-[submodule "roles/locale"]
-	path = roles/locale
-	url = https://github.com/AlbanAndrieu/ansible-locale.git
 [submodule "roles/--force"]
 	path = roles/--force
 	url = https://github.com/AlbanAndrieu/ansible-role-mysql.git
-[submodule "roles/geerlingguy.mysql"]
-	path = roles/geerlingguy.mysql
-	url = https://github.com/AlbanAndrieu/ansible-role-mysql.git
-[submodule "roles/geerlingguy.phpmyadmin"]
-	path = roles/geerlingguy.phpmyadmin
-	url = https://github.com/AlbanAndrieu/ansible-role-phpmyadmin.git
 [submodule "roles/alban.andrieu.evasive"]
 	path = roles/alban.andrieu.evasive
 	url = https://github.com/AlbanAndrieu/ansible-evasive.git
-[submodule "roles/alban.andrieu.awstats"]
-	path = roles/alban.andrieu.awstats
-	url = https://github.com/AlbanAndrieu/ansible-awstats.git
 [submodule "roles/alban.andrieu.solaris"]
 	path = roles/alban.andrieu.solaris
 	url = https://github.com/AlbanAndrieu/ansible-solaris.git
-[submodule "roles/alban.andrieu.jdiskreport"]
-	path = roles/alban.andrieu.jdiskreport
-	url = https://github.com/AlbanAndrieu/ansible-jdiskreport.git
 [submodule "roles/alban.andrieu.private-bower"]
 	path = roles/alban.andrieu.private-bower
 	url = https://github.com/AlbanAndrieu/ansible-private-bower.git

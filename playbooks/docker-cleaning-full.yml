@@ -1,19 +1,21 @@
+---
 #WARNING run it with -e ansible_python_interpreter="/opt/ansible/env35/bin/python3.5"
 #ansible-playbook -i inventory/production -v playbooks/docker-cleaning.yml -e ansible_python_interpreter="/opt/ansible/env35/bin/python3.5" -vvvv | tee setup.log
 
 #sudo docker logout https://docker.misys.global.ad:5000
 #sudo docker login registry.misys.global.ad
 
-- hosts: docker-cleaning
-  become: true
-
-  tasks:
-    - name: Log into private registry
-      docker_login:
-        registry: https://registry.nabla.mobi/
-        username: jenkins
-        password: "{{ docker_registry_password }}"
-#        reauthorize: yes
+# - hosts: docker-cleaning
+#   become: true
+#
+#   tasks:
+#     - name: Log into private registry
+#       docker_login:
+#         registry: "{{ docker_registry }}"
+#         username: "{{ docker_registry_user }}"
+#         password: "{{ docker_registry_password }}"
+# #        reauthorize: yes
+#       ignore_errors: true
 
 - hosts: docker-cleaning
   become: true
@@ -23,6 +25,7 @@
       docker_image:
         state: absent
         name: ubuntu:14.04
+      ignore_errors: true
 
     - name: Remove hello-world image
       docker_image:

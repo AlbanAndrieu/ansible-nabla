@@ -18,7 +18,7 @@ sys.path.insert(0, os.path.abspath('../library'))
 # -- Project information -----------------------------------------------------
 
 project = 'Nabla Ansible'
-copyright = '2019, Alban Andrieu'
+copyright = '2020, Alban Andrieu'
 author = 'Alban Andrieu'
 
 # The short X.Y version

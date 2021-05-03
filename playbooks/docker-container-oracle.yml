@@ -57,7 +57,7 @@
     - name: Run the database-enterprise container
       docker_container:
           name: database-enterprise
-          image: registry.nabla.mobi/nabla-common/oracle-database:12.1.0.2
+          image: registry.albandrieu.com/nabla-common/oracle-database:12.1.0.2
           #restart_policy: always
           state: started
           recreate: true

@@ -10,7 +10,7 @@
 
   vars:
        tomcat_started_check_enable: yes
-       tomcat_version: "8"
-       tomcat_keystore_file: "/workspace/users/albandri10/.keystore"
+       tomcat_version: "9"
+       #tomcat_keystore_file: "/workspace/users/albandrieu10/.keystore"
 #      user: root
 #      home: "/root"

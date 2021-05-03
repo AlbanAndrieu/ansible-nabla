@@ -90,7 +90,7 @@ repos:
                       playbooks/group_vars/all/vault.yml|
                   )$
 -   repo: https://github.com/doublify/pre-commit-hindent.git
-    rev: master
+    rev: b3680b6ebf9f7cf29b19307f246adef66756feef
     hooks:
     -   id: hindent
 -   repo: https://github.com/detailyang/pre-commit-shell

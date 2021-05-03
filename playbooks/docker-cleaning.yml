@@ -5,33 +5,33 @@
 #sudo docker logout https://docker.albandrieu.com:5000
 #sudo docker login hub.docker.com
 
-- hosts: docker-cleaning
-  become: true
-
-  tasks:
-    - name: Fix docker permission issue on docker.sock
-      command: "setfacl -m user:jenkins:rw /var/run/docker.sock"
-      # TODO
-      # acl:
-      #   path: /var/run/docker.sock
-      #   entry: default:user:jenkins:rw
-      #   state: present
-      changed_when: false
-      ignore_errors: true
-      tags:
-        - docker
-        - vm # do not install on docker image
-
-    - name: Log into private registry
-      docker_login:
-        registry: https://hub.docker.com
-        username: "{{ docker_registry_login }}"
-        password: "{{ docker_registry_password }}"
-#        reauthorize: yes
-      ignore_errors: true
-      tags:
-        - docker
-        - vm # do not install on docker image
+#- hosts: docker-cleaning
+#  become: true
+#
+#  tasks:
+#    - name: Fix docker permission issue on docker.sock
+#      command: "setfacl -m user:jenkins:rw /var/run/docker.sock"
+#      # TODO
+#      # acl:
+#      #   path: /var/run/docker.sock
+#      #   entry: default:user:jenkins:rw
+#      #   state: present
+#      changed_when: false
+#      ignore_errors: true
+#      tags:
+#        - docker
+#        - vm # do not install on docker image
+#
+#    - name: Log into private registry
+#      docker_login:
+#        registry: "{{ docker_registry }}"
+#        username: "{{ docker_registry_user }}"
+#        password: "{{ docker_registry_password }}"
+##        reauthorize: yes
+#      ignore_errors: true
+#      tags:
+#        - docker
+#        - vm # do not install on docker image
 
 - hosts: docker-cleaning
   become: true
@@ -47,6 +47,7 @@
         - clean
         - docker
         - vm
+
     - name: Remove hello-world image
       docker_image:
         state: absent
@@ -128,36 +129,37 @@
 #docker ps -a -s
 #docker images
 
-- hosts: docker-cleaning
-  become: true
+#- hosts: docker-cleaning
+#  become: true
+#
+# BELOW IS NOT WORKING
+#  tasks:
+#    - name: Fix docker permission issue on config.json (jenkins user)
+#      file:
+#            path: "{{ jenkins_home|default('/home/jenkins') }}/.docker/config.json"
+#            owner: jenkins
+#            group: docker
+#            state: touch
+#            mode: g+rw
+#      become: true
+#      become_user: root
+#      changed_when: false
+#      ignore_errors: true
+#      tags:
+#        - clean
+#        - docker
+#        - vm
 
-  tasks:
-    - name: Fix docker permission issue on config.json (jenkins user)
-      file:
-            path: "{{ jenkins_home|default('/home/jenkins') }}/.docker/config.json"
-            owner: jenkins
-            group: docker
-            state: touch
-            mode: g+rw
-      become: true
-      become_user: root
-      changed_when: false
-      ignore_errors: true
-      tags:
-        - clean
-        - docker
-        - vm
-
-    - name: Log into private registry (jenkins user)
-      docker_login:
-        registry: https://hub.docker.com
-        username: "{{ docker_registry_login }}"
-        password: "{{ docker_registry_password }}"
-        reauthorize: yes
-      become: true
-      become_user: jenkins
-      # ignore_errors: true # I will not ignore failure on purpose, goal is to catch docker login issue
-      tags:
-        - clean
-        - docker
-        - vm
+#   - name: Log into private harbor registry (jenkins user)
+#     docker_login:
+#       registry: "{{ docker_registry_tmp }}"
+#       username: "{{ docker_registry_user }}"
+#       password: "{{ docker_registry_password }}"
+#       reauthorize: yes
+#     become: true
+#     become_user: jenkins
+#     # ignore_errors: true # I will not ignore failure on purpose, goal is to catch docker login issue
+#     tags:
+#       - clean
+#       - docker
+#       - vm

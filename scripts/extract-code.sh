@@ -21,9 +21,11 @@ echo -e "${magenta} git clone https://github.com/AlbanAndrieu/ansible-nabla.git 
 cd "${HOME}/ansible-nabla"
 ansible-galaxy install -r requirements.yml -p ./roles/ --ignore-errors
 
+git pull origin master --allow-unrelated-histories
 git pull && git submodule init && git submodule update && git submodule status
 #git fetch --recurse-submodules
 #git submodule foreach git fetch
+git submodule foreach git pull origin master
 git submodule foreach git checkout master
 git submodule foreach git pull origin master
 
@@ -71,8 +73,8 @@ git submodule add -f  https://github.com/AlbanAndrieu/ansible-galaxy.ubuntu.virt
 #git clone https://github.com/aw/ansible-galaxy-vagrant.git vagrant-user
 #git submodule add -f  https://github.com/AlbanAndrieu/ansible-galaxy-vagrant.git vagrant-user
 
+git submodule deinit -f vagrant
 #git clone https://github.com/klynch/ansible-vagrant-role.git vagrant
-#TODO switch
 git submodule add -f  https://github.com/AlbanAndrieu/ansible-vagrant-role.git vagrant
 
 #TODO control vagrant with ansible https://github.com/robparrott/ansible-vagrant

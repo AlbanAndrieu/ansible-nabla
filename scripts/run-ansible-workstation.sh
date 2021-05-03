@@ -71,9 +71,10 @@ echo -e "${green} shell check for release done. $? ${NC}"
 
 echo -e "${cyan} =========== ${NC}"
 cd "${WORKSPACE}/" || exit # pylint need .pylintrc
-pylint --output-format=junit ./**/*.py > pylint-junit-result.xml || true
-echo -e "${green} pyhton check for shell done. $? ${NC}"
-
+if [ -f "${WORKSPACE}/.pylintrc" ]; then
+  pylint --output-format=junit ./**/*.py > pylint-junit-result.xml || true
+  echo -e "${green} pyhton check for shell done. $? ${NC}"
+fi
 #pyreverse -o png -p Pyreverse pylint/pyreverse/
 
 echo -e "${green} ansible junit output is in ${JUNIT_OUTPUT_DIR} ${NC}"

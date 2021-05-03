@@ -1,4 +1,5 @@
-#ansible-playbook -i hosts-albandri -c local -v conky.yml -vvvv --ask-become-pass | tee setup.log
+---
+# ansible-playbook -i inventory/hosts-albandrieu -c local -v playbooks/conky.yml -vvvv --ask-become-pass | tee setup.log
 
 # This playbook can be run using vagrant (on virtual box).
 - name: Install conky

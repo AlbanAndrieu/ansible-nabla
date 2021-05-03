@@ -13,26 +13,27 @@
 
 - name: Apply configuration to jenkins master
   hosts: jenkins-master
+  become: true
 
   roles:
     - jenkins-master
 
   vars:
-      docker_files_enable: true
-      docker_files_generated_directory: "../roles/jenkins-master"
-      jenkins_proxy: apache
       jenkins_user: jenkins
       jenkins_version: 2.204.3
+      jenkins_proxy: "" # apache
       jenkins_proxy_hostname: localhost
 #      jenkins_ssh_key_file: "{{resources_to}}/resources/jenkins/ssh_key"    # (you can manage remote files with Stouts.resources role)
       jenkins_ssh_key_file: "~/.ssh/id_rsa"
       jenkins_http_port: 8686
-      jenkins_http_host: "{{ ansible_fqdn }}"
+      #jenkins_http_host: "{{ ansible_fqdn }}"
+      jenkins_http_host: 127.0.0.1
       #jenkins_proxy_port: 7070
-      jenkins_proxy_ssl: true
+      jenkins_proxy_ssl: false
       jenkins_proxy_ssl_certificate: "{{ jenkins_http_host }}.cer"
       jenkins_proxy_ssl_key: "/etc/ssl/{{ jenkins_http_host }}/almonde-jenkins.key"
       jenkins_home: /jenkins
+      restart_policy: unless-stopped
       jenkins_target_home: /jenkins
       jenkins_maxopenfiles: 65535
       #See jenkins tuning https://jenkins.io/blog/2016/11/21/gc-tuning/?utm_source=feedburner&utm_medium=twitter&utm_campaign=Feed%3A+ContinuousBlog+%28Jenkins%29
@@ -364,9 +365,6 @@
         - "zap"
         - "zapper"
       jenkins_disabled_plugins: [ 'versioncolumn', 'scm-sync-configuration', 'clamav', 'selenium', 'seleniumrc-plugin', 'selenium-builder', 'svnmerge', 'WebSVN2', 'svn-revert-plugin', 'subversion', 'ec2', 'scons', 'gearman-plugin', 'findbugs', 'checkstyle', 'pmd', 'clover', 'fitnesse' ]
-      jenkins_jobs:
-          - name: Delete_workspaces_on_nodes
-            action: disable
       shell_git:
         - {
           shell_git_machine: "github.com",
@@ -374,6 +372,7 @@
           shell_git_email: "alban.andrieu@free.fr",
           shell_git_password: "microsoft",
           shell_git_name: "Andrieu, Alban",
+          shell_git_maildomain: "free.fr",
           shell_git_path: "/usr/bin",
           shell_git_autocrlf: "input",   # For unix, use true for mingw on windows
           shell_git_longpaths: "true",   # For windows

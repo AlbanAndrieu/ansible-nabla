@@ -1,0 +1,8 @@
+---
+
+- name: Install locale
+  hosts: locale
+  remote_user: root
+
+  roles:
+    - locale

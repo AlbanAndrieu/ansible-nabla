@@ -1,12 +1,11 @@
 ---
 
-#ansible-playbook -i playbooks/hosts-albandri -c local -v playbooks/eclipse.yml -vvvv --limit albandri | tee setup.log
-#ansible-playbook -i playbooks/hosts-albandri -c local -v playbooks/eclipse.yml -vvvv --limit albandri --ask-become-pass | tee setup.log
+#ansible-playbook -i inventory/hosts-albandrieu -c local -v playbooks/eclipse.yml -vvvv --limit albandrieu --ask-become-pass | tee setup.log
 
 - name: Install eclipse
 #  connection: local
   hosts: eclipse
-  remote_user: albandri
+  remote_user: albandrieu
 #  remote_user: root
 #  accelerate: true
 
@@ -16,6 +15,9 @@
   vars:
        docker_files_enable: no
        docker_files_generated_directory: "../roles/alban.andrieu.eclipse"
+       eclipse_dir_tmp: "/tmp"
+       #eclipse_owner: albandrieu
+       eclipse_group: docker
        eclipse_plugins_emf_enabled: no
        eclipse_plugins_cdt_enabled: no
        eclipse_plugins_cmakeed_enabled: no
