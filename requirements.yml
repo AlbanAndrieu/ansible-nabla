@@ -21,10 +21,9 @@
   name: alban.andrieu.common
   version: 'master'
 
-- src: 'https://github.com/AlbanAndrieu/ansible-conky'
-  name: 'alban.andrieu.conky'
-  scm: 'git'
-  version: 'master'
+- src: https://github.com/AlbanAndrieu/ansible-conky.git
+  name: alban.andrieu.conky
+  version: master
 
 - src: 'https://github.com/AlbanAndrieu/ansible-cpp'
   name: 'alban.andrieu.cpp'

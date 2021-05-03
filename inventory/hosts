@@ -120,6 +120,9 @@ localhost ansible_user=root
 ansible_ssh_user=jenkins
 ansible_ssh_pass=jenkins1234
 
+[iscsi]
+localhost ansible_user=root
+
 [opencl]
 localhost ansible_user=root
 
