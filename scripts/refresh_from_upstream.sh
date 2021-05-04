@@ -41,6 +41,7 @@ git remote add upstream https://github.com/alourie/devbox.chrome.git
 git remote add upstream https://github.com/jdauphant/ansible-role-ssl-certs.git
 git remote add upstream https://github.com/andrewrothstein/ansible-trust-ca.git
 git remote add upstream https://github.com/geerlingguy/ansible-role-apache.git
+git remote add upstream https://github.com/Stouts/Stouts.python.git
 
 #git remote rm origin
 #git remote add origin https://github.com/AlbanAndrieu/ansible-role-elasticsearch-curator.git
