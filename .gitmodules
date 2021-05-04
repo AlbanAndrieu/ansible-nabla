@@ -91,9 +91,6 @@
 [submodule "roles/alban.andrieu.common"]
 	path = roles/alban.andrieu.common
 	url = https://github.com/AlbanAndrieu/ansible-common.git
-[submodule "roles/alban.andrieu.administration"]
-	path = roles/alban.andrieu.administration
-	url = https://github.com/AlbanAndrieu/ansible-administration.git
 [submodule "roles/alban.andrieu.jenkins-swarm"]
 	path = roles/alban.andrieu.jenkins-swarm
 	url = https://github.com/AlbanAndrieu/ansible-jenkins-swarm.git
