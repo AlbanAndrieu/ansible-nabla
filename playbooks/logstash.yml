@@ -29,7 +29,7 @@
 #  connection: local
 
   roles:
-    - alban.andrieu.logstash-settings
+    - albanandrieu.logstash-settings
 
   vars:
        logstash_monitor_local_collectd: yes

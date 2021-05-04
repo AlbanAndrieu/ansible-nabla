@@ -5,7 +5,7 @@
   remote_user: root
 
   roles:
-    - role: alban.andrieu.awstats
+    - role: albanandrieu.awstats
 
   vars:
       apache_listen_port: 7070

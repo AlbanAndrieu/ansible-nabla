@@ -5,7 +5,7 @@
   hosts: workstation
 
   roles:
-    - role: alban.andrieu.zap
+    - role: albanandrieu.zap
 
   vars:
       jmeter_plugins_standard_enabled: yes

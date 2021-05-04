@@ -3,7 +3,7 @@
 #  hosts: jenkins-swarm
 #
 #  roles:
-#    - alban.andrieu.jenkins-swarm
+#    - albanandrieu.jenkins-swarm
 #
 #  vars:
 #    jenkins_slave_home: /media/jenkins-slave/

@@ -8,7 +8,7 @@
 #  connection: local
 
   roles:
-    - role: alban.andrieu.conky
+    - role: albanandrieu.conky
 
   vars:
        conky_sensor_enabled: yes

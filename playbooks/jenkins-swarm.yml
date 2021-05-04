@@ -25,8 +25,8 @@
 #    private: yes
 
   roles:
-    - { role: alban.andrieu.jenkins-swarm,
+    - { role: albanandrieu.jenkins-swarm,
         docker_files_enable: yes,
-        docker_files_generated_directory: "../roles/alban.andrieu.jenkins-swarm",
+        docker_files_generated_directory: "../roles/albanandrieu.jenkins-swarm",
         jenkins_home: "/jenkins"
       }

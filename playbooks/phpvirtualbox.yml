@@ -9,7 +9,7 @@
 #  accelerate: true
 
   roles:
-    - { role: alban.andrieu.phpvirtualbox,
+    - { role: albanandrieu.phpvirtualbox,
         virtualbox_extension_enable: yes,
         phpvirtualbox_owner_password: "microsoft",
         apache_listen_port: 7070,

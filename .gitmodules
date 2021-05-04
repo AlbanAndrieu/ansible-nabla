@@ -82,9 +82,6 @@
 [submodule "roles/alban.andrieu.mon"]
 	path = roles/alban.andrieu.mon
 	url = https://github.com/AlbanAndrieu/ansible-mon.git
-[submodule "roles/alban.andrieu.grive"]
-	path = roles/alban.andrieu.grive
-	url = https://github.com/AlbanAndrieu/ansible-grive.git
 [submodule "roles/alban.andrieu.web"]
 	path = roles/alban.andrieu.web
 	url = https://github.com/AlbanAndrieu/ansible-web.git
@@ -115,18 +112,6 @@
 [submodule "roles/alban.andrieu.private-bower"]
 	path = roles/alban.andrieu.private-bower
 	url = https://github.com/AlbanAndrieu/ansible-private-bower.git
-[submodule "roles/alban.andrieu.visualvm"]
-	path = roles/alban.andrieu.visualvm
-	url = https://github.com/AlbanAndrieu/ansible-visualvm.git
-[submodule "roles/alban.andrieu.yourkit"]
-	path = roles/alban.andrieu.yourkit
-	url = https://github.com/AlbanAndrieu/ansible-yourkit.git
-[submodule "roles/alban.andrieu.logstash-settings"]
-	path = roles/alban.andrieu.logstash-settings
-	url = https://github.com/AlbanAndrieu/ansible-logstash-settings.git
-[submodule "roles/alban.andrieu.squirrel"]
-	path = roles/alban.andrieu.squirrel
-	url = https://github.com/AlbanAndrieu/ansible-squirrel.git
 [submodule "roles/alban.andrieu.sublimetext"]
 	path = roles/alban.andrieu.sublimetext
 	url = https://github.com/AlbanAndrieu/ansible-sublimetext.git

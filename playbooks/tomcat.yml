@@ -6,7 +6,7 @@
 #  connection: local
 
   roles:
-    - alban.andrieu.tomcat
+    - albanandrieu.tomcat
 
   vars:
        tomcat_started_check_enable: yes

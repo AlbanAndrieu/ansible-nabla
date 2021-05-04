@@ -41,7 +41,7 @@
   become: true
 
   roles:
-    - alban.andrieu.workstation
+    - albanandrieu.workstation
 
   vars:
        dropbox_user_host: "2366450895"
@@ -77,7 +77,7 @@
   hosts: tomcat-servers
 
   roles:
-    - alban.andrieu.tomcat
+    - albanandrieu.tomcat
 
   vars:
       tomcat_version: "9"

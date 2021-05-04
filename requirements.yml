@@ -3,63 +3,63 @@
 # ansible-galaxy install -r requirements.yml -p ./roles/ --ignore-errors
 
 - src: https://github.com/AlbanAndrieu/ansible-administration.git
-  name: alban.andrieu.administration
+  name: albanandrieu.administration
   version: master
 
 - src: https://github.com/AlbanAndrieu/ansible-awstats.git
-  name: alban.andrieu.awstats
+  name: albanandrieu.awstats
   version: master
 
 - src: 'https://github.com/AlbanAndrieu/ansible-cmake'
-  name: 'alban.andrieu.cmake'
+  name: 'albanandrieu.cmake'
   scm: 'git'
   version: 'master'
 
 - src: https://github.com/AlbanAndrieu/ansible-common.git
-  name: alban.andrieu.common
+  name: albanandrieu.ansible_common
   version: 'master'
 
 - src: https://github.com/AlbanAndrieu/ansible-conky.git
-  name: alban.andrieu.conky
+  name: albanandrieu.conky
   version: master
 
 - src: 'https://github.com/AlbanAndrieu/ansible-cpp'
-  name: 'alban.andrieu.cpp'
+  name: 'albanandrieu.cpp'
   scm: 'git'
   version: 'master'
 
 - src: 'https://github.com/AlbanAndrieu/ansible-css'
-  name: 'alban.andrieu.css'
+  name: 'albanandrieu.css'
   scm: 'git'
   version: 'master'
 
 - src: 'https://github.com/AlbanAndrieu/ansible-dns'
-  name: 'alban.andrieu.dns'
+  name: 'albanandrieu.dns'
   scm: 'git'
   version: 'master'
 
 - src: https://github.com/AlbanAndrieu/ansible-dropbox.git
-  name: alban.andrieu.dropbox
+  name: albanandrieu.dropbox
   version: master
 
 - src: https://github.com/AlbanAndrieu/ansible-eclipse.git
-  name: alban.andrieu.eclipse
+  name: albanandrieu.eclipse
   version: master
 
 - src: 'https://github.com/AlbanAndrieu/ansible-evasive'
-  name: 'alban.andrieu.evasive'
+  name: 'albanandrieu.evasive'
   scm: 'git'
   version: 'master'
 
 - src: 'https://github.com/AlbanAndrieu/ansible-gcc'
-  name: 'alban.andrieu.gcc'
+  name: 'albanandrieu.gcc'
   scm: 'git'
   version: 'master'
 
-- src: 'https://github.com/AlbanAndrieu/ansible-grive'
-  name: 'alban.andrieu.grive'
-  scm: 'git'
-  version: 'master'
+#- src: 'https://github.com/AlbanAndrieu/ansible-grive'
+#  name: 'albanandrieu.grive'
+#  scm: 'git'
+#  version: 'master'
 
 #TODO
 #- src: https://github.com/Stouts/Stouts.hostname
@@ -67,148 +67,147 @@
 #  name: Stouts.hostname
 
 - src: 'https://github.com/AlbanAndrieu/ansible-hostname'
-  name: 'alban.andrieu.hostname'
+  name: 'albanandrieu.ansible_hostname'
   scm: 'git'
   version: 'master'
 
 - src: 'https://github.com/AlbanAndrieu/ansible-jboss'
-  name: 'alban.andrieu.jboss'
+  name: 'albanandrieu.jboss'
   scm: 'git'
   version: 'master'
 
 - src: https://github.com/AlbanAndrieu/ansible-jdiskreport.git
-  name: alban.andrieu.jdiskreport
+  name: albanandrieu.jdiskreport
   version: master
 
-- src: 'https://github.com/AlbanAndrieu/ansible-jenkins-slave'
-  name: 'alban.andrieu.jenkins-slave'
-  scm: 'git'
-  version: 'master'
+- src: https://github.com/AlbanAndrieu/ansible-jenkins-slave.git
+  name: albanandrieu.jenkins_slave
+  version: master
 
 - src: 'https://github.com/AlbanAndrieu/ansible-jenkins-swarm'
-  name: 'alban.andrieu.jenkins-swarm'
+  name: 'albanandrieu.jenkins-swarm'
   scm: 'git'
   version: 'master'
 
 - src: 'https://github.com/AlbanAndrieu/ansible-jmeter'
-  name: 'alban.andrieu.jmeter'
+  name: 'albanandrieu.jmeter'
   scm: 'git'
   version: 'master'
 
-- src: 'https://github.com/AlbanAndrieu/ansible-logstash-settings'
-  name: 'alban.andrieu.logstash-settings'
-  scm: 'git'
-  version: 'master'
+#- src: 'https://github.com/AlbanAndrieu/ansible-logstash-settings'
+#  name: 'albanandrieu.logstash-settings'
+#  scm: 'git'
+#  version: 'master'
 
 - src: 'https://github.com/AlbanAndrieu/ansible-mon'
-  name: 'alban.andrieu.mon'
+  name: 'albanandrieu.mon'
   scm: 'git'
   version: 'master'
 
 - src: 'https://github.com/AlbanAndrieu/ansible-owasp-wte'
-  name: 'alban.andrieu.owasp-wte'
+  name: 'albanandrieu.owasp-wte'
   scm: 'git'
   version: 'master'
 
 - src: https://github.com/AlbanAndrieu/ansible-pagespeed.git
-  name: alban.andrieu.pagespeed
+  name: albanandrieu.pagespeed
   version: master
 
 - src: 'https://github.com/AlbanAndrieu/ansible-phpvirtualbox'
-  name: 'alban.andrieu.phpvirtualbox'
+  name: 'albanandrieu.phpvirtualbox'
   scm: 'git'
   version: 'master'
 
 - src: 'https://github.com/AlbanAndrieu/ansible-private-bower'
-  name: 'alban.andrieu.private-bower'
+  name: 'albanandrieu.private-bower'
   scm: 'git'
   version: 'master'
 
 - src: 'https://github.com/AlbanAndrieu/ansible-scons'
-  name: 'alban.andrieu.scons'
+  name: 'albanandrieu.scons'
   scm: 'git'
   version: 'master'
 
 - src: 'https://github.com/AlbanAndrieu/ansible-selenium'
-  name: 'alban.andrieu.selenium'
+  name: 'albanandrieu.selenium'
   scm: 'git'
   version: 'master'
 
 - src: 'https://github.com/AlbanAndrieu/ansible-shell'
-  name: 'alban.andrieu.shell'
+  name: 'albanandrieu.shell'
   scm: 'git'
   version: 'master'
 
 - src: 'https://github.com/AlbanAndrieu/ansible-solaris'
-  name: 'alban.andrieu.solaris'
+  name: 'albanandrieu.solaris'
   scm: 'git'
   version: 'master'
 
-- src: 'https://github.com/AlbanAndrieu/ansible-squirrel'
-  name: 'alban.andrieu.squirrel'
-  scm: 'git'
-  version: 'master'
+#- src: 'https://github.com/AlbanAndrieu/ansible-squirrel'
+#  name: 'albanandrieu.squirrel'
+#  scm: 'git'
+#  version: 'master'
 
 - src: 'https://github.com/AlbanAndrieu/ansible-sublimetext'
-  name: 'alban.andrieu.sublimetext'
+  name: 'albanandrieu.sublimetext'
   scm: 'git'
   version: 'master'
 
 - src: 'https://github.com/AlbanAndrieu/ansible-subversion'
-  name: 'alban.andrieu.subversion'
+  name: 'albanandrieu.subversion'
   scm: 'git'
   version: 'master'
 
 - src: 'https://github.com/AlbanAndrieu/ansible-synergy'
-  name: 'alban.andrieu.synergy'
+  name: 'albanandrieu.synergy'
   scm: 'git'
   version: 'master'
 
 - src: 'https://github.com/AlbanAndrieu/ansible-tomcat'
-  name: 'alban.andrieu.tomcat'
+  name: 'albanandrieu.tomcat'
   scm: 'git'
   version: 'master'
 
-- src: 'https://github.com/AlbanAndrieu/ansible-visualvm'
-  name: 'alban.andrieu.visualvm'
-  scm: 'git'
-  version: 'master'
+#- src: 'https://github.com/AlbanAndrieu/ansible-visualvm'
+#  name: 'albanandrieu.visualvm'
+#  scm: 'git'
+#  version: 'master'
 
 - src: https://github.com/AlbanAndrieu/ansible-web.git
-  name: alban.andrieu.web
+  name: albanandrieu.web
   version: master
 
 - src: https://github.com/AlbanAndrieu/ansible-webmin.git
-  name: alban.andrieu.webmin
+  name: albanandrieu.webmin
   version: master
 
-- src: 'https://github.com/AlbanAndrieu/ansible-windows'
-  name: 'alban.andrieu.windows'
-  scm: 'git'
-  version: 'master'
+#- src: 'https://github.com/AlbanAndrieu/ansible-windows'
+#  name: 'albanandrieu.windows'
+#  scm: 'git'
+#  version: 'master'
 
 - src: 'https://github.com/AlbanAndrieu/ansible-workstation'
-  name: 'alban.andrieu.workstation'
+  name: 'albanandrieu.workstation'
   scm: 'git'
   version: 'master'
 
 - src: 'https://github.com/AlbanAndrieu/ansible-xvbf'
-  name: 'alban.andrieu.xvbf'
+  name: 'albanandrieu.xvbf'
   scm: 'git'
   version: 'master'
 
-- src: 'https://github.com/AlbanAndrieu/ansible-yourkit'
-  name: 'alban.andrieu.yourkit'
-  scm: 'git'
-  version: 'master'
+#- src: 'https://github.com/AlbanAndrieu/ansible-yourkit'
+#  name: 'albanandrieu.yourkit'
+#  scm: 'git'
+#  version: 'master'
 
 - src: 'https://github.com/AlbanAndrieu/ansible-zap'
-  name: 'alban.andrieu.zap'
+  name: 'albanandrieu.zap'
   scm: 'git'
   version: 'master'
 
 - src: 'https://github.com/AlbanAndrieu/ansible-zfs'
-  name: 'alban.andrieu.zfs'
+  name: 'albanandrieu.zfs'
   scm: 'git'
   version: 'master'
 
@@ -467,7 +466,7 @@
   version:  'master'
 
 - src: https://github.com/AlbanAndrieu/ansible-supervisor_task.git
-  name: supervisor
+  name: ansible-supervisor
   version: master
 
 - src: https://github.com/AlbanAndrieu/ansible-vagrant-role.git
@@ -475,7 +474,7 @@
   version: master
 
 - src: 'https://github.com/AlbanAndrieu/ansible-galaxy.ubuntu.virtualbox'
-  name: 'alban.andrieu.virtualbox'
+  name: 'albanandrieu.virtualbox'
   scm: 'git'
   version: 'master'
 

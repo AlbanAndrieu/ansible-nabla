@@ -7,7 +7,7 @@
   connection: local
 
   roles:
-    - role: alban.andrieu.synergy
+    - role: albanandrieu.synergy
 
   vars:
       synergy_server_main: "10.25.40.139"

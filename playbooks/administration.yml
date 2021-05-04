@@ -8,7 +8,7 @@
   become: true
 
   roles:
-    - alban.andrieu.administration
+    - albanandrieu.administration
 
   vars:
 #      automount_enabled: true

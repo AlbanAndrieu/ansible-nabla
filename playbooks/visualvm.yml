@@ -7,7 +7,7 @@
 #  accelerate: true
 
   roles:
-    - { role: alban.andrieu.visualvm,
+    - { role: albanandrieu.visualvm,
         visualvm_remote_hosts_enable: yes,
       }
 

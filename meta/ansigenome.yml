@@ -1,31 +1,11 @@
 ---
-dependencies: []
 
-galaxy_info:
-  author: Alban Andrieu
-  description: A role for gathering nabla infrastructure other ansible role
-  company: Nabla
-  license: GPLv3
-  min_ansible_version: 2.6.0
-  platforms:
-    - name: Ubuntu
-      versions:
-        - all
-        - lucid
-        - maverick
-        - natty
-        - oneiric
-        - precise
-        - quantal
-        - raring
-        - saucy
-        - trusty
-  galaxy_tags: []
-
-ansigenome_info:
+ansigenome_info: # noqa 701
   galaxy_id: ''
+  galaxy_url: 'https://galaxy.ansible.com/alban.andrieu/ansible-nabla/'
   galaxy_user: 'alban.andrieu'
   galaxy_name: 'ansible-nabla'
+  galaxy_docker_name: 'ansible-nabla'
 
   travis: false
 
