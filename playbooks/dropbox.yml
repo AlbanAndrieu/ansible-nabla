@@ -8,9 +8,9 @@
 #  accelerate: true
 
   roles:
-    - { role: alban.andrieu.dropbox,
+    - { role: albanandrieu.dropbox,
         docker_files_enable: yes,
-        docker_files_generated_directory: "../roles/alban.andrieu.dropbox",
+        docker_files_generated_directory: "../roles/albanandrieu.dropbox",
         dropbox_owner: "{{ user }}",
         dropbox_group: "{{ group }}",
         #dropbox_user_directory: "/workspace/Dropbox",

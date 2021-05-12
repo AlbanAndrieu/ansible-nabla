@@ -73,14 +73,23 @@
 - import_playbook: common.yml
 
 - import_playbook: dns.yml
+  tags:
+    - dns
+    - vm
 
 - import_playbook: python.yml
 
 - import_playbook: administration.yml automount_enabled=false nis_enabled=false
 
 - include: firewall.yml
+  tags:
+    - firewall
+    - vm
 
 - include: security.yml
+  tags:
+    - security
+    - vm
 
 #Below cmake role is included in cpp role
 #- name: Install cmake
@@ -89,7 +98,7 @@
 #
 #
 #  roles:
-#    - alban.andrieu.cmake
+#    - albanandrieu.cmake
 
 #Below scons role is included in cpp role
 #- name: Install scons
@@ -98,7 +107,7 @@
 #
 #
 #  roles:
-#    - alban.andrieu.scons
+#    - albanandrieu.scons
 
 - import_playbook: cpp.yml
 
@@ -126,18 +135,33 @@
 ##      vagrant_url: https://dl.bintray.com/mitchellh/vagrant/vagrant_1.6.3_x86_64.deb
 
 - import_playbook: docker.yml
+  tags:
+    - docker
+    - vm
 
 - import_playbook: locale.yml
 
 - import_playbook: zabbix-agent.yml
+  tags:
+    - zabbix
+    - vm
 
 - import_playbook: xvbf.yml
+  tags:
+    - xvbf
+    - vm
 
 - import_playbook: selenium.yml
+  tags:
+    - selenium
+    - vm
 
 #- import_playbook: zfs.yml
 
 - import_playbook: dropbox.yml
+  tags:
+    - dropbox
+    - vm
 
 - name: Install workstation add-on
   hosts: workstation
@@ -145,7 +169,7 @@
 
 
   roles:
-    - alban.andrieu.workstation
+    - albanandrieu.workstation
 
   vars:
        dropbox_user_host: "2366450895"
@@ -173,13 +197,19 @@
 #
 #  vars:
 #       docker_files_enable: yes,
-#       docker_files_generated_directory: "../roles/alban.andrieu.jenkins-swarm",
+#       docker_files_generated_directory: "../roles/albanandrieu.jenkins-swarm",
 
 - import_playbook: webmin.yml
+  tags:
+    - webmin
+    - vm
 
 #- import_playbook: nexus.yml
 
 - import_playbook: tomcat.yml
+  tags:
+    - tomcat
+    - vm
 
 # This playbook deploys a simple standalone JBoss server.
 
@@ -194,7 +224,7 @@
 
 
   roles:
-    - alban.andrieu.web
+    - albanandrieu.web
 
   vars:
        apache_listen_port: 7070
@@ -207,29 +237,53 @@
        mysql_root_username: root
        mysql_root_password: microsoft
        docker_files_enable: yes
-       docker_files_generated_directory: "../roles/alban.andrieu.web"
+       docker_files_generated_directory: "../roles/albanandrieu.web"
 
 - import_playbook: pagespeed.yml
+  tags:
+    - web
+    - vm
 
 - import_playbook: evasive.yml
+  tags:
+    - web
+    - vm
 
 - import_playbook: awstats.yml
+  tags:
+    - web
+    - vm
 
 - import_playbook: jenkins-master.yml
+  tags:
+    - jenkins
+    - vm
 
 - import_playbook: maven.yml
 
 - import_playbook: jenkins-slave.yml
+  tags:
+    - jenkins
+    - vm
 
 - import_playbook: css.yml
 
 - import_playbook: chrome.yml
+  tags:
+    - chrome
+    - vm
 
 - import_playbook: nodejs.yml
 
 - import_playbook: supervisor.yml
+  tagssupervisor
+    - web
+    - vm
 
 - import_playbook: sonar.yml
+  tags:
+    - sonar
+    - vm
 
 #Below cmake conky is included in workstation role
 #- name: Install conky
@@ -237,7 +291,7 @@
 #  remote_user: root
 #
 #  roles:
-#    - role: alban.andrieu.conky
+#    - role: albanandrieu.conky
 
 - name: Install git
   hosts: workstation
@@ -245,18 +299,6 @@
 
   roles:
     - role: geerlingguy.git
-
-- name: Install subversion
-  hosts: workstation
-  remote_user: root
-  ignore_errors: true
-
-  roles:
-    - role: alban.andrieu.subversion
-
-  vars:
-      subversion_owner: "{{ user }}"
-      subversion_group: "{{ group }}"
 
 - name: Apply common shell configuration
   hosts: workstation
@@ -266,7 +308,7 @@
 #  become: true
 
   roles:
-    - role: alban.andrieu.shell
+    - role: albanandrieu.shell
 
   vars:
     shell_default_version: "30"
@@ -311,7 +353,7 @@
     shell_maven_enabled: no
     newrelic_license_key: de35bf5d191ebb208d359b2cd24a60616a02b1f3
     docker_files_enable: no
-#    docker_files_generated_directory: "../roles/alban.andrieu.shell"
+#    docker_files_generated_directory: "../roles/albanandrieu.shell"
 
 #- name: Install eclipse
 
@@ -319,10 +361,10 @@
 #  remote_user: root
 #
 #  roles:
-#    - role: alban.andrieu.eclipse
+#    - role: albanandrieu.eclipse
 #
 #  vars:
-#      docker_files_generated_directory: "../roles/alban.andrieu.eclipse"
+#      docker_files_generated_directory: "../roles/albanandrieu.eclipse"
 #      docker_files_enable: yes
 #      #eclipse_base_dir: /workspace/eclipse
 #      #user: "albandri"
@@ -331,6 +373,9 @@
 - import_playbook: sublimetext.yml
 
 - import_playbook: zap.yml
+  tags:
+    - zap
+    - vm
 
 - import_playbook: jmeter.yml
 
@@ -339,7 +384,7 @@
 
 
   roles:
-    - alban.andrieu.mon
+    - albanandrieu.mon
 
   vars:
       apache_listen_port: 7070
@@ -351,8 +396,14 @@
       home: "/root"
 
 - import_playbook: jdiskreport.yml
+  tags:
+    - jdiskreport
+    - vm
 
 - import_playbook: private-bower.yml
+  tags:
+    - bower
+    - vm
 
 - import_playbook: owasp-wte.yml
 
@@ -361,3 +412,6 @@
 
   roles:
     - geerlingguy.samba
+  tags:
+    - samba
+    - vm

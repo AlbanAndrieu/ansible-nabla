@@ -43,18 +43,27 @@
 - import_playbook: python-bootstrap.yml
 
 - import_playbook: hostname.yml
+  tags:
+    - hostname
+    - vm
 
 #- import_playbook: nfs.yml
 
 - import_playbook: common.yml
 
 - import_playbook: dns.yml
+  tags:
+    - dns
+    - vm
 
 - import_playbook: python.yml
 
 - import_playbook: administration.yml automount_enabled=false nis_enabled=false
 
 - import_playbook: security.yml
+  tags:
+    - security
+    - vm
 
 - import_playbook: java.yml
 
@@ -63,14 +72,29 @@
 - import_playbook: python.yml
 
 - import_playbook: webmin.yml
+  tags:
+    - webmin
+    - vm
 
 - import_playbook: chrome.yml
+  tags:
+    - chrome
+    - vm
 
 - import_playbook: selenium.yml
+  tags:
+    - selenium
+    - vm
 
 - import_playbook: xvbf.yml
+  tags:
+    - xvbf
+    - vm
 
 - import_playbook: zabbix-agent.yml
+  tags:
+    - zabbix
+    - vm
 
 - import_playbook: yarn.yml
 
@@ -91,7 +115,7 @@
   become: true
 
   roles:
-    - alban.andrieu.web
+    - albanandrieu.web
 
   vars:
       apache_listen_port: 7075
@@ -114,7 +138,7 @@
   become: true
 
   roles:
-    - alban.andrieu.web
+    - albanandrieu.web
 
   vars:
       apache_listen_port: 7075
@@ -135,3 +159,6 @@
       repository_version: "gh-pages"
 
 - import_playbook: lamp.yml
+  tags:
+    - lamp
+    - vm

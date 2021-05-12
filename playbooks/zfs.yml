@@ -7,4 +7,4 @@
 #  connection: local
 
   roles:
-    - alban.andrieu.zfs
+    - albanandrieu.zfs

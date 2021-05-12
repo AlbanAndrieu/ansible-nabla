@@ -174,3 +174,20 @@ Here are some ideas for ways that these playbooks could be extended:
 
 We would love to see contributions and improvements, so please fork this
 repository and send us your changes via pull requests.
+
+## Update README.md
+
+
+  * [github-markdown-toc](https://github.com/jonschlinkert/markdown-toc)
+  * With [github-markdown-toc](https://github.com/Lucas-C/pre-commit-hooks-nodejs)
+
+```
+npm install --save markdown-toc
+markdown-toc README.md
+markdown-toc CHANGELOG.md  -i
+```
+
+```
+git add README.md
+pre-commit run markdown-toc
+```

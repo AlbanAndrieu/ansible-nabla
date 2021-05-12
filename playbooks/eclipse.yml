@@ -10,11 +10,11 @@
 #  accelerate: true
 
   roles:
-    - alban.andrieu.eclipse
+    - albanandrieu.eclipse
 
   vars:
        docker_files_enable: no
-       docker_files_generated_directory: "../roles/alban.andrieu.eclipse"
+       docker_files_generated_directory: "../roles/albanandrieu.eclipse"
        eclipse_dir_tmp: "/tmp"
        #eclipse_owner: albandrieu
        eclipse_group: docker

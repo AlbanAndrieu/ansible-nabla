@@ -3,7 +3,7 @@
 - name: Install jdiskreport
   hosts: workstation
   roles:
-    - role: alban.andrieu.jdiskreport
+    - role: albanandrieu.jdiskreport
 
 #  vars:
 #       apache_listen_port: 7070

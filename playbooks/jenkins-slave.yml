@@ -15,11 +15,11 @@
 #  strategy: debug
 
   roles:
-    - alban.andrieu.jenkins-slave
+    - albanandrieu.jenkins_slave
 
   vars:
     docker_files_enable: false
-    #docker_files_generated_directory: "../roles/alban.andrieu.jenkins-slave"
+    #docker_files_generated_directory: "../roles/albanandrieu.jenkins_slave"
     docker_registry_user: nabla
     shell_git:
       # Additional properties: 'shell_git_machine, shell_git_login, shell_git_email, shell_git_password, shell_git_name, shell_git_path, shell_git_ssl'.

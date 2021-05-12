@@ -123,7 +123,7 @@
 #  connection: local
 
   roles:
-    - alban.andrieu.web
+    - albanandrieu.web
 
   vars:
        apache_listen_port: 7070
@@ -136,7 +136,7 @@
        mysql_root_username: root
        mysql_root_password: microsoft
        docker_files_enable: yes
-       docker_files_generated_directory: "../roles/alban.andrieu.web"
+       docker_files_generated_directory: "../roles/albanandrieu.web"
 
 - import_playbook: pagespeed.yml
 
@@ -172,7 +172,7 @@
 #  remote_user: root
 #
 #  roles:
-#    - role: alban.andrieu.conky
+#    - role: albanandrieu.conky
 
 - name: Install git
   hosts: workstation
@@ -187,7 +187,7 @@
   ignore_errors: true
 
   roles:
-    - role: alban.andrieu.subversion
+    - role: albanandrieu.subversion
 
   vars:
       subversion_owner: "{{ user }}"
@@ -199,16 +199,16 @@
 ##  connection: local
 #
 #  vars_files:
-#  - [ "roles/alban.andrieu.shell/defaults/main.yml" ]
-#  - [ "roles/alban.andrieu.shell/vars/default.yml" ]
-#  - [ "roles/alban.andrieu.shell/vars/version.yml" ]
-#  - [ "roles/alban.andrieu.shell/vars/custom-{{ ansible_distribution }}-{{ ansible_architecture }}.yml", "roles/alban.andrieu.shell/vars/custom-{{ ansible_distribution }}.yml" ]
+#  - [ "roles/albanandrieu.shell/defaults/main.yml" ]
+#  - [ "roles/albanandrieu.shell/vars/default.yml" ]
+#  - [ "roles/albanandrieu.shell/vars/version.yml" ]
+#  - [ "roles/albanandrieu.shell/vars/custom-{{ ansible_distribution }}-{{ ansible_architecture }}.yml", "roles/albanandrieu.shell/vars/custom-{{ ansible_distribution }}.yml" ]
 #
 #  roles:
-#    - role: alban.andrieu.shell
+#    - role: albanandrieu.shell
 #
 #  vars:
-#      docker_files_generated_directory: "../roles/alban.andrieu.shell"
+#      docker_files_generated_directory: "../roles/albanandrieu.shell"
 #      docker_files_enable: yes
 #      newrelic_license_key: de35bf5d191ebb208d359b2cd24a60616a02b1f3
 #      shell_owner: "{{ user }}"
@@ -223,10 +223,10 @@
 #  remote_user: root
 #
 #  roles:
-#    - role: alban.andrieu.eclipse
+#    - role: albanandrieu.eclipse
 #
 #  vars:
-#      docker_files_generated_directory: "../roles/alban.andrieu.eclipse"
+#      docker_files_generated_directory: "../roles/albanandrieu.eclipse"
 #      docker_files_enable: yes
 #      #eclipse_base_dir: /workspace/eclipse
 #      #user: "albandri"
@@ -244,7 +244,7 @@
 ##  connection: local
 #
 #  roles:
-#    - alban.andrieu.mon
+#    - albanandrieu.mon
 #
 #  vars:
 #      apache_listen_port: 7070

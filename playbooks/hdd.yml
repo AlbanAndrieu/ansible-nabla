@@ -22,7 +22,7 @@
     - name: set freenas_ssh_port to default
       set_fact: freenas_ssh_port=3260
 
-    - name: Copy isci configuration.
+    - name: Copy isci configuration
       template:
         src: iscsid.conf.j2
         dest: "/etc/iscsi/iscsid.conf"
@@ -79,7 +79,6 @@
   become: true
 
   tasks:
-
     - name: hdd | Create vg_iscsi volume group
       command: umount /data && vgcreate vg_iscsi /dev/sdd1
       changed_when: false

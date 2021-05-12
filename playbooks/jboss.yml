@@ -6,7 +6,7 @@
 #  accelerate: true
 
   roles:
-    - { role: alban.andrieu.jboss,
+    - { role: albanandrieu.jboss,
         docker_files_enable: yes,
         docker_files_generated_directory: "../roles/jboss"
       }

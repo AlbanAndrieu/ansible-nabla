@@ -217,10 +217,10 @@ git submodule add -f  https://github.com/AlbanAndrieu/ansible-web.git alban.andr
 #git submodule deinit -f common
 git submodule add -f  https://github.com/AlbanAndrieu/ansible-common.git alban.andrieu.common
 
-#git submodule deinit -f administration
+#git submodule deinit -f alban.andrieu.administration/
 git submodule add -f  https://github.com/AlbanAndrieu/ansible-administration.git alban.andrieu.administration
 
-#git submodule deinit -f workstation
+#git submodule deinit -f alban.andrieu.workstation
 git submodule add -f  https://github.com/AlbanAndrieu/ansible-workstation.git alban.andrieu.workstation
 
 #git submodule deinit -f dns

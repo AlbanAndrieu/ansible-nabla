@@ -9,4 +9,4 @@
   user: root
 
   roles:
-    - role: alban.andrieu.windows
+    - role: albanandrieu.windows

@@ -7,7 +7,7 @@
   become: true
 
   roles:
-    - alban.andrieu.shell
+    - albanandrieu.shell
 
   vars:
     shell_default_version: "30"
@@ -52,4 +52,4 @@
     shell_maven_enabled: no
     newrelic_license_key: de35bf5d191ebb208d359b2cd24a60616a02b1f3
     docker_files_enable: no
-#    docker_files_generated_directory: "../roles/alban.andrieu.shell"
+#    docker_files_generated_directory: "../roles/albanandrieu.shell"

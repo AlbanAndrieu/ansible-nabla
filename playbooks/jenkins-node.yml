@@ -22,14 +22,14 @@
 
   tasks:
     - name: set jenkins_slave_home to default
-      set_fact: jenkins_slave_home: /workspace
+      set_fact: jenkins_slave_home=/workspace
 
-    - name: Request CSRF token from Jenkins
-      jenkins_csrf_token:
-        auth:
-          username: "{{ username }}"
-          password: "{{ password }}"
-      register: csrf
+    #- name: Request CSRF token from Jenkins
+    #  jenkins_csrf_token:
+    #    auth:
+    #      username: "{{ username }}"
+    #      password: "{{ password }}"
+    #  register: csrf
 
     - name: Debug Jenkins-Crumb
       debug:
@@ -52,7 +52,7 @@
         - key: OS_ARCH
           value: x86Linux
         credentialsId: 001 # jenkins@unix-slaves
-        remoteFS: {{ jenkins_slave_home }}/slave/
+        remoteFS: "{{ jenkins_slave_home }}/slave/"
         x_token: "{{ csrf.token }}"
         x_auth:
           username: "{{ username }}"

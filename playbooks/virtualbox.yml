@@ -8,7 +8,7 @@
   ignore_errors: true
 
   roles:
-    - alban.andrieu.virtualbox
+    - albanandrieu.virtualbox
 
   vars:
     #virtualbox_version: "5.2.26"

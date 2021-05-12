@@ -16,7 +16,7 @@
 #  connection: local
 
   roles:
-    - alban.andrieu.common
+    - albanandrieu.ansible_common
 
   vars:
      apt_install_packages_list  :
@@ -44,7 +44,7 @@
   become: true
   tasks:
   - name: copy build.sh
-    copy: src=roles/alban.andrieu.jenkins-slave/ dest=./
+    copy: src=roles/albanandrieu.jenkins_slave dest=./
     #mode=0777
 
 #- name: Copy Dockerfile to build image

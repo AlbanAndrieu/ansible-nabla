@@ -1,5 +1,15 @@
 ---
-dependencies: []
+dependencies:
+  - { role: albanandrieu.ansible_common }
+#  - { role: albanandrieu.ansible_cpp }
+  - { role: albanandrieu.cmake }
+  - { role: albanandrieu.scons }
+  - { role: albanandrieu.gcc }
+  - { role: albanandrieu.ansible-workstation }
+  - { role: albanandrieu.xvbf }
+  - { role: albanandrieu.jenkins_slave }
+  - { role: albanandrieu.java }
+  - { role: albanandrieu.selenium }
 
 galaxy_info:
   author: Alban Andrieu
@@ -20,4 +30,5 @@ galaxy_info:
         - raring
         - saucy
         - trusty
-  galaxy_tags: []
+  galaxy_tags:
+    - development

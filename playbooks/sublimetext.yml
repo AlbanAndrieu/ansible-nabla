@@ -5,4 +5,4 @@
   hosts: workstation
 
   roles:
-    - role: alban.andrieu.sublimetext
+    - role: albanandrieu.sublimetext
