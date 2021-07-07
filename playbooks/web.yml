@@ -16,7 +16,7 @@
     - name: group hosts by distribution
       group_by: key="{{ ansible_distribution }}-{{ ansible_distribution_version }}"
 
-- hosts: RedHat-7*:RedHat-6*:RedHat-5*:CentOS-7*:CentOS-6*:Ubuntu-19*:Ubuntu-18*:Ubuntu-17*:Ubuntu-16*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
+- hosts: RedHat-7*:RedHat-6*:RedHat-5*:CentOS-7*:CentOS-6*:Ubuntu-21*:Ubuntu-20*:Ubuntu-19*:Ubuntu-18*:Ubuntu-17*:Ubuntu-16*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
   gather_facts: false
   tasks:
     - name: group hosts for supported distributions
@@ -41,6 +41,9 @@
 #      ignore_errors: true
 
 - import_playbook: python-bootstrap.yml
+  tags:
+    - python
+    - vm
 
 - import_playbook: hostname.yml
   tags:
@@ -70,6 +73,9 @@
 - import_playbook: certificate.yml
 
 - import_playbook: python.yml
+  tags:
+    - python
+    - vm
 
 - import_playbook: webmin.yml
   tags:

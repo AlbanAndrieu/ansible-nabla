@@ -23,20 +23,18 @@
   name: albanandrieu.conky
   version: master
 
-- src: 'https://github.com/AlbanAndrieu/ansible-cpp'
-  name: 'albanandrieu.cpp'
-  scm: 'git'
-  version: 'master'
+- src: https://github.com/AlbanAndrieu/ansible-cpp.git
+  name: albanandrieu.ansible_cpp
+  version: master
 
 - src: 'https://github.com/AlbanAndrieu/ansible-css'
   name: 'albanandrieu.css'
   scm: 'git'
   version: 'master'
 
-- src: 'https://github.com/AlbanAndrieu/ansible-dns'
-  name: 'albanandrieu.dns'
-  scm: 'git'
-  version: 'master'
+- src: https://github.com/AlbanAndrieu/ansible-dns.git
+  name: albanandrieu.ansible_dns
+  version: master
 
 - src: https://github.com/AlbanAndrieu/ansible-dropbox.git
   name: albanandrieu.dropbox
@@ -225,10 +223,9 @@
   name: chrome
   version: master
 
-- src: 'https://github.com/AlbanAndrieu/Stouts.collectd'
-  name: 'collectd'
-  scm: 'git'
-  version: 'master'
+- src: https://github.com/AlbanAndrieu/Stouts.collectd.git
+  name: Stouts.collectd
+  version: master
 
 #- src: 'https://github.com/AlbanAndrieu/ansible-darthwade-wordpress'
 #  name: 'darthwade-wordpress'
@@ -460,10 +457,13 @@
   scm: 'git'
   version: 'master'
 
-- src: 'https://github.com/andrewrothstein/ansible-trust-ca'
-  name: 'ssl-ca-certificate'
-  scm: 'git'
-  version:  'master'
+- src: https://github.com/andrewrothstein/ansible-trust-ca.git
+  name: ssl-ca-certificate
+  version: master
+
+- src: https://github.com/andrewrothstein/ansible-tls.git
+  name: andrewrothstein.tls
+  version: master
 
 - src: https://github.com/AlbanAndrieu/ansible-supervisor_task.git
   name: ansible-supervisor
@@ -508,10 +508,9 @@
   scm: 'git'
   version: 'master'
 
-- src: 'https://github.com/geerlingguy/mac-dev-playbook'
-  name: 'mac-dev-playbook'
-  scm: 'git'
-  version: 'master'
+#- src: https://github.com/geerlingguy/mac-dev-playbook.git
+#  name: mac-dev-playbook
+#  version: master
 
 - src: 'https://github.com/ocha/ansible-role-yarn'
   name: 'yarn'

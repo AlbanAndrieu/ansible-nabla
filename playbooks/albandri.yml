@@ -276,8 +276,8 @@
 - import_playbook: nodejs.yml
 
 - import_playbook: supervisor.yml
-  tagssupervisor
-    - web
+  tags:
+    - supervisor
     - vm
 
 - import_playbook: sonar.yml
@@ -293,12 +293,10 @@
 #  roles:
 #    - role: albanandrieu.conky
 
-- name: Install git
-  hosts: workstation
-  remote_user: root
-
-  roles:
-    - role: geerlingguy.git
+- import_playbook: git.yml
+  tags:
+    - git
+    # - vm
 
 - name: Apply common shell configuration
   hosts: workstation

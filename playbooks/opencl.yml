@@ -1,5 +1,6 @@
+---
 #as albandri
-#ansible-playbook opencl.yml -i hosts-production --limit pricer.nabla.mobi -vvvv --ask-become-pass --sudo
+#ansible-playbook opencl.yml -i hosts-production --limit pricer.nabla.mobi -vvvv --ask-become-pass
 
 #TODO service lightdm stop
 # pkill -u jenkins

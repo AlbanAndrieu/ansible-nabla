@@ -1,4 +1,7 @@
 ---
+#This script is used to configure your workstation (for developer)
+
+#sudo ansible-playbook -i hosts -c local -v supervisor.yml | tee setup.log
 
 # This playbook can be run using vagrant (on virtual box).
 - name: configure supervisor

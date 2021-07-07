@@ -1,3 +1,4 @@
+---
 #sudo rm -Rf /opt/collectd
 #sudo rm -Rf /usr/src/collectd-*
 #sudo ansible-playbook -i hosts-albandri -c local --limit albandri -v collectd.yml -vvvv --ask-sudo | tee setup.log
