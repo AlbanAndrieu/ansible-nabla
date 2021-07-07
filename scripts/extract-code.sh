@@ -359,7 +359,11 @@ git submodule add -f  https://github.com/ocha/ansible-role-yarn.git yarn
 #https://github.com/geerlingguy/docker-examples/blob/master/.travis.yml
 
 #See https://github.com/ypid/ypid-ansible-common/tree/master/template_READMEs
-TODO https://github.com/ypid/ypid-ansible-common
+#TODO https://github.com/ypid/ypid-ansible-common
+
+# keep python 2.7
+deactivate
+unset PYTHONPATH
 
 #sudo pip install ansigenome --upgrade
 cd ${WORKING_DIR}/ansigenome ; sudo python setup.py develop
@@ -371,7 +375,11 @@ cd ${WORKING_DIR}/ansigenome ; sudo python setup.py develop
 
 ansigenome export -t reqs -o ./test.yml -f yml ./roles
 ansigenome export -o ./test.dot -f dot ./roles
+#Then comment
+#        //size="15,8"
+#        //dpi=130
 ansigenome export -o ./test.png ./roles --size=20,20 -dpi=300
+dot -Tps ./test.dot -o test.ps
 
 #ansigenome scan --limit roles/alban.andrieu.eclipse
 #ansigenome gendoc --format=md --limit roles/alban.andrieu.eclipse

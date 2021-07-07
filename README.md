@@ -80,11 +80,90 @@ Run `./scripts/run-ansible-workstation.sh` for building like Jenkins.
 Run `./scripts/setup.sh` for building.
 Run `./scripts/docker-build.sh` for building docker image.
 
-#### Dependency Graph
+
+## Folder Structure Conventions
+
+> Folder structure options and naming conventions for software projects
+
+### A typical top-level directory layout
+
+    .
+    ├── docs                    # Documentation files (alternatively `doc`)
+    docker                      # Where to put image Dockerfile (link)
+    ├── scripts                 # Source files
+    ├── inventory
+    │   production
+    ├── playbooks               # Ansible playbooks
+    ├── roles                   # Ansible roles
+    bower.json                  # Bower not build directly, using maven instead
+    Dockerfile                  # A link to default Dockerfile to build (DockerHub)
+    Jenkinsfile
+    package.json                # Nnpm not build directly, using maven instead
+    pom.xml                     # Will run maven clean install
+    .pre-commit-config.yaml
+    requirements.testing.txt    # Python package used for test and build only
+    requirements.txt            # Python package used for production only
+    requirements.yml            # Ansible requirements, will be add to roles directory
+    tox.ini
+    sonar-project.properties    # Will run sonar standalone scan
+    LICENSE
+    CHANGELOG.md
+    README.md
+    └── target                  # Compiled files (alternatively `dist`) for maven
+
+    docker directory is used only to build project
+    .
+    ├── ...
+    ├── docker                  # Docker files used to build project
+    │   ├── ubuntu18            # End-to-end, integration tests (alternatively `e2e`)
+    │   └── ubuntu20
+    │       Dockerfile          # File to build
+    │       config.yaml         # File to run CST
+    └── ...
+
+    .
+    ├── ...
+    ├── docs                    # Documentation files
+    │   ├── index.rst           # Table of contents
+    │   ├── faq.rst             # Frequently asked questions
+    │   ├── misc.rst            # Miscellaneous information
+    │   ├── usage.rst           # Getting started guide
+    │   └── ...                 # etc.
+    └── ...
+
+## Dependency Graph
+
+### Ansigenome
 
 See ansigenome.conf file in your HOME folder ~.ansigenome.conf and templates in misc/ansigenome/templates
 
+### Python 3.8 graphviz
+
+ * [graphviz](https://pypi.org/project/graphviz/)
+
+```
+pip install graphviz
+python3 ./scripts/ansible-roles-dependencies.py
+```
+
 ![Dependency Graph](roles/test.png)
+
+## Update README.md
+
+
+  * [github-markdown-toc](https://github.com/jonschlinkert/markdown-toc)
+  * With [github-markdown-toc](https://github.com/Lucas-C/pre-commit-hooks-nodejs)
+
+```
+npm install --save markdown-toc
+markdown-toc README.md
+markdown-toc CHANGELOG.md  -i
+```
+
+```
+git add README.md
+pre-commit run markdown-toc
+```
 
 ### Ideas for Improvement
 
