@@ -1,4 +1,30 @@
-# NABLA Deployment
+## [![Nabla](http://albandrieu.com/nabla/index/assets/nabla/nabla-4.png)](https://github.com/AlbanAndrieu)  Deployment
+
+Nabla ansible playbooks
+
+[![License](http://img.shields.io/:license-apache-blue.svg?style=flat-square)](http://www.apache.org/licenses/LICENSE-2.0.html)
+
+## Table of contents
+
+<!-- toc -->
+
+- [How to run it](#how-to-run-it)
+  * [Install python dependencies](#install-python-dependencies)
+  * [Install ansible](#install-ansible)
+  * [Quality tools](#quality-tools)
+  * [npm-groovy-lint groovy formating for Jenkinsfile](#npm-groovy-lint-groovy-formating-for-jenkinsfile)
+  * [Docker image](#docker-image)
+  * [Build & development](#build--development)
+- [Folder Structure Conventions](#folder-structure-conventions)
+  * [A typical top-level directory layout](#a-typical-top-level-directory-layout)
+- [Dependency Graph](#dependency-graph)
+  * [Ansigenome](#ansigenome)
+  * [Python 3.8 graphviz](#python-38-graphviz)
+- [Update README.md](#update-readmemd)
+  * [Ideas for Improvement](#ideas-for-improvement)
+- [Update README.md](#update-readmemd-1)
+
+<!-- tocstop -->
 
 - Requires Ansible 2.5.0 or newer
 - Expects Ubuntu or CentOS/RHEL 6.x hosts
@@ -10,10 +36,12 @@ Goal is to ensure following roles (GIT submodules) to work in harmony.
 
 Then run the playbook, like this:
 
+```bash
 	ansible-playbook -i hosts -c local -v nabla.yml -vvvv
 	or
 	export ANSIBLE_VAULT_PASS=todo
 	./scripts/docker-build.sh
+```
 
 When the playbook run completes, you should be able to work on any NABLA project, on the target machines.
 
@@ -23,14 +51,14 @@ This is a very simple playbook and could serve as a starting point for more comp
 
 ### Install python dependencies
 
-```
+```bash
 #pip2.7 freeze > requirements.txt
 sudo pip2.7 install -r requirements.txt
 ```
 
 ### Install ansible
 
-```
+```bash
 sudo pip2 install ansible==2.4.1.0
 ```
 
@@ -48,7 +76,7 @@ Run `git commit -am 'Add key' --no-verify`
 
 Tested with nodejs 12 and 16 on ubuntu 20 and 21 (not working with nodejs 11 and 16)
 
-```
+```bash
 npm install -g npm-groovy-lint@8.2.0
 npm-groovy-lint --format
 ls -lrta .groovylintrc.json
@@ -59,11 +87,14 @@ ls -lrta .groovylintrc.json
 See [ansible-nabla](https://hub.docker.com/r/nabla/ansible-nabla/) or [ansible-jenkins-slave-docker](https://hub.docker.com/r/nabla/ansible-jenkins-slave-docker/)
 
 #### Pull image
-```
+
+```bash
 docker pull nabla/ansible-nabla:1.0.3
 ```
+
 #### Start container
-```
+
+```bash
 #Sample using container to buid my local workspace
 docker run -t -d -w /sandbox/project-to-build -v /workspace/users/albandri30/:/sandbox/project-to-build:rw --name sandbox nabla/ansible-nabla:latest cat
 #More advance sample using jenkins user on my workstation in order to get bash completion, git-radar and most of the dev tools I need
@@ -73,13 +104,16 @@ docker run -it -u 1004:999 --rm --net=host --pid=host --dns-search=nabla.mobi --
 docker run -it -u 1000:999 --rm --net=host --pid=host --dns-search=nabla.mobi --init -w /sandbox/project-to-build -v /workspace/users/albandri30/:/sandbox/project-to-build:rw -v /workspace:/workspace -v /data1/home/albandri/:/home/jenkins -v /etc/passwd:/etc/passwd:ro -v /etc/group:/etc/group:ro -v /etc/bash_completion.d:/etc/bash_completion.d:ro --name sandbox nabla/ansible-nabla:latest /bin/bash
 
 ```
+
 #### Build
-```
+
+```bash
 docker exec sandbox /opt/maven/apache-maven-3.2.1/bin/mvn -B -Djava.io.tmpdir=./tmp -Dmaven.repo.local=/home/jenkins/.m2/.repository -Dmaven.test.failure.ignore=true -s /home/jenkins/.m2/settings.xml -f cmr/pom.xml clean install
 ```
 
 #### Stop & remove container
-```
+
+```bash
 docker stop sandbox
 docker rm sandbox
 ```
@@ -151,7 +185,7 @@ See ansigenome.conf file in your HOME folder ~.ansigenome.conf and templates in 
 
  * [graphviz](https://pypi.org/project/graphviz/)
 
-```
+```bash
 pip install graphviz
 python3 ./scripts/ansible-roles-dependencies.py
 ```
@@ -164,13 +198,13 @@ python3 ./scripts/ansible-roles-dependencies.py
   * [github-markdown-toc](https://github.com/jonschlinkert/markdown-toc)
   * With [github-markdown-toc](https://github.com/Lucas-C/pre-commit-hooks-nodejs)
 
-```
+```bash
 npm install --save markdown-toc
 markdown-toc README.md
 markdown-toc CHANGELOG.md  -i
 ```
 
-```
+```bash
 git add README.md
 pre-commit run markdown-toc
 ```
@@ -191,13 +225,13 @@ repository and send us your changes via pull requests.
   * [github-markdown-toc](https://github.com/jonschlinkert/markdown-toc)
   * With [github-markdown-toc](https://github.com/Lucas-C/pre-commit-hooks-nodejs)
 
-```
+```bash
 npm install --save markdown-toc
 markdown-toc README.md
 markdown-toc CHANGELOG.md  -i
 ```
 
-```
+```bash
 git add README.md
 pre-commit run markdown-toc
 ```
