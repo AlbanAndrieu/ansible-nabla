@@ -10,7 +10,7 @@
   become: true
 
   roles:
-#    - role: supervisor
+#    - role: ansible-supervisor
 #      name: jenkins
 #      command: python -m SimpleHTTPServer 8686
 #      directory: /opt/jenkins
@@ -18,7 +18,7 @@
 #      user: jenkins
 
 # start a basic python http server on port 7075
-    - role: supervisor
+    - role: ansible-supervisor
       name: apache
       command: python -m SimpleHTTPServer 7075
       directory: /opt/web

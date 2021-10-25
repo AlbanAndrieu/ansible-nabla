@@ -10,10 +10,9 @@
   name: albanandrieu.awstats
   version: master
 
-- src: 'https://github.com/AlbanAndrieu/ansible-cmake'
-  name: 'albanandrieu.cmake'
-  scm: 'git'
-  version: 'master'
+- src: https://github.com/AlbanAndrieu/ansible-cmake.git
+  name: albanandrieu.cmake
+  version: master
 
 - src: https://github.com/AlbanAndrieu/ansible-common.git
   name: albanandrieu.ansible_common
@@ -44,15 +43,13 @@
   name: albanandrieu.eclipse
   version: master
 
-- src: 'https://github.com/AlbanAndrieu/ansible-evasive'
-  name: 'albanandrieu.evasive'
-  scm: 'git'
-  version: 'master'
+- src: https://github.com/AlbanAndrieu/ansible-evasive.git
+  name: albanandrieu.evasive
+  version: master
 
-- src: 'https://github.com/AlbanAndrieu/ansible-gcc'
-  name: 'albanandrieu.gcc'
-  scm: 'git'
-  version: 'master'
+- src: https://github.com/AlbanAndrieu/ansible-gcc.git
+  name: albanandrieu.gcc
+  version: master
 
 #- src: 'https://github.com/AlbanAndrieu/ansible-grive'
 #  name: 'albanandrieu.grive'
@@ -121,15 +118,13 @@
   scm: 'git'
   version: 'master'
 
-- src: 'https://github.com/AlbanAndrieu/ansible-scons'
-  name: 'albanandrieu.scons'
-  scm: 'git'
-  version: 'master'
+- src: https://github.com/AlbanAndrieu/ansible-scons.git
+  name: albanandrieu.scons
+  version: master
 
-- src: 'https://github.com/AlbanAndrieu/ansible-selenium'
-  name: 'albanandrieu.selenium'
-  scm: 'git'
-  version: 'master'
+- src: https://github.com/AlbanAndrieu/ansible-selenium.git
+  name: albanandrieu.selenium
+  version: master
 
 - src: 'https://github.com/AlbanAndrieu/ansible-shell'
   name: 'albanandrieu.shell'
@@ -166,10 +161,9 @@
   scm: 'git'
   version: 'master'
 
-#- src: 'https://github.com/AlbanAndrieu/ansible-visualvm'
-#  name: 'albanandrieu.visualvm'
-#  scm: 'git'
-#  version: 'master'
+- src: https://github.com/AlbanAndrieu/ansible-visualvm.git
+  name: albanandrieu.visualvm
+  version: master
 
 - src: https://github.com/AlbanAndrieu/ansible-web.git
   name: albanandrieu.web
@@ -179,10 +173,9 @@
   name: albanandrieu.webmin
   version: master
 
-#- src: 'https://github.com/AlbanAndrieu/ansible-windows'
-#  name: 'albanandrieu.windows'
-#  scm: 'git'
-#  version: 'master'
+- src: https://github.com/AlbanAndrieu/ansible-windows.git
+  name: albanandrieu.windows
+  version: master
 
 - src: 'https://github.com/AlbanAndrieu/ansible-workstation'
   name: 'albanandrieu.workstation'
@@ -194,10 +187,9 @@
   scm: 'git'
   version: 'master'
 
-#- src: 'https://github.com/AlbanAndrieu/ansible-yourkit'
-#  name: 'albanandrieu.yourkit'
-#  scm: 'git'
-#  version: 'master'
+- src: https://github.com/AlbanAndrieu/ansible-yourkit.git
+  name: albanandrieu.yourkit
+  version: master
 
 - src: 'https://github.com/AlbanAndrieu/ansible-zap'
   name: 'albanandrieu.zap'
@@ -432,20 +424,17 @@
   name: python
   version: master
 
-- src: 'https://github.com/AlbanAndrieu/ansible-sonar'
-  name: 'sonar'
-  scm: 'git'
-  version: 'master'
+#- src: 'https://github.com/AlbanAndrieu/ansible-role-security'
+#  name: 'security'
+#  version: master
 
-- src: 'https://github.com/AlbanAndrieu/ansible-role-security'
-  name: 'geerlingguy.security'
-  scm: 'git'
-  version: 'master'
+#- src: 'https://github.com/AlbanAndrieu/ansible-sonar'
+#  name: 'sonar'
+#  version: master
 
-- src: 'https://github.com/geerlingguy/ansible-role-sonar-runner'
-  name: 'geerlingguy.sonar-runner'
-  scm: 'git'
-  version: 'master'
+- src: https://github.com/geerlingguy/ansible-role-sonar-runner.git
+  name: geerlingguy.sonar-runner
+  version: master
 
 - src: 'https://github.com/geerlingguy/ansible-role-filebeat'
   name: 'geerlingguy.filebeat'
@@ -473,30 +462,26 @@
   name: vagrant
   version: master
 
-- src: 'https://github.com/AlbanAndrieu/ansible-galaxy.ubuntu.virtualbox'
-  name: 'albanandrieu.virtualbox'
-  scm: 'git'
-  version: 'master'
+- src: https://github.com/AlbanAndrieu/ansible-galaxy.ubuntu.virtualbox.git
+  name: albanandrieu.virtualbox
+  version: master
 
-- src: 'https://github.com/dj-wasabi/ansible-zabbix-agent'
-  name: 'zabbix'
-  scm: 'git'
-  version: 'master'
+- src: https://github.com/dj-wasabi/ansible-zabbix-agent.git
+  name: dj-wasabi.zabbix-agent
+  version: master
 
 - src: 'https://github.com/LIP-Computing/ansible-role-nvidia'
   name: 'opencl'
   scm: 'git'
   version: 'master'
 
-- src: 'https://github.com/elliotweiser/ansible-osx-command-line-tools'
-  name: 'elliotweiser.osx-command-line-tools'
-  scm: 'git'
-  version: 'master'
+- src: https://github.com/elliotweiser/ansible-osx-command-line-tools.git
+  name: elliotweiser.osx-command-line-tools
+  version: master
 
-- src: 'https://github.com/geerlingguy/ansible-role-homebrew'
-  name: 'geerlingguy.homebrew'
-  scm: 'git'
-  version: 'master'
+- src: https://github.com/geerlingguy/ansible-role-homebrew.git
+  name: geerlingguy.homebrew
+  version: master
 
 - src: 'https://github.com/geerlingguy/ansible-role-dotfiles'
   name: 'geerlingguy.dotfiles'

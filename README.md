@@ -44,6 +44,16 @@ Run `pre-commit run --all-files`
 Run `SKIP=ansible-lint git commit -am 'Add key'`
 Run `git commit -am 'Add key' --no-verify`
 
+### npm-groovy-lint groovy formating for Jenkinsfile
+
+Tested with nodejs 12 and 16 on ubuntu 20 and 21 (not working with nodejs 11 and 16)
+
+```
+npm install -g npm-groovy-lint@8.2.0
+npm-groovy-lint --format
+ls -lrta .groovylintrc.json
+```
+
 ### Docker image
 
 See [ansible-nabla](https://hub.docker.com/r/nabla/ansible-nabla/) or [ansible-jenkins-slave-docker](https://hub.docker.com/r/nabla/ansible-jenkins-slave-docker/)
