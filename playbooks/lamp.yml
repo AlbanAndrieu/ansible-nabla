@@ -17,7 +17,8 @@
     #apache_allow_override: "All"
     apache_allow_override: "FileInfo Indexes"
     #apache_options: "-Indexes +FollowSymLinks"
-    apache_options: "MultiViews Indexes SymLinksIfOwnerMatch IncludesNoExec"
+    #apache_options: "MultiViews Indexes SymLinksIfOwnerMatch IncludesNoExec"
+    apache_options: "MultiViews Indexes FollowSymLinks IncludesNoExec"
     apache_mods_enabled:
       - rewrite.load
       - ssl.load
@@ -28,7 +29,8 @@
       - servername: "albandrieu.com"
         documentroot: "/var/www/nabla-site-apache"
         allow_override: "FileInfo Indexes"
-        options: "MultiViews Indexes SymLinksIfOwnerMatch IncludesNoExec"
+        #options: "MultiViews Indexes SymLinksIfOwnerMatch IncludesNoExec"
+        options: "MultiViews Indexes FollowSymLinks IncludesNoExec"
         extra_parameters: |
           <Directory "/var/www/password-protected-directory">
             Require valid-user

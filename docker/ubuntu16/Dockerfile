@@ -5,7 +5,7 @@ FROM selenium/standalone-chrome:3.141.59-antimony
 ARG JENKINS_USER_HOME=${JENKINS_USER_HOME:-/home/jenkins}
 
 # dockerfile_lint - ignore
-LABEL Name="ansible-jenkins-slave" Version="1.0.0"
+LABEL name="ansible-jenkins-slave" version="1.0.0"
 LABEL description="Image used by fusion-risk products to build Java/Javascript and CPP\
  this image is running on Ubuntu 16.04."
 

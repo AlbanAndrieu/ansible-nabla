@@ -1,10 +1,13 @@
+---
 exclude_paths:
+  - ./requirements.yml
   - ./.travis.yml
-  - ./playbooks/group_vars/all/
+  - ./playbooks/group_vars/all/vault.yml
+  - ./docker/
   - ./playbooks/mac.yml
   - ./playbooks/jenkins-node.yml
-  - ./roles/alban.andrieu.virtualbox/
-  - ./roles/alban.andrieu.webmin/
+  - ./roles/albanandrieu.virtualbox/
+  - ./roles/albanandrieu.webmin/
   - ./roles/Stouts.python/
   - ./roles/Stouts.collectd/
   - ./roles/andrewrothstein.terraform/
@@ -69,6 +72,7 @@ skip_list:
   - '602' # See https://github.com/ansible/ansible-lint/issues/457
   - '204'
   - '503'
+  - '208' # File permissions not mentioned
   - filenotfounderror
 #  - skip_this_tag
 #  - and_this_one_too
@@ -77,3 +81,4 @@ skip_list:
 #  - run_this_tag
 use_default_rules: true
 #verbosity: 1
+offline: true

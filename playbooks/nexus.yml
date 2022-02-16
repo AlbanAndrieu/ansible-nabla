@@ -12,7 +12,7 @@
   vars:
       nexus_home: "/usr/local/{{ nexus_user }}"
       nexus_version_major : "3"
-      nexus_version_minor : "0.0-03"
+      nexus_version_minor : "31.1-01"
       nexus_user : nexus3
       nexus_group : nexus3
       nexus_service_name: "nexus-{{ nexus_version }}"
@@ -103,6 +103,31 @@
            searchable                                      : "true"
            localStorage                                    : "file"
            remoteStorage                                   : "https://repo.jenkins-ci.org/releases/"
+           externalConfiguration_proxyMode                 : "ALLOW"
+           externalConfiguration_artifactMaxAge            : "-1"
+           externalConfiguration_itemMaxAge                : "1440"
+           externalConfiguration_cleanseRepositoryMetadata : "false"
+           externalConfiguration_downloadRemoteIndex       : "false"
+           externalConfiguration_checksumPolicy            : "WARN"
+           externalConfiguration_repositoryPolicy          : "RELEASE"
+
+# https://spring.io/blog/2020/10/29/notice-of-permissions-changes-to-repo-spring-io-fall-and-winter-2020
+# https://repo.spring.io/plugins-release/ replaced by https://maven.repository.redhat.com/ga/
+         - id                                              : "redhat-ga"
+           name                                            : "JBoss Releases"
+           providerRole                                    : "org.sonatype.nexus.proxy.repository.Repository"
+           providerHint                                    : "maven2"
+           localStatus                                     : "IN_SERVICE"
+           notFoundCacheActive                             : "true"
+           notFoundCacheTTL                                : "1440"
+           userManaged                                     : "true"
+           exposed                                         : "true"
+           browseable                                      : "true"
+           writePolicy                                     : "READ_ONLY"
+           indexable                                       : "true"
+           searchable                                      : "true"
+           localStorage                                    : "file"
+           remoteStorage                                   : "https://maven.repository.redhat.com/ga/"
            externalConfiguration_proxyMode                 : "ALLOW"
            externalConfiguration_artifactMaxAge            : "-1"
            externalConfiguration_itemMaxAge                : "1440"

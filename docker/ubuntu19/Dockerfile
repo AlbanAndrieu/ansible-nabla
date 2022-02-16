@@ -8,7 +8,7 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 ARG JENKINS_USER_HOME=${JENKINS_USER_HOME:-/home/jenkins}
 
 # dockerfile_lint - ignore
-LABEL Name="ansible-jenkins-slave" Version="2.0.0"
+LABEL name="ansible-jenkins-slave" version="1.9.0"
 LABEL description="Image used by fusion-risk products to build Java/Javascript and CPP\
  this image is running on Ubuntu 19.10."
 LABEL com.example.vendor="ACME Incorporated"

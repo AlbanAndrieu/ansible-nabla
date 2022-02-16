@@ -1,3 +1,5 @@
+# syntax=docker/dockerfile:1.2.1
+
 # This Dockerfile is used to build an image containing basic stuff to be used as a Jenkins slave build node.
 # Multistage build is not possible with Jenkins Docker Pipeline Plugin
 #FROM ubuntu:18.04
@@ -8,10 +10,11 @@ ARG JENKINS_USER_HOME=${JENKINS_USER_HOME:-/home/jenkins}
 
 # dockerfile_lint - ignore
 MAINTAINER Alban Andrieu "https://github.com/AlbanAndrieu"
-LABEL name="ansible-jenkins-slave" version="1.0.9"
-LABEL description="Image used by Nabla products to build Java/Javascript and CPP\
- this image is running on Ubuntu 18.04."
-LABEL com.example.vendor="ACME Incorporated"
+
+LABEL name="ansible-jenkins-slave" version="1.0.9" \
+ description="Image used by Nabla products to build Java/Javascript and CPP\
+ this image is running on Ubuntu 18.04." \
+ com.example.vendor="ACME Incorporated"
 
 # No interactive frontend during docker build
 ENV DEBIAN_FRONTEND=noninteractive \
@@ -299,10 +302,6 @@ RUN chmod 700 ${HOME}/.ssh && chmod 600 ${HOME}/.ssh/id_rsa* && chmod 644 ${HOME
 
 #BELOW npm install is adding 700Mb to the images
 #RUN npm install --only=production && npm run update-webdriver
-
-#RUN /microscanner ${MICROSCANNER_TOKEN} --continue-on-failure 2>&1 > ${HOME}/microscanner.log
-#RUN echo "No vulnerabilities!"
-#RUN /microscanner ${token} && rm /microscanner
 
 # Will create $JENKINS_USER_HOME/.local/share/applications/mimeapps.list
 RUN google-chrome --version
