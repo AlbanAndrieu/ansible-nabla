@@ -154,7 +154,7 @@ git submodule add -f  https://github.com/AlbanAndrieu/ansible-zap.git alban.andr
 #git clone https://github.com/ahelal/ansible-sonatype_nexus.git nexus
 git submodule add -f  https://github.com/AlbanAndrieu/ansible-sonatype_nexus.git nexus
 
-#git submodule deinit -f cmake
+#git submodule deinit -f alban.andrieu.cmake
 git submodule add -f  https://github.com/AlbanAndrieu/ansible-cmake.git alban.andrieu.cmake
 git submodule add -f  https://github.com/AlbanAndrieu/ansible-scons.git alban.andrieu.scons
 git submodule add -f  https://github.com/AlbanAndrieu/ansible-gcc.git alban.andrieu.gcc

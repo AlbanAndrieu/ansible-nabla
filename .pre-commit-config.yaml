@@ -90,12 +90,12 @@ repos:
     -   id: ansible-lint
         files: \.(yaml|yml)$
         exclude: >
-                  (?x)^(
-                      .travis.yml|
-                      docker/|
-                      requirements.yml|
-                      playbooks/group_vars/all/vault.yml|
-                  )$
+          (?x)^(
+              .travis.yml|
+              docker/|
+              requirements.yml|
+              playbooks/group_vars/all/vault.yml|
+          )$
 -   repo: https://github.com/doublify/pre-commit-hindent.git
     rev: b3680b6ebf9f7cf29b19307f246adef66756feef
     hooks:
@@ -107,10 +107,10 @@ repos:
         #entry: pre_commit_hooks/shell-lint.sh -x
         args: [-x]
         exclude: >
-                  (?x)^(
-                      mvnw|
-                      hooks|
-                  )$
+          (?x)^(
+              mvnw|
+              hooks|
+          )$
 -   repo: https://github.com/asottile/pyupgrade
     rev: v2.31.0
     hooks:

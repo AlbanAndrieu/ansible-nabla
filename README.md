@@ -37,9 +37,10 @@ Goal is to ensure following roles (GIT submodules) to work in harmony.
 Then run the playbook, like this:
 
 ```bash
-	ansible-playbook -i hosts -c local -v nabla.yml -vvvv
-	or
-	export ANSIBLE_VAULT_PASS=todo
+ansible-playbook playbooks/python-bootstrap.yml -i inventory/hosts --limit localhost -c local --ask-become-pass -vvvv
+ansible-playbook -i hosts -c local -v nabla.yml -vvvv
+or
+export ANSIBLE_VAULT_PASS=todo
 	./scripts/docker-build.sh
 ```
 
