@@ -136,10 +136,9 @@ roles:
     name: albanandrieu.selenium
     version: master
 
-  - src: 'https://github.com/AlbanAndrieu/ansible-shell'
-    name: 'albanandrieu.shell'
-    scm: 'git'
-    version: 'master'
+  - src: https://github.com/AlbanAndrieu/ansible-shell.git
+    name: albanandrieu.shell
+    version: master
 
   - src: 'https://github.com/AlbanAndrieu/ansible-solaris'
     name: 'albanandrieu.solaris'

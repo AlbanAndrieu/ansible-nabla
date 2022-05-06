@@ -1,1 +1,1 @@
-../roles/alban.andrieu.shell/files/ansible-env.sh
+../roles/albanandrieu.shell/files/ansible-env.sh

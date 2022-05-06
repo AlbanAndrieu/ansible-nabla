@@ -1,1 +1,1 @@
-../roles/alban.andrieu.shell/files/step-0-color.sh
+../roles/albanandrieu.shell/files/step-0-color.sh

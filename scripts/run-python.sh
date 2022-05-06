@@ -1,1 +1,1 @@
-../roles/alban.andrieu.shell/files/run-python.sh
+../roles/albanandrieu.shell/files/run-python.sh

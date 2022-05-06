@@ -1,1 +1,1 @@
-../roles/alban.andrieu.shell/files/run-ansible.sh
+../roles/albanandrieu.shell/files/run-ansible.sh

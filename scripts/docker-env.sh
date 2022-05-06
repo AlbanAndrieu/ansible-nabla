@@ -1,1 +1,1 @@
-../roles/alban.andrieu.shell/files/docker-env.sh
+../roles/albanandrieu.shell/files/docker-env.sh

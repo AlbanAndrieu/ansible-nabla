@@ -7,7 +7,10 @@ set -eo pipefail
 
 WORKING_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}"  )" && pwd  )"
 
-export DOCKER_TAG="1.0.3"
+WORKING_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+export DOCKER_NAME=${DOCKER_NAME:-"ansible-nabla"}
+export DOCKER_TAG=${DOCKER_TAG:-"1.0.3"}
 
 if [ -n "${DOCKER_BUILD_ARGS}" ]; then
   echo -e "${green} DOCKER_BUILD_ARGS is defined ${happy_smiley} : ${DOCKER_BUILD_ARGS} ${NC}"
@@ -18,11 +21,11 @@ else
   echo -e "${magenta} DOCKER_BUILD_ARGS : ${DOCKER_BUILD_ARGS} ${NC}"
 fi
 
+export DOCKER_FILE=${DOCKER_FILE:-"../docker/ubuntu20/Dockerfile"}
+export CST_CONFIG=${CST_CONFIG:-"docker/ubuntu20/config.yaml"}
+
 # shellcheck source=/dev/null
 source "${WORKING_DIR}/docker-env.sh"
-
-#export DOCKER_NAME=${DOCKER_NAME:-"ansible-jenkins-slave-docker"}
-export DOCKER_FILE="../docker/ubuntu18/Dockerfile"
 
 echo -e "${green} Validating Docker ${NC}"
 echo -e "${magenta} hadolint ${WORKING_DIR}/${DOCKER_FILE} ${NC}"

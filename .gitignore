@@ -111,8 +111,8 @@ venv.bak/
 hooks
 
 roles/alban.andrieu.*
-roles/Stouts.python
-roles/Stouts.collectd
+roles/albanandrieu.*
+roles/Stouts.*
 roles/andrewrothstein.*
 roles/angstwad.docker-ubuntu
 roles/elliotweiser.osx-command-line-tools
@@ -135,13 +135,22 @@ roles/python/
 roles/repo-epel/
 roles/repo-remi/
 roles/security/
-roles/ssl.ca-certificate/
-roles/ssl.certificate/
+#roles/ssl.ca-certificate/
+roles/ssl-ca-certificate/
+#roles/ssl.certificate/
+roles/ssl-certificate/
 roles/vagrant/
 roles/yarn/
 roles/zabbix/
 roles/anxs.perl/
 roles/jermon.ansible-role-cpan/
+roles/ansible-supervisor/
+roles/dj-wasabi.zabbix-agent/
+roles/elastic/
+roles/java-certificate/
+roles/jenkins-master/
+roles/kost.virtualbox/
+roles/newrelic/
 
 # To avoid adding encrypted files with git add -u or -a
 .idea/*
