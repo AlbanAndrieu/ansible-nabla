@@ -10,6 +10,11 @@
     - role: albanandrieu.synergy
 
   vars:
-      synergy_server_main: "10.25.40.139"
-      synergy_server_laptop: "10.41.40.90"
-      synergy_url: "http://home.nabla.mobi:84/nabla/html/download/synergy/{{synergy_package_deb}}"
+    #synergy_server_main: "10.25.40.139"
+    synergy_server_desktop: "albandrieu"
+    synergy_server_laptop: "albandrieu-dell-5420"
+    synergy_major: "1"
+    synergy_minor: "14.3.stable"
+    synergy_number: "218fa800"
+    #synergy_url: "http://albandrieu.com:84/nabla/html/download/synergy/{{synergy_package_deb}}"
+    synergy_url: "http://192.168.132.24:8680/download/synergy/{{synergy_package_deb}}"
