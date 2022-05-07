@@ -114,16 +114,16 @@ repos:
     rev: v0.1.2
     hooks:
     -   id: encryption-check
-#  - repo: https://github.com/Lucas-C/pre-commit-hooks-nodejs
-#    rev: v1.1.2
-#    hooks:
-#    -   id: htmllint
-#        args: [--config, .htmlhintrc]
+  - repo: https://github.com/Lucas-C/pre-commit-hooks-nodejs
+    rev: v1.1.2
+    hooks:
+    -   id: htmllint
+        args: [--config, .htmlhintrc]
 #    -   id: markdown-toc
 #        args: [--maxdepth, "3", -i]
-#    -   id: dockerfile_lint
-#        #args: [--json, --verbose, --dockerfile]
-#        args: [--permissive, --verbose, --dockerfile, ./docker/ubuntu20/Dockerfile]
+    -   id: dockerfile_lint
+        #args: [--json, --verbose, --dockerfile]
+        args: [--permissive, --verbose, --dockerfile, ./docker/ubuntu20/Dockerfile]
   - repo: https://github.com/AlbanAndrieu/nabla-hooks.git
     rev: v1.0.3
     hooks:
