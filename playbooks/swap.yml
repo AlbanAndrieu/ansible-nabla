@@ -7,6 +7,6 @@
 
   roles:
     - role: ansible-swapfile
-      swapfile_size: 8GiB
+      swapfile_size: 16GiB
       swapfile_swappiness: 20
       swapfile_location: /data/swap

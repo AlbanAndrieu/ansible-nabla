@@ -9,10 +9,10 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 ARG JENKINS_USER_HOME=${JENKINS_USER_HOME:-/home/jenkins}
 
-# dockerfile_lint - ignore
 LABEL name="ansible-jenkins-slave" version="1.0.20"
 LABEL description="Image used by fusion-risk products to build Java/Javascript and CPP\
  this image is running on Ubuntu 20.10."
+ # dockerfile_lint - ignore
 LABEL com.example.vendor="ACME Incorporated"
 
 # No interactive frontend during docker build

@@ -1,6 +1,7 @@
+---
 
 - name: Install CA root certificate
-  hosts: jenkins-slaves
+  hosts: certificate_server
   gather_facts: false
   remote_user: root
   check_mode: no
@@ -12,16 +13,8 @@
       trust_ca_pki_dir: '~/pki'
 
 - name: Install server certificate
-  hosts: jenkins-slaves
-  gather_facts: false
-#TODO does not work for CentOS
-#  hosts: Ubuntu-12.04:Ubuntu-14.04:Ubuntu-16.04
-  remote_user: root
-  check_mode: no
-  #become: no # become is not working with local_action
-#  run_once: true
-#  strategy: debug
-  ignore_errors: yes
+  hosts: certificate_server
+  become: true
 
   roles:
     - role: ssl-certificate
@@ -29,10 +22,13 @@
       ssl_certs_locality: "Paris"
       ssl_certs_organization: "Nabla"
       ssl_certs_state: "Ile de France"
-      ssl_certs_common_name: "{{ ansible_fqdn }}"
-      #ssl_certs_common_name: "albandrieu.com"
-      ssl_certs_days: "365"
-      ssl_certs_fields: "/C={{ ssl_certs_country }}/ST={{ ssl_certs_state }}/L={{ ssl_certs_locality }}/O={{ ssl_certs_organization }}/CN={{ ssl_certs_common_name }}/emailAddress=alban.andrieu@free.fr/subjectAltName=DNS.1={{ ssl_certs_common_name }},DNS.2=albandrieu.com,DNS.3={{ ansible_fqdn }},DNS.4={{ ansible_hostname }},DNS.5=localhost,IP={{ ansible_default_ipv4.address }},IP=127.0.0.1" # noqa 204
+      #ssl_certs_common_name: "{{ ansible_fqdn }}"
+      ssl_certs_domain_name: "int.albandrieu.com"
+      ssl_certs_san_name: "vaultuat.{{ ssl_certs_domain_name }}"
+      ssl_certs_common_name: "{{ ansible_hostname }}.{{ ssl_certs_domain_name }}"
+      ssl_certs_email: "alban.andrieu@free.fr"
+      ssl_certs_days: "3650"
+      ssl_certs_fields: "/C={{ ssl_certs_country }}/ST={{ ssl_certs_state }}/L={{ ssl_certs_locality }}/O={{ ssl_certs_organization }}/CN={{ ssl_certs_common_name }}/emailAddress={{ ssl_certs_email }}/subjectAltName=DNS.1={{ ssl_certs_common_name },DNS.2={{ ansible_fqdn }},DNS.3={{ ansible_hostname }},DNS.4=localhost,IP={{ ansible_default_ipv4.address }},IP=127.0.0.1" # noqa 204
       #ssl_certs_path_owner: "root"
       #ssl_certs_path_group: "root"
-      ssl_certs_mode: 700
+      #ssl_certs_mode: 700

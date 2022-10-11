@@ -450,10 +450,9 @@ roles:
     scm: 'git'
     version: 'master'
 
-  - src: 'https://github.com/AlbanAndrieu/ansible-role-ssl-certs'
-    name: 'ssl-certificate'
-    scm: 'git'
-    version: 'master'
+  - src: https://github.com/jdauphant/ansible-role-ssl-certs.git
+    name: ssl-certificate
+    version: master
 
   - src: https://github.com/andrewrothstein/ansible-trust-ca.git
     name: ssl-ca-certificate
