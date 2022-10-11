@@ -124,10 +124,10 @@ repos:
     -   id: dockerfile_lint
         #args: [--json, --verbose, --dockerfile]
         args: [--permissive, --verbose, --dockerfile, ./docker/ubuntu20/Dockerfile]
-  - repo: https://github.com/AlbanAndrieu/nabla-hooks.git
-    rev: v1.0.3
-    hooks:
-    -   id: git-branches-check
-        always_run: false
-        args: [--max=3]
-        verbose: true
+#  - repo: https://github.com/AlbanAndrieu/nabla-hooks.git
+#    rev: v1.0.3
+#    hooks:
+#    -   id: git-branches-check
+#        always_run: false
+#        args: [--max=3]
+#        verbose: true
