@@ -29,27 +29,16 @@
            shell_git_machine: 'github.com',
            shell_git_login: 'AlbanAndrieu',
            shell_git_email: 'alban.andrieu@free.fr',
-           shell_git_password: 'microsoft',
-           shell_git_name: "Alban Andrieu",
+           #shell_git_password: 'microsoft',
+           #shell_git_name: "Andrieu, Alban",
            shell_git_maildomain: "free.fr",
            shell_git_path: '/usr/bin',
            shell_git_ssl: false,
            shell_git_meld_enabled: yes,
-           shell_git_editor: "geany"
+           shell_git_signingkey: "F4C4B79A80826A5E5ADAD2C8B12DECD437E9E1C8"
+           shell_git_editor: "nano"
            }
-#         - {
-#           shell_git_machine: 'https://bitbucket.org',
-#           shell_git_login: 'AlbanAndrieu',
-#           shell_git_email: 'alban.andrieu@free.fr',
-#           shell_git_password: 'microsoft',
-#           shell_git_name: "Alban Andrieu",
-#           shell_git_path: '/usr/bin',
-#           shell_git_ssl: false,
-#           shell_git_meld_enabled: yes,
-#           shell_git_editor: "gedit"
-#           }
 #      shell_rlogin_enabled: no
     shell_maven_enabled: no
     newrelic_license_key: de35bf5d191ebb208d359b2cd24a60616a02b1f3
     docker_files_enable: no
-#    docker_files_generated_directory: "../roles/albanandrieu.shell"
