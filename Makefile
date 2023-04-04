@@ -25,12 +25,23 @@ all: clean build
 
 ## —— Clean 🧹 ———————————————————————————————————————————————————————————————
 .PHONY: clean
-clean:
-	@echo "=> Cleaning image..."
+clean: ## Cleaning for ansible
+	@echo "=> Cleaning for ansible..."
+	rm -Rf artifacts/
+	rm -Rf collections/
+
+## —— Tests Ansible 🧪🔗 —————————————————————————————————————————————————————————————————
+.PHONY: test
+test: ## Run all tests
+	@echo "=> Testing ansible..."
+	ansible-lint ansible/
 
 ## —— Ansible 🐝 ————————————————————————————————————————————————————————————————
 .PHONY: build-ansible
 build-ansible: ## Build workstation with ansible
+	@echo "=> Building for ansible..."
+	pip install -r requirements.txt
+	ansible-galaxy install -r requirements.yml
 	@echo "=> Building ansible..."
 	./setup.sh
 
@@ -57,8 +68,8 @@ fmt: ## Run formating
 	shfmt -i 2 -ci -w *.sh || true
 	ansible-lint --write ./
 
-## —— Tests Ansible 🧪🔗 —————————————————————————————————————————————————————————————————
-.PHONY: test
-test: ## Run all tests
-	@echo "=> Testing ansible..."
-	ansible-lint ./
+## —— Ansible Kong 🐝 ———————————————————————————————————————————————————————————————
+.PHONY: ansible-kong
+ansible-kong: ## Add kong
+	@echo "=> Add kong..."
+	ansible-playbook playbooks/kong.yml --inventory envs/dev/inventory.ini  --limit gra1apigtwdev1 -vv

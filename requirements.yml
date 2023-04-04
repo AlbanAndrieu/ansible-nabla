@@ -572,4 +572,8 @@ roles:
     scm: 'git'
     version: 'master'
 
+  - src: https://github.com/wunzeco/ansible-kong.git
+    version: master
+    name: wunzeco.kong
+
   # TODO https://github.com/Stouts/Stouts.openvpn
