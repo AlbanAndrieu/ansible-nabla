@@ -11,3 +11,15 @@
   vars:
        apt_notification_email: "alban.andrieu@free.fr"
        apt_upgrade_system_enabled: no
+
+- name: Timezone
+  hosts: all
+  gather_facts: true
+  become: yes
+  tags:
+    - tz
+    - utc
+    - timezone
+
+  roles:
+    - yatesr.timezone

@@ -576,4 +576,12 @@ roles:
     version: master
     name: wunzeco.kong
 
+# - src: https://github.com/adamsbytes/ansible-ovhbastion.git
+#   version: master
+#   name: adamsbytes.ovhbastion
+
+  - src: https://github.com/yatesr/ansible-timezone.git
+    version: master
+    name: yatesr.timezone
+
   # TODO https://github.com/Stouts/Stouts.openvpn
