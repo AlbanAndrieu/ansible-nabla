@@ -52,7 +52,7 @@ When the playbook run completes, you should be able to work on any NABLA project
 
 This is a very simple playbook and could serve as a starting point for more complex projects.
 
-## How to run it
+## [How to run it](#table-of-contents)
 
 ### Install python dependencies
 
@@ -130,7 +130,7 @@ Run `./scripts/setup.sh` for building.
 Run `./scripts/docker-build.sh` for building docker image.
 
 
-## Folder Structure Conventions
+## [Folder Structure Conventions](#table-of-contents)
 
 > Folder structure options and naming conventions for software projects
 
@@ -180,7 +180,7 @@ Run `./scripts/docker-build.sh` for building docker image.
     │   └── ...                 # etc.
     └── ...
 
-## Dependency Graph
+## [Dependency Graph](#table-of-contents)
 
 ### Ansigenome
 
@@ -197,7 +197,7 @@ python3 ./scripts/ansible-roles-dependencies.py
 
 ![Dependency Graph](roles/test.png)
 
-## Update README.md
+## [Update README.md](#table-of-contents)
 
 
   * [github-markdown-toc](https://github.com/jonschlinkert/markdown-toc)
@@ -223,20 +223,3 @@ Here are some ideas for ways that these playbooks could be extended:
 
 We would love to see contributions and improvements, so please fork this
 repository and send us your changes via pull requests.
-
-## Update README.md
-
-
-  * [github-markdown-toc](https://github.com/jonschlinkert/markdown-toc)
-  * With [github-markdown-toc](https://github.com/Lucas-C/pre-commit-hooks-nodejs)
-
-```bash
-npm install --save markdown-toc
-markdown-toc README.md
-markdown-toc CHANGELOG.md  -i
-```
-
-```bash
-git add README.md
-pre-commit run markdown-toc
-```
