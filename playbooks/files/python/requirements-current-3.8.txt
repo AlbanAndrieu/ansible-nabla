@@ -103,7 +103,7 @@ Flask-Script==2.0.6
 Flask-SQLAlchemy==2.4.1
 frosted==1.4.1
 Frozen-Flask==0.15
-future==0.18.2
+future==0.18.3
 gcg==0.2.0
 gcovr==4.2
 git-pre-commit-hook-utils==0.0.5
