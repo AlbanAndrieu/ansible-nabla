@@ -284,7 +284,7 @@ tinycss==0.4
 tinycss2==1.0.2
 toml==0.10.0
 tox==3.20.1
-tqdm==4.45.0
+tqdm==4.66.3
 traceback2==1.4.0
 tree-format==0.1.2
 typed-ast==1.4.1
