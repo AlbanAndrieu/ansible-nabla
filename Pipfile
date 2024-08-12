@@ -4,7 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-alabaster = "==0.7.12"
+alabaster = "==0.7.16"
 ansible-cmdb = ">=1.31"
 ansible-core = ">=2.13.0"
 ansicolors = "==1.1.8"
