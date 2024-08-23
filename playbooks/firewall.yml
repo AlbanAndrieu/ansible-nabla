@@ -1,104 +1,103 @@
-#sudo ansible-playbook -i hosts-albandri -c local -v firewall.yml | tee setup.log
+# sudo ansible-playbook -i hosts-albandri -c local -v firewall.yml | tee setup.log
 
 - name: Install firewall
   connection: local
   hosts: workstation
-#  remote_user: root
-#  accelerate: true
+  #  remote_user: root
+  #  accelerate: true
 
   roles:
-    - { role: geerlingguy.firewall
-      }
+    - { role: geerlingguy.firewall }
 
   vars:
-       firewall_allowed_tcp_ports:
-       - "21" #FTP
-       - "22" #SSH
-       - "25" #SMTP
-       - "80" #HTTP / Nginx
-       - "82" #Varnish or Google +
-       - "123" #DNS
-       - "137" #Samba
-       - "138" #Samba
-       - "139" #Samba
-       - "443" #HTTPS
-       - "445" #Samba
-       - "2222" #SSH alternate
-       - "3306" #Mysql
-       - "3689" #FireFly
-       - "4040" #Subsonic
-       - "4444" #Selenium
-       - "4445" #Lumbermill/Selenium TODO???????
-       - "4243" #Docker
-#       - "4949" #Munin
-       - "5000" #xrdp / openstack /windows vm
-       - "5001" #xrdp
-       - "5050" #CouchPatato
-       - "5555" #XMRig
-       - "5678" #Private bower
-       - "6000" #Logstash
-       - "6082" #Varnish admin
-       - "6379" #Redis
-       - "6789" #Private bower git cache
-       - "7000" #FreeNas
-       - "7070" #Apache
-       - "7071" #Apache redirect gearman
-       - "7072" #Apache redirect jenkins
-       - "7073" #Apache redirect nabla
-       - "7074" #Apache redirect visma
-       - "7075" #Apache redirect sample
-       - "7076" #Apache redirect kibana
-       - "7077" #Apache redirect ansible tower (WAS)
-       - "7078" #Apache redirect Wordpress
-#       - "8080"#HTTP alternate (often used with Tomcat)
-#       - "8081"
-       - "8021" #FTP FreeNas
-       - "8081" #Nexus
-       - "8082" #Atlassian JIRA
-       - "8083" #SickBeard
-       - "8084" #OwnCloud
-       - "8085" #Fitness/nexus
-       - "8060" #Atlassion Fisheye
-       - "8080" #HTTP alternate (often used with Tomcat)
-       - "8089" #Bower registry
-       - "8091" #Transmission
-       - "8095" #Atlassion Crowd
-       - "8180" #JBoss
-       - "8181" #HeadPhone/JBoss http debug port
-       - "8200" #MiniDLNA
-       - "8280" #Tomcat HTTP
-#       - "8380" Jenkins use apache redirect 7072
-       - "8381" #jenkins FreeNas
-       - "8480" #NGinx
-       - "8787" #JBoss remote debug port
-       - "8983" #Tomcat HTTP TODO???????
-       - "9000" #SonarQube
-       - "9090" #Jetty
-       - "9042" #Supervisor
-       - "9090" #SABznbd/Jetty
-       - "9091" #Transmission
-#       - "9092" #Sonar database
-       - "9200" #Elasticsearch
-       - "9990" #Jboss console
-       - "10000" #Webmin
-       - "10050" #Zabbix
-       - "20000" #Usermin
-       - "24800" #Synergy
-       - "25826" #Collectd
-       - "32400" #Plex
-#Do not enable
-#       - "139" #Samba/NetBIOS
-#       - "445" #Samba/NetBIOS
-#       - "17500" #DropBox
-#       firewall_allowed_udp_ports:
-#Do not enable
-#       - "137" #Samba/NetBIOS
-#       - "138" #Samba/NetBIOS
+    firewall_allowed_tcp_ports:
+      - "21" #FTP
+      - "22" #SSH
+      - "25" #SMTP
+      - "80" #HTTP / Nginx
+      - "82" #Varnish or Google +
+      - "123" #DNS
+      - "137" #Samba
+      - "138" #Samba
+      - "139" #Samba
+      - "443" #HTTPS
+      - "445" #Samba
+      - "2222" #SSH alternate
+      - "3306" #Mysql
+      - "3689" #FireFly
+      - "4040" #Subsonic
+      - "4444" #Selenium
+      - "4445" #Lumbermill/Selenium TODO???????
+      - "4243" #Docker
+      #       - "4949" #Munin
+      - "5000" #xrdp / openstack /windows vm
+      - "5001" #xrdp
+      - "5050" #CouchPatato
+      - "5555" #XMRig
+      - "5678" #Private bower
+      - "6000" #Logstash
+      - "6082" #Varnish admin
+      - "6379" #Redis
+      - "6789" #Private bower git cache
+      - "7000" #FreeNas
+      - "7070" #Apache
+      - "7071" #Apache redirect gearman
+      - "7072" #Apache redirect jenkins
+      - "7073" #Apache redirect nabla
+      - "7074" #Apache redirect visma
+      - "7075" #Apache redirect sample
+      - "7076" #Apache redirect kibana
+      - "7077" #Apache redirect ansible tower (WAS)
+      - "7078" #Apache redirect Wordpress
+      #       - "8080"#HTTP alternate (often used with Tomcat)
+      #       - "8081"
+      - "8021" #FTP FreeNas
+      - "8081" #Nexus
+      - "8082" #Atlassian JIRA
+      - "8083" #SickBeard
+      - "8084" #OwnCloud
+      - "8085" #Fitness/nexus
+      - "8060" #Atlassion Fisheye
+      - "8080" #HTTP alternate (often used with Tomcat)
+      - "8089" #Bower registry
+      - "8091" #Transmission
+      - "8095" #Atlassion Crowd
+      - "8180" #JBoss
+      - "8181" #HeadPhone/JBoss http debug port
+      - "8200" #MiniDLNA
+      - "8280" #Tomcat HTTP
+      #       - "8380" Jenkins use apache redirect 7072
+      - "8381" #jenkins FreeNas
+      - "8480" #NGinx
+      - "8787" #JBoss remote debug port
+      - "8983" #Tomcat HTTP TODO???????
+      - "9000" #SonarQube
+      - "9090" #Jetty
+      - "9042" #Supervisor
+      - "9090" #SABznbd/Jetty
+      - "9091" #Transmission
+      #       - "9092" #Sonar database
+      - "9200" #Elasticsearch
+      - "9990" #Jboss console
+      - "10000" #Webmin
+      - "10050" #Zabbix
+      - "20000" #Usermin
+      - "24800" #Synergy
+      - "25826" #Collectd
+      - "32400" #Plex
+    #Do not enable
+    #       - "139" #Samba/NetBIOS
+    #       - "445" #Samba/NetBIOS
+    #       - "17500" #DropBox
+    #       firewall_allowed_udp_ports:
+    #Do not enable
+    #       - "137" #Samba/NetBIOS
+    #       - "138" #Samba/NetBIOS
 
-       firewall_additional_rules:
-        - "iptables -A INPUT -i wlan1 -p udp -m udp -s mafreebox.freebox.fr -j ACCEPT" #Freebox tv
-#        - "iptables -A INPUT -i wlan1 -p udp -m udp -s 212.27.38.253 -j ACCEPT" #Freebox tv
-        - "iptables -A OUTPUT -o wlan1 -p tcp -m tcp --dport 554 -j ACCEPT" #Freebox tv
+    firewall_additional_rules:
+      - "iptables -A INPUT -i wlan1 -p udp -m udp -s mafreebox.freebox.fr -j ACCEPT" #Freebox tv
+      #        - "iptables -A INPUT -i wlan1 -p udp -m udp -s 212.27.38.253 -j ACCEPT" #Freebox tv
+      - "iptables -A OUTPUT -o wlan1 -p tcp -m tcp --dport 554 -j ACCEPT" #Freebox tv
 #        - "iptables -A OUTPUT -o wlan1 -s 82.231.208.223 -m state --state ESTABLISHED -j ACCEPT" #Freebox tv
 #       - "iptables -A INPUT -i eth0 -p udp -m udp -s 212.27.38.253 --dport 32000:34000 -j ACCEPT" #Freebox tv
 #       - "iptables -A OUTPUT -o eth0 -p udp -m udp --dport 32000:34000 -j ACCEPT" #Freebox tv

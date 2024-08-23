@@ -14,19 +14,14 @@ Nabla ansible playbooks
   * [Quality tools](#quality-tools)
   * [npm-groovy-lint groovy formating for Jenkinsfile](#npm-groovy-lint-groovy-formating-for-jenkinsfile)
   * [Docker image](#docker-image)
-    + [Pull image](#pull-image)
-    + [Start container](#start-container)
-    + [Build](#build)
-    + [Stop & remove container](#stop--remove-container)
   * [Build & development](#build--development)
 - [Folder Structure Conventions](#folder-structure-conventions)
   * [A typical top-level directory layout](#a-typical-top-level-directory-layout)
 - [Dependency Graph](#dependency-graph)
   * [Ansigenome](#ansigenome)
   * [Python 3.8 graphviz](#python-38-graphviz)
-- [Update README.md](#update-readmemd)
   * [Ideas for Improvement](#ideas-for-improvement)
-- [Update README.md](#update-readmemd-1)
+- [Update README.md](#update-readmemd)
 
 <!-- tocstop -->
 
@@ -45,7 +40,7 @@ ansible-playbook playbooks/python-bootstrap.yml -i inventory/hosts --limit local
 ansible-playbook -i hosts -c local -v nabla.yml -vvvv
 or
 export ANSIBLE_VAULT_PASS=todo
-	./scripts/docker-build.sh
+ ./scripts/docker-build.sh
 ```
 
 When the playbook run completes, you should be able to work on any NABLA project, on the target machines.
@@ -188,7 +183,7 @@ See ansigenome.conf file in your HOME folder ~.ansigenome.conf and templates in 
 
 ### Python 3.8 graphviz
 
- * [graphviz](https://pypi.org/project/graphviz/)
+* [graphviz](https://pypi.org/project/graphviz/)
 
 ```bash
 pip install graphviz
@@ -197,11 +192,21 @@ python3 ./scripts/ansible-roles-dependencies.py
 
 ![Dependency Graph](roles/test.png)
 
-## [Update README.md](#table-of-contents)
+### Ideas for Improvement
+
+Here are some ideas for ways that these playbooks could be extended:
+
+- Test this playbooks on all aservers automatically.
+- Write a playbook to deploy an NABLA application into the server.
+
+We would love to see contributions and improvements, so please fork this
+repository and send us your changes via pull requests.
+
+## Update README.md
 
 
-  * [github-markdown-toc](https://github.com/jonschlinkert/markdown-toc)
-  * With [github-markdown-toc](https://github.com/Lucas-C/pre-commit-hooks-nodejs)
+* [github-markdown-toc](https://github.com/jonschlinkert/markdown-toc)
+* With [github-markdown-toc](https://github.com/Lucas-C/pre-commit-hooks-nodejs)
 
 ```bash
 npm install --save markdown-toc
@@ -213,13 +218,3 @@ markdown-toc CHANGELOG.md  -i
 git add README.md
 pre-commit run markdown-toc
 ```
-
-### Ideas for Improvement
-
-Here are some ideas for ways that these playbooks could be extended:
-
-- Test this playbooks on all aservers automatically.
-- Write a playbook to deploy an NABLA application into the server.
-
-We would love to see contributions and improvements, so please fork this
-repository and send us your changes via pull requests.

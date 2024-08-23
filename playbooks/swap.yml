@@ -1,12 +1,71 @@
 ---
-# To prevent OOM errors on docker hosts (can be included with docker playbook)
 
-- name: configure swap
-  hosts: jenkins-slaves
+# To prevent OOM errors on docker hosts (can be included with docker playbook)
+# ansible-playbook playbooks/swap.yml -i inventory/hosts --limit "localhost"  --extra-vars "swap_file_size_mo=32000 other_variable=foo"   -vvvv --ask-become-pass --ask-vault-pass
+
+- name: Add swap to host
+  hosts: all
   become: true
 
-  roles:
-    - role: ansible-swapfile
-      swapfile_size: 16GiB
-      swapfile_swappiness: 20
-      swapfile_location: /data/swap
+  vars:
+    swap_enabled: true
+    # swap_file_size_mo: 8192 # 8GiB
+    swap_file_size_mo: 32000 # 32GiB
+    swap_file_path: /var/swapfile
+
+  tasks:
+    # - debug: var={{ swap_enabled }}
+
+    - name: Create swap file
+      ansible.builtin.command:
+        cmd: dd if=/dev/zero of={{ swap_file_path }} bs=1M count={{ swap_file_size_mo }}
+        creates: "{{ swap_file_path }}"
+      tags:
+        - swap.file.create
+      failed_when: false
+      changed_when: false
+
+    - name: Change swap file permissions
+      file:
+        path: "{{ swap_file_path }}"
+        owner: root
+        group: root
+        mode: 0600
+      tags:
+        - swap.file.permissions
+
+    - name: Check swap file type
+      command: file {{ swap_file_path }}
+      register: swapfile
+      changed_when: false
+      tags:
+        - swap.file.mkswap
+
+    - name: Make swap file
+      command: mkswap {{ swap_file_path }}
+      when: swapfile.stdout.find('swap file') == -1
+      become: true
+      tags:
+        - swap.file.mkswap
+      changed_when: false
+
+    - name: Write swap entry in fstab
+      ansible.posix.mount:
+        name: none
+        src: "{{ swap_file_path }}"
+        fstype: swap
+        opts: sw
+        passno: 0
+        dump: 0
+        state: present
+      become: true
+      tags:
+        - swap.fstab
+
+    - name: Mount swap
+      command: swapon {{ swap_file_path }}
+      when: ansible_swaptotal_mb < 1
+      become: true
+      tags:
+        - swap.file.swapon
+      changed_when: false

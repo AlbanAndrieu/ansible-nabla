@@ -220,7 +220,7 @@ ansible_winrm_transport=ssl
 #192.168.33.12
 
 [workstation]
-#localhost ansible_connection=local
+localhost ansible_connection=local
 
 [workstation:vars]
 user=albandrieu
