@@ -439,9 +439,10 @@ roles:
     name: python
     version: develop
 
-  #- src: 'https://github.com/AlbanAndrieu/ansible-role-security'
-  #  name: 'security'
-  #  version: master
+  # - src: https://github.com/AlbanAndrieu/ansible-role-security.git
+  - src: https://github.com/geerlingguy/ansible-role-security.git
+    name: geerlingguy.security
+    version: master
 
   #- src: 'https://github.com/AlbanAndrieu/ansible-sonar'
   #  name: 'sonar'

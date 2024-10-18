@@ -3,7 +3,7 @@ schemaVersion: "2.0.0"
 
 globalEnvVars:
   - key: "JAVA_HOME"
-    value: "/usr/lib/jvm/java-1.17.0-openjdk-amd64"
+    value: "/usr/lib/jvm/java-1.21.0-openjdk-amd64"
 #   - key: "PATH"
 #     value: "/opt/ansible/env38/bin:$PATH"
 
@@ -81,8 +81,8 @@ fileExistenceTests:
     permissions: "-rwxr-xr-x" # Lrwxrwxrwx
 
   # check default python (python3)
-  - name: "python"
-    path: "/usr/bin/python"
+  - name: "python 3"
+    path: "/usr/bin/python3"
     shouldExist: true
     permissions: "Lrwxrwxrwx"
 
@@ -147,6 +147,11 @@ fileExistenceTests:
     shouldExist: true
     permissions: "drwxr-xr-x"
 
+  - name: "java-1.21.0-openjdk-amd64"
+    path: "/usr/lib/jvm/java-1.21.0-openjdk-amd64/"
+    shouldExist: true
+    permissions: "drwxr-xr-x"
+
 commandTests:
   # - name: "check ubuntu user"
   #   command: "whoami"
@@ -203,7 +208,7 @@ commandTests:
     command: "pip"
     args: ["--version"]
     expectedOutput:
-      ["pip 24.0.* from /usr/local/lib/python3/dist-packages/pip.*.*"]
+      ["pip 24.0.*	 from /usr/lib/python3/dist-packages/pip.*.*"]
 
   # - name: "check default python version"
   #   command: "python"
@@ -219,7 +224,7 @@ commandTests:
   - name: "check python 3 version"
     command: "python3"
     args: ["--version"]
-    expectedOutput: ["Python 3.10.*"]
+    expectedOutput: ["Python 3.12.*"]
 
   - name: "check python 3.12 version"
     command: "python3.12"
@@ -261,7 +266,7 @@ metadataTest:
     - key: TZ
       value: "Europe/Paris"
     - key: "PATH"
-      value: "/home/ubuntu/go/bin:/usr/local/go/bin:/home/ubuntu/.local/bin/:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+      value: "/home/ubuntu/.local/bin/:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
   #    - key: "JAVA_HOME"
   #      value: "/usr/lib/jvm/java-1.8.0-openjdk-amd64"
   #    - key: "HOME"
