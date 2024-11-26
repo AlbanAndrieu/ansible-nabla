@@ -1,0 +1,14 @@
+---
+#ansible-playbook -i staging -c local -v docker-registry.yml --ask-pass -vvvv | tee setup.log
+#ansible-playbook -i staging -c local -v docker-registry.yml --limit albandri --ask-become-pass -vvvv | tee setup.log
+
+#- import_playbook: docker.yml
+
+#sudo docker logout https://docker.nabla.mobi:5000
+#sudo docker login dtr.nabla.mobi:443
+
+- import_playbook: docker-registry-nabla.yml
+
+- import_playbook: docker-registry-oracle.yml
+
+- import_playbook: docker-cleaning.yml

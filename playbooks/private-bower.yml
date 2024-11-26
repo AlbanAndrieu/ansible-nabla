@@ -1,0 +1,13 @@
+---
+
+- name: Install private-bower
+  hosts: workstation
+  become: true
+
+  roles:
+#    - geerlingguy.nodejs
+    - albanandrieu.private-bower
+
+  vars:
+       private_bower_version: "1.1.9"
+#       private_bower_user: "www-data"

@@ -1,0 +1,89 @@
+---
+#ansible-playbook -i hosts-albandri -v certificate.yml -c local --limit albandri-laptop-work --ask-become-pass -vvvv | tee setup.log
+
+- hosts: jenkins-slaves
+  remote_user: root
+
+  tasks:
+    - name: set proxy_cdnurl_server to default
+      set_fact: proxy_cdnurl_server="albandrieu.com/download"
+
+    #- name: Create private key
+    #  shell: ssh-keygen -t rsa -C "alban.andrieu@free.fr"
+    #  ignore_errors: yes
+    #  become: true
+    #  become_user: albandri
+
+    - name: Create ~/pki
+      file: path=~/pki/ state=directory mode=0700
+      become: true
+      become_user: root
+
+- import_playbook: certificate-old.yml
+
+- import_playbook: certificate-new.yml
+
+- hosts: jenkins-slaves
+  remote_user: root
+
+  tasks:
+    - name: Get the CA root certificate (3) HELM
+      command: curl --cacert ~/.cert/helm-cert.pem https://albandrieu.com/chartrepo/nabla/index.yaml
+      ignore_errors: yes
+      changed_when: false
+      become: true
+      tags:
+        - certificate
+
+- hosts: jenkins-slaves
+  remote_user: root
+
+  tasks:
+    #- name: Get the CA root certificate
+    #  get_url: dest=~/pki/ca.pem url=http://albandrieu.com:7072/download/certs/NABLA.crt
+    #  ignore_errors: yes
+    #  become: true
+    #  become_user: root
+
+    - name: Get the server DER certificate
+      get_url: dest=~/pki/{{ ansible_fqdn }}-der.cer url=http://albandrieu.com:7072/download/certs/servers/{{ ansible_fqdn }}-der.cer
+      ignore_errors: yes
+      become: true
+      tags:
+        - certificate
+        - vm
+
+    - name: Convert DER certificate to PEM
+      command: openssl x509 -inform DER -outform PEM -in ~/pki/{{ ansible_fqdn }}-der.cer -out /etc/ssl/{{ ansible_fqdn }}/{{ ansible_fqdn }}.pem
+      ignore_errors: yes
+      changed_when: false
+      become: true
+      tags:
+        - certificate
+        - vm
+
+- import_playbook: certificate-server.yml
+
+#- import_playbook: certificate-docker.yml
+
+- import_playbook: certificate-java.yml
+
+# From docker you can test
+# openssl s_client -connect jira.albandrieu.com:443  -servername jira.albandrieu.com -CApath /etc/ssl/certs
+
+- hosts: jenkins-slaves
+  remote_user: jenkins
+
+  tasks:
+    - name: Test the CA root certificate (3) HELM
+      get_url:
+        dest: /home/jenkins/index.yaml
+        url: https://albandrieu.com/chartrepo/nabla/index.yaml
+        timeout: 20
+        validate_certs: true
+        use_proxy: no
+      #become: true
+      ignore_errors: true
+      become_user: jenkins
+      tags:
+        - certificate

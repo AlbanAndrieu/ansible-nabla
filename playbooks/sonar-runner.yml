@@ -1,0 +1,16 @@
+---
+#sudo ansible-playbook -i inventory/production -c local -v playbooks/sonar-runner.yml -vvvv | tee setup.log
+
+- name: Install sonar
+  hosts: jenkins-slaves
+  become: true
+  ignore_errors: yes
+
+  roles:
+    - role: geerlingguy.sonar-runner
+
+  vars:
+      #sonar_runner_download_url: https://sonarsource.bintray.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.2.0.1873.zip
+      sonar_runner_download_url: https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.2.0.1873.zip
+      sonar_runner_download_file: sonar-scanner-cli-4.2.0.1873.zip
+      sonar_runner_expanded_file: sonar-scanner-4.3.0.2102

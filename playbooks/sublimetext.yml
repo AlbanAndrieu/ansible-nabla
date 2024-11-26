@@ -1,0 +1,8 @@
+---
+
+- name: Install sublimetext
+  connection: local
+  hosts: workstation
+
+  roles:
+    - role: albanandrieu.sublimetext

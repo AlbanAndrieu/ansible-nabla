@@ -1,0 +1,205 @@
+---
+#ansible-playbook -i staging -c local -v docker-container.yml --ask-pass -vvvv | tee setup.log
+#ansible-playbook -i staging -c local -v docker-container.yml --limit localhost --ask-become-pass -vvvv | tee setup.log
+
+#sudo docker logout https://docker.nabla.mobi:5000
+#sudo docker login registry.nabla.mobi:443
+- hosts: docker-container
+#  become: true
+
+  tasks:
+#    - name: Log into private registry
+#      docker_login:
+#        registry: https://docker.nabla.mobi/
+#        username: nabla
+#        password: microsoft
+#        state: present
+#        debug: true
+##        reauthorize: yes
+##        ignore_errors: true
+
+    - name: Define WORKSPACE
+      shell: "echo $WORKSPACE"
+      environment:
+        WORKSPACE: "{{ repository_target_dir }}"
+      changed_when: false
+
+    - name: Echo WORKSPACE again
+      shell: "echo $WORKSPACE"
+      changed_when: false
+
+    - name: Copy the code from repository
+      git: repo={{ repository }} version={{ repository_version }} dest={{ repository_target_dir }}/dockerfile-fusionrisk
+      become: true
+      become_user: "{{ git_user }}"
+#      ignore_errors: true
+
+#    - name: Sync .env file
+#      synchronize:
+#        src: "{{ repository_target_dir }}/dockerfile-nabla/centos/.env"
+#        dest: "{{ repository_target_dir }}/dockerfile-nabla/.env"
+#      #delegate_to: delegate.host
+#      #delegate_to: localhost
+#      delegate_to: "{{ inventory_hostname }}"
+
+#See https://docs.ansible.com/ansible/docker_service_module.html
+    - name: Stop all containers
+      docker_service:
+        project_src: "{{ repository_target_dir }}/dockerfile-nabla/centos"
+        files: docker-compose.yml
+        build: no
+        recreate: never
+        restarted: no
+        project_name: "TEST"
+        remove_images: local
+        remove_orphans: true
+        remove_volumes: true
+        state: absent
+        stopped: yes
+#        pull: true
+#        timeout: 120
+        debug: true
+      register: output
+      ignore_errors: true
+
+    - debug: var=output
+
+- import_playbook: docker-registry.yml
+
+- hosts: docker-container
+#  become: true
+
+  tasks:
+    - name: Create a data container
+      docker_container:
+        name: mydata
+        image: busybox
+        volumes:
+          - /data
+
+    - name: Container present (ubuntu:16.04)
+      docker_container:
+        name: ubuntu1604
+        state: present
+        image: ubuntu:16.04
+        command: sleep infinity
+
+    - name: Container present (ubuntu:18.04)
+      docker_container:
+        name: ubuntu1804
+        state: present
+        image: ubuntu:18.04
+        command: sleep infinity
+
+#    - name: Set nabla port
+#      set_fact: nabla_port=3002
+#
+#    - name: Pull and run the nabla container
+#      docker_container:
+#          name: "nablaboard"
+#          image: registry.nabla.mobi/fusion-risk/nabla:latest
+#          restart_policy: always
+#          #state: present
+#          #recreate: yes
+#          exposed_ports:
+#            - 3002
+#          volumes_from:
+#            - mydata
+#          #detach: True
+#          #use_tls: encrypt
+#          #ports:
+#          #  - "{{ nabla_port }}:8080"
+#
+#    #- name: Wait a few minutes for the IPs to be set to the container
+#    #  wait_for: timeout=120
+#
+#    - name: Wait for the nabla server to start
+#      action: command docker logs nabla
+#      register: nabla_logs
+#      until: nabla_logs.stdout.find("Listening on") != -1
+#      retries: 30
+#      delay: 10
+#
+#    - name: Print nabla's URL
+#      debug: msg="You can connect to nabla server http://{{ ansible_default_ipv4.address }}:{{ nablaboard_port }}"
+
+
+#    - name: Update all containers
+#      docker_service:
+#        project_src: "{{ lookup('env','WORKSPACE') }}/dockerfile-nabla/centos"
+#        files: docker-compose-nabla.yml
+#        pull: yes
+##        build: yes
+##        restarted: true
+##        recreate: always
+#        project_name: "TEST"
+#        remove_images: local
+#        remove_orphans: true
+#        remove_volumes: true
+#        state: present
+##        stopped: yes
+#        timeout: 120
+#        debug: true
+#      register: output
+##      ignore_errors: true
+#
+#    - debug: var=output
+
+    - name: Start all containers
+      docker_service:
+        project_src: "{{ repository_target_dir }}/dockerfile-nabla/centos"
+        files: docker-compose-nabla.yml
+#        build: yes
+        pull: yes
+        #restarted: true
+        #recreate: always
+        recreate: smart
+        project_name: "TEST"
+        #remove_images: local
+        #remove_orphans: true
+        #remove_volumes: true
+        state: present
+#        stopped: yes
+        timeout: 180
+        debug: true
+      register: output
+
+    - debug: var=output
+
+    - assert:
+        that:
+          - "test.test.state.running"
+          - "nabla.nabla.state.running"
+
+#    - name: "Wait for services to start"
+#      pause: minutes=15
+
+    - name: sleep for 900 seconds (15 minutes) and continue with play
+      wait_for: timeout=900
+      delegate_to: localhost
+
+#curl -XGET http://localhost:5601/
+
+    - name: "Check the status of kibana UI"
+      command: curl localhost:5601/
+      register: curl_result
+
+    - name: "Ensure that proper data is present in stdout"
+      assert:
+        that:
+          - "'Kibana 4' in curl_result.stdout"
+      ignore_errors: true
+
+#TODO
+#curl -XGET http://localhost:9200/_cluster/health?pretty
+
+#curl -XGET https://localhost:9443/#/
+#curl -XGET http://localhost:9190/#/
+
+    - name: Wait 300 seconds for port 9190 to become open on the host, don't start checking for 10 seconds
+      wait_for:
+        port: 9190
+        timeout: 300
+        delay: 10
+
+- import_playbook: docker-container-oracle.yml

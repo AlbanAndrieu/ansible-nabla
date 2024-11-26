@@ -1,0 +1,45 @@
+[submodule "ansigenome"]
+	path = ansigenome
+	url = https://github.com/AlbanAndrieu/ansigenome.git
+[submodule "roles/ansible"]
+	path = roles/ansible
+	url = https://github.com/debops/ansible-role-ansible.git
+[submodule "roles/maven"]
+	path = roles/maven
+	url = https://github.com/AlbanAndrieu/ansible-maven.git
+[submodule "roles/sonar"]
+	path = roles/sonar
+	url = https://github.com/AlbanAndrieu/ansible-sonar.git
+[submodule "roles/nodejs"]
+	path = roles/nodejs
+	url = https://github.com/AlbanAndrieu/ansible-nodejs.git
+[submodule "roles/security"]
+	path = roles/security
+	url = https://github.com/AlbanAndrieu/ansible-role-security.git
+[submodule "roles/alban.andrieu.conky"]
+	path = roles/alban.andrieu.conky
+	url = https://github.com/AlbanAndrieu/ansible-conky.git
+[submodule "roles/alban.andrieu.pagespeed"]
+	path = roles/alban.andrieu.pagespeed
+	url = https://github.com/AlbanAndrieu/ansible-pagespeed.git
+[submodule "roles/alban.andrieu.web"]
+	path = roles/alban.andrieu.web
+	url = https://github.com/AlbanAndrieu/ansible-web.git
+[submodule "roles/alban.andrieu.common"]
+	path = roles/alban.andrieu.common
+	url = https://github.com/AlbanAndrieu/ansible-common.git
+[submodule "roles/--force"]
+	path = roles/--force
+	url = https://github.com/AlbanAndrieu/ansible-role-mysql.git
+[submodule "roles/alban.andrieu.evasive"]
+	path = roles/alban.andrieu.evasive
+	url = https://github.com/AlbanAndrieu/ansible-evasive.git
+[submodule "nodejs"]
+	path = nodejs
+	url = https://github.com/AlbanAndrieu/ansible-nodejs.git
+[submodule "roles/alban.andrieu.scons"]
+	path = roles/alban.andrieu.scons
+	url = https://github.com/AlbanAndrieu/ansible-scons.git
+[submodule "roles/alban.andrieu.shell"]
+	path = roles/alban.andrieu.shell
+	url = https://github.com/AlbanAndrieu/ansible-shell.git

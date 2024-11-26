@@ -1,0 +1,33 @@
+#ansible-playbook -i hosts-albandri -c local -v grive.yml -vvvv --ask-become-pass | tee setup.log
+
+- hosts: all
+  gather_facts: true
+  tasks:
+    - name: group hosts by distribution
+      group_by: key="{{ ansible_distribution }}-{{ ansible_distribution_version }}"
+
+- hosts: Ubuntu-12*:Ubuntu-14*:Ubuntu-16*:Ubuntu-17*
+  gather_facts: false
+  tasks:
+    - name: group hosts for supported distributions
+      group_by: key="supported"
+
+- hosts: "!supported"
+  gather_facts: false
+  tasks:
+    - name: fail for unsupported distribution
+      fail: msg="{{ ansible_distribution }} {{ ansible_distribution_version }}
+                 is not a supported OS for a Tower installation.  Supported
+                 OSes include Ubuntu 12.04/14.04/16.04/17.04."
+
+- name: Install subversion
+  connection: local
+  hosts: workstation
+#  remote_user: root
+#  accelerate: true
+
+  roles:
+    - { role: albanandrieu.grive,
+        docker_files_enable: yes,
+        docker_files_generated_directory: "../roles/grive"
+      }

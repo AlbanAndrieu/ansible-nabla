@@ -1,0 +1,13 @@
+---
+
+- name: Install css
+  hosts: css
+  remote_user: root
+
+  roles:
+    - albanandrieu.css
+
+  vars:
+#      ruby_version: "2.3.1"
+#      ruby_version: "2.5.5p157" # Ubuntu 19
+      ruby_version: ""

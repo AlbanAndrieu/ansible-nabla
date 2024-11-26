@@ -1,0 +1,118 @@
+---
+#This script is used to configure your workstation (for developer)
+
+#ansible-playbook -i pinventory/hosts -v playbooks/workstation.yml --limit albandrieu -vvvv | tee setup.log
+#for testing purpose
+#ansible-playbook -i inventory/hosts-albandrieu -c local -v playbooks/workstation.yml --check --diff --ask-become-pass -vvvv
+
+- hosts: all
+  gather_facts: true
+  gather_subset: hardware
+  tasks:
+    - name: group hosts by distribution
+      group_by: key="{{ ansible_distribution }}-{{ ansible_distribution_version }}"
+
+- hosts: RedHat-7*:RedHat-6*:RedHat-5*:CentOS-7*:CentOS-6*:Ubuntu-22*:Ubuntu-21*:Ubuntu-19*:Ubuntu-20*:Ubuntu-18*:Ubuntu-17*:Ubuntu-16*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
+  gather_facts: false
+  tasks:
+    - name: group hosts for supported distributions
+      group_by: key="supported"
+
+- hosts: "!supported"
+  gather_facts: false
+  tasks:
+    - name: fail for unsupported distribution
+      fail: msg="{{ ansible_distribution }} {{ ansible_distribution_version }}
+                 is not a supported OS for a Tower installation.  Supported
+                 OSes include Red Hat Enterprise Linux 5/6/7, CentOS 6/7, or
+                 Ubuntu 12.04/13.04/14.04/16.04/17.04/18.04/19.04/20.4/21.04/22.04."
+    - debug: msg="Version {{ ansible_distribution }} {{ ansible_distribution_version }} {{ ansible_architecture }}"
+
+#- import_playbook: jenkins-full.yml workstation_enabled=true automount_enabled=true nis_enabled=true
+
+- import_playbook: maven.yml
+
+- import_playbook: dropbox.yml
+
+- name: Apply workstation configuration
+  hosts: workstation
+#  remote_user: albandrieu
+#  connection: local
+  become: true
+
+  roles:
+    - albanandrieu.workstation
+
+  vars:
+       dropbox_user_host: "2366450895"
+       dash_enabled: no
+       webapps_enabled: no
+       ansigenome_enabled: no
+       apache_create_vhosts: no
+       nodejs_enabled: false
+       variety_owner: "{{ user }}"
+       variety_group: "{{ group }}"
+       dropbox_owner: "{{ user }}"
+       dropbox_group: "{{ group }}"
+       jenkins_user: "{{ user }}"
+
+- import_playbook: chrome.yml
+
+- import_playbook: virtualbox.yml
+
+- import_playbook: vagrant.yml
+
+- import_playbook: locale.yml
+
+- import_playbook: css.yml
+
+- import_playbook: webmin.yml
+
+#- import_playbook: jenkins-master.yml
+
+- import_playbook: solaris.yml
+
+# This playbook deploys a simple standalone Tomcat 7 server.
+- name: deploy Tomcat
+  hosts: tomcat-servers
+
+  roles:
+    - albanandrieu.tomcat
+
+  vars:
+      tomcat_version: "9"
+
+- name: Install samba
+  hosts: workstation
+
+  roles:
+    - geerlingguy.samba
+
+#- name: Install packer
+#  hosts: workstation
+#
+#  roles:
+#    - geerlingguy.packer
+
+- name: Install terraform
+  hosts: workstation
+
+  roles:
+    - andrewrothstein.terraform
+
+#- import_playbook: kubernetes.yml
+
+#- import_playbook: collectd.yml
+
+#- name: Install certbot
+#  hosts: workstation
+#
+#  roles:
+#    - geerlingguy.certbot
+
+#- name: Install certbot
+#  hosts: workstation
+#  become: true
+#
+#  roles:
+#    - geerlingguy.clamav

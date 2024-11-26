@@ -1,0 +1,10 @@
+---
+#ansible-playbook -i inventory/production -c local -v playbooks/yarn.yml --limit albandri.nabla.mobi --ask-become-pass | tee setup.log
+
+- name: Install yarn
+  hosts: jenkins-slaves
+  become: true
+  ignore_errors: true
+
+  roles:
+    - yarn

@@ -1,0 +1,42 @@
+# /etc/fstab: static file system information.
+#
+# Use 'blkid' to print the universally unique identifier for a
+# device; this may be used with UUID= as a more robust way to name devices
+# that works even if disks are added and removed. See fstab(5).
+#
+# <file system> <mount point>   <type>  <options>       <dump>  <pass>
+/dev/mapper/vgubuntu-root /               ext4    errors=remount-ro 0       1
+# /boot was on /dev/sda2 during installation
+UUID=f4c9f5b4-85f9-4480-be97-f2340df5c836 /boot           ext4    defaults        0       2
+# /boot/efi was on /dev/sda1 during installation
+UUID=4B0B-41D7  /boot/efi       vfat    umask=0077      0       1
+/dev/mapper/vgubuntu-swap_1 none            swap    sw              0       0
+# iscsi mounted
+/dev/vg-sata/data       /data       ext4    defaults,auto,_netdev 0 0
+/dev/vg-sata/docker       /docker       ext4    defaults,auto,_netdev 0 0
+/dev/vg_iscsi/workspace       /workspace        ext4    defaults,auto,_netdev 0 0
+/dev/sdb1       /albandri       ext4    defaults,auto,_netdev 0 0
+#/dev/sdc1       /albandrieu       ext4    defaults,auto,_netdev 0 0
+nabla:/mnt/dpool/media/ftp /media/ftp nfs4 defaults,user,auto,noatime,bg,rsize=16384,wsize=16384 0 0
+nabla:/mnt/dpool/media/download /media/download nfs4 defaults,user,auto,noatime,bg,rsize=16384,wsize=16384 0 0
+#nabla:/mnt/dpool/media/download/music /media/download/music nfs4 defaults,user,auto,noatime,bg,rsize=16384,wsize=16384 0 0
+nabla:/mnt/dpool/media/music /media/music nfs4 defaults,user,auto,noatime,bg,rsize=16384,wsize=16384 0 0
+#nabla:/mnt/dpool/media/movie /media/movie nfs4 defaults,user,auto,noatime,bg,rsize=16384,wsize=16384 0 0
+#nabla:/mnt/dpool/media/download/movie /media/download/movie nfs4 defaults,user,auto,noatime,bg,rsize=16384,wsize=16384 0 0
+nabla:/mnt/dpool/media/photo /media/photo nfs4 defaults,user,auto,noatime,bg,rsize=16384,wsize=16384 0 0
+#nabla:/mnt/dpool/media/serie /media/serie nfs4 defaults,user,auto,noatime,bg,rsize=16384,wsize=16384 0 0
+#nabla:/mnt/dpool/media/download/serie /media/download/serie nfs4 defaults,user,auto,noatime,bg,rsize=16384,wsize=16384 0 0
+nabla:/mnt/dpool/media/torrentfile /media/torrentfile nfs4 defaults,user,auto,noatime,bg,rsize=16384,wsize=16384 0 0
+nabla:/mnt/dpool/media/video /media/video nfs4 defaults,user,auto,noatime,bg,rsize=16384,wsize=16384 0 0
+nabla:/mnt/dpool/media/webdav /media/webdav nfs4 defaults,user,auto,noatime,bg,rsize=16384,wsize=16384 0 0
+nabla:/mnt/dpool/image /media/image nfs4 defaults,user,auto,noatime,bg,rsize=16384,wsize=16384 0 0
+nabla:/mnt/dpool/archive /media/archive nfs4 defaults,user,auto,noatime,bg,rsize=16384,wsize=16384 0 0
+nabla:/mnt/dpool/backup /media/backup nfs4 defaults,user,auto,noatime,bg,rsize=16384,wsize=16384 0 0
+nabla:/mnt/dpool/jenkins /media/jenkins nfs4 defaults,user,auto,noatime,bg,rsize=16384,wsize=16384 0 0
+#nabla:/mnt/dpool/jenkins-slave /media/jenkins-slave nfs4 defaults,user,auto,noatime,bg,rsize=16384,wsize=16384 0 0
+nabla:/mnt/dpool/workspace /workspace-tmp nfs4 defaults,user,auto,noatime,bg,rsize=16384,wsize=16384 0 0
+
+#https://repository-nabla.forge.cloudbees.com/release/  /mnt/nabla-release davfs rw,user,noauto,conf=/etc/davfs2/davfs2.conf,uid=$UID 0 0
+#https://repository-nabla.forge.cloudbees.com/snapshot/  /mnt/nabla-snapshot davfs rw,user,noauto,conf=/etc/davfs2/davfs2.conf,uid=$UID 0 0
+
+/swapfile   none    swap    sw    0   0

@@ -1,0 +1,11 @@
+---
+
+- name: Install awstats
+  hosts: apache-servers
+  remote_user: root
+
+  roles:
+    - role: albanandrieu.awstats
+
+  vars:
+      apache_listen_port: 7070

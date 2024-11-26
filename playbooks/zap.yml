@@ -1,0 +1,11 @@
+---
+
+- name: Install zap
+  connection: local
+  hosts: workstation
+
+  roles:
+    - role: albanandrieu.zap
+
+#  vars:
+#       apache_listen_port: 7070

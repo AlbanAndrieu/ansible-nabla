@@ -1,0 +1,19 @@
+---
+
+ansigenome_info: # noqa 701
+  galaxy_id: ''
+  galaxy_url: 'https://galaxy.ansible.com/alban.andrieu/ansible-nabla/'
+  galaxy_user: 'alban.andrieu'
+  galaxy_name: 'ansible-nabla'
+  galaxy_docker_name: 'ansible-nabla'
+
+  travis: false
+
+  synopsis: |
+    Describe your role in a few paragraphs....
+
+  usage: |
+    Describe how to use in more detail...
+
+  # custom: |
+  #   Any custom output you want after the usage section..

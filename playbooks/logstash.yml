@@ -1,0 +1,106 @@
+---
+#sudo ansible-playbook -i hosts-albandri -c local -v logstash.yml | tee setup.log
+
+#See corresponding vagrant file
+
+#- name: Apply elasticsearch configuration for logstash
+#  hosts: logstash
+#  gather_facts: false
+#  remote_user: root
+##  connection: local
+#
+#  roles:
+#    - geerlingguy.elasticsearch
+#
+#  vars:
+#       logstash_elasticsearch_host: albandri.nabla.mobi
+
+- name: Add elasticsearch curator
+  hosts: logstash
+  remote_user: root
+#  connection: local
+
+  roles:
+    - geerlingguy.elasticsearch-curator
+
+- name: Add logstash configuration
+  hosts: logstash
+  remote_user: root
+#  connection: local
+
+  roles:
+    - albanandrieu.logstash-settings
+
+  vars:
+       logstash_monitor_local_collectd: yes
+       logstash_listen_port_lumberjack: 6000
+       #logstash_elasticsearch_host: "albandri"
+       #logstash_local_syslog_path: "/var/log/*.log"
+       logstash_monitor_local_syslog: yes
+       logstash_monitor_collectd_syslog: yes
+       logstash_monitor_jenkins_enabled: yes
+       logstash_monitor_nexus_enabled: yes
+       logstash_monitor_apache_enabled: yes
+       logstash_monitor_nginx_enabled: yes
+       logstash_monitor_tomcat_enabled: yes
+       logstash_monitor_jetty_enabled: yes
+       logstash_monitor_redis_enabled: no
+       logstash_monitor_jboss_enabled: yes
+       logstash_monitor_elasticsearch_enabled: yes
+       logstash_monitor_miscellaneous_enabled: yes
+       logstash_monitor_application_enabled: yes
+       logstash_monitor_sybase_enabled: yes
+       logstash_monitor_log4j_enabled: no
+       logstash_heap: "50m"
+       redis_bind_interface: "127.0.0.1"
+       elasticsearch_plugin_hq: yes
+       jenkins_home: /var/lib/jenkins
+       application_dir: "/thomsonreuters"
+       application_user: "albandri"
+       application_name: "nabla"
+       sybase_log_file: "NABLA.log"
+       tomcat_catalina_base_dir: "{{ application_home }}"
+       tomcat_catalina_out: "{{ application_home }}/log/catalina.out"
+       tomcat_catalina_log_dir: "{{ tomcat_catalina_base_dir }}/data/J2EE/TomcatConfigs/logs"
+       collectd_prefix: "/etc/collectd"
+       collectd_type: no
+       collectd_prefix_type: "/usr/share/collectd/"
+       collectd_prefix_conf: "{{ collectd_prefix }}"
+       nginx_worker_processes: "8"
+       nginx_worker_connections: "8192"
+       nginx_user: root
+#       kibana_elasticsearch_url: ""
+       kibana_username: kibana
+       kibana_password: microsoft
+       kibana_domain: home.nabla.mobi
+       kibana_server_name: home.nabla.mobi
+       es_address: http://{{ kibana_domain}}/es/
+
+#- name: Add nginx configuration
+#  hosts: logstash
+#  remote_user: root
+##  connection: local
+#
+#  roles:
+#    - geerlingguy.nginx
+#
+#  vars:
+#       nginx_worker_processes: "8"
+#       nginx_worker_connections: "8192"
+#       nginx_user: root
+
+#- name: Add kibana configuration
+#  hosts: logstash
+#  remote_user: root
+##  connection: local
+#
+#  roles:
+#    - geerlingguy.kibana
+#
+#  vars:
+#       kibana_username: kibana
+#       kibana_password: microsoft
+#       nginx_user: root
+#       kibana_domain: home.nabla.mobi
+#       kibana_server_name: home.nabla.mobi
+#       es_address: http://{{ kibana_domain}}/es/

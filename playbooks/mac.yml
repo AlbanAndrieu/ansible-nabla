@@ -1,0 +1,152 @@
+---
+#ansible -m setup mac-jenkins.nabla.mobi -vvvv -i production -vvvv
+#ansible-playbook -i production  -v mac.yml --limit mac-jenkins.nabla.mobi --ask-become-pass
+#ansible-playbook -i production -v jenkins-master.yml -vvvv --ask-become-pass --limit mac-jenkins.nabla.mobi
+
+- hosts: all
+  gather_facts: true
+  gather_subset: hardware
+  tasks:
+    - name: group hosts by distribution
+      group_by: key="{{ ansible_distribution }}-{{ ansible_distribution_version }}-{{ ansible_architecture }}"
+
+#Solaris-10-sun4u not managed via ansible on purpose
+- hosts: MacOSX-10.13*:MacOSX-10.12*
+  gather_facts: false
+  tasks:
+    - name: group hosts for supported distributions
+      group_by: key="supported"
+
+- hosts: "!supported"
+  gather_facts: false
+  tasks:
+    - name: fail for unsupported distribution
+      fail: msg="{{ ansible_distribution }} {{ ansible_distribution_version }}
+                 is not a supported OS for a Tower installation.  Supported
+                 OSes include MacOSX 10"
+
+- import_playbook: roles/mac-dev-playbook/main.yml
+
+- name: Apply common configuration to mac nodes
+  hosts: mac
+  become: true
+  #connection: local
+
+#  vars_files:
+#    - default.config.yml
+
+  roles:
+    - role: mac-dev-playbook
+#    - role: geerlingguy.homebrew
+#      tags: ['homebrew']
+#    - role: geerlingguy.dotfiles
+#      when: configure_dotfiles
+#      tags: ['dotfiles']
+#    - role: geerlingguy.mas
+#      when: mas_installed_apps
+#      tags: ['mas']
+
+  vars:
+    homebrew_installed_packages:
+      # - ansible # Installed via Pip.
+      - autoconf
+      - bash-completion
+#      - chromedriver #moved to caskroom/cask
+      - doxygen
+      - graphviz
+      - ocaml
+      - gettext
+      - gifsicle
+#      - git
+      - go
+      - gpg
+      - hub
+      - httpie
+      - iperf
+      - libevent
+      - sqlite
+      - mcrypt
+      - nmap
+      - node
+      - nvm
+      - ssh-copy-id
+      - cowsay
+      - readline
+      - openssl
+      - wget
+      - wrk
+      #- cmake
+      - scons
+      - gcc
+      - lcov
+      - gperf
+      - llvm
+#brew install llvm --with-toolchain --with-graphviz --with-ocaml --with-lldb
+      - clang-format
+      - mingw-w64
+      - gnustep-make
+      - cppcheck
+      - shellcheck
+      - flawfinder
+      - rats
+      - findbugs
+      - ansible-lint
+      - bison
+      - flex
+      - openssl
+      - ant
+      - maven@3.5
+      - svn
+      - unixodbc
+#brew rm unixodbc && brew rm freetds
+      - libtool
+#brew installink libtool
+      - freetds
+#brew install freetds --with-unixodbc
+      - md5sha1sum
+      - zabbix
+#brew install zabbix --without-server-proxy
+#GNU Coreutils contains the most essential UNIX commands, such as ls, cat.
+      - coreutils
+#      - gnu-tar
+      - screen
+      - watch
+      - gdb
+#echo "set startup-with-shell off" >> ~/.gdbinit
+#Below todo in default.config.yml disable homebrew/php
+      - adoptopenjdk8
+    homebrew_taps:
+      - homebrew/core
+      - caskroom/cask
+#      - homebrew/php
+
+- hosts: mac
+
+  post_tasks:
+   - name: macport | Install macport package (Darwin based)
+     action: "{{ ansible_pkg_mgr }} name={{ item }} state={{ util_pkg_state|default('present') }}"
+     when: (ansible_distribution == 'MacOSX')
+     tags: package
+     with_items:
+      - wget
+      - openssl
+      - gnutar
+      - git
+      - git-lfs
+      - pv
+     changed_when: false
+
+#By hand please do
+#git config --global credential.helper store
+
+- name: git | Initialize git-lfs
+  shell: >
+    git lfs install
+  become: true
+
+- name: maven | Initialize maven
+  shell: >
+    ln -s -f /usr/local/Cellar/maven@3.5/3.5.4/bin/mvn /usr/local/bin/mvn
+  become: true
+
+#- import_playbook: jenkins-master.yml

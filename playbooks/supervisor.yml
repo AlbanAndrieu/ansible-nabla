@@ -1,0 +1,32 @@
+---
+#This script is used to configure your workstation (for developer)
+
+#sudo ansible-playbook -i hosts -c local -v supervisor.yml | tee setup.log
+
+# This playbook can be run using vagrant (on virtual box).
+- name: configure supervisor
+  hosts: supervisors
+  remote_user: root
+  become: true
+
+  roles:
+#    - role: ansible-supervisor
+#      name: jenkins
+#      command: python -m SimpleHTTPServer 8686
+#      directory: /opt/jenkins
+## user is the same as base_admin_username
+#      user: jenkins
+
+# start a basic python http server on port 7075
+    - role: ansible-supervisor
+      name: apache
+      command: python -m SimpleHTTPServer 7075
+      directory: /opt/web
+      user: root
+      stopsignal: HUP
+
+#    - role: supervisor
+#      name: fitness
+#      command: /workspace/xebium/run.sh
+#      directory: /workspace/xebium
+#      user: ubuntu

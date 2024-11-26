@@ -1,0 +1,170 @@
+---
+
+#ansible all -m setup -i production --limit albandrieu.com -vvvv
+
+#ansible-playbook web.yml -i production --limit albandrieu.com, -vvvv
+# -e python2_version="2.7"
+
+#TODO ansible -i production albandrieu.com --sudo --ask-become-pass -m raw -a "yum install -y python2 python-simplejson"
+#TODO ansible -i production albandrieu.com --sudo --ask-become-pass -m raw -a "apt-get -f install && apt-get update"
+#TODO ansible -i production albandrieu.com --sudo --ask-become-pass -m raw -a "apt-get install -y python python-simplejson"
+
+- hosts: all
+  gather_facts: true
+  gather_subset: hardware
+  tasks:
+    - name: group hosts by distribution
+      group_by: key="{{ ansible_distribution }}-{{ ansible_distribution_version }}"
+
+- hosts: RedHat-7*:RedHat-6*:RedHat-5*:CentOS-7*:CentOS-6*:Ubuntu-21*:Ubuntu-20*:Ubuntu-19*:Ubuntu-18*:Ubuntu-17*:Ubuntu-16*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
+  gather_facts: false
+  tasks:
+    - name: group hosts for supported distributions
+      group_by: key="supported"
+
+- hosts: "!supported"
+  gather_facts: false
+  tasks:
+    - name: fail for unsupported distribution
+      fail: msg="{{ ansible_distribution }} {{ ansible_distribution_version }}
+                 is not a supported OS for a Tower installation.  Supported
+                 OSes include Red Hat Enterprise Linux 6/7, CentOS 6/7, or
+                 Ubuntu 12.04/13.04/14.04/16.04/17.04/18.04/19.04."
+    - debug: msg="Version {{ ansible_distribution }} {{ ansible_distribution_version }} {{ ansible_architecture }}"
+
+#- hosts: localhost
+#
+#  tasks:
+#    - name: Install Ansible-Galaxy dependencies
+#      shell: ansible-galaxy install -r requirements.yml -p ./roles/
+#      #shell: ansible-galaxy install -r requirements.yml -p ./roles/ --ignore-errors --force
+#      ignore_errors: true
+
+- import_playbook: python-bootstrap.yml
+  tags:
+    - python
+    - vm
+
+- import_playbook: hostname.yml
+  tags:
+    - hostname
+    - vm
+
+#- import_playbook: nfs.yml
+
+- import_playbook: common.yml
+
+- import_playbook: dns.yml
+  tags:
+    - dns
+    - vm
+
+- import_playbook: python.yml
+
+- import_playbook: administration.yml automount_enabled=false nis_enabled=false
+
+- import_playbook: security.yml
+  tags:
+    - security
+    - vm
+
+- import_playbook: java.yml
+
+- import_playbook: certificate.yml
+
+- import_playbook: python.yml
+  tags:
+    - python
+    - vm
+
+- import_playbook: webmin.yml
+  tags:
+    - webmin
+    - vm
+
+- import_playbook: chrome.yml
+  tags:
+    - chrome
+    - vm
+
+- import_playbook: selenium.yml
+  tags:
+    - selenium
+    - vm
+
+- import_playbook: xvbf.yml
+  tags:
+    - xvbf
+    - vm
+
+- import_playbook: zabbix-agent.yml
+  tags:
+    - zabbix
+    - vm
+
+- import_playbook: yarn.yml
+
+#- import_playbook: jenkins-slave.yml
+
+#- import_playbook: docker.yml
+
+- hosts: apache-servers
+  gather_facts: true
+  become: true
+
+  tasks:
+    - debug: var=hostvars[inventory_hostname]['ansible_default_ipv4']['address']
+
+- name: Configure and deploy the nabla application to apache
+  hosts: apache-servers
+  gather_facts: true
+  become: true
+
+  roles:
+    - albanandrieu.web
+
+  vars:
+      apache_listen_port: 7075
+      php_default_version_debian: "7.3"
+      php_mysql_package: "php7.3-mysql"
+      __php_mysql_package: "php7.3-mysql"
+      web_base_dir: "/var/www/nabla-site-apache"
+      apache_owner: "jenkins"
+      apache_group: "www-data"
+      git_user: "jenkins"
+      share_user: "jenkins"
+      share_group: "www-data"
+      repository: "git@github.com:AlbanAndrieu/nabla-site-apache.git"
+      repository_version: "master"
+
+#WARNING jenkins-master role has disabled a2dissite 000-default
+- name: Configure and deploy the nabla php sample application code to apache
+  hosts: apache-servers
+  gather_facts: true
+  become: true
+
+  roles:
+    - albanandrieu.web
+
+  vars:
+      apache_listen_port: 7075
+      php_default_version_debian: "7.3"
+      php_mysql_package: "php7.3-mysql"
+      __php_mysql_package: "php7.3-mysql"
+      web_base_dir: "/var/www/nabla-servers-bower-sample"
+      #jenkins_proxy_port: "{{ apache_listen_port }}" #TODO why is it needed!!!
+      phpmyadmin_mysql_user: root
+      phpmyadmin_mysql_password: microsoft
+      phpmyadmin_mysql_port: "{{ apache_listen_port }}"
+      php_date_timezone: "Europe/Paris"
+      mysql_innodb_log_file_size: "5M"
+      mysql_root_username: root
+      mysql_root_password: microsoft
+      php_enable: no
+      repository: "https://github.com/AlbanAndrieu/nabla-servers-bower-sample.git"
+      repository_version: "gh-pages"
+
+- import_playbook: lamp.yml
+  tags:
+    - lamp
+    - vm

@@ -1,0 +1,8 @@
+---
+
+- name: Install webmin
+  hosts: webmin
+  become: true
+
+  roles:
+    - albanandrieu.webmin

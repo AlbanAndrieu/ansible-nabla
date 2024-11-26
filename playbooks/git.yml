@@ -1,0 +1,9 @@
+---
+#sudo ansible-playbook -i hosts-albandri -c local -v git.yml -vvvv | tee setup.log
+
+- name: Install git
+  hosts: workstation
+  remote_user: root
+
+  roles:
+    - role: geerlingguy.git

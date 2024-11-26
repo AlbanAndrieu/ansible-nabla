@@ -1,0 +1,1 @@
+../roles/albanandrieu.shell/files/run-ansible-setup.sh

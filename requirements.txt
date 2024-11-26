@@ -1,0 +1,6 @@
+awxkit>=21.4.0
+dnspython>=2.3.0
+netaddr>=0.8.0
+packaging>=20.9
+requests>=2.28.1
+zabbix-api>=0.5.4

@@ -1,0 +1,86 @@
+---
+
+#ansible all -m setup -i hosts-albandri --limit albandri -vvvv
+
+# ansible-playbook -i inventory/hosts-albandrieu -c local -v playbooks/lamp.yml --ask-become-pass -vvvv
+
+- name: Configure and deploy php to apache
+  hosts: apache-servers
+  become: true
+
+  vars:
+    apache_listen_port: 7075
+    apache_listen_ip: "*"
+    apache_global_vhost_settings: |
+      DirectoryIndex index.php index.html
+      # Add other global settings on subsequent lines.
+    #apache_allow_override: "All"
+    apache_allow_override: "FileInfo Indexes"
+    #apache_options: "-Indexes +FollowSymLinks"
+    #apache_options: "MultiViews Indexes SymLinksIfOwnerMatch IncludesNoExec"
+    apache_options: "MultiViews Indexes FollowSymLinks IncludesNoExec"
+    apache_mods_enabled:
+      - rewrite.load
+      - ssl.load
+    apache_create_vhosts: true
+    #apache_vhosts_template: "vhosts.conf.j2"
+    apache_vhosts:
+      #- servername: "{{ ansible_fqdn }}"
+      - servername: "albandrieu.com"
+        documentroot: "/var/www/nabla-site-apache"
+        allow_override: "FileInfo Indexes"
+        #options: "MultiViews Indexes SymLinksIfOwnerMatch IncludesNoExec"
+        options: "MultiViews Indexes FollowSymLinks IncludesNoExec"
+        extra_parameters: |
+          <Directory "/var/www/password-protected-directory">
+            Require valid-user
+            AuthType Basic
+            AuthName "Please authenticate"
+            AuthUserFile /var/www/password-protected-directory/.htpasswd
+          </Directory>
+    apache_vhosts_ssl:
+      #- servername: "{{ ansible_fqdn }}"
+      - servername: "albandrieu.com"
+        documentroot: "/var/www/nabla-site-apache"
+        #TODO
+        #certificate_file: "/etc/ssl/{{ ansible_fqdn }}/{{ ansible_fqdn }}.pem"
+        #certificate_file: "/etc/webmin/miniserv.cert"
+        #certificate_file: "/etc/webmin/miniserv.pem"
+        certificate_file: "/etc/ssl/private/{{ ansible_fqdn }}.pem"
+        #certificate_key_file: "/etc/webmin/miniserv.pem"
+        certificate_key_file: "/etc/ssl/private/{{ ansible_fqdn }}.pem"
+        # Optional.
+        #certificate_chain_file: "/etc/ssl/{{ ansible_fqdn }}/certificate_chain.crt"
+    php_default_version_debian: "7.3"
+    php_mysql_package: "php7.3-mysql"
+    __php_mysql_package: "php7.3-mysql"
+    php_version: '7.3'
+    php_memory_limit: "128M"
+    php_max_execution_time: "90"
+    php_upload_max_filesize: "256M"
+    phpmyadmin_mysql_user: root
+    phpmyadmin_mysql_password: microsoft
+    phpmyadmin_mysql_port: 80
+    php_date_timezone: "Europe/Paris"
+    mysql_innodb_log_file_size: "5M"
+    mysql_root_username: root
+    mysql_root_password: microsoft
+
+  roles:
+    - geerlingguy.mysql
+    - geerlingguy.apache
+#    - geerlingguy.php-versions
+    - geerlingguy.php
+#    - geerlingguy.php-xdebug
+    - geerlingguy.php-mysql
+# TODO fix
+#    - geerlingguy.phpmyadmin
+
+- hosts: apache-servers
+  become: true
+
+  roles:
+    - {
+      role: ansible-swapfile,
+      swapfile_size: 4GiB
+      }

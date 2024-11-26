@@ -1,0 +1,27 @@
+---
+#sudo ansible-playbook -i hosts-albandri -c local -v yourkit.yml | tee setup.log
+#sudo ansible-playbook -i hosts -v yourkit.yml -vvvv  -u root --ask-pass
+#NOK sudo ansible-playbook -i hosts -v yourkit.yml -vvvv -u root --ask-pass -e 'ansible_python_interpreter=/usr/local/bin/python2.7'
+
+- import_playbook: solaris.yml
+
+- name: Install yourkit
+#  connection: local
+#  hosts: workstation
+  hosts: zone
+#  remote_user: root
+#  accelerate: true
+
+  roles:
+    - { role: albanandrieu.yourkit,
+        yourkit_group: "{{ group }}",
+        yourkit_license_server_enable: true,
+        yourkit_license_server: "10.7.109.25",
+        yourkit_arch: "solaris-x86-32",
+        yourkit_arch_64: "solaris-x86-64",
+        tomcat_catalina_home_dir: "/usr/share/tomcat7",
+        yourkit_base_dir: "/opt/yourkit"
+      }
+
+#  vars:
+#    ansible_python_interpreter: "/usr/local/bin/python2.7"

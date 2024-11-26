@@ -1,0 +1,32 @@
+---
+
+- name: Install locale
+  hosts: locale
+  remote_user: root
+
+  roles:
+    - locale
+
+  vars:
+    locales_present:
+      - en_US.UTF-8
+      - fr_FR.UTF-8
+    locales_language_packs_present:
+      - language-pack-en
+      - language-pack-en-base
+      - language-pack-fr
+    locales_default:
+      lang: en_US.UTF-8
+      #language:
+      lc_ctype: en_US.UTF-8
+      lc_numeric: fr_FR.UTF-8
+      lc_time: fr_FR.UTF-8
+      lc_monetary: fr_FR.UTF-8
+      lc_messages: en_US.UTF-8
+      lc_paper: fr_FR.UTF-8
+      lc_name: fr_FR.UTF-8
+      lc_address: fr_FR.UTF-8
+      lc_telephone: fr_FR.UTF-8
+      lc_measurement: fr_FR.UTF-8
+      lc_identification: fr_FR.UTF-8
+      lc_all: en_US.UTF-8

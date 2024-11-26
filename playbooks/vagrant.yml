@@ -1,0 +1,33 @@
+---
+#ansible-playbook playbooks/vagrant.yml -i inventory/hosts-albandrieu --limit albandrieu --vault-password-file ./vault.passwd -vvvv
+
+- name: Install vagrant
+  hosts: vagrant
+  become: true
+#  ignore_errors: true
+
+  roles:
+    - vagrant
+
+  vars:
+      vagrant_libvirt_enabled: true
+      vagrant_windows_enabled: true
+      vagrant_lxc_enabled: false
+      vagrant_vbguest_enabled: true
+      vagrant_hosts_enabled: true
+      vagrant_share_enabled: true
+      vagrant_winrm_enabled: true
+#      vagrant_version: "2.2.7"
+#      vagrant_url: "https://releases.hashicorp.com/vagrant/{{ vagrant_version }}/vagrant_{{ vagrant_version }}_x86_64.deb"
+
+#- name: Install vagrant user
+#  hosts: vagrant
+#  remote_user: root
+##  connection: local
+#
+#  roles:
+#    - vagrant-user
+#
+#  vars:
+#      vagrant_root_password_enabled: false
+#      vagrant_user_shell: "/bin/false"

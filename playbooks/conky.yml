@@ -1,0 +1,15 @@
+---
+# ansible-playbook -i inventory/hosts-albandrieu -c local -v playbooks/conky.yml -vvvv --ask-become-pass | tee setup.log
+
+# This playbook can be run using vagrant (on virtual box).
+- name: Install conky
+  hosts: workstation
+  remote_user: root
+#  connection: local
+
+  roles:
+    - role: albanandrieu.conky
+
+  vars:
+       conky_sensor_enabled: yes
+       conky_manager_enabled: yes

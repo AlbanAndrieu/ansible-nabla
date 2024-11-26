@@ -1,0 +1,10 @@
+---
+
+- name: Install zfs
+  hosts: zfs
+  remote_user: root
+  become: true
+#  connection: local
+
+  roles:
+    - albanandrieu.zfs

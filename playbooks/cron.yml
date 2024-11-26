@@ -1,0 +1,18 @@
+---
+- name: Add cron cleaning policies
+  hosts:
+    - jenkins-slaves
+    - docker
+  become: true
+
+  tasks:
+  - cron:
+      name: "Clean Jenkins Workspace"
+      minute: "0"
+      hour: "*"
+      day: "*"
+      weekday: "*"
+      month: "*"
+      user: root
+      job: "find /workspace/slave -maxdepth 1 -mtime +5 -type d | xargs rm -rf"
+      cron_file: "clean_workspace"

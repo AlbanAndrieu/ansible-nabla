@@ -1,0 +1,38 @@
+---
+#
+# WARNING : DEPRECATED, only used for gra1apigtwdev1
+#
+
+- name: Add kong to host
+  hosts: apigtw
+  become: true
+
+  vars:
+    kong_version: 3.2.2
+    # https://download.konghq.com/gateway-3.x-ubuntu-jammy/pool/all/k/kong/kong_3.2.2_amd64.deb
+    # kong_deb_pkg:     "kong-community-edition-{{ kong_version }}.{{ ansible_distribution_release }}.all.deb"
+    kong_deb_pkg: "kong_{{ kong_version }}_amd64.deb"
+    # kong_deb_pkg_url: "https://bintray.com/kong/kong-community-edition-deb/download_file?file_path=dists/{{ kong_deb_pkg }}"
+    kong_deb_pkg_url: "https://download.konghq.com/gateway-3.x-ubuntu-jammy/pool/all/k/kong/{{ kong_deb_pkg }}"
+    # kong_deb_pkg_pre_0_11_x:     "kong-{{ kong_version }}.jammy_all.deb"
+    kong_deb_pkg_pre_0_11_x: "kong_{{ kong_version }}_amd64.deb"
+    # kong_deb_pkg_url_pre_0_11_x: "https://github.com/Mashape/kong/releases/download/{{ kong_version }}/{{ kong_deb_pkg_pre_0_11_x }}"
+    kong_deb_pkg_url_pre_0_11_x: "https://download.konghq.com/gateway-3.x-ubuntu-jammy/pool/all/k/kong/{{ kong_deb_pkg_pre_0_11_x }}"
+    ##kong_cassandra_host: <my_cassandra_ip_or_fqdn>
+    ## OR for postgres backend
+    kong_database: postgres
+    kong_pg_host: postgres-kong.service.gra.dev.consul
+    # kong_pg_user: "{{ kong_pg_user|default('kong') }}"
+    kong_pg_user: "kong"
+    #kong_pg_password: "{{ kong_pg_password|default('kongpass') }}"
+    kong_pg_password: "kongpass"
+    #kong_pg_database: "{{ kong_pg_database|default('kong') }}"
+    kong_pg_database: "kong"
+    # kong_dns_resolver: ""
+    kong_use_old_config_format: false
+    kong_proxy_listen: 0.0.0.0:8000 reuseport backlog=16384, 0.0.0.0:8443 http2 ssl reuseport backlog=16384
+    # kong_admin_listen: 127.0.0.1:8001 reuseport backlog=16384, 127.0.0.1:8444 http2 ssl reuseport backlog=16384
+    kong_admin_listen: 0.0.0.0:8001 reuseport backlog=16384, 0.0.0.0:8444 http2 ssl reuseport backlog=16384
+
+  roles:
+    - wunzeco.kong

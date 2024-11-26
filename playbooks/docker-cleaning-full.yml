@@ -1,0 +1,76 @@
+---
+#WARNING run it with -e ansible_python_interpreter="/opt/ansible/env35/bin/python3.5"
+#ansible-playbook -i inventory/production -v playbooks/docker-cleaning.yml -e ansible_python_interpreter="/opt/ansible/env35/bin/python3.5" -vvvv | tee setup.log
+
+#sudo docker logout https://docker.albandrieu.com:5000
+#sudo docker login registry.albandrieu.com
+
+# - hosts: docker-cleaning
+#   become: true
+#
+#   tasks:
+#     - name: Log into private registry
+#       docker_login:
+#         registry: "{{ docker_registry }}"
+#         username: "{{ docker_registry_user }}"
+#         password: "{{ docker_registry_password }}"
+# #        reauthorize: yes
+#       ignore_errors: true
+
+- hosts: docker-cleaning
+  become: true
+
+  tasks:
+    - name: Remove ubuntu image
+      docker_image:
+        state: absent
+        name: ubuntu:14.04
+      ignore_errors: true
+
+    - name: Remove hello-world image
+      docker_image:
+        state: absent
+        name: hello-world:latest
+        force: yes
+
+#    - name: Remove test image
+#      docker_image:
+#        state: absent
+#        name: docker.hub/nabla/ansible-jenkins-slave
+#        tag: test
+
+#For issue : Error pulling: too many links
+    - name: Remove untagged images
+      shell: "docker rmi $(docker images | grep \"<none>\" | awk ' { print $3} ')"
+      changed_when: false
+      ignore_errors: true
+
+#TODO http://blog.yohanliyanage.com/2015/05/docker-clean-up-after-yourself/
+#TODD must be run on a daily basis
+#Clean 1 week old containers
+#docker ps -a | grep 'weeks ago' | awk '{print $1}' | xargs --no-run-if-empty docker rm
+#Clean all containers
+#docker rm `docker ps --no-trunc -aq`
+
+    - name: Clean all exited containers
+      shell: "docker rm -v $(docker ps -a -q -f status=exited)"
+      changed_when: false
+      ignore_errors: true
+
+    - name: Clean all created containers
+      shell: "docker rm -v $(docker ps -a -q -f status=created)"
+      changed_when: false
+      ignore_errors: true
+
+    - name: Clean all created network
+      shell: "docker network rm $(docker network ls | tail -n+2 | awk '{if($2 !~ /bridge|none|host/){ print $1 }}')"
+      changed_when: false
+      ignore_errors: true
+
+#TODO below is so slow, we have to pull all the images again after
+    - name: Remove reclaimable images and volumes
+      command: "docker system prune -a --volumes -f"
+      changed_when: false
+      ignore_errors: true
+
+- import_playbook: docker-cleaning.yml

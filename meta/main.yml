@@ -1,0 +1,27 @@
+---
+dependencies:
+  - { role: albanandrieu.ansible_common }
+  # - { role: albanandrieu.ansible_cpp }
+  - { role: albanandrieu.cmake }
+  - { role: albanandrieu.scons }
+  - { role: albanandrieu.gcc }
+  - { role: albanandrieu.ansible-workstation }
+  - { role: albanandrieu.xvbf }
+  - { role: albanandrieu.jenkins_slave }
+  - { role: albanandrieu.java }
+  - { role: albanandrieu.selenium }
+
+galaxy_info:
+  author: Alban Andrieu
+  role_name: ansible_nabla
+  namespace: AlbanAndrieu
+  description: A role for gathering nabla infrastructure other ansible role
+  company: Nabla
+  license: GPLv3
+  min_ansible_version: 2.6.0
+  platforms:
+    - name: Ubuntu
+      versions:
+      - all
+  galaxy_tags:
+    - development

@@ -1,0 +1,61 @@
+---
+- hosts: "{{ hosts }}"
+  become: yes
+
+  tasks:
+
+    - name: Get disk usage
+      command: df -h
+      register: disk_usage
+
+    - name: Check disk space available
+      shell: df -h / | awk 'NR==2 {print $5}'
+      register: disk_usage
+
+    # Send Discord message when disk space is over 80%
+    # - name: Send Discord message
+    #   uri:
+    #     url: "{{ discord_webhook_url }}"
+    #     method: POST
+    #     body_format: json
+    #     body: '{"content": "Disk space on {{ inventory_hostname }} is above 80%!"}'
+    #     headers:
+    #       Content-Type: application/json
+    #     status_code: 204
+    #   when: disk_usage.stdout[:-1]|int > 80
+
+    # - name: Prune non-dangling, and dangling images
+    #   community.docker.docker_prune:
+    #     containers: false
+    #     images: true
+    #     images_filters:
+    #       dangling: false
+    #     networks: false
+    #     volumes: false
+    #     builder_cache: false
+
+    # Upgrade packages
+    - name: upgrade apt packages
+      become: true
+      apt:
+        upgrade: yes
+        update_cache: yes
+
+    # Check if reboot is required
+    - name: check if system reboot is required
+      become: true
+      stat:
+        path: /var/run/reboot-required
+      register: reboot_required
+
+    # Send Discord message when reboot is required
+    - name: Send Discord message
+      uri:
+        url: "{{ discord_webhook_url }}"
+        method: POST
+        body_format: json
+        body: '{"content": "Reboot required on {{ inventory_hostname }}"}'
+        headers:
+          Content-Type: application/json
+        status_code: 204
+      when: reboot_required.stat.exists

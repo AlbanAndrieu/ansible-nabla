@@ -1,0 +1,25 @@
+---
+
+- name: Apply common configuration to all nodes
+  hosts: common
+  gather_facts: false
+  remote_user: root
+
+  roles:
+    - albanandrieu.ansible_common
+
+  vars:
+       apt_notification_email: "alban.andrieu@free.fr"
+       apt_upgrade_system_enabled: no
+
+- name: Timezone
+  hosts: all
+  gather_facts: true
+  become: yes
+  tags:
+    - tz
+    - utc
+    - timezone
+
+  roles:
+    - yatesr.timezone

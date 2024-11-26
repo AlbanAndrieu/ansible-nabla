@@ -1,0 +1,44 @@
+---
+#ansible-playbook -i staging -c local -v docker-registry.yml --ask-pass -vvvv | tee setup.log
+#ansible-playbook -i staging -c local -v docker-registry.yml --limit albandri --ask-become-pass -vvvv | tee setup.log
+
+- hosts: docker-container-oracle
+
+  tasks:
+#    - name: Log into private registry
+#      docker_login:
+#        registry: https://docker.nabla.mobi/
+#        username: nabla
+#        password: microsoft
+#        state: present
+#        debug: true
+##        reauthorize: yes
+##        ignore_errors: true
+
+    - name: Inspect multiple images
+      docker_image_facts:
+        name:
+          - database-instantclient
+          - database-enterprise
+
+- hosts: docker-container-oracle
+#  become: true
+
+  tasks:
+    - name: Pull database-instantclient images
+      docker_container:
+        name: database-instantclient
+        image: store/oracle/database-instantclient:12.2.0.1
+        state: present
+        recreate: false
+        #pull: yes
+        #command: sleep infinity
+
+    - name: Pull database-enterprise images
+      docker_container:
+        name: database-enterprise
+        image: store/oracle/database-enterprise:12.2.0.1
+        state: present
+        recreate: false
+        #pull: yes
+        #command: sleep infinity

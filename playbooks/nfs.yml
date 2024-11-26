@@ -1,0 +1,8 @@
+---
+
+- name: Install nfs
+  hosts: workstation
+  become: true
+
+  roles:
+    - geerlingguy.nfs

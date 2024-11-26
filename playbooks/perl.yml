@@ -1,0 +1,16 @@
+---
+
+- name: configure cpan
+  hosts: RedHat-7*:RedHat-6*:CentOS-7*:CentOS-6*
+  become: true
+
+  roles:
+    - role: jermon.ansible-role-cpan
+
+- name: configure cpanm
+  hosts: jenkins-slaves
+  become: true
+
+  roles:
+    - role: anxs.perl
+      perl_cpanm_version: "1.7102"

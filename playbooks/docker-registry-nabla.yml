@@ -1,0 +1,122 @@
+#ansible-playbook -i production -c local -v docker-registry-fusionrisk.yml --ask-pass -vvvv | tee setup.log
+#ansible-playbook -i production -c local -v docker-registry-fusionrisk.yml --limit albandri.albandrieu.com --ask-become-pass -vvvv | tee setup.log
+
+- hosts: all
+  gather_facts: true
+  tasks:
+    - name: group hosts by distribution
+      group_by: key="{{ ansible_distribution }}-{{ ansible_distribution_version }}"
+
+- hosts: RedHat-7*:RedHat-6*:RedHat-5*:CentOS-7*:CentOS-6*:Ubuntu-17*:Ubuntu-16*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
+  gather_facts: false
+  tasks:
+    - name: group hosts for supported distributions
+      group_by: key="supported"
+
+- hosts: "!supported"
+  gather_facts: false
+  tasks:
+    - name: fail for unsupported distribution
+      fail: msg="{{ ansible_distribution }} {{ ansible_distribution_version }}
+                 is not a supported OS for a Tower installation.  Supported
+                 OSes include Red Hat Enterprise Linux 6/7, CentOS 6, or
+                 Ubuntu 12.04/13.04/14.04/16.04/17.04."
+    - debug: msg="Version {{ ansible_distribution }} {{ ansible_distribution_version }} {{ ansible_architecture }}"
+
+- hosts: docker-container
+#  become: true
+
+  tasks:
+    - name: Define DOCKER_CLIENT_TIMEOUT
+      shell: "echo $DOCKER_CLIENT_TIMEOUT"
+      environment:
+        DOCKER_CLIENT_TIMEOUT: "240"
+
+    - name: Echo DOCKER_CLIENT_TIMEOUT again
+      shell: "echo $DOCKER_CLIENT_TIMEOUT"
+
+    - name: Define COMPOSE_HTTP_TIMEOUT
+      shell: "echo $COMPOSE_HTTP_TIMEOUT"
+      environment:
+        COMPOSE_HTTP_TIMEOUT: "2000"
+
+    - name: Echo COMPOSE_HTTP_TIMEOUT again
+      shell: "echo $COMPOSE_HTTP_TIMEOUT"
+
+- hosts: docker-container
+  become: true
+
+  tasks:
+#    - name: Log into private registry and force re-authorization
+#      docker_login:
+#        registry: https://docker.nabla.mobi/
+#        username: nabla
+#        password: microsoft
+#        reauthorize: yes
+
+    - name: Inspect multiple images
+      docker_image_facts:
+        name:
+          - nabla/centos
+          - nabla/java
+
+- hosts: docker-container
+#  become: true
+
+  tasks:
+
+    - name: Pull ansible-jenkins-slave images
+      docker_container:
+        name: ansible-jenkins-slave
+        image: registry.nabla.mobi/fusion-risk/ansible-jenkins-slave
+        state: stopped
+        pull: yes
+        #command: sleep infinity
+
+    - name: Pull zaproxy images
+      docker_container:
+        name: zap2docker-stable
+        image: owasp/zap2docker-stable
+        state: stopped
+        pull: yes
+        #command: sleep infinity
+
+    - name: Pull centos images
+      docker_container:
+        name: centos
+        image: docker/nabla/centos:6.8-latest
+        state: stopped
+        pull: yes
+        #command: sleep infinity
+
+    - name: Pull selenium hub images
+      docker_container:
+        name: selenium-hub
+        image: selenium/hub
+        #state: stopped
+        pull: yes
+        #command: sleep infinity
+
+    - name: Pull selenium chrome images
+      docker_container:
+        name: selenium-node-chrome
+        image: selenium/node-chrome
+        state: stopped
+        pull: yes
+        #command: sleep infinity
+
+    - name: Pull selenium standalone chrome images
+      docker_container:
+        name: selenium-standalone-chrome-debug
+        image: selenium/standalone-chrome-debug
+        state: stopped
+        pull: yes
+        #command: sleep infinity
+
+    - name: Pull selenium standalone firefox images
+      docker_container:
+        name: selenium-standalone-firefox-debug
+        image: selenium/standalone-firefox-debug
+        state: stopped
+        pull: yes
+        #command: sleep infinity

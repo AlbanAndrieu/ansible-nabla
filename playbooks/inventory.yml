@@ -1,0 +1,20 @@
+- name: master1
+  box: ubuntu/trusty64
+  check_updates: false
+  net: private_network
+  ip: 192.168.11.33
+  forward_host_ssh_port: 2233
+  forward_host_port: 8380
+  forward_guest_port: 8380
+  mem: 8192
+  #script: jenkins2.x_bootstrap.sh
+
+- name: master2
+  box: ubuntu/trusty64
+  check_updates: false
+  net: private_network
+  ip: 192.168.11.34
+  forward_host_ssh_port: 2233
+  forward_host_port: 8381
+  forward_guest_port: 8380
+  mem: 8192

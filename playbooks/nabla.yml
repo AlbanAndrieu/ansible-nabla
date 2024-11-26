@@ -1,0 +1,262 @@
+---
+#ansible-playbook -i hosts-albandrieu -c local -v playbooks/nabla.yml --check --diff --ask-become-pass -vvvv
+
+- name: Assert platform is supported
+  hosts: all
+  remote_user: root
+  gather_facts: true
+
+  tasks:
+    - name: Assert platform is supported
+      assert:
+        that:
+          - ansible_os_family in ['Debian', 'RedHat', 'CentOS', 'Windows', 'Solaris']
+          - ansible_architecture in ['x86_64']
+
+- hosts: all
+  gather_facts: true
+  tasks:
+    - name: group hosts by distribution
+      group_by: key="{{ ansible_distribution }}-{{ ansible_distribution_version }}"
+
+- hosts: RedHat-7*:RedHat-6*:RedHat-5*:CentOS-7*:CentOS-6*:Ubuntu-20*:Ubuntu-19*:Ubuntu-18*:Ubuntu-17*:Ubuntu-16*:Ubuntu-15*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
+  gather_facts: false
+  tasks:
+    - name: group hosts for supported distributions
+      group_by: key="supported"
+
+- hosts: "!supported"
+  gather_facts: false
+  tasks:
+    - name: fail for unsupported distribution
+      fail: msg="{{ ansible_distribution }} {{ ansible_distribution_version }}
+                 is not a supported OS for a Tower installation.  Supported
+                 OSes include Red Hat Enterprise Linux 6/7/5, CentOS 6/7, or
+                 Ubuntu 12.04/13.04/14.04/15.04/16.04/17.04/18.04/19.04."
+    - debug: msg="Version {{ ansible_distribution }} {{ ansible_distribution_version }} {{ ansible_architecture }}"
+
+# USELESS playbook will fail before
+#- hosts: localhost
+#
+#  tasks:
+#    - name: Install Ansible-Galaxy dependencies
+#      shell: ansible-galaxy install -r ../requirements.yml -p ../roles/
+#      #shell: ansible-galaxy install -r ../requirements.yml -p ../roles/ --ignore-errors --force
+#      ignore_errors: true
+
+- import_playbook: python-bootstrap.yml
+
+- import_playbook: common.yml
+
+- import_playbook: dns.yml
+
+- import_playbook: python.yml
+
+- import_playbook: hostname.yml
+
+- import_playbook: administration.yml automount_enabled=false nis_enabled=false
+
+#- import_playbook: firewall.yml
+
+#- name: Apply security configuration
+#  hosts: security
+#  remote_user: root
+##  connection: local
+#
+#  roles:
+#    - security
+#
+#  vars:
+#       sudoers_enabled: no
+#       restart_ssh_enabled: false
+
+#- import_playbook: login.yml
+
+#- name: Install virtualbox
+#  hosts: virtualbox
+#  remote_user: root
+##  connection: local
+#
+#  roles:
+#    - virtualbox
+#
+#  vars:
+#      virtualbox_package_name: virtualbox
+#      virtualbox_dkms_enable: no
+
+
+- import_playbook: vagrant.yml
+
+#  vars:
+#       vagrant_libvirt_enabled: false
+#       vagrant_windows_enabled: false
+##      vagrant_url: https://dl.bintray.com/mitchellh/vagrant/vagrant_1.6.3_x86_64.deb
+
+- import_playbook: locale.yml
+
+#- import_playbook: zabbix.yml
+
+- import_playbook: webmin.yml
+
+- import_playbook: xvbf.yml
+
+- import_playbook: selenium.yml
+
+#- import_playbook: zfs.yml
+
+#- import_playbook: workstation.yml
+
+#- import_playbook: nexus.yml
+
+- import_playbook: tomcat.yml
+
+# This playbook deploys a simple standalone JBoss server.
+
+#- import_playbook: jboss.yml
+
+#- import_playbook: lamp.yml
+
+#WARNING jenkins-master role has disabled a2dissite 000-default
+- name: Configure and deploy the nabla php sample application code to apache
+  hosts: nabla-servers
+  remote_user: root
+#  connection: local
+
+  roles:
+    - albanandrieu.web
+
+  vars:
+       apache_listen_port: 7070
+       #jenkins_proxy_port: "{{ apache_listen_port }}" #TODO why is it needed!!!
+       phpmyadmin_mysql_user: root
+       phpmyadmin_mysql_password: microsoft
+       phpmyadmin_mysql_port: "{{ apache_listen_port }}"
+       php_date_timezone: "Europe/Paris"
+       mysql_innodb_log_file_size: "5M"
+       mysql_root_username: root
+       mysql_root_password: microsoft
+       docker_files_enable: yes
+       docker_files_generated_directory: "../roles/albanandrieu.web"
+
+- import_playbook: pagespeed.yml
+
+- import_playbook: evasive.yml
+
+- import_playbook: awstats.yml
+
+#- import_playbook: jenkins-master.yml
+
+- import_playbook: java.yml
+
+- import_playbook: maven.yml
+
+- import_playbook: chrome.yml google_talkplugin_enabled=false
+
+- import_playbook: docker.yml # must be before jenkins-slave
+
+- import_playbook: jenkins-slave.yml
+
+#- import_playbook: nodejs.yml
+
+- import_playbook: xvbf.yml
+
+- import_playbook: css.yml
+
+#- import_playbook: supervisor.yml
+
+#- import_playbook: sonar.yml
+
+#Below cmake conky is included in workstation role
+#- name: Install conky
+#  hosts: workstation
+#  remote_user: root
+#
+#  roles:
+#    - role: albanandrieu.conky
+
+- name: Install git
+  hosts: workstation
+  remote_user: root
+
+  roles:
+    - role: geerlingguy.git
+
+- name: Install subversion
+  hosts: workstation
+  remote_user: root
+  ignore_errors: true
+
+  roles:
+    - role: albanandrieu.subversion
+
+  vars:
+      subversion_owner: "{{ user }}"
+      subversion_group: "{{ group }}"
+
+#- name: Apply user shell configuration
+#  hosts: workstation
+#  remote_user: root
+##  connection: local
+#
+#  vars_files:
+#  - [ "roles/albanandrieu.shell/defaults/main.yml" ]
+#  - [ "roles/albanandrieu.shell/vars/default.yml" ]
+#  - [ "roles/albanandrieu.shell/vars/version.yml" ]
+#  - [ "roles/albanandrieu.shell/vars/custom-{{ ansible_distribution }}-{{ ansible_architecture }}.yml", "roles/albanandrieu.shell/vars/custom-{{ ansible_distribution }}.yml" ]
+#
+#  roles:
+#    - role: albanandrieu.shell
+#
+#  vars:
+#      docker_files_generated_directory: "../roles/albanandrieu.shell"
+#      docker_files_enable: yes
+#      newrelic_license_key: de35bf5d191ebb208d359b2cd24a60616a02b1f3
+#      shell_owner: "{{ user }}"
+#      shell_group: "{{ group }}"
+##      shell_owner_home: "{{ home }}"
+##      shell_env_directory: "{{ home }}/env/tmp"
+##      rhosts_hosts: []
+
+#- name: Install eclipse
+#  connection: local
+#  hosts: workstation
+#  remote_user: root
+#
+#  roles:
+#    - role: albanandrieu.eclipse
+#
+#  vars:
+#      docker_files_generated_directory: "../roles/albanandrieu.eclipse"
+#      docker_files_enable: yes
+#      #eclipse_base_dir: /workspace/eclipse
+#      #user: "albandri"
+#      #home: "/workspace/users/albandri10"
+
+- import_playbook: sublimetext.yml
+
+- import_playbook: zap.yml
+
+- import_playbook: jmeter.yml
+
+#- name: Install mon
+#  hosts: workstation
+#  remote_user: root
+##  connection: local
+#
+#  roles:
+#    - albanandrieu.mon
+#
+#  vars:
+#      apache_listen_port: 7070
+#      mon_localhost : "albandri"
+#      mon_custom_group: "nabla"
+#      mon_admin_email: "alban.andrieu@free.fr"
+#      mon_weekly_email: "team@free.fr"
+#      user: root
+#      home: "/root"
+
+- import_playbook: jdiskreport.yml
+
+- import_playbook: private-bower.yml
+
+- import_playbook: owasp-wte.yml

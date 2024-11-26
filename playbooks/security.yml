@@ -1,0 +1,28 @@
+---
+
+- name: Apply security configuration
+  hosts: security
+  become: true
+
+  roles:
+    - geerlingguy.security
+
+  vars:
+      # sudoers_enabled: no
+      security_ssh_port: 2849
+      restart_ssh_enabled: false
+      security_ssh_password_authentication: "yes"
+      security_ssh_permit_root_login: "no"
+      security_ssh_x11_forwarding: "yes"
+      security_fail2ban_enabled: false
+      # security_autoupdate_enabled: false # make yum to get stuck later
+      security_ssh_allowed_users:
+        - albandrieu
+        - albanandrieu
+      security_sudoers_passwordless:
+        - albandrieu
+        - albanandrieu
+
+#X11Forwarding yes
+#X11DisplayOffset 10
+#X11UseLocalhost yes

@@ -1,0 +1,32 @@
+#sudo ansible-playbook -i hosts-albandri -c local -v wordpress.yml | tee setup.log
+
+#- import_playbook: lamp.yml
+
+- name: Install wordpress
+  connection: local
+  hosts: workstation
+#  remote_user: root
+#  accelerate: true
+
+  roles:
+    - { role: darthwade.wordpress-apache,
+        apache_listen_port: 7078,
+        #jenkins_proxy_port: "{{ apache_listen_port }}" #TODO why is it needed!!!
+        phpmyadmin_mysql_user: root,
+        phpmyadmin_mysql_password: microsoft,
+        phpmyadmin_mysql_port: '{{ apache_listen_port }}',
+        php_date_timezone: "Europe/Paris",
+        mysql_innodb_log_file_size: "5M",
+        mysql_root_username: root,
+        mysql_root_password: microsoft,
+        #wp_version: 4.0,
+        wp_install_dir: '/var/www/wordpress',
+        wp_db_name: 'wordpress',
+        wp_db_user: '{{ mysql_root_username }}',
+        wp_db_password: '{{ mysql_root_password }}',
+        wp_db_host: 'localhost',
+        wp_apache_listen_port: '{{ apache_listen_port }}',
+        wp_apache_hostname: 'wordpress',
+        wp_apache_alias: 'localhost',
+        wp_apache_admin_email: 'admin@example.com'
+      }

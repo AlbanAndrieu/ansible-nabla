@@ -1,0 +1,42 @@
+---
+#ansible-playbook playbooks/certificate-new.yml -i inventory/production --limit albandrieu.com -vvvv --vault-password-file vault.passwd
+
+- hosts: jenkins-slaves
+  remote_user: root
+
+  tasks:
+    - name: set proxy_cdnurl_server to default
+      set_fact: proxy_cdnurl_server="albandrieu.com/download"
+
+    - name: Get the CA root certificate (1) NEW
+      get_url:
+        dest: ~/pki/ca-new.pem
+        url: https://{{ proxy_cdnurl_server }}/download/certs/NEW-CA-1.crt
+        timeout: 20
+        validate_certs: false
+        use_proxy: no
+      become: true
+      become_user: root
+
+- name: Install CA root certificate (1) NEW
+  hosts: jenkins-slaves
+  gather_facts: false
+  #remote_user: root
+  check_mode: no
+#  ignore_errors: yes
+  become: true
+  become_user: root
+
+  roles:
+    - role: ssl-ca-certificate
+      trust_ca_configs:
+        - name: ca-new
+          pki_dir: /root/pki/
+      tls_src_file_names:
+        ca: ca-new.pem
+        cert: '{{ inventory_hostname }}-new.pem'
+        key: '{{ inventory_hostname }}-key-new.pem'
+      tls_dest_chown:
+        owner: root
+        grp: root
+        remote_src: yes
