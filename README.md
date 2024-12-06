@@ -1,5 +1,5 @@
-## [![Nabla](http://albandrieu.com/nabla/index/assets/nabla/nabla-4.png)](https://github.com/AlbanAndrieu)  Deployment
-
+## [![Nabla](https://bababou.albandrieu.com/nabla/index/assets/nabla/nabla-4.pn)](https://github.com/AlbanAndrieu)  Deployment
+g
 Nabla ansible playbooks
 
 [![License](http://img.shields.io/:license-apache-blue.svg?style=flat-square)](http://www.apache.org/licenses/LICENSE-2.0.html)

@@ -9,7 +9,7 @@
 
   vars:
       # sudoers_enabled: no
-      security_ssh_port: 2849
+      security_ssh_port: 9922
       restart_ssh_enabled: false
       security_ssh_password_authentication: "yes"
       security_ssh_permit_root_login: "no"

@@ -1,4 +1,6 @@
 ---
+# cd roles
+# ln -s ../../ansible-shell/ albanandrieu.shell
 # from galaxy
 # ansible-galaxy install -r requirements.yml -p ./roles/ --ignore-errors
 # ansible-galaxy collection install -r requirements.yml
