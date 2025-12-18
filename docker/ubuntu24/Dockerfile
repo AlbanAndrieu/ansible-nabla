@@ -1,11 +1,11 @@
-# syntax=docker/dockerfile:1.10
+# syntax=docker/dockerfile:1
 # FROM docker.io/ubuntu:24.04 AS base
 FROM selenium/standalone-chrome:4.25.0-20240922 AS base
 # FROM selenium/standalone-chrome:4.8.3-20230328 AS base
 # FROM selenium/standalone-chrome:4.11.0-20230801 AS base
 
 # dockerfile_lint - ignore
-LABEL name="jm-ubuntu" vendor="nabla" version="2.0.9"
+LABEL name="nabla-ubuntu" vendor="nabla" version="2.0.10"
 
 # SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
@@ -358,8 +358,8 @@ ENV GOROOT=/usr/local/go
 ENV GOPATH=${UBUNTU_USER_HOME}/go
 ENV GO111MODULE=on
 
-RUN ${GOROOT}/bin/go install github.com/hashicorp/levant@main \
-&& ${GOROOT}/bin/go install github.com/aquasecurity/tfsec/cmd/tfsec@latest \
+# ${GOROOT}/bin/go install github.com/hashicorp/levant@main
+RUN ${GOROOT}/bin/go install github.com/aquasecurity/tfsec/cmd/tfsec@latest \
 && ${GOROOT}/bin/go install github.com/minamijoyo/tfupdate@latest \
 && ${GOROOT}/bin/go install mvdan.cc/sh/v3/cmd/shfmt@latest \
 && ${GOROOT}/bin/go install github.com/cweill/gotests/gotests@latest
@@ -378,7 +378,7 @@ RUN mkdir -p /usr/share/man/man1 && \
 
 # NOMAD
 
-ENV NOMAD_VERSION=${NOMAD_VERSION:-"1.8.4"}
+ENV NOMAD_VERSION=${NOMAD_VERSION:-"1.11.0"}
 ENV NOMAD_FILENAME=nomad_${NOMAD_VERSION}_linux_amd64.zip
 ENV NOMAD_URL=https://releases.hashicorp.com/nomad/${NOMAD_VERSION}/${NOMAD_FILENAME}
 

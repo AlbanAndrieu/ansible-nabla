@@ -34,7 +34,7 @@ WORKING_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # "${WORKING_DIR}/../clean.sh"
 
-# export DOCKER_BUILDKIT=1 # See https://github.com/moby/moby/issues/42261
+export DOCKER_BUILDKIT=1 # See https://github.com/moby/moby/issues/42261
 # export DOCKER_BUILDKIT=0
 # export BUILDKIT_STEP_LOG_MAX_SIZE=50000000
 # export BUILDKIT_STEP_LOG_MAX_SIZE=1073741824
