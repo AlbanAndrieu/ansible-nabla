@@ -10,11 +10,11 @@
     - role: nexus
 
   vars:
-      nexus_home: "/usr/local/{{ nexus_user }}"
+      nexus_home: "/opt/nexus"
       nexus_version_major : "3"
-      nexus_version_minor : "31.1-01"
-      nexus_user : nexus3
-      nexus_group : nexus3
+      nexus_version_minor : "87.1-01"
+      nexus_user : nexus
+      nexus_group : nexus
       nexus_service_name: "nexus-{{ nexus_version }}"
 
       ## Repositories Section
@@ -317,7 +317,7 @@
            indexable                                       : "true"
            searchable                                      : "true"
            localStorage                                    : "file"
-           remoteStorage                                   : "http://albandrieu.com:8081/nexus/content/groups/public/"
+           remoteStorage                                   : "https://nexus.albandrieu.com/nexus/content/groups/public/"
            externalConfiguration_proxyMode                 : "ALLOW"
            externalConfiguration_artifactMaxAge            : "1440"
            externalConfiguration_itemMaxAge                : "1440"
@@ -340,7 +340,7 @@
            indexable                                       : "true"
            searchable                                      : "true"
            localStorage                                    : "file"
-           remoteStorage                                   : "http://albandrieu.com:8081/nexus/content/repositories/releases/"
+           remoteStorage                                   : "https://nexus.albandrieu.com/repository/nabla-releases/"
            externalConfiguration_proxyMode                 : "ALLOW"
            externalConfiguration_artifactMaxAge            : "1440"
            externalConfiguration_itemMaxAge                : "1440"
@@ -363,7 +363,7 @@
            indexable                                       : "true"
            searchable                                      : "true"
            localStorage                                    : "file"
-           remoteStorage                                   : "http://albandrieu.com:8081/nexus/content/repositories/snapshots/"
+           remoteStorage                                   : "https://nexus.albandrieu.com/repository/nabla-snapshots/"
            externalConfiguration_proxyMode                 : "ALLOW"
            externalConfiguration_artifactMaxAge            : "1440"
            externalConfiguration_itemMaxAge                : "1440"

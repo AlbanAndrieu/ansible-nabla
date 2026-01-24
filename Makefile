@@ -43,7 +43,7 @@ build-ansible: ## Build workstation with ansible
 	pip install -r requirements.txt
 	ansible-galaxy install -r requirements.yml
 	@echo "=> Building ansible..."
-	./setup.sh
+	./scripts/setup.sh
 
 ## —— Build 🚀 —————————————————————————————————————————————————————————————————
 .PHONY: build
