@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import logging
 from glob import glob
 
@@ -53,7 +52,7 @@ for path in glob('roles/*/meta/main.yml'):
 
     add_role(dependent_role)
 
-    with open(path, 'r') as f:
+    with open(path) as f:
         for dependency in yaml.safe_load(f.read()).get('dependencies', []):
             try:
                 if isinstance(dependency, str):
@@ -66,6 +65,8 @@ for path in glob('roles/*/meta/main.yml'):
                     add_role(depended_role)
                     link_roles(dependent_role, depended_role)
             except:
-                logging.exception('Probleme with %s dependency: %s', dependent_role, dependency)
+                logging.exception(
+                    'Probleme with %s dependency: %s', dependent_role, dependency,
+                )
 dot.format = 'png'
 dot.render('roles.gv', view=True)

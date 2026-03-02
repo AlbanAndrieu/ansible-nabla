@@ -1,5 +1,4 @@
 ---
-
 - name: Install nodejs
   hosts: nodejs
   #remote_user: root
@@ -9,5 +8,5 @@
     - geerlingguy.nodejs
 
   vars:
-       nodejs_install_packages: false
-       nodejs_global_packages: []
+    nodejs_install_packages: false
+    nodejs_global_packages: []

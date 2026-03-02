@@ -1,5 +1,4 @@
 ---
-
 # ansible-playbook -i playbooks/hosts-albandri-test -v playbooks/virtualbox.yml --limit albandri-test -vvvv
 
 - name: Install virtualbox

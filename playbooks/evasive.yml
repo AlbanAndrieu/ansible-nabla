@@ -1,5 +1,4 @@
 ---
-
 - name: Install evasive
   hosts: apache-servers
   remote_user: root
@@ -8,4 +7,4 @@
     - role: albanandrieu.evasive
 
   vars:
-       apache_listen_port: 7070
+    apache_listen_port: 7070

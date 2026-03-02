@@ -1,26 +1,25 @@
-
 - name: Install java certificate for java
   hosts: RedHat-7*:RedHat-6*:RedHat-5*:CentOS-7*:CentOS-6*
   remote_user: root
   become: true
 
   roles:
-#    - role: java-certificate
-#      java_certificate_host: mail.google.com
-#      java_certificate_port: 443
+    #    - role: java-certificate
+    #      java_certificate_host: mail.google.com
+    #      java_certificate_port: 443
 
-#    - role: java-certificate
-#      java_certificate_host: nbala.freeboxos.fr
-#      java_certificate_port: 443
-#
-#    - role: java-certificate
-#      java_certificate_host: home.nabla.mobi
-#      java_certificate_port: 443
+    #    - role: java-certificate
+    #      java_certificate_host: nbala.freeboxos.fr
+    #      java_certificate_port: 443
+    #
+    #    - role: java-certificate
+    #      java_certificate_host: home.nabla.mobi
+    #      java_certificate_port: 443
 
-# Sonar
-#    - role: java-certificate
-#      java_certificate_host: home.nabla.mobi
-#      java_certificate_port: 8999
+    # Sonar
+    #    - role: java-certificate
+    #      java_certificate_host: home.nabla.mobi
+    #      java_certificate_port: 8999
 
     - role: java-certificate
       ignore_errors: true
@@ -40,8 +39,7 @@
   become: true
 
   roles:
-
-# Default standard oracle java 8
+    # Default standard oracle java 8
     - role: java-certificate
       ignore_errors: true
       java_path: "/usr/lib/jvm/java-8-oracle/"
@@ -54,15 +52,15 @@
       java_certificate_host: github.com
       java_certificate_port: 443
 
-# Dependency check
+    # Dependency check
     - role: java-certificate
       ignore_errors: true
       java_path: "/usr/lib/jvm/java-8-oracle/"
       java_certificate_host: api.nodesecurity.io
       java_certificate_port: 443
 
-# Default standard openjdk java 8
-# /usr/lib/jvm/java-8-openjdk-amd64/ java-openjdk
+    # Default standard openjdk java 8
+    # /usr/lib/jvm/java-8-openjdk-amd64/ java-openjdk
     - role: java-certificate
       ignore_errors: true
       java_path: "/usr/lib/jvm/java-openjdk"
@@ -75,7 +73,7 @@
       java_certificate_host: github.com
       java_certificate_port: 443
 
-# Dependency check
+    # Dependency check
     - role: java-certificate
       ignore_errors: true
       java_path: "/usr/lib/jvm/java-openjdk"

@@ -22,9 +22,9 @@
   tasks:
     - name: fail for unsupported distribution
       fail: msg="{{ ansible_distribution }} {{ ansible_distribution_version }}
-                 is not a supported OS for a Tower installation.  Supported
-                 OSes include Solaris 10, or
-                 Solaris 11"
+        is not a supported OS for a Tower installation.  Supported
+        OSes include Solaris 10, or
+        Solaris 11"
 
 - name: Apply common configuration to solaris nodes
   hosts: solaris

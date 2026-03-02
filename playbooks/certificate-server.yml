@@ -1,5 +1,4 @@
 ---
-
 - name: Install CA root certificate
   hosts: certificate_server
   gather_facts: false
@@ -10,7 +9,7 @@
 
   roles:
     - role: ssl-ca-certificate
-      trust_ca_pki_dir: '~/pki'
+      trust_ca_pki_dir: "~/pki"
 
 - name: Install server certificate
   hosts: certificate_server

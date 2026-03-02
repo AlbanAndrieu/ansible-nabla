@@ -3,10 +3,10 @@
 - name: Install monit
   hosts: workstation
   remote_user: root
-#  connection: local
+  #  connection: local
 
   roles:
     - monit
 
   vars:
-      monit_notify_email: "alban.andrieu@free.fr"
+    monit_notify_email: "alban.andrieu@free.fr"

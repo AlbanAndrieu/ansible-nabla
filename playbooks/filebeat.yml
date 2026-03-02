@@ -1,5 +1,4 @@
 ---
-
 #ansible-playbook -i inventory/production -v playbooks/filebeat.yml --limit albandri -vvvv | tee setup.log
 
 - name: Install filebeat
@@ -11,17 +10,17 @@
 
   vars:
     filebeat_output_elasticsearch_hosts:
-#      - "localhost:9200"
+      #      - "localhost:9200"
       - "150.151.160.25:9200"
 
     filebeat_output_logstash_hosts:
-#      - "localhost:5044"
+      #      - "localhost:5044"
       - "150.151.160.25:5044"
 
     filebeat_prospectors:
       - input_type: log
         paths:
-#          - "/var/log/*.log"
+          #          - "/var/log/*.log"
           - "/jenkins/jobs/*/builds/*/log"
           - /var/log/jenkins/jenkins.log
 
@@ -41,11 +40,11 @@
 
   vars:
     filebeat_output_elasticsearch_hosts:
-#      - "localhost:9200"
+      #      - "localhost:9200"
       - "192.168.1.24:9200"
 
     filebeat_output_logstash_hosts:
-#      - "localhost:5044"
+      #      - "localhost:5044"
       - "192.168.1.24:5044"
 
     filebeat_prospectors:

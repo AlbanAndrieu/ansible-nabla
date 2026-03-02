@@ -17,20 +17,20 @@
   tasks:
     - name: fail for unsupported distribution
       fail: msg="{{ ansible_distribution }} {{ ansible_distribution_version }}
-                 is not a supported OS for a Tower installation.  Supported
-                 OSes include Red Hat Enterprise Linux 6/7, CentOS 6, or
-                 Ubuntu 12.04/14.04."
+        is not a supported OS for a Tower installation.  Supported
+        OSes include Red Hat Enterprise Linux 6/7, CentOS 6, or
+        Ubuntu 12.04/14.04."
 
 # This playbook deploys a MySQL database.
 - name: Deploy MySQL and configure the databases
   hosts: mysql-servers
   remote_user: root
-#  connection: local
+  #  connection: local
 
   roles:
     - geerlingguy.mysql
 
   vars:
-       mysql_innodb_log_file_size: "5M"
-       mysql_root_username: root
-       mysql_root_password: microsoft
+    mysql_innodb_log_file_size: "5M"
+    mysql_root_username: root
+    mysql_root_password: microsoft

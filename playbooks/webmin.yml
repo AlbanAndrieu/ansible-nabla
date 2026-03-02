@@ -1,5 +1,4 @@
 ---
-
 - name: Install webmin
   hosts: webmin
   become: true

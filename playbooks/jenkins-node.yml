@@ -43,14 +43,14 @@
           Node automatically configured by Ansible.
           Do not change configuration manually, use jenkins-node.yml playbook instead.
         labels:
-        - flyweight
-        - docker-inside
-        - docker-compose
-        - ubuntu16
+          - flyweight
+          - docker-inside
+          - docker-compose
+          - ubuntu16
         numExecutors: 2
         env:
-        - key: OS_ARCH
-          value: x86Linux
+          - key: OS_ARCH
+            value: x86Linux
         credentialsId: 001 # jenkins@unix-slaves
         remoteFS: "{{ jenkins_slave_home }}/slave/"
         x_token: "{{ csrf.token }}"
@@ -67,36 +67,36 @@
           Node automatically configured by Ansible.
           Do not change configuration manually, use jenkins_node.yml playbook instead.
         labels:
-        - compil-winnt
-        - compil-winnt-kles
-        - compil-winnt-kles-64b
-        - windows-pipeline
-        - windows-vm
+          - compil-winnt
+          - compil-winnt-kles
+          - compil-winnt-kles-64b
+          - windows-pipeline
+          - windows-vm
         numExecutors: 1
         env:
-        - key: ARCH
-          value: winnt
-        - key: JAVA_HOME
-          value: "C:\\Program Files\\Java\\jdk1.7.0_80"
-        - key: SCONS
-          value: scons
-        - key: HOME
-          value: "C:\\Users\\jenkins"
-        - key: SHELL
-          value: "/usr/bin/bash"
+          - key: ARCH
+            value: winnt
+          - key: JAVA_HOME
+            value: "C:\\Program Files\\Java\\jdk1.7.0_80"
+          - key: SCONS
+            value: scons
+          - key: HOME
+            value: "C:\\Users\\jenkins"
+          - key: SHELL
+            value: "/usr/bin/bash"
         tools:
-        - key: "hudson.model.JDK$DescriptorImpl@java-latest"
-          home: "C:\\Program Files\\Java\\jdk1.8.0_201"
-        - key: "hudson.model.JDK$DescriptorImpl@jdk-17"
-          home: "C:\\Program Files\\Java\\jdk1.7.0_80"
-        - key: "hudson.model.JDK$DescriptorImpl@jdk-18-latest"
-          home: "C:\\tools\\jdk_8u201"
-        - key: "hudson.plugins.git.GitTool$DescriptorImpl@git-latest"
-          home: "C:\\Program Files\\Git\\bin\\git.exe"
-        - key: "hudson.plugins.git.GitTool$DescriptorImpl@git-system"
-          home: "C:\\Program Files\\Git\\git.exe"
-        - key: "hudson.plugins.git.GitTool$DescriptorImpl@git-windows"
-          home: "C:\\Program Files\\Git\\git.exe"
+          - key: "hudson.model.JDK$DescriptorImpl@java-latest"
+            home: "C:\\Program Files\\Java\\jdk1.8.0_201"
+          - key: "hudson.model.JDK$DescriptorImpl@jdk-17"
+            home: "C:\\Program Files\\Java\\jdk1.7.0_80"
+          - key: "hudson.model.JDK$DescriptorImpl@jdk-18-latest"
+            home: "C:\\tools\\jdk_8u201"
+          - key: "hudson.plugins.git.GitTool$DescriptorImpl@git-latest"
+            home: "C:\\Program Files\\Git\\bin\\git.exe"
+          - key: "hudson.plugins.git.GitTool$DescriptorImpl@git-system"
+            home: "C:\\Program Files\\Git\\git.exe"
+          - key: "hudson.plugins.git.GitTool$DescriptorImpl@git-windows"
+            home: "C:\\Program Files\\Git\\git.exe"
         credentialsId: 1234 # jenkins@unix-slaves
         agentLauncher: "hudson.slaves.JNLPLauncher"
         remoteFS: "C:\\jenkins"
@@ -106,8 +106,8 @@
           username: "{{ username }}"
           password: "{{ password }}"
       with_items:
-      - TEST1
-      - TEST2
+        - TEST1
+        - TEST2
 
     - name: Delete nodes from Jenkins
       jenkins_node:
@@ -118,5 +118,5 @@
           username: "{{ username }}"
           password: "{{ password }}"
       with_items:
-      # This are example VM that we no longer use, but the playbook can be run on against any node
-      - OLDCRAP
+        # This are example VM that we no longer use, but the playbook can be run on against any node
+        - OLDCRAP

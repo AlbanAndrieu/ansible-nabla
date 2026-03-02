@@ -11,8 +11,8 @@
   hosts: jenkins-slaves
   become: true
   any_errors_fatal: true
-#  no_log: true
-#  strategy: debug
+  #  no_log: true
+  #  strategy: debug
 
   roles:
     - albanandrieu.jenkins_slave
@@ -24,15 +24,15 @@
     shell_git:
       # Additional properties: 'shell_git_machine, shell_git_login, shell_git_email, shell_git_password, shell_git_name, shell_git_path, shell_git_ssl'.
       - {
-         shell_git_machine: "github.com",
-         shell_git_login: "AlbanAndrieu",
-         shell_git_email: "alban.andrieu@free.fr",
-         shell_git_password: "microsoft",
-         # Optional.
-         shell_git_name: "Andrieu, Alban",
-         shell_git_maildomain: "free.fr",
-         shell_git_path: "/usr/bin",
-         shell_git_ssl: false
+          shell_git_machine: "github.com",
+          shell_git_login: "AlbanAndrieu",
+          shell_git_email: "alban.andrieu@free.fr",
+          shell_git_password: "microsoft",
+          # Optional.
+          shell_git_name: "Andrieu, Alban",
+          shell_git_maildomain: "free.fr",
+          shell_git_path: "/usr/bin",
+          shell_git_ssl: false,
         }
     home_url: "http://albandrieu.com"
     nexus_url: "{{ home_url }}:8081"
@@ -49,8 +49,8 @@
     jenkins_slave_home: /workspace
     #jenkins_prefix: "/jenkins"
     #jenkins_url: {{ home_url }}:{{ jenkins_http_port }}{{ jenkins_prefix }}
-    jenkins_ssh_authorized_keys_fingerprints:   # Set known authorized keys for ssh
-    # Alban Andrieu
+    jenkins_ssh_authorized_keys_fingerprints: # Set known authorized keys for ssh
+      # Alban Andrieu
       - "ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAIEAio3SOQ9yeK6QfKqSFNKyTasuzjStxWevG1Vz1wgJIxPF+KB0XoMAPD081J+Bzj2LCDRSWisNv2L4xv2jbFxW/Pl7NEakoX47eNx3U+Dxaf+szeWBTryYcDUGkduLV7G8Qncm0luIFd+HDIe/Qir1E2f56Qu2uuBNE6Tz5TFt1vc= Alban"
     jenkins_ssh_fingerprints: # Set known hosts for ssh
       - "bitbucket.org,131.103.20.167 ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAubiN81eDcafrgMeLzaFPsw2kNvEcqTKl/VqLat/MaB33pZy0y3rJZtnqwR2qOOvbwKZYKiEO1O6VqNEBxKvJJelCq0dTXWT5pbO2gDXC6h6QDXCaHo6pOHGPUy+YBaGQRGuSusMEASYiWunYN0vCAI8QaXnWMXNMdFP3jHAJH0eDsoiGnLPBlBp4TNm6rYI74nMzgz3B9IikW4WVK+dc8KZJZWYjAuORU3jc1c/NPskD2ASinf8v3xnfXeukU0sJ5N6m5E8VLjObPEO+mN2t/FZTMZLiFqPWc/ALSqnMnnhwrNi2rbfg/rd/IpL8Le3pSBne8+seeFVBoGqzHM9yXw=="

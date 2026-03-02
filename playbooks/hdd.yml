@@ -1,5 +1,4 @@
 ---
-
 #ansible-playbook playbooks/hdd.yml -i inventory/production --limit albandrieu.com -vvvv
 
 # WARNING below order is important
@@ -85,7 +84,7 @@
       become: true
       ignore_errors: true
 
-#pvs && vgs && lvs
+    #pvs && vgs && lvs
 
     - name: hdd | Create sdd1
       command: pvcreate /dev/sdd1
@@ -93,12 +92,12 @@
       become: true
       ignore_errors: true
 
-#    - name: hdd | Extend sdb
-#      command: vgextend vgubuntu /dev/sdb
-#      when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and ansible_distribution_version not in ['12.04', '14.04']
-#      changed_when: false
-#      become: true
-#      ignore_errors: true
+    #    - name: hdd | Extend sdb
+    #      command: vgextend vgubuntu /dev/sdb
+    #      when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and ansible_distribution_version not in ['12.04', '14.04']
+    #      changed_when: false
+    #      become: true
+    #      ignore_errors: true
 
     - name: hdd | Extend sdb
       command: vgextend VolGroup00 /dev/sdb
@@ -219,19 +218,19 @@
       become: true
       ignore_errors: true
 
-# lvcreate -l 12805 -n workspace rhel_fr1cslvcacrhel71
-# lvcreate -l 12805 -n docker rhel_fr1cslvcacrhel71
-#
-# lvdisplay
-#
-# sudo mkfs -t ext4 /dev/rhel_fr1cslvcacrhel71/workspace
-# sudo mkfs -t xfs /dev/rhel_fr1cslvcacrhel71/workspace
-# sudo mkfs -t ext4 /dev/rhel_fr1cslvcacrhel71/docker
-# mkfs.xfs -n ftype=1 /dev/rhel_fr1cslvcacrhel71/docker
-#
-# sudo mkdir /workspace
-# sudo mkdir /docker
-#
+    # lvcreate -l 12805 -n workspace rhel_fr1cslvcacrhel71
+    # lvcreate -l 12805 -n docker rhel_fr1cslvcacrhel71
+    #
+    # lvdisplay
+    #
+    # sudo mkfs -t ext4 /dev/rhel_fr1cslvcacrhel71/workspace
+    # sudo mkfs -t xfs /dev/rhel_fr1cslvcacrhel71/workspace
+    # sudo mkfs -t ext4 /dev/rhel_fr1cslvcacrhel71/docker
+    # mkfs.xfs -n ftype=1 /dev/rhel_fr1cslvcacrhel71/docker
+    #
+    # sudo mkdir /workspace
+    # sudo mkdir /docker
+    #
     - name: hdd | Mount up device by label data
       mount:
         path: /data
@@ -284,19 +283,19 @@
         group: root
         mode: 0600
 
-# Check entry in /etc/fstab
-# sudo mount /workspace
-# sudo mount /docker
+    # Check entry in /etc/fstab
+    # sudo mount /workspace
+    # sudo mount /docker
 
-# extend size of logical volume
-# lvextend --resizefs -L +6G /dev/rhel_fr1cslvcacrhel71/swap
-# lvextend --resizefs -L +17G /dev/rhel_fr1cslvcacrhel71/root
-# #lvextend -l +100%FREE /dev/rhel_fr1cslvcacrhel71/root
-# RedHat 6
-# lvextend --resizefs -L +6G /dev/VolGroup00/usrvol
+    # extend size of logical volume
+    # lvextend --resizefs -L +6G /dev/rhel_fr1cslvcacrhel71/swap
+    # lvextend --resizefs -L +17G /dev/rhel_fr1cslvcacrhel71/root
+    # #lvextend -l +100%FREE /dev/rhel_fr1cslvcacrhel71/root
+    # RedHat 6
+    # lvextend --resizefs -L +6G /dev/VolGroup00/usrvol
 
-# IMPORTANT
-# Do not reboot the server if entry in wrong in fstab you will have IS team to get console on booting
+    # IMPORTANT
+    # Do not reboot the server if entry in wrong in fstab you will have IS team to get console on booting
 
     - name: hdd | Install hdd tools
       action: "{{ ansible_pkg_mgr }} name={{ item }} state={{ util_pkg_state|default('present') }}"
@@ -313,7 +312,6 @@
         - gnome-disk-utility
         - baobab
       become: true
-
 # Change quota on xfs for oracle database
 # See https://help.directadmin.com/item.php?id=557
 

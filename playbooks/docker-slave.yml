@@ -10,22 +10,22 @@
 
 - name: Apply common configuration to all nodes
   hosts: jenkins-slaves
-#  gather_facts: false
+  #  gather_facts: false
   become: true
   remote_user: root
-#  connection: local
+  #  connection: local
 
   roles:
     - albanandrieu.ansible_common
 
   vars:
-     apt_install_packages_list  :
-     stats_enabled              : false
-     utilities_enabled          : false
-     editors_enabled            : true
-     cowsay_enabled             : true
-     perl_enabled               : false
-     python_enabled             : true
+    apt_install_packages_list:
+    stats_enabled: false
+    utilities_enabled: false
+    editors_enabled: true
+    cowsay_enabled: true
+    perl_enabled: false
+    python_enabled: true
 
 #- name: Install Docker
 #  hosts: jenkins-slaves
@@ -43,9 +43,9 @@
   hosts: jenkins-slaves
   become: true
   tasks:
-  - name: copy build.sh
-    copy: src=roles/albanandrieu.jenkins_slave dest=./
-    #mode=0777
+    - name: copy build.sh
+      copy: src=roles/albanandrieu.jenkins_slave dest=./
+      #mode=0777
 
 #- name: Copy Dockerfile to build image
 #  hosts: jenkins-slaves
@@ -70,9 +70,9 @@
   hosts: jenkins-slaves
   become: true
   tasks:
-  - name: Check or build image
-#    docker_image: path="/home/vagrant" name="{{ docker_image_name }}" state=present
-    docker_image: path="/home/vagrant" name="nabla/ansible-jenkins-slave" state=present
+    - name: Check or build image
+      #    docker_image: path="/home/vagrant" name="{{ docker_image_name }}" state=present
+      docker_image: path="/home/vagrant" name="nabla/ansible-jenkins-slave" state=present
 
 #- name: Build new version of image
 #  hosts: jenkins-slaves
@@ -88,16 +88,15 @@
   hosts: jenkins-slaves
   become: true
   tasks:
-  - name: Run docker containers
-    local_action:
-      module: docker
-      docker_url: tcp://127.0.0.1:4243
-      image: "{{ docker_image_name }}"
-      name: jenkins-slaves
-      state: present
-      publish_all_ports: yes
-    with_sequence: count=2
-
+    - name: Run docker containers
+      local_action:
+        module: docker
+        docker_url: tcp://127.0.0.1:4243
+        image: "{{ docker_image_name }}"
+        name: jenkins-slaves
+        state: present
+        publish_all_ports: yes
+      with_sequence: count=2
 #- name: Remove image from local docker storage:
 #  hosts: jenkins-slaves
 #  sudo: yes

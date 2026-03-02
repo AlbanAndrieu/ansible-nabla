@@ -23,7 +23,7 @@
   gather_facts: false
   #remote_user: root
   check_mode: no
-#  ignore_errors: yes
+  #  ignore_errors: yes
   become: true
   become_user: root
 
@@ -34,8 +34,8 @@
           pki_dir: /root/pki/
       tls_src_file_names:
         ca: ca-new.pem
-        cert: '{{ inventory_hostname }}-new.pem'
-        key: '{{ inventory_hostname }}-key-new.pem'
+        cert: "{{ inventory_hostname }}-new.pem"
+        key: "{{ inventory_hostname }}-key-new.pem"
       tls_dest_chown:
         owner: root
         grp: root

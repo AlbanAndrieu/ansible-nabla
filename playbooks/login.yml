@@ -1,12 +1,11 @@
-
 - name: Apply login configuration
   hosts: security
   remote_user: root
-#  connection: local
+  #  connection: local
 
   roles:
     - ansible-login
 
   vars:
-       login_umask: 077
-       login_usergroups_enab: 'no'
+    login_umask: 077
+    login_usergroups_enab: "no"

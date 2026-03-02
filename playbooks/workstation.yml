@@ -23,9 +23,9 @@
   tasks:
     - name: fail for unsupported distribution
       fail: msg="{{ ansible_distribution }} {{ ansible_distribution_version }}
-                 is not a supported OS for a Tower installation.  Supported
-                 OSes include Red Hat Enterprise Linux 5/6/7, CentOS 6/7, or
-                 Ubuntu 12.04/13.04/14.04/16.04/17.04/18.04/19.04/20.4/21.04/22.04."
+        is not a supported OS for a Tower installation.  Supported
+        OSes include Red Hat Enterprise Linux 5/6/7, CentOS 6/7, or
+        Ubuntu 12.04/13.04/14.04/16.04/17.04/18.04/19.04/20.4/21.04/22.04."
     - debug: msg="Version {{ ansible_distribution }} {{ ansible_distribution_version }} {{ ansible_architecture }}"
 
 #- import_playbook: jenkins-full.yml workstation_enabled=true automount_enabled=true nis_enabled=true
@@ -36,25 +36,25 @@
 
 - name: Apply workstation configuration
   hosts: workstation
-#  remote_user: albandrieu
-#  connection: local
+  #  remote_user: albandrieu
+  #  connection: local
   become: true
 
   roles:
     - albanandrieu.workstation
 
   vars:
-       dropbox_user_host: "2366450895"
-       dash_enabled: no
-       webapps_enabled: no
-       ansigenome_enabled: no
-       apache_create_vhosts: no
-       nodejs_enabled: false
-       variety_owner: "{{ user }}"
-       variety_group: "{{ group }}"
-       dropbox_owner: "{{ user }}"
-       dropbox_group: "{{ group }}"
-       jenkins_user: "{{ user }}"
+    dropbox_user_host: "2366450895"
+    dash_enabled: no
+    webapps_enabled: no
+    ansigenome_enabled: no
+    apache_create_vhosts: no
+    nodejs_enabled: false
+    variety_owner: "{{ user }}"
+    variety_group: "{{ group }}"
+    dropbox_owner: "{{ user }}"
+    dropbox_group: "{{ group }}"
+    jenkins_user: "{{ user }}"
 
 - import_playbook: chrome.yml
 
@@ -80,7 +80,7 @@
     - albanandrieu.tomcat
 
   vars:
-      tomcat_version: "9"
+    tomcat_version: "9"
 
 - name: Install samba
   hosts: workstation
@@ -99,7 +99,6 @@
 
   roles:
     - andrewrothstein.terraform
-
 #- import_playbook: kubernetes.yml
 
 #- import_playbook: collectd.yml

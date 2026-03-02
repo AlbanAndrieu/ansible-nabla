@@ -35,7 +35,6 @@
     - clean
     - docker
     - vm
-
 # TODO certificate cleaning
 
 #rm -f ~/pki/registry.pem

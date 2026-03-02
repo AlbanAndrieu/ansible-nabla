@@ -30,9 +30,9 @@
   tasks:
     - name: fail for unsupported distribution
       fail: msg="{{ ansible_distribution }} {{ ansible_distribution_version }}
-                 is not a supported OS for a Tower installation.  Supported
-                 OSes include Red Hat Enterprise Linux 6/7/5, CentOS 6/7, or
-                 Ubuntu 12.04/13.04/14.04/15.04/16.04/17.04/18.04/19.04."
+        is not a supported OS for a Tower installation.  Supported
+        OSes include Red Hat Enterprise Linux 6/7/5, CentOS 6/7, or
+        Ubuntu 12.04/13.04/14.04/15.04/16.04/17.04/18.04/19.04."
     - debug: msg="Version {{ ansible_distribution }} {{ ansible_distribution_version }} {{ ansible_architecture }}"
 
 # USELESS playbook will fail before
@@ -84,7 +84,6 @@
 #      virtualbox_package_name: virtualbox
 #      virtualbox_dkms_enable: no
 
-
 - import_playbook: vagrant.yml
 
 #  vars:
@@ -120,23 +119,23 @@
 - name: Configure and deploy the nabla php sample application code to apache
   hosts: nabla-servers
   remote_user: root
-#  connection: local
+  #  connection: local
 
   roles:
     - albanandrieu.web
 
   vars:
-       apache_listen_port: 7070
-       #jenkins_proxy_port: "{{ apache_listen_port }}" #TODO why is it needed!!!
-       phpmyadmin_mysql_user: root
-       phpmyadmin_mysql_password: microsoft
-       phpmyadmin_mysql_port: "{{ apache_listen_port }}"
-       php_date_timezone: "Europe/Paris"
-       mysql_innodb_log_file_size: "5M"
-       mysql_root_username: root
-       mysql_root_password: microsoft
-       docker_files_enable: yes
-       docker_files_generated_directory: "../roles/albanandrieu.web"
+    apache_listen_port: 7070
+    #jenkins_proxy_port: "{{ apache_listen_port }}" #TODO why is it needed!!!
+    phpmyadmin_mysql_user: root
+    phpmyadmin_mysql_password: microsoft
+    phpmyadmin_mysql_port: "{{ apache_listen_port }}"
+    php_date_timezone: "Europe/Paris"
+    mysql_innodb_log_file_size: "5M"
+    mysql_root_username: root
+    mysql_root_password: microsoft
+    docker_files_enable: yes
+    docker_files_generated_directory: "../roles/albanandrieu.web"
 
 - import_playbook: pagespeed.yml
 
@@ -190,8 +189,8 @@
     - role: albanandrieu.subversion
 
   vars:
-      subversion_owner: "{{ user }}"
-      subversion_group: "{{ group }}"
+    subversion_owner: "{{ user }}"
+    subversion_group: "{{ group }}"
 
 #- name: Apply user shell configuration
 #  hosts: workstation

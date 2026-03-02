@@ -13,7 +13,7 @@
   pre_tasks:
     - name: Set cpu_driver
       set_fact:
-       cpu_driver: "{% if 'GenuineIntel' in ansible_processor %}intel{% elif 'AuthenticAMD' in ansible_processor %}amd{%else%}unknown{%endif%}"
+        cpu_driver: "{% if 'GenuineIntel' in ansible_processor %}intel{% elif 'AuthenticAMD' in ansible_processor %}amd{%else%}unknown{%endif%}"
 
     - debug: msg="{{ cpu_driver }}"
 
@@ -22,10 +22,10 @@
       changed_when: false
 
 #Remove older nvidia driver from kernel
-    #modprobe -v nvidia-uvm
-    #dpkg -l | grep nvidia
-    #apt-get remove nvidia-*
-    #apt-get purge nvidia-304
+#modprobe -v nvidia-uvm
+#dpkg -l | grep nvidia
+#apt-get remove nvidia-*
+#apt-get purge nvidia-304
 
 - name: Configure opencl
   hosts: opencl
@@ -44,7 +44,6 @@
     kmod_install: true
 
     #modprobe -v nvidia-uvm
-
 #cat /proc/driver/nvidia/version
 
 #sudo update-alternatives --config opencl-intel-runtime

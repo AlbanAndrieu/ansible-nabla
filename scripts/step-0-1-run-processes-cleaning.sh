@@ -14,8 +14,7 @@ fi
 
 echo -e "${red} Find stale processes ${NC}"
 
-function kill_matching_processes
-{
+function kill_matching_processes {
   local process_name_matcher="$1"
   # shellcheck disable=SC2038
   find /proc -maxdepth 1 -user "${TARGET_USER}" -type d -mmin +200 -exec basename {} \; | xargs ps | grep "${process_name_matcher}" | awk '{ print $1 }'

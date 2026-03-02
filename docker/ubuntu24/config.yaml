@@ -64,11 +64,9 @@ fileExistenceTests:
     permissions: "-rwxr-xr-x"
 
   # NPM cache cleaned (to spare disk space)
-
   # - name: "ubuntu npm"
   #   path: "/home/ubuntu/.npm/"
   #   shouldExist: false
-
   # check default pip (pip3)
   - name: "pip local"
     path: "/usr/local/bin/pip" # /usr/bin/pip
@@ -207,8 +205,7 @@ commandTests:
   - name: "check default pip 24.0 version with python 3.12"
     command: "pip"
     args: ["--version"]
-    expectedOutput:
-      ["pip 24.0.*	 from /usr/lib/python3/dist-packages/pip.*.*"]
+    expectedOutput: ["pip 24.0.*	 from /usr/lib/python3/dist-packages/pip.*.*"]
 
   # - name: "check default python version"
   #   command: "python"
@@ -218,8 +215,7 @@ commandTests:
   - name: "check pip 3 24.0 version"
     command: "pip3"
     args: ["--version"]
-    expectedOutput:
-      ["pip 24.0.* from /usr/lib/python3/dist-packages/pip.*.*"]
+    expectedOutput: ["pip 24.0.* from /usr/lib/python3/dist-packages/pip.*.*"]
 
   - name: "check python 3 version"
     command: "python3"

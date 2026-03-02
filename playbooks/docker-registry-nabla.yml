@@ -18,13 +18,13 @@
   tasks:
     - name: fail for unsupported distribution
       fail: msg="{{ ansible_distribution }} {{ ansible_distribution_version }}
-                 is not a supported OS for a Tower installation.  Supported
-                 OSes include Red Hat Enterprise Linux 6/7, CentOS 6, or
-                 Ubuntu 12.04/13.04/14.04/16.04/17.04."
+        is not a supported OS for a Tower installation.  Supported
+        OSes include Red Hat Enterprise Linux 6/7, CentOS 6, or
+        Ubuntu 12.04/13.04/14.04/16.04/17.04."
     - debug: msg="Version {{ ansible_distribution }} {{ ansible_distribution_version }} {{ ansible_architecture }}"
 
 - hosts: docker-container
-#  become: true
+  #  become: true
 
   tasks:
     - name: Define DOCKER_CLIENT_TIMEOUT
@@ -47,12 +47,12 @@
   become: true
 
   tasks:
-#    - name: Log into private registry and force re-authorization
-#      docker_login:
-#        registry: https://docker.nabla.mobi/
-#        username: nabla
-#        password: microsoft
-#        reauthorize: yes
+    #    - name: Log into private registry and force re-authorization
+    #      docker_login:
+    #        registry: https://docker.nabla.mobi/
+    #        username: nabla
+    #        password: microsoft
+    #        reauthorize: yes
 
     - name: Inspect multiple images
       docker_image_facts:
@@ -61,10 +61,9 @@
           - nabla/java
 
 - hosts: docker-container
-#  become: true
+  #  become: true
 
   tasks:
-
     - name: Pull ansible-jenkins-slave images
       docker_container:
         name: ansible-jenkins-slave

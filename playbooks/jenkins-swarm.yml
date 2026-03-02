@@ -14,19 +14,20 @@
   sudo: yes
   user: vagrant
   connection: local
-#  remote_user: vagrant
+  #  remote_user: vagrant
 
-#  vars_prompt:
-#  - name: jenkins_username
-#    prompt: "What is your jenkins user?"
-#    private: no
-#  - name: jenkins_password
-#    prompt: "What is your jenkins password?"
-#    private: yes
+  #  vars_prompt:
+  #  - name: jenkins_username
+  #    prompt: "What is your jenkins user?"
+  #    private: no
+  #  - name: jenkins_password
+  #    prompt: "What is your jenkins password?"
+  #    private: yes
 
   roles:
-    - { role: albanandrieu.jenkins-swarm,
+    - {
+        role: albanandrieu.jenkins-swarm,
         docker_files_enable: yes,
         docker_files_generated_directory: "../roles/albanandrieu.jenkins-swarm",
-        jenkins_home: "/jenkins"
+        jenkins_home: "/jenkins",
       }

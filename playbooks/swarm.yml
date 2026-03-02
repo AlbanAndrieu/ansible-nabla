@@ -1,4 +1,3 @@
-
 #- name: Register slaves to master
 #  hosts: jenkins-swarm
 #

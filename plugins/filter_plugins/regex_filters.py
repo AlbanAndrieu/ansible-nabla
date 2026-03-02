@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import re
 import traceback
 
@@ -6,7 +5,7 @@ from ansible.module_utils._text import to_text
 from ansible.utils.unsafe_proxy import AnsibleUnsafeText
 
 
-class FilterModule(object):
+class FilterModule:
 
     def filters(self: object):
         return {

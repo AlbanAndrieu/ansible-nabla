@@ -1,5 +1,4 @@
 ---
-
 # To prevent OOM errors on docker hosts (can be included with docker playbook)
 # ansible-playbook playbooks/swap.yml -i inventory/hosts --limit "localhost"  --extra-vars "swap_file_size_mo=32000 other_variable=foo"   -vvvv --ask-become-pass --ask-vault-pass
 

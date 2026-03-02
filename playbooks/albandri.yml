@@ -63,9 +63,9 @@
   tasks:
     - name: fail for unsupported distribution
       fail: msg="{{ ansible_distribution }} {{ ansible_distribution_version }}
-                 is not a supported OS for a Tower installation.  Supported
-                 OSes include Red Hat Enterprise Linux 6/7/5, CentOS 6/7, or
-                 Ubuntu 12.04/13.04/14.04/15.04/16.04/17.04/18.04/19.04."
+        is not a supported OS for a Tower installation.  Supported
+        OSes include Red Hat Enterprise Linux 6/7/5, CentOS 6/7, or
+        Ubuntu 12.04/13.04/14.04/15.04/16.04/17.04/18.04/19.04."
     - debug: msg="Version {{ ansible_distribution }} {{ ansible_distribution_version }} {{ ansible_architecture }}"
 
 - import_playbook: python-bootstrap.yml
@@ -167,17 +167,16 @@
   hosts: workstation
   remote_user: root
 
-
   roles:
     - albanandrieu.workstation
 
   vars:
-       dropbox_user_host: "2366450895"
-       nodejs_enabled: false
-       variety_owner: "{{ user }}"
-       variety_group: "{{ group }}"
-       dropbox_owner: "{{ user }}"
-       dropbox_group: "{{ group }}"
+    dropbox_user_host: "2366450895"
+    nodejs_enabled: false
+    variety_owner: "{{ user }}"
+    variety_group: "{{ group }}"
+    dropbox_owner: "{{ user }}"
+    dropbox_group: "{{ group }}"
 
 #- name: Apply swarm configuration to all jenkins slaves
 #  hosts: jenkins-swarm
@@ -222,22 +221,21 @@
   hosts: nabla-servers
   remote_user: root
 
-
   roles:
     - albanandrieu.web
 
   vars:
-       apache_listen_port: 7070
-       #jenkins_proxy_port: "{{ apache_listen_port }}" #TODO why is it needed!!!
-       phpmyadmin_mysql_user: root
-       phpmyadmin_mysql_password: microsoft
-       phpmyadmin_mysql_port: "{{ apache_listen_port }}"
-       php_date_timezone: "Europe/Paris"
-       mysql_innodb_log_file_size: "5M"
-       mysql_root_username: root
-       mysql_root_password: microsoft
-       docker_files_enable: yes
-       docker_files_generated_directory: "../roles/albanandrieu.web"
+    apache_listen_port: 7070
+    #jenkins_proxy_port: "{{ apache_listen_port }}" #TODO why is it needed!!!
+    phpmyadmin_mysql_user: root
+    phpmyadmin_mysql_password: microsoft
+    phpmyadmin_mysql_port: "{{ apache_listen_port }}"
+    php_date_timezone: "Europe/Paris"
+    mysql_innodb_log_file_size: "5M"
+    mysql_root_username: root
+    mysql_root_password: microsoft
+    docker_files_enable: yes
+    docker_files_generated_directory: "../roles/albanandrieu.web"
 
 - import_playbook: pagespeed.yml
   tags:
@@ -300,10 +298,10 @@
 
 - name: Apply common shell configuration
   hosts: workstation
-#  remote_user: root
+  #  remote_user: root
   remote_user: root
 
-#  become: true
+  #  become: true
 
   roles:
     - role: albanandrieu.shell
@@ -313,41 +311,41 @@
     shell_git_configure_enabled: yes
     shell_git:
       # Additional properties: 'shell_git_machine, shell_git_login, shell_git_email, shell_git_password, shell_git_name, shell_git_path, shell_git_ssl'.
-         - {
-           shell_git_machine: '82.231.208.223',
-           shell_git_login: 'AlbanAndrieu',
-           shell_git_email: 'alban.andrieu@free.fr',
-           shell_git_password: 'microsoft',
-           shell_git_name: "Andrieu, Alban",
-           shell_git_maildomain: "free.fr",
-           shell_git_path: '/usr/bin',
-           shell_git_ssl: false,
-           shell_git_meld_enabled: yes,
-           shell_git_editor: "gedit"
-           }
-#         - {
-#           shell_git_machine: 'https://github.com',
-#           shell_git_login: 'AlbanAndrieu',
-#           shell_git_email: 'alban.andrieu@free.fr',
-#           shell_git_password: 'microsoft',
-#           shell_git_name: "Andrieu, Alban",
-#           shell_git_path: '/usr/bin',
-#           shell_git_ssl: false,
-#           shell_git_meld_enabled: yes,
-#           shell_git_editor: "gedit"
-#           }
-#         - {
-#           shell_git_machine: 'https://bitbucket.org',
-#           shell_git_login: 'AlbanAndrieu',
-#           shell_git_email: 'alban.andrieu@free.fr',
-#           shell_git_password: 'microsoft',
-#           shell_git_name: "Andrieu, Alban",
-#           shell_git_path: '/usr/bin',
-#           shell_git_ssl: false,
-#           shell_git_meld_enabled: yes,
-#           shell_git_editor: "gedit"
-#           }
-#      shell_rlogin_enabled: no
+      - {
+          shell_git_machine: "82.231.208.223",
+          shell_git_login: "AlbanAndrieu",
+          shell_git_email: "alban.andrieu@free.fr",
+          shell_git_password: "microsoft",
+          shell_git_name: "Andrieu, Alban",
+          shell_git_maildomain: "free.fr",
+          shell_git_path: "/usr/bin",
+          shell_git_ssl: false,
+          shell_git_meld_enabled: yes,
+          shell_git_editor: "gedit",
+        }
+    #         - {
+    #           shell_git_machine: 'https://github.com',
+    #           shell_git_login: 'AlbanAndrieu',
+    #           shell_git_email: 'alban.andrieu@free.fr',
+    #           shell_git_password: 'microsoft',
+    #           shell_git_name: "Andrieu, Alban",
+    #           shell_git_path: '/usr/bin',
+    #           shell_git_ssl: false,
+    #           shell_git_meld_enabled: yes,
+    #           shell_git_editor: "gedit"
+    #           }
+    #         - {
+    #           shell_git_machine: 'https://bitbucket.org',
+    #           shell_git_login: 'AlbanAndrieu',
+    #           shell_git_email: 'alban.andrieu@free.fr',
+    #           shell_git_password: 'microsoft',
+    #           shell_git_name: "Andrieu, Alban",
+    #           shell_git_path: '/usr/bin',
+    #           shell_git_ssl: false,
+    #           shell_git_meld_enabled: yes,
+    #           shell_git_editor: "gedit"
+    #           }
+    #      shell_rlogin_enabled: no
     shell_maven_enabled: no
     newrelic_license_key: de35bf5d191ebb208d359b2cd24a60616a02b1f3
     docker_files_enable: no
@@ -380,18 +378,17 @@
 - name: Install mon
   hosts: workstation
 
-
   roles:
     - albanandrieu.mon
 
   vars:
-      apache_listen_port: 7070
-      mon_localhost : "albandri"
-      mon_custom_group: "nabla"
-      mon_admin_email: "alban.andrieu@free.fr"
-      mon_weekly_email: "team@free.fr"
-      user: root
-      home: "/root"
+    apache_listen_port: 7070
+    mon_localhost: "albandri"
+    mon_custom_group: "nabla"
+    mon_admin_email: "alban.andrieu@free.fr"
+    mon_weekly_email: "team@free.fr"
+    user: root
+    home: "/root"
 
 - import_playbook: jdiskreport.yml
   tags:

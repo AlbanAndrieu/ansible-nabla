@@ -17,9 +17,9 @@
   tasks:
     - name: fail for unsupported distribution
       fail: msg="{{ ansible_distribution }} {{ ansible_distribution_version }}
-                 is not a supported OS for a Tower installation.  Supported
-                 OSes include Red Hat Enterprise Linux 6/7, CentOS 6, or
-                 Ubuntu 12.04/14.04."
+        is not a supported OS for a Tower installation.  Supported
+        OSes include Red Hat Enterprise Linux 6/7, CentOS 6, or
+        Ubuntu 12.04/14.04."
 
 # This playbook can be run using vagrant (on virtual box).
 - name: Install subversion
@@ -31,13 +31,13 @@
     - role: albanandrieu.subversion
 
   vars:
-      subversion_previous_enabled: true
-      subversion_previous_codename: precise
-      subversion_rabbitvcs_enabled: no
-      subversion_major    : '1'
-      subversion_minor    : '8'
-      subversion_revision : '8'
-      subversion_version : "{{subversion_major}}.{{subversion_minor}}.{{subversion_revision}}"
-      subversion_ubuntu: '{{ subversion_version }}-1ubuntu3.2'
-      subversion_owner: "{{ user }}"
-      subversion_group: "{{ group }}"
+    subversion_previous_enabled: true
+    subversion_previous_codename: precise
+    subversion_rabbitvcs_enabled: no
+    subversion_major: "1"
+    subversion_minor: "8"
+    subversion_revision: "8"
+    subversion_version: "{{subversion_major}}.{{subversion_minor}}.{{subversion_revision}}"
+    subversion_ubuntu: "{{ subversion_version }}-1ubuntu3.2"
+    subversion_owner: "{{ user }}"
+    subversion_group: "{{ group }}"

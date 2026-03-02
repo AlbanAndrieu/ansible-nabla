@@ -1,5 +1,4 @@
 ---
-
 #ansible all -m setup -i hosts-albandri --limit albandri -vvvv
 
 # ansible-playbook -i inventory/hosts-albandrieu -c local -v playbooks/lamp.yml --ask-become-pass -vvvv
@@ -54,7 +53,7 @@
     php_default_version_debian: "7.3"
     php_mysql_package: "php7.3-mysql"
     __php_mysql_package: "php7.3-mysql"
-    php_version: '7.3'
+    php_version: "7.3"
     php_memory_limit: "128M"
     php_max_execution_time: "90"
     php_upload_max_filesize: "256M"
@@ -69,9 +68,9 @@
   roles:
     - geerlingguy.mysql
     - geerlingguy.apache
-#    - geerlingguy.php-versions
+    #    - geerlingguy.php-versions
     - geerlingguy.php
-#    - geerlingguy.php-xdebug
+    #    - geerlingguy.php-xdebug
     - geerlingguy.php-mysql
 # TODO fix
 #    - geerlingguy.phpmyadmin
@@ -80,7 +79,4 @@
   become: true
 
   roles:
-    - {
-      role: ansible-swapfile,
-      swapfile_size: 4GiB
-      }
+    - { role: ansible-swapfile, swapfile_size: 4GiB }

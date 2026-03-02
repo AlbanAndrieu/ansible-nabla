@@ -5,7 +5,7 @@
 
 - hosts: all
   gather_facts: true
-#  gather_subset: hardware
+  #  gather_subset: hardware
   tasks:
     - name: group hosts by distribution
       group_by: key="{{ ansible_distribution }}-{{ ansible_distribution_version }}"
@@ -21,9 +21,9 @@
   tasks:
     - name: fail for unsupported distribution
       fail: msg="{{ ansible_distribution }} {{ ansible_distribution_version }}
-                 is not a supported OS for a Tower installation.  Supported
-                 OSes include Red Hat Enterprise Linux 6/7, CentOS 6/7, or
-                 Ubuntu 12.04/13.04/14.04/15.04/16.04/17.04/18.04/19.04/20.04/21.04."
+        is not a supported OS for a Tower installation.  Supported
+        OSes include Red Hat Enterprise Linux 6/7, CentOS 6/7, or
+        Ubuntu 12.04/13.04/14.04/15.04/16.04/17.04/18.04/19.04/20.04/21.04."
     - debug: msg="Version {{ ansible_distribution }} {{ ansible_distribution_version }} {{ ansible_architecture }}"
 
 # USELESS playbook will fail before

@@ -3,12 +3,11 @@
   become: yes
 
   tasks:
-
-  - name: install core packages
-    apt:
-      name:
-        - prometheus-node-exporter
-        #- nfs-common
-        #- qemu-guest-agent
-        #- unzip
-      update_cache: yes
+    - name: install core packages
+      apt:
+        name:
+          - prometheus-node-exporter
+          #- nfs-common
+          #- qemu-guest-agent
+          #- unzip
+        update_cache: yes

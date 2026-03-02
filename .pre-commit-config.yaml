@@ -79,8 +79,7 @@ repos:
       #   args: [--branch, develop, --branch, main, --branch, master, --branch, release/*]
       - id: end-of-file-fixer
       - id: fix-byte-order-marker
-      - id: fix-encoding-pragma
-        args: [--remove]
+
       - id: requirements-txt-fixer
       - id: sort-simple-yaml
       - id: file-contents-sorter
@@ -94,14 +93,7 @@ repos:
     rev: v4.5.0
     hooks:
       - id: validate_manifest
-  - repo: https://github.com/asottile/reorder_python_imports.git
-    rev: v3.16.0
-    hooks:
-      - id: reorder-python-imports
-  - repo: https://github.com/asottile/pyupgrade
-    rev: v3.21.2
-    hooks:
-      - id: pyupgrade
+
   - repo: https://github.com/asottile/add-trailing-comma
     rev: v4.0.0
     hooks:

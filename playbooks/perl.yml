@@ -1,5 +1,4 @@
 ---
-
 - name: configure cpan
   hosts: RedHat-7*:RedHat-6*:CentOS-7*:CentOS-6*
   become: true

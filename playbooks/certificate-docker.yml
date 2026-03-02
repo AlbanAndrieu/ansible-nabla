@@ -1,4 +1,3 @@
-
 # Below is no more needed for ubuntu-19 and docker 19.03.3
 - hosts: Ubuntu-18*:Ubuntu-17*:Ubuntu-16*:Ubuntu-14*:Ubuntu-12*
 
@@ -21,12 +20,12 @@
   ignore_errors: yes
   remote_user: root
 
-#See /root/pki/docker.pem
+  #See /root/pki/docker.pem
   roles:
     - role: ssl-ca-certificate
-      trust_ca_pki_dir: '~/pki'
-      trust_ca_pki_prefix: 'registry'
-      trust_ca_cert_prefix: 'registry'
+      trust_ca_pki_dir: "~/pki"
+      trust_ca_pki_prefix: "registry"
+      trust_ca_cert_prefix: "registry"
 
 #TODO secure docker https://docs.docker.com/engine/security/https/
 #mkdir -pv ~/.docker

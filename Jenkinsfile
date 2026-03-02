@@ -1,16 +1,16 @@
 #!/usr/bin/env groovy
 @Library(value='jenkins-pipeline-scripts@master', changelog=false) _
 
-String DOCKER_REGISTRY="index.docker.io/v1".trim()
-String DOCKER_ORGANISATION="nabla".trim()
-String DOCKER_TAG="1.0.11".trim()
-String DOCKER_TAG_NEXT="1.0.12".trim()
-String DOCKER_NAME="ansible-jenkins-slave-docker".trim()
+String DOCKER_REGISTRY = 'index.docker.io/v1'.trim()
+String DOCKER_ORGANISATION = 'nabla'.trim()
+String DOCKER_TAG = '1.0.11'.trim()
+String DOCKER_TAG_NEXT = '1.0.12'.trim()
+String DOCKER_NAME = 'ansible-jenkins-slave-docker'.trim()
 
-String DOCKER_REGISTRY_URL="https://${DOCKER_REGISTRY}".trim()
-String DOCKER_REGISTRY_URL="https://${DOCKER_REGISTRY}".trim()
-String DOCKER_REGISTRY_CREDENTIAL=env.DOCKER_REGISTRY_CREDENTIAL ?: "hub-docker-nabla".trim()
-String DOCKER_IMAGE="${DOCKER_ORGANISATION}/${DOCKER_NAME}:${DOCKER_TAG}".trim()
+String DOCKER_REGISTRY_URL = "https://${DOCKER_REGISTRY}".trim()
+String DOCKER_REGISTRY_URL = "https://${DOCKER_REGISTRY}".trim()
+String DOCKER_REGISTRY_CREDENTIAL = env.DOCKER_REGISTRY_CREDENTIAL ?: 'hub-docker-nabla'.trim()
+String DOCKER_IMAGE = "${DOCKER_ORGANISATION}/${DOCKER_NAME}:${DOCKER_TAG}".trim()
 
 String DOCKER_OPTS_BASIC = getDockerOpts()
 String DOCKER_OPTS_COMPOSE = getDockerOpts(isDockerCompose: true, isLocalJenkinsUser: false)
@@ -50,11 +50,11 @@ pipeline {
     booleanParam(defaultValue: true, description: 'Run sphinx', name: 'BUILD_DOC')
   }
   //environment {
-    //BRANCH_NAME = "${env.BRANCH_NAME}".replaceAll("feature/","")
-    //PROJECT_BRANCH = "${env.GIT_BRANCH}".replaceFirst("origin/","")
-    //BUILD_ID = "${env.BUILD_ID}"
-    //DOCKER_BUILDKIT = "1" // https://github.com/moby/buildkit/issues/1004
-    //COMPOSE_DOCKER_CLI_BUILD = "1"
+  //BRANCH_NAME = "${env.BRANCH_NAME}".replaceAll("feature/","")
+  //PROJECT_BRANCH = "${env.GIT_BRANCH}".replaceFirst("origin/","")
+  //BUILD_ID = "${env.BUILD_ID}"
+  //DOCKER_BUILDKIT = "1" // https://github.com/moby/buildkit/issues/1004
+  //COMPOSE_DOCKER_CLI_BUILD = "1"
   //}
   options {
     disableConcurrentBuilds()
@@ -68,20 +68,20 @@ pipeline {
     stage('Setup') {
       steps {
         script {
-          setUp(description: "Ansible")
+          setUp(description: 'Ansible')
 
           lock("${params.TARGET_SLAVE}") {
             echo "Lock on ${params.TARGET_SLAVE} released" // we do not have many molecule label
-            sh "rm -f *.log || true"
+            sh 'rm -f *.log || true'
           } // lock
         }
       }
     }
-    stage("Ansible pre-commit check") {
+    stage('Ansible pre-commit check') {
       steps {
         script {
           // TODO testPreCommit
-          tee("pre-commit.log") {
+          tee('pre-commit.log') {
             sh "#!/bin/bash \n" +
               "whoami \n" +
               "source ./scripts/run-python.sh\n" +
@@ -91,13 +91,13 @@ pipeline {
         } // script
       }
     } // stage pre-commit
-    stage("Ansible CMDB Report") {
+    stage('Ansible CMDB Report') {
       when {
         expression { params.BUILD_ONLY == false && params.BUILD_CMDB == true }
       }
       steps {
         script {
-          runAnsibleCmbd(shell: "./scripts/run-ansible-cmbd.sh")
+          runAnsibleCmbd(shell: './scripts/run-ansible-cmbd.sh')
         } // script
       }
     }
@@ -106,13 +106,13 @@ pipeline {
         expression { params.BUILD_ONLY == false && params.BUILD_DOC == true }
       }
       environment {
-        PYTHON_MAJOR_VERSION = "3.8"
+        PYTHON_MAJOR_VERSION = '3.8'
       }
       // Creates documentation using Sphinx and publishes it on Jenkins
       // Copy of the documentation is rsynced
       steps {
         script {
-          runSphinx(shell: "export PYTHON_MAJOR_VERSION=3.8 && ../scripts/run-python.sh && ./build.sh", targetDirectory: "fusionrisk-ansible/")
+          runSphinx(shell: 'export PYTHON_MAJOR_VERSION=3.8 && ../scripts/run-python.sh && ./build.sh', targetDirectory: 'fusionrisk-ansible/')
         }
       }
     }
@@ -139,7 +139,6 @@ pipeline {
 
             echo "Init result: ${currentBuild.result}"
             echo "Init currentResult: ${currentBuild.currentResult}"
-
           } // JENKINS_URL
         } // script
       } // steps
@@ -147,7 +146,7 @@ pipeline {
 
     stage('SonarQube analysis') {
       environment {
-        SONAR_SCANNER_OPTS = "-Xmx4g"
+        SONAR_SCANNER_OPTS = '-Xmx4g'
         SONAR_USER_HOME = "$WORKSPACE"
       }
       when {
@@ -161,7 +160,7 @@ pipeline {
 
           withSonarQubeWrapper(verbose: true,
             skipMaven: true,
-            repository: "ansible-nabla")
+            repository: 'ansible-nabla')
         } // script
       } // steps
     } // stage SonarQube analysis
@@ -172,9 +171,7 @@ pipeline {
       }
       steps {
         script {
-
-          testAnsibleRole(roleName: "ansiblebit.oracle-java")
-
+          testAnsibleRole(roleName: 'ansiblebit.oracle-java')
         } // script
       } // steps
     } // stage
@@ -187,24 +184,24 @@ pipeline {
       //  MOLECULE_DEBUG="${params.MOLECULE_DEBUG ? '--debug' : ' '}"  // syntax: important to have the space ' '
       //}
       parallel {
-        stage("administration") {
+        stage('administration') {
           steps {
             script {
-              testAnsibleRole(roleName: "administration")
+              testAnsibleRole(roleName: 'administration')
             }
           }
         }
-        stage("common") {
+        stage('common') {
           steps {
             script {
-              testAnsibleRole(roleName: "common")
+              testAnsibleRole(roleName: 'common')
             }
           }
         }
-        stage("security") {
+        stage('security') {
           steps {
             script {
-              testAnsibleRole(roleName: "security")
+              testAnsibleRole(roleName: 'security')
             }
           }
         }
@@ -216,17 +213,17 @@ pipeline {
         expression { params.BUILD_MOLECULE == true && params.BUILD_ONLY == false }
       }
       parallel {
-        stage("cleaning") {
+        stage('cleaning') {
           steps {
             script {
-              testAnsibleRole(roleName: "cleaning")
+              testAnsibleRole(roleName: 'cleaning')
             }
           }
         }
-        stage("DNS") {
+        stage('DNS') {
           steps {
             script {
-              testAnsibleRole(roleName: "dns")
+              testAnsibleRole(roleName: 'dns')
             }
           }
         }
@@ -242,82 +239,75 @@ pipeline {
           steps {
             script {
               if (!params.SKIP_DOCKER) {
-
                 echo "Init result: ${currentBuild.result}"
                 echo "Init currentResult: ${currentBuild.currentResult}"
 
                 tee('docker-build-ubuntu-18.04.log') {
-
                   try {
-
                     configFileProvider([configFile(fileId: 'vault.passwd',  targetLocation: 'vault.passwd', variable: 'ANSIBLE_VAULT_PASS_FILE')]) {
                       withCredentials([string(credentialsId: 'fr-ansible-vault-password', variable: 'ANSIBLE_VAULT_PASS')]) {
                         echo "${ANSIBLE_VAULT_PASS}"
 
                         sh 'mkdir -p .ssh/ || true'
 
-                        DOCKER_BUILD_ARGS="--pull --build-arg ANSIBLE_VAULT_PASS=${ANSIBLE_VAULT_PASS} "
-                        DOCKER_BUILD_ARGS+= getDockerProxyOpts(isProxy: true)
+                        DOCKER_BUILD_ARGS = "--pull --build-arg ANSIBLE_VAULT_PASS=${ANSIBLE_VAULT_PASS} "
+                        DOCKER_BUILD_ARGS += getDockerProxyOpts(isProxy: true)
 
                         if (isCleanRun() == true) {
-                          DOCKER_BUILD_ARGS+=" --no-cache"
+                          DOCKER_BUILD_ARGS += ' --no-cache'
                         }
 
-                           withCredentials([
+                        withCredentials([
                                [$class: 'UsernamePasswordMultiBinding',
                                credentialsId: DOCKER_REGISTRY_CREDENTIAL,
                                usernameVariable: 'USERNAME',
                                passwordVariable: 'PASSWORD']
                            ]) {
-                           def container = docker.build("${DOCKER_REGISTRY}/${DOCKER_ORGANISATION}/${DOCKER_NAME}:1.0.0", "${docker_build_args} -f docker/ubuntu16/Dockerfile . ")
-                           container.inside {
-                             sh 'echo test'
+                          def container = docker.build("${DOCKER_REGISTRY}/${DOCKER_ORGANISATION}/${DOCKER_NAME}:1.0.0", "${docker_build_args} -f docker/ubuntu16/Dockerfile . ")
+                          container.inside {
+                            sh 'echo test'
                               archiveArtifacts artifacts: '*.log, /home/jenkins/npm/cache/_logs/*-debug.log', excludes: null, fingerprint: false, onlyIfSuccessful: false
-                           }
+                          }
 
-                           docker.image("${DOCKER_REGISTRY}/${DOCKER_ORGANISATION}/${DOCKER_NAME}:${DOCKER_TAG_NEXT}").withRun("-u root --entrypoint='/entrypoint.sh'", "/bin/bash") {c ->
-
-                             logs = sh (
+                          docker.image("${ DOCKER_REGISTRY}/${DOCKER_ORGANISATION}/${DOCKER_NAME}:${DOCKER_TAG_NEXT}").withRun("-u root --entrypoint='/entrypoint.sh'", '/bin/bash') {c ->
+                            logs = sh(
                                script: "docker logs ${c.id}",
                                returnStatus: true
                              )
 
-                             echo "LOGS RETURN CODE : ${logs}"
-                             if (logs == 0) {
-                                 echo "LOGS SUCCESS"
+                            echo "LOGS RETURN CODE : ${logs}"
+                            if (logs == 0) {
+                              echo 'LOGS SUCCESS'
                              } else {
-                                 echo "LOGS FAILURE"
-                                 sh "exit 1" // this fails the stage
-                                 //currentBuild.result = 'FAILURE'
-                             }
+                              echo 'LOGS FAILURE'
+                              sh 'exit 1' // this fails the stage
+                            //currentBuild.result = 'FAILURE'
+                            }
                            } // docker.image
 
-                           containers.put("ubuntu-18.04", container)
-
+                          containers.put('ubuntu-18.04', container)
                          } // withCredentials
-
                       } // ANSIBLE_VAULT_PASS
                     } // vault configFileProvider
-
                   } catch (exc) {
-                    echo 'Error: There were errors in tests : ' + exc.toString()
+                    echo 'Error: There were errors in tests : ' + exc
                     currentBuild.result = 'UNSTABLE'
-                    logs = "FAIL" // make sure other exceptions are recorded as failure too
-                    //error 'There are errors in tests'
+                    logs = 'FAIL' // make sure other exceptions are recorded as failure too
+                  //error 'There are errors in tests'
                   } finally {
-                    echo "finally"
+                    echo 'finally'
                   } // finally
 
-                  cst = sh (
+                  cst = sh(
                     script: "bash scripts/docker-test.sh ${DOCKER_NAME} ${DOCKER_TAG_NEXT} 2>&1 > docker-build-ubuntu-18.04-cst.log ",
                     returnStatus: true
                   )
 
                   echo "CONTAINER STRUCTURE TEST RETURN CODE : ${cst}"
                   if (cst == 0) {
-                    echo "CONTAINER STRUCTURE TEST SUCCESS"
+                    echo 'CONTAINER STRUCTURE TEST SUCCESS'
                   } else {
-                    echo "CONTAINER STRUCTURE TEST FAILURE"
+                    echo 'CONTAINER STRUCTURE TEST FAILURE'
                     echo "WARNING : CST failed, check output at ${env.BUILD_URL}artifact/docker-build-ubuntu-18.04-cst.log"
                     // and ${env.BUILD_URL}artifact/docker-build-cst.json
                     currentBuild.result = 'UNSTABLE'
@@ -325,14 +315,13 @@ pipeline {
 
                   echo "Init result: ${currentBuild.result}"
                   echo "Init currentResult: ${currentBuild.currentResult}"
-
                 } // tee
               } // if
             } // script
           } // steps
           post {
             always {
-              archiveArtifacts artifacts: "docker-build-cst.json, *.log, target/ansible-lint*, docker/**/config*.yaml, docker/**/Dockerfile*", onlyIfSuccessful: false, allowEmptyArchive: true
+              archiveArtifacts artifacts: 'docker-build-cst.json, *.log, target/ansible-lint*, docker/**/config*.yaml, docker/**/Dockerfile*', onlyIfSuccessful: false, allowEmptyArchive: true
             }
           } // post
         } // stage Ubuntu 18.04
@@ -344,119 +333,108 @@ pipeline {
           steps {
             script {
               if (! params.SKIP_DOCKER) {
-
                 tee('docker-build-ubuntu-20.04.log') {
-
                     try {
-
                       configFileProvider([configFile(fileId: 'vault.passwd',  targetLocation: 'vault.passwd', variable: 'ANSIBLE_VAULT_PASS_FILE')]) {
-
                         withCredentials([string(credentialsId: 'fr-ansible-vault-password', variable: 'ANSIBLE_VAULT_PASS')]) {
                           echo "${ANSIBLE_VAULT_PASS}"
 
                           sh 'mkdir -p .ssh/ || true'
 
-                          DOCKER_TAG_NEXT_UBUNTU_20="1.1.17"
+                          DOCKER_TAG_NEXT_UBUNTU_20 = '1.1.17'
 
-                          DOCKER_BUILD_ARGS=" --pull --build-arg ANSIBLE_VAULT_PASS=${ANSIBLE_VAULT_PASS}"
-                          DOCKER_BUILD_ARGS+= getDockerProxyOpts(isProxy: true)
+                          DOCKER_BUILD_ARGS = " --pull --build-arg ANSIBLE_VAULT_PASS=${ANSIBLE_VAULT_PASS}"
+                          DOCKER_BUILD_ARGS += getDockerProxyOpts(isProxy: true)
 
                           if (isCleanRun() == true) {
-                            DOCKER_BUILD_ARGS+=" --no-cache"
+                            DOCKER_BUILD_ARGS += ' --no-cache'
                           }
 
-                         withCredentials([
+                        withCredentials([
                              [$class: 'UsernamePasswordMultiBinding',
                              credentialsId: DOCKER_REGISTRY_CREDENTIAL,
                              usernameVariable: 'USERNAME',
                              passwordVariable: 'PASSWORD']
                          ]) {
-                           def container = docker.build("${DOCKER_ORGANISATION}/${DOCKER_NAME}:${DOCKER_TAG_NEXT_UBUNTU_20}", "${DOCKER_BUILD_ARGS} -f docker/ubuntu20/Dockerfile . ")
-                           container.inside {
-                             sh 'echo test'
-                           }
+                          def container = docker.build("${DOCKER_ORGANISATION}/${DOCKER_NAME}:${DOCKER_TAG_NEXT_UBUNTU_20}", "${DOCKER_BUILD_ARGS} -f docker/ubuntu20/Dockerfile . ")
+                          container.inside {
+                            sh 'echo test'
+                          }
 
-                           //docker run -i -t --entrypoint /bin/bash ${myImg.imageName()}
-                           docker.image("${DOCKER_ORGANISATION}/${DOCKER_NAME}:${DOCKER_TAG_NEXT_UBUNTU_20}").withRun("-u root --entrypoint='/entrypoint.sh'", "/bin/bash") {c ->
-                             logs = sh (
+                          //docker run -i -t --entrypoint /bin/bash ${myImg.imageName()}
+                          docker.image("${ DOCKER_ORGANISATION}/${DOCKER_NAME}:${DOCKER_TAG_NEXT_UBUNTU_20}").withRun("-u root --entrypoint='/entrypoint.sh'", '/bin/bash') {c ->
+                            logs = sh(
                                script: "docker logs ${c.id}",
                                returnStatus: true
                              )
 
-                             echo "LOGS RETURN CODE : ${logs}"
-                             if (logs == 0) {
-                                 echo "LOGS SUCCESS"
+                            echo "LOGS RETURN CODE : ${logs}"
+                            if (logs == 0) {
+                              echo 'LOGS SUCCESS'
                              } else {
-                                 echo "LOGS FAILURE"
-                                 sh "exit 1" // this fails the stage
-                                 //currentBuild.result = 'FAILURE'
-                             }
-
+                              echo 'LOGS FAILURE'
+                              sh 'exit 1' // this fails the stage
+                            //currentBuild.result = 'FAILURE'
+                            }
                            } // docker.image
 
-                           containers.put("ubuntu-20.04", container)
-
+                          containers.put('ubuntu-20.04', container)
                         } // withCredentials
 
-                        echo "TODO JUNIT"
+                        echo 'TODO JUNIT'
 
                         // TODO
                         //junit "target/jenkins-full-*.xml"
                         //junit "ansible-lint.xml, pylint-junit-result.xml"
-
                         } // ANSIBLE_VAULT_PASS
-
                       } // vault configFileProvider
-
                     } catch (exc) {
-                      echo 'Error: There were errors in tests. '+exc.toString()
+                      echo 'Error: There were errors in tests. ' + exc
                       currentBuild.result = 'UNSTABLE'
-                      logs = "FAIL" // make sure other exceptions are recorded as failure too
-                      //error 'There are errors in tests'
+                      logs = 'FAIL' // make sure other exceptions are recorded as failure too
+                    //error 'There are errors in tests'
                     } finally {
-                      echo "finally"
+                      echo 'finally'
                     } // finally
 
-                    cst = sh (
+                    cst = sh(
                       script: "export CST_CONFIG=docker/ubuntu20/config.yaml && bash scripts/docker-test.sh ${DOCKER_NAME} ${DOCKER_TAG_NEXT_UBUNTU_20} 2>&1 > docker-build-ubuntu-20.04-cst.log ",
                       returnStatus: true
                     )
 
                     echo "CONTAINER STRUCTURE TEST RETURN CODE : ${cst}"
                     if (cst == 0) {
-                      echo "CONTAINER STRUCTURE TEST SUCCESS"
+                      echo 'CONTAINER STRUCTURE TEST SUCCESS'
                     } else {
-                      echo "CONTAINER STRUCTURE TEST FAILURE"
+                      echo 'CONTAINER STRUCTURE TEST FAILURE'
                       echo "WARNING : CST failed, check output at ${env.BUILD_URL}artifact/docker-build-ubuntu-20.04-cst.log"
-                      //currentBuild.result = 'UNSTABLE'
+                    //currentBuild.result = 'UNSTABLE'
                     }
 
                     echo "Init result: ${currentBuild.result}"
                     echo "Init currentResult: ${currentBuild.currentResult}"
 
-                    sh "docker images"
+                    sh 'docker images'
 
                     if (isReleaseBranch()) {
-                      String DOCKER_IMAGE_BUILD="${DOCKER_ORGANISATION}/${DOCKER_NAME}:${DOCKER_TAG_NEXT_UBUNTU_20}".trim()
-                      String DOCKER_IMAGE_NEXT="${DOCKER_REGISTRY_TMP}/${DOCKER_ORGANISATION}/${DOCKER_NAME}:${DOCKER_TAG_NEXT_UBUNTU_20}".trim()
+                      String DOCKER_IMAGE_BUILD = "${DOCKER_ORGANISATION}/${DOCKER_NAME}:${DOCKER_TAG_NEXT_UBUNTU_20}".trim()
+                      String DOCKER_IMAGE_NEXT = "${DOCKER_REGISTRY_TMP}/${DOCKER_ORGANISATION}/${DOCKER_NAME}:${DOCKER_TAG_NEXT_UBUNTU_20}".trim()
 
                       try {
                         sh "docker tag ${DOCKER_IMAGE_BUILD} ${DOCKER_IMAGE_NEXT}"
-                        //sh "docker push ${DOCKER_IMAGE_NEXT}"
+                      //sh "docker push ${DOCKER_IMAGE_NEXT}"
                       } catch (exc) {
-                        echo "Warn: There was a problem pushing image to registry " + exc.toString()
+                        echo 'Warn: There was a problem pushing image to registry ' + exc
                         currentBuild.result = 'UNSTABLE'
                       }
                     } // isReleaseBranch
-
                 } // tee
-
               }
             }
           } // steps
           post {
             always {
-              archiveArtifacts artifacts: "docker-*.json, *.log, target/ansible-lint*, docker/**/config*.yaml, docker/**/Dockerfile*", onlyIfSuccessful: false, allowEmptyArchive: true
+              archiveArtifacts artifacts: 'docker-*.json, *.log, target/ansible-lint*, docker/**/config*.yaml, docker/**/Dockerfile*', onlyIfSuccessful: false, allowEmptyArchive: true
             }
           } // post
         } // stage Ubuntu 20.04
@@ -466,20 +444,18 @@ pipeline {
           }
           steps {
             script {
-
               echo "Init result: ${currentBuild.result}"
               echo "Init currentResult: ${currentBuild.currentResult}"
 
-              String DOCKER_IMAGE_BUILD="${DOCKER_ORGANISATION}/${DOCKER_NAME}:${DOCKER_TAG_NEXT}".trim()
-              String DOCKER_IMAGE_NEXT="${DOCKER_REGISTRY_TMP}/${DOCKER_ORGANISATION}/${DOCKER_NAME}:${DOCKER_TAG_NEXT}".trim()
+              String DOCKER_IMAGE_BUILD = "${DOCKER_ORGANISATION}/${DOCKER_NAME}:${DOCKER_TAG_NEXT}".trim()
+              String DOCKER_IMAGE_NEXT = "${DOCKER_REGISTRY_TMP}/${DOCKER_ORGANISATION}/${DOCKER_NAME}:${DOCKER_TAG_NEXT}".trim()
 
               if (JENKINS_URL ==~ /https:\/\/albandrieu.*\/jenkins\/|https:\/\/todo.*\/jenkins\// ) {
-                echo "JENKINS is supported"
+                echo 'JENKINS is supported'
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
                   build job:'nabla-servers-bower-sample/master', propagate: false, wait: true
                 }
               } // JENKINS_URL
-
             }
           }
         } // stage Sample project
@@ -489,14 +465,12 @@ pipeline {
   post {
     always {
       node('molecule') {
-
         withLogParser(failBuildOnError:false, unstableOnWarning: false)
-
       } // node
-      archiveArtifacts artifacts: "*.log, .scannerwork/*.log, roles/*.log, target/ansible-lint*", onlyIfSuccessful: false, allowEmptyArchive: true
+      archiveArtifacts artifacts: '*.log, .scannerwork/*.log, roles/*.log, target/ansible-lint*', onlyIfSuccessful: false, allowEmptyArchive: true
     }
-    //cleanup {
-    //  wrapCleanWsOnNode()
-    //} // cleanup
+  //cleanup {
+  //  wrapCleanWsOnNode()
+  //} // cleanup
   } // post
 }

@@ -5,11 +5,11 @@
 - name: Install conky
   hosts: workstation
   remote_user: root
-#  connection: local
+  #  connection: local
 
   roles:
     - role: albanandrieu.conky
 
   vars:
-       conky_sensor_enabled: yes
-       conky_manager_enabled: yes
+    conky_sensor_enabled: yes
+    conky_manager_enabled: yes

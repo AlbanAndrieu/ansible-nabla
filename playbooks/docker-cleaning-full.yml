@@ -33,24 +33,24 @@
         name: hello-world:latest
         force: yes
 
-#    - name: Remove test image
-#      docker_image:
-#        state: absent
-#        name: docker.hub/nabla/ansible-jenkins-slave
-#        tag: test
+    #    - name: Remove test image
+    #      docker_image:
+    #        state: absent
+    #        name: docker.hub/nabla/ansible-jenkins-slave
+    #        tag: test
 
-#For issue : Error pulling: too many links
+    #For issue : Error pulling: too many links
     - name: Remove untagged images
-      shell: "docker rmi $(docker images | grep \"<none>\" | awk ' { print $3} ')"
+      shell: 'docker rmi $(docker images | grep "<none>" | awk '' { print $3} '')'
       changed_when: false
       ignore_errors: true
 
-#TODO http://blog.yohanliyanage.com/2015/05/docker-clean-up-after-yourself/
-#TODD must be run on a daily basis
-#Clean 1 week old containers
-#docker ps -a | grep 'weeks ago' | awk '{print $1}' | xargs --no-run-if-empty docker rm
-#Clean all containers
-#docker rm `docker ps --no-trunc -aq`
+    #TODO http://blog.yohanliyanage.com/2015/05/docker-clean-up-after-yourself/
+    #TODD must be run on a daily basis
+    #Clean 1 week old containers
+    #docker ps -a | grep 'weeks ago' | awk '{print $1}' | xargs --no-run-if-empty docker rm
+    #Clean all containers
+    #docker rm `docker ps --no-trunc -aq`
 
     - name: Clean all exited containers
       shell: "docker rm -v $(docker ps -a -q -f status=exited)"
@@ -67,7 +67,7 @@
       changed_when: false
       ignore_errors: true
 
-#TODO below is so slow, we have to pull all the images again after
+    #TODO below is so slow, we have to pull all the images again after
     - name: Remove reclaimable images and volumes
       command: "docker system prune -a --volumes -f"
       changed_when: false

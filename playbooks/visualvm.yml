@@ -3,20 +3,19 @@
 - name: Install visualvm
   connection: local
   hosts: workstation
-#  remote_user: root
-#  accelerate: true
+  #  remote_user: root
+  #  accelerate: true
 
   roles:
-    - { role: albanandrieu.visualvm,
-        visualvm_remote_hosts_enable: yes,
-      }
+    - { role: albanandrieu.visualvm, visualvm_remote_hosts_enable: yes }
 
   vars:
-      visualvm_remote_hosts:
-        - { name  : "Zone",
-            serverip: "192.168.0.29",
-            serverhostname: "albandri.nabla.mobi",
-            servername: "albandri",
-            serverjstatdport: "albandri",
-            serverposition: "4"
-            }
+    visualvm_remote_hosts:
+      - {
+          name: "Zone",
+          serverip: "192.168.0.29",
+          serverhostname: "albandri.nabla.mobi",
+          servername: "albandri",
+          serverjstatdport: "albandri",
+          serverposition: "4",
+        }

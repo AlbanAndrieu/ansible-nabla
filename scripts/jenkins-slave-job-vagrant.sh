@@ -41,10 +41,10 @@ echo -e "${red} Find stale processes ${NC}"
 echo -e "${red} Configure workstation ${NC}"
 
 if [ -t 0 ]; then
-   echo interactive
-   stty erase ^H
+  echo interactive
+  stty erase ^H
 else
-   echo non-interactive
+  echo non-interactive
 fi
 
 #scl enable python27 bash
@@ -92,8 +92,6 @@ echo "List VMS"
 VBoxManage list vms
 echo "List running VMS"
 VBoxManage list runningvms
-
-
 
 echo "###################"
 vagrant status

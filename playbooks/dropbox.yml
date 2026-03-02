@@ -4,16 +4,17 @@
 - name: Install subversion
   connection: local
   hosts: workstation
-#  remote_user: albandrieu
-#  accelerate: true
+  #  remote_user: albandrieu
+  #  accelerate: true
 
   roles:
-    - { role: albanandrieu.dropbox,
+    - {
+        role: albanandrieu.dropbox,
         docker_files_enable: yes,
         docker_files_generated_directory: "../roles/albanandrieu.dropbox",
         dropbox_owner: "{{ user }}",
         dropbox_group: "{{ group }}",
         #dropbox_user_directory: "/workspace/Dropbox",
         #dropbox_user_directory: "/home/albandrieu/Dropbox",
-        dropbox_user_host : "2366450895"
+        dropbox_user_host: "2366450895",
       }
