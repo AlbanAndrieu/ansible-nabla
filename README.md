@@ -1,5 +1,6 @@
-## [![Nabla](https://bababou.albandrieu.com/nabla/index/assets/nabla/nabla-4.pn)](https://github.com/AlbanAndrieu)  Deployment
-g
+<!-- markdown-link-check-disable-next-line -->
+## [![Nabla](https://nabla.albandrieu.com/assets/nabla/nabla-4.png)](https://github.com/AlbanAndrieu) Ansible Deployment
+
 Nabla ansible playbooks
 
 [![License](http://img.shields.io/:license-apache-blue.svg?style=flat-square)](http://www.apache.org/licenses/LICENSE-2.0.html)
@@ -48,6 +49,12 @@ When the playbook run completes, you should be able to work on any NABLA project
 This is a very simple playbook and could serve as a starting point for more complex projects.
 
 ## [How to run it](#table-of-contents)
+
+### Quick Start
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/AlbanAndrieu/ansible-nabla/master/install.sh | bash
+```
 
 ### Install python dependencies
 
