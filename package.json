@@ -174,7 +174,7 @@
     "webpagetest": "^0.3.9",
     "wiredep": "4.0.0",
     "xml2js": "0.4.22",
-    "yo": "3.1.0"
+    "yo": "3.1.1"
   },
   "scripts": {
     "update-webdriver": "webdriver-manager update --versions.chrome 2.37",
