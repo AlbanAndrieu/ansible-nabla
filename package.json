@@ -162,7 +162,7 @@
     "phantomjs-prebuilt": "2.1.16",
     "pixrem": "5.0.0",
     "protractor": "5.4.2",
-    "qs": "6.9.0",
+    "qs": "6.9.7",
     "request": "2.88.2",
     "semver": "6.3.1",
     "serve-index": "1.9.1",
