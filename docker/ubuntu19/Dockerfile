@@ -1,6 +1,6 @@
 # This Dockerfile is used to build an image containing basic stuff to be used as a Jenkins slave build node.
 # Multistage build is not possible with Jenkins Docker Pipeline Plugin
-FROM ubuntu:19.10
+FROM ubuntu:eoan-20200608
 #FROM selenium/standalone-chrome:latest
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
