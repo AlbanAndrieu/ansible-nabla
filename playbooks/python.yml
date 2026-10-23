@@ -5,7 +5,8 @@
 - name: Check supported distributions
   hosts: all
   gather_facts: true
-  gather_subset: min
+  gather_subset:
+    - min
   tasks:
     - name: Fail for unsupported distribution
       ansible.builtin.assert:
