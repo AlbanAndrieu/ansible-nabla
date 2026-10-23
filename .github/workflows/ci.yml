@@ -10,9 +10,10 @@ on:
 permissions:
   contents: read
 
+# one group per pull request (superseded runs are cancelled),
+# one group per commit on master (a pending run is never replaced, every commit is validated)
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  # only cancel superseded pull request runs, every master commit is validated
+  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.ref || github.sha }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 env:
