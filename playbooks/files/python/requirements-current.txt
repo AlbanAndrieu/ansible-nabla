@@ -135,7 +135,7 @@ pysocks==1.7.1            # via urllib3
 pyspnego==0.12.4          # via requests-credssp, requests-ntlm
 pytest==9.1.1             # via pytest-cov, -r requirements-current.in
 pytest-cov==7.1.0         # via -r requirements-current.in
-python-dateutil==2.9.0.post0  # via arrow, conan, kubernetes, matplotlib, pandas, s3cmd
+python-dateutil==3.0.0  # via arrow, conan, kubernetes, matplotlib, pandas, s3cmd
 python-discovery==1.6.4   # via tox, virtualenv
 python-gnupg==0.5.7       # via -r requirements-current.in
 python-magic==0.4.27      # via s3cmd, -r requirements-current.in
