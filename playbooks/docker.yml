@@ -11,21 +11,21 @@
   become: true
 
   pre_tasks:
-    - name: docker | Remove old docker repo # noqa 301 302
+    - name: Docker | Remove old docker repo # noqa: no-changed-when no-free-form
       ansible.builtin.raw: |
         rm -f /etc/apt/sources.list.d/download_docker_com_linux_ubuntu.list*
 
-    - name: docker | Install docker repo # noqa 301
+    - name: Docker | Install docker repo # noqa: no-changed-when
       ansible.builtin.raw: |
         curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 
-    - name: docker | Install docker repo # noqa 301
+    - name: Docker | Install docker repo # noqa: no-changed-when
       ansible.builtin.raw: |
         add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable edge"
 
 - name: Install docker
   hosts: Ubuntu-24*:Ubuntu-23*:Ubuntu-22*:Ubuntu-21*:Ubuntu-20*:Ubuntu-19*:Ubuntu-18*:Ubuntu-17*:Ubuntu-16*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
-  #hosts: docker
+  # hosts: docker
   become: true
   tags:
     - vm
@@ -38,8 +38,8 @@
     docker_compose_version: "1.25.0"
     docker_edition: ce
     docker_version: 5:19.03.4~3-0~ubuntu-bionic
-      #TODO make sure it does not conflit with jenkins-slave python36.yml and requirements-current-3.6.txt
-      #pip_install_packages:
+      # TODO make sure it does not conflit with jenkins-slave python36.yml and requirements-current-3.6.txt
+      # pip_install_packages:
       #  - name: docker
       #    version: "2.7.0"
       #    virtualenv: /opt/ansible/env35
@@ -54,13 +54,13 @@
       #    version: "1.12.0"
       #    state: forcereinstall
       #    virtualenv: /opt/ansible/env35
-      #docker_users:
+      # docker_users:
       #  - docker
       #  - jenkins
 
 - name: Install docker
   hosts: Ubuntu-19*
-  #hosts: docker
+  # hosts: docker
   become: true
   tags:
     - vm
@@ -72,13 +72,13 @@
     docker_install_compose: false # using pip instead
     docker_compose_version: "1.25.0"
     docker_edition: ce
-    #docker_version: 5:19.03.6~3-0~ubuntu-eoan # https://github.com/docker/for-linux/issues/833
+    # docker_version: 5:19.03.6~3-0~ubuntu-eoan # https://github.com/docker/for-linux/issues/833
     docker_version: 5:19.03.7~3-0~ubuntu-eoan
     docker_package: "docker-{{ docker_edition }}={{ docker_version }}" # Ubuntu
 
 - name: Install docker
   hosts: Ubuntu-20*
-  #hosts: docker
+  # hosts: docker
   become: true
   tags:
     - vm
@@ -95,7 +95,7 @@
 
 - name: Install docker
   hosts: RedHat-7*:RedHat-6*:RedHat-5*:CentOS-7*:CentOS-6*
-  #hosts: docker
+  # hosts: docker
   become: true
   tags:
     - vm
@@ -110,13 +110,14 @@
     docker_version: 19.03.6
     docker_package: "docker-{{ docker_edition }}-{{ docker_version }}" # CentOS
 
-- hosts: docker
+- name: Apply vm
+  hosts: docker
   become: true
   tags:
     - vm
 
   tasks:
-    - name: docker | Copy the docker.service script
+    - name: Docker | Copy the docker.service script
       ansible.builtin.template:
         src: docker.service.j2
         dest: /lib/systemd/system/docker.service
@@ -126,14 +127,14 @@
       become: true
       changed_when: false
 
-    - name: docker | Create a docker group
+    - name: Docker | Create a docker group
       ansible.builtin.group:
         name: docker
         state: present
       become: true
     #      ignore_errors: true
 
-    - name: docker | Add user(s) to docker group
+    - name: Docker | Add user(s) to docker group
       ansible.builtin.user:
         name: "{{ lookup('env', 'USER') }}"
         group: docker
@@ -141,7 +142,7 @@
       become: true
       ignore_errors: true
 
-    - name: docker | Add user(s) to docker group
+    - name: Docker | Add user(s) to docker group
       ansible.builtin.user:
         name: "{{ remote_user | default('jenkins') }}"
         group: docker

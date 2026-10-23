@@ -8,7 +8,7 @@
   forward_host_port: 8380
   forward_guest_port: 8380
   mem: 8192
-  #script: jenkins2.x_bootstrap.sh
+  # script: jenkins2.x_bootstrap.sh
 
 - name: master2
   box: ubuntu/trusty64

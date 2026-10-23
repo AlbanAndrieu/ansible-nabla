@@ -5,19 +5,19 @@
 - name: "Sandbox"
   hosts: localhost
   gather_facts: true
-  #become: true
+  # become: true
 
   tasks:
-    - ansible.builtin.debug:
+    - name: Show ansible version
+      ansible.builtin.debug:
         var: ansible_version.full
-    - ansible.builtin.debug:
+    - name: Show container interface
+      ansible.builtin.debug:
         var: ansible_en.container
 
-- hosts: localhost
-  #become: true
-
-  collections:
-    - devsec.hardening
+- name: Apply devsec.hardening.os_hardening
+  hosts: localhost
+  # become: true
 
   roles:
     - devsec.hardening.os_hardening
@@ -28,7 +28,7 @@
     os_auditd_enabled: false
     os_pam_enabled: false
     os_securetty_enabled: false
-    #os_security_auto_logout: 60
+    # os_security_auto_logout: 60
     os_sysctl_enabled: false
     sysctl_overwrite:
       # Enable IPv4 traffic forwarding.
@@ -40,9 +40,9 @@
       # NOK podman images
       kernel.unprivileged_userns_clone: 1
       kernel.unprivileged_bpf_disabled: 0
-    #os_security_suid_sgid_system_whitelist:
+    # os_security_suid_sgid_system_whitelist:
     # - '/usr/bin/ssh-agent'
-    #os_security_suid_sgid_whitelist:
+    # os_security_suid_sgid_whitelist:
     #  -
     os_selinux_enabled: false
     ssh_permit_root_login: true

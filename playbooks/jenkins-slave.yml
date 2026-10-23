@@ -19,7 +19,7 @@
 
   vars:
     docker_files_enable: false
-    #docker_files_generated_directory: "../roles/albanandrieu.jenkins_slave"
+    # docker_files_generated_directory: "../roles/albanandrieu.jenkins_slave"
     docker_registry_user: nabla
     shell_git:
       # Additional properties: 'shell_git_machine, shell_git_login, shell_git_email, shell_git_password, shell_git_name, shell_git_path, shell_git_ssl'.
@@ -39,13 +39,13 @@
     npm_nexus_private_npm_data: []
     npm_phantomjs_cdnurl: "{{ home_url }}:7070/download/phantomjs"
     npm_slimerjs_cdnurl: "{{ home_url }}:7070//download/slimerjs"
-    #jenkins_ssh_key_file: "~/.ssh/id_rsa"
+    # jenkins_ssh_key_file: "~/.ssh/id_rsa"
     jenkins_home: "/home/jenkins"
     jenkins_group: docker
     jenkins_http_port: 8686
     jenkins_slave_home: /workspace
-    #jenkins_prefix: "/jenkins"
-    #jenkins_url: {{ home_url }}:{{ jenkins_http_port }}{{ jenkins_prefix }}
+    # jenkins_prefix: "/jenkins"
+    # jenkins_url: {{ home_url }}:{{ jenkins_http_port }}{{ jenkins_prefix }}
     jenkins_ssh_authorized_keys_fingerprints: # Set known authorized keys for ssh
       # Alban Andrieu
       - "ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAIEAio3SOQ9yeK6QfKqSFNKyTasuzjStxWevG1Vz1wgJIxPF+KB0XoMAPD081J+Bzj2LCDRSWisNv2L4xv2jbFxW/Pl7NEakoX47eNx3U+Dxaf+szeWBTryYcDUGkduLV7G8Qncm0luIFd+HDIe/Qir1E2f56Qu2uuBNE6Tz5TFt1vc=
@@ -56,5 +56,5 @@
     maven_repository: "{{ jenkins_home }}/.repository"
     jenkins_jdk7_enable: false
     jenkins_jdk8_enable: true
-    #epel_repo_enabled: false
-    #proxy_repo_enabled: false
+    # epel_repo_enabled: false
+    # proxy_repo_enabled: false

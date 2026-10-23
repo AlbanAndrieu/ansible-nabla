@@ -25,7 +25,7 @@
       changed_when: false
 
     - name: Change swap file permissions
-      file:
+      ansible.builtin.file:
         path: "{{ swap_file_path }}"
         owner: root
         group: root
@@ -34,14 +34,14 @@
         - swap.file.permissions
 
     - name: Check swap file type
-      command: file {{ swap_file_path }}
+      ansible.builtin.command: file {{ swap_file_path }}
       register: swapfile
       changed_when: false
       tags:
         - swap.file.mkswap
 
     - name: Make swap file
-      command: mkswap {{ swap_file_path }}
+      ansible.builtin.command: mkswap {{ swap_file_path }}
       when: swapfile.stdout.find('swap file') == -1
       become: true
       tags:
@@ -62,7 +62,7 @@
         - swap.fstab
 
     - name: Mount swap
-      command: swapon {{ swap_file_path }}
+      ansible.builtin.command: swapon {{ swap_file_path }}
       when: ansible_swaptotal_mb < 1
       become: true
       tags:

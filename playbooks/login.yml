@@ -4,9 +4,17 @@
   remote_user: root
   #  connection: local
 
-  roles:
-    - ansible-login
-
   vars:
     login_umask: "077"
     login_usergroups_enab: "no"
+
+  tasks:
+    - name: Configure login.defs
+      ansible.builtin.lineinfile:
+        path: /etc/login.defs
+        regexp: "^#?\\s*{{ item.key }}\\s"
+        line: "{{ item.key }}\t\t{{ item.value }}"
+        state: present
+      loop:
+        - { key: UMASK, value: "{{ login_umask }}" }
+        - { key: USERGROUPS_ENAB, value: "{{ login_usergroups_enab }}" }

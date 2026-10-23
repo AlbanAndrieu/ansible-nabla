@@ -2,8 +2,8 @@
 # Playbook to register node on Zabbix server, requires running zabbix agent on node
 #
 # nabla should be default zabbix server
-# On localhost, zabbix-api library needs to be installed globally:
-# $ sudo pip install zabbix-api
+# Requires the community.zabbix collection (see requirements.yml); the Zabbix API
+# is reached over HTTPS through the httpapi connection, no Python library needed.
 #
 # Usage:
 # (interactive prompt)
@@ -27,10 +27,7 @@
       prompt: "Password for Zabbix user"
   tasks:
     - name: Change zabbix server
-      zabbix_host:
-        server_url: https://nabla/zabbix/
-        login_user: "{{ zabbix_username }}"
-        login_password: "{{ zabbix_password }}"
+      community.zabbix.zabbix_host:
         host_name: "{{ inventory_hostname.split('.')[0] }}"
         visible_name: "{{ zabbix_visible_name | default(ansible_fqdn) }}"
         description: "{{ description | default('Zabbix Agent automatically configured with Ansible') }}"
@@ -42,7 +39,6 @@
         status: enabled
         state: present
         force: true
-        proxy:
         inventory_mode: automatic
         interfaces:
           - type: 1
@@ -53,7 +49,16 @@
             main: 0
             useip: 1
             ip: "{{ ansible_facts.default_ipv4.address }}"
-      delegate_to: localhost
+      # community.zabbix modules talk to the Zabbix API through the httpapi connection
+      delegate_to: nabla
+      vars:
+        ansible_network_os: community.zabbix.zabbix
+        ansible_connection: httpapi
+        ansible_httpapi_use_ssl: true
+        ansible_httpapi_port: 443
+        ansible_zabbix_url_path: zabbix
+        ansible_user: "{{ zabbix_username }}"
+        ansible_httpapi_pass: "{{ zabbix_password }}"
   become: false
   tags:
     - configure
@@ -68,13 +73,18 @@
       prompt: "Password for Zabbix user"
   tasks:
     - name: Change zabbix server
-      zabbix_host:
-        server_url: https://nabla/zabbix/
-        login_user: "{{ zabbix_username }}"
-        login_password: "{{ zabbix_password }}"
+      community.zabbix.zabbix_host:
         host_name: "{{ inventory_hostname.split('.')[0] }}"
         state: absent
-      delegate_to: localhost
+      delegate_to: nabla
+      vars:
+        ansible_network_os: community.zabbix.zabbix
+        ansible_connection: httpapi
+        ansible_httpapi_use_ssl: true
+        ansible_httpapi_port: 443
+        ansible_zabbix_url_path: zabbix
+        ansible_user: "{{ zabbix_username }}"
+        ansible_httpapi_pass: "{{ zabbix_password }}"
   become: false
   tags:
     - never

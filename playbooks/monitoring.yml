@@ -1,13 +1,14 @@
 ---
-- hosts: "{{ hosts }}"
+- name: Install monitoring
+  hosts: "{{ hosts | default([]) }}" # target with -e hosts=..., no host by default
   become: true
 
   tasks:
-    - name: install core packages
-      apt:
+    - name: Install core packages
+      ansible.builtin.apt:
         name:
           - prometheus-node-exporter
-          #- nfs-common
-          #- qemu-guest-agent
-          #- unzip
+          # - nfs-common
+          # - qemu-guest-agent
+          # - unzip
         update_cache: true

@@ -1,20 +1,21 @@
 ---
 # ansible-playbook -i hosts-albandri -v certificate.yml -c local --limit albandri-laptop-work --ask-become-pass -vvvv | tee setup.log
 
-- hosts: jenkins-slaves
+- name: Set proxy_cdnurl_server to default
+  hosts: jenkins-slaves
   remote_user: root
 
   tasks:
     - name: Set proxy_cdnurl_server to default
       ansible.builtin.set_fact:
+        proxy_cdnurl_server: "albandrieu.com/download"
 
-    #- name: Create private key
+    # - name: Create private key
     #  shell: ssh-keygen -t rsa -C "alban.andrieu@free.fr"
     #  ignore_errors: yes
     #  become: true
     #  become_user: albandri
 
-        proxy_cdnurl_server: "albandrieu.com/download"
     - name: Create ~/pki
       ansible.builtin.file:
         path: ~/pki/
@@ -23,15 +24,18 @@
       become: true
       become_user: root
 
-- import_playbook: certificate-old.yml
+- name: Import certificate-old
+  ansible.builtin.import_playbook: certificate-old.yml
 
-- import_playbook: certificate-new.yml
+- name: Import certificate-new
+  ansible.builtin.import_playbook: certificate-new.yml
 
-- hosts: jenkins-slaves
+- name: Get the CA root certificate (3) HELM
+  hosts: jenkins-slaves
   remote_user: root
 
   tasks:
-    - name: Get the CA root certificate (3) HELM
+    - name: Get the CA root certificate (3) HELM # noqa: command-instead-of-module tests the CA file with curl
       ansible.builtin.command: curl --cacert ~/.cert/helm-cert.pem https://albandrieu.com/chartrepo/nabla/index.yaml
       ignore_errors: true
       changed_when: false
@@ -39,7 +43,8 @@
       tags:
         - certificate
 
-- hosts: jenkins-slaves
+- name: Get the server DER certificate
+  hosts: jenkins-slaves
   remote_user: root
 
   tasks:
@@ -69,16 +74,19 @@
         - certificate
         - vm
 
-- import_playbook: certificate-server.yml
+- name: Import certificate-server
+  ansible.builtin.import_playbook: certificate-server.yml
 
-#- import_playbook: certificate-docker.yml
+# - import_playbook: certificate-docker.yml
 
-- import_playbook: certificate-java.yml
+- name: Import certificate-java
+  ansible.builtin.import_playbook: certificate-java.yml
 
 # From docker you can test
 # openssl s_client -connect jira.albandrieu.com:443  -servername jira.albandrieu.com -CApath /etc/ssl/certs
 
-- hosts: jenkins-slaves
+- name: Test the CA root certificate (3) HELM
+  hosts: jenkins-slaves
   remote_user: jenkins
 
   tasks:
@@ -89,7 +97,7 @@
         timeout: 20
         validate_certs: true
         use_proxy: false
-      #become: true
+      # become: true
       ignore_errors: true
       tags:
         - certificate

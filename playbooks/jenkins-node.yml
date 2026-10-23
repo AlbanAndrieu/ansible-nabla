@@ -11,7 +11,8 @@
 # Usage
 # $ ansible-playbook -i inventory/staging playbooks/jenkins_node.yml
 # $ ansible-playbook -i inventory/staging -e username=jenkins -e password=*** playbooks/jenkins_node.yml
-- hosts: localhost
+- name: Username
+  hosts: localhost
   gather_facts: no
 
   vars_prompt:
@@ -24,7 +25,7 @@
     - name: set jenkins_slave_home to default
       set_fact: jenkins_slave_home=/workspace
 
-    #- name: Request CSRF token from Jenkins
+    # - name: Request CSRF token from Jenkins
     #  jenkins_csrf_token:
     #    auth:
     #      username: "{{ username }}"

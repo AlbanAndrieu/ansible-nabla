@@ -3,8 +3,8 @@ exclude_paths:
   - ./requirements.yml
   - ./playbooks/group_vars/all/vault.yml
   - ./docker/
-  - ./playbooks/mac.yml
   - ./playbooks/jenkins-node.yml
+  - ./playbooks/inventory.yml # Vagrant machines list, not a playbook
   - ./roles/albanandrieu.virtualbox/
   - ./roles/albanandrieu.webmin/
   - ./roles/Stouts.python/

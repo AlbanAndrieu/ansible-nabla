@@ -25,7 +25,7 @@
           - /var/log/jenkins/jenkins.log
 
     filebeat_enable_logging: true
-    #filebeat_log_level: warning
+    # filebeat_log_level: warning
     filebeat_log_level: info
     filebeat_log_dir: /var/log/filebeat
     filebeat_log_filename: info.log
@@ -55,7 +55,7 @@
     filebeat_enable_logging: true
     filebeat_output_elasticsearch_enabled: true
     filebeat_output_logstash_enabled: false
-    #filebeat_log_level: warning
+    # filebeat_log_level: warning
     filebeat_log_level: info
     filebeat_log_dir: /var/log/filebeat
     filebeat_log_filename: info.log
@@ -67,11 +67,9 @@
   tasks:
     - name: Set filebeat_ssh_host to default
       ansible.builtin.set_fact:
-
         filebeat_ssh_host: 192.168.1.24
     - name: Set filebeat_ssh_port to default
       ansible.builtin.set_fact:
-
         filebeat_ssh_port: "9200"
     - name: Copy Filebeat configuration.
       ansible.builtin.template:

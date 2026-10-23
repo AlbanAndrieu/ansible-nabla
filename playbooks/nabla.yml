@@ -13,53 +13,56 @@
           - ansible_os_family in ['Debian', 'RedHat', 'CentOS', 'Windows', 'Solaris']
           - ansible_architecture in ['x86_64']
 
-- hosts: all
+- name: Group hosts by distribution
+  hosts: all
   gather_facts: true
   tasks:
     - name: Group hosts by distribution
       ansible.builtin.group_by:
-
         key: "{{ ansible_distribution }}-{{ ansible_distribution_version }}"
-- hosts: RedHat-7*:RedHat-6*:RedHat-5*:CentOS-7*:CentOS-6*:Ubuntu-20*:Ubuntu-19*:Ubuntu-18*:Ubuntu-17*:Ubuntu-16*:Ubuntu-15*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
+- name: Group hosts for supported distributions
+  hosts: RedHat-7*:RedHat-6*:RedHat-5*:CentOS-7*:CentOS-6*:Ubuntu-20*:Ubuntu-19*:Ubuntu-18*:Ubuntu-17*:Ubuntu-16*:Ubuntu-15*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
   gather_facts: false
   tasks:
     - name: Group hosts for supported distributions
       ansible.builtin.group_by:
-
         key: "supported"
-- hosts: "!supported"
+- name: Fail on unsupported distributions
+  hosts: "!supported"
   gather_facts: false
   tasks:
     - name: Fail for unsupported distribution
       ansible.builtin.fail:
         msg: "{{ ansible_distribution }} {{ ansible_distribution_version }} is not a supported OS for a Tower installation.  Supported OSes include Red Hat Enterprise
           Linux 6/7/5, CentOS 6/7, or Ubuntu 12.04/13.04/14.04/15.04/16.04/17.04/18.04/19.04."
-    - ansible.builtin.debug: msg="Version {{ ansible_distribution }} {{ ansible_distribution_version }} {{ ansible_architecture }}"
+    - name: Show distribution
+      ansible.builtin.debug:
+        msg: "Version {{ ansible_distribution }} {{ ansible_distribution_version }} {{ ansible_architecture }}"
 
-# USELESS playbook will fail before
-#- hosts: localhost
-#
-#  tasks:
-#    - name: Install Ansible-Galaxy dependencies
-#      shell: ansible-galaxy install -r ../requirements.yml -p ../roles/
-#      #shell: ansible-galaxy install -r ../requirements.yml -p ../roles/ --ignore-errors --force
-#      ignore_errors: true
+- name: Import python-bootstrap
+  ansible.builtin.import_playbook: python-bootstrap.yml
 
-- import_playbook: python-bootstrap.yml
+- name: Import common
+  ansible.builtin.import_playbook: common.yml
 
-- import_playbook: common.yml
+- name: Import dns
+  ansible.builtin.import_playbook: dns.yml
 
-- import_playbook: dns.yml
+- name: Import python
+  ansible.builtin.import_playbook: python.yml
 
-- import_playbook: python.yml
+- name: Import hostname
+  ansible.builtin.import_playbook: hostname.yml
 
-- import_playbook: hostname.yml
+- name: Import administration
+  ansible.builtin.import_playbook: administration.yml
+  vars:
+    automount_enabled: false
+    nis_enabled: false
 
-- import_playbook: administration.yml automount_enabled=false nis_enabled=false
+# - import_playbook: firewall.yml
 
-#- import_playbook: firewall.yml
-
-#- name: Apply security configuration
+# - name: Apply security configuration
 #  hosts: security
 #  remote_user: root
 ##  connection: local
@@ -71,9 +74,9 @@
 #       sudoers_enabled: no
 #       restart_ssh_enabled: false
 
-#- import_playbook: login.yml
+# - import_playbook: login.yml
 
-#- name: Install virtualbox
+# - name: Install virtualbox
 #  hosts: virtualbox
 #  remote_user: root
 ##  connection: local
@@ -85,38 +88,41 @@
 #      virtualbox_package_name: virtualbox
 #      virtualbox_dkms_enable: no
 
-- import_playbook: vagrant.yml
+- name: Import vagrant
+  ansible.builtin.import_playbook: vagrant.yml
 
 #  vars:
 #       vagrant_libvirt_enabled: false
 #       vagrant_windows_enabled: false
 ##      vagrant_url: https://dl.bintray.com/mitchellh/vagrant/vagrant_1.6.3_x86_64.deb
 
-- import_playbook: locale.yml
+- name: Import locale
+  ansible.builtin.import_playbook: locale.yml
 
-#- import_playbook: zabbix.yml
+# - import_playbook: zabbix.yml
 
-- import_playbook: webmin.yml
+- name: Import xvbf
+  ansible.builtin.import_playbook: xvbf.yml
 
-- import_playbook: xvbf.yml
+- name: Import selenium
+  ansible.builtin.import_playbook: selenium.yml
 
-- import_playbook: selenium.yml
+# - import_playbook: zfs.yml
 
-#- import_playbook: zfs.yml
+# - import_playbook: workstation.yml
 
-#- import_playbook: workstation.yml
+# - import_playbook: nexus.yml
 
-#- import_playbook: nexus.yml
-
-- import_playbook: tomcat.yml
+- name: Import tomcat
+  ansible.builtin.import_playbook: tomcat.yml
 
 # This playbook deploys a simple standalone JBoss server.
 
-#- import_playbook: jboss.yml
+# - import_playbook: jboss.yml
 
-#- import_playbook: lamp.yml
+# - import_playbook: lamp.yml
 
-#WARNING jenkins-master role has disabled a2dissite 000-default
+# WARNING jenkins-master role has disabled a2dissite 000-default
 - name: Configure and deploy the nabla php sample application code to apache
   hosts: nabla-servers
   remote_user: root
@@ -127,7 +133,7 @@
 
   vars:
     apache_listen_port: 7070
-    #jenkins_proxy_port: "{{ apache_listen_port }}" #TODO why is it needed!!!
+    # jenkins_proxy_port: "{{ apache_listen_port }}" #TODO why is it needed!!!
     phpmyadmin_mysql_user: root
     phpmyadmin_mysql_password: microsoft
     phpmyadmin_mysql_port: "{{ apache_listen_port }}"
@@ -138,36 +144,39 @@
     docker_files_enable: true
     docker_files_generated_directory: "../roles/albanandrieu.web"
 
-- import_playbook: pagespeed.yml
+# - import_playbook: jenkins-master.yml
 
-- import_playbook: evasive.yml
+- name: Import java
+  ansible.builtin.import_playbook: java.yml
 
-- import_playbook: awstats.yml
+- name: Import maven
+  ansible.builtin.import_playbook: maven.yml
 
-#- import_playbook: jenkins-master.yml
+- name: Import chrome
+  ansible.builtin.import_playbook: chrome.yml
+  vars:
+    google_talkplugin_enabled: false
 
-- import_playbook: java.yml
+- name: Import docker # must be before jenkins-slave
+  ansible.builtin.import_playbook: docker.yml
 
-- import_playbook: maven.yml
+- name: Import jenkins-slave
+  ansible.builtin.import_playbook: jenkins-slave.yml
 
-- import_playbook: chrome.yml google_talkplugin_enabled=false
+# - import_playbook: nodejs.yml
 
-- import_playbook: docker.yml # must be before jenkins-slave
+- name: Import xvbf
+  ansible.builtin.import_playbook: xvbf.yml
 
-- import_playbook: jenkins-slave.yml
+- name: Import css
+  ansible.builtin.import_playbook: css.yml
 
-#- import_playbook: nodejs.yml
+# - import_playbook: supervisor.yml
 
-- import_playbook: xvbf.yml
+# - import_playbook: sonar.yml
 
-- import_playbook: css.yml
-
-#- import_playbook: supervisor.yml
-
-#- import_playbook: sonar.yml
-
-#Below cmake conky is included in workstation role
-#- name: Install conky
+# Below cmake conky is included in workstation role
+# - name: Install conky
 #  hosts: workstation
 #  remote_user: root
 #
@@ -181,19 +190,7 @@
   roles:
     - role: geerlingguy.git
 
-- name: Install subversion
-  hosts: workstation
-  remote_user: root
-  ignore_errors: true
-
-  roles:
-    - role: albanandrieu.subversion
-
-  vars:
-    subversion_owner: "{{ user }}"
-    subversion_group: "{{ group }}"
-
-#- name: Apply user shell configuration
+# - name: Apply user shell configuration
 #  hosts: workstation
 #  remote_user: root
 ##  connection: local
@@ -217,7 +214,7 @@
 ##      shell_env_directory: "{{ home }}/env/tmp"
 ##      rhosts_hosts: []
 
-#- name: Install eclipse
+# - name: Install eclipse
 #  connection: local
 #  hosts: workstation
 #  remote_user: root
@@ -232,13 +229,13 @@
 #      #user: "albandri"
 #      #home: "/workspace/users/albandri10"
 
-- import_playbook: sublimetext.yml
+- name: Import zap
+  ansible.builtin.import_playbook: zap.yml
 
-- import_playbook: zap.yml
+- name: Import jmeter
+  ansible.builtin.import_playbook: jmeter.yml
 
-- import_playbook: jmeter.yml
-
-#- name: Install mon
+# - name: Install mon
 #  hosts: workstation
 #  remote_user: root
 ##  connection: local
@@ -255,8 +252,5 @@
 #      user: root
 #      home: "/root"
 
-- import_playbook: jdiskreport.yml
-
-- import_playbook: private-bower.yml
-
-- import_playbook: owasp-wte.yml
+- name: Import owasp-wte
+  ansible.builtin.import_playbook: owasp-wte.yml

@@ -15,7 +15,7 @@
     docker_files_enable: false
     docker_files_generated_directory: "../roles/albanandrieu.eclipse"
     eclipse_dir_tmp: "/tmp"
-    #eclipse_owner: albandrieu
+    # eclipse_owner: albandrieu
     eclipse_group: docker
     eclipse_plugins_emf_enabled: false
     eclipse_plugins_cdt_enabled: false
@@ -28,7 +28,7 @@
     eclipse_plugins_pydev_enabled: false
     eclipse_plugins_m2e_enabled: false
     eclipse_plugins_subclipse_enabled: false
-    #eclipse_base_dir: "/workspace/eclipse"
-    #eclipse_owner: "{{ user }}"
-    #eclipse_group: "{{ eclipse_owner }}"
-    #eclipse_owner_home: "{{ home }}"
+    # eclipse_base_dir: "/workspace/eclipse"
+    # eclipse_owner: "{{ user }}"
+    # eclipse_group: "{{ eclipse_owner }}"
+    # eclipse_owner_home: "{{ home }}"

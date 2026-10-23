@@ -18,15 +18,15 @@
     kong_deb_pkg_pre_0_11_x: "kong_{{ kong_version }}_amd64.deb"
     # kong_deb_pkg_url_pre_0_11_x: "https://github.com/Mashape/kong/releases/download/{{ kong_version }}/{{ kong_deb_pkg_pre_0_11_x }}"
     kong_deb_pkg_url_pre_0_11_x: "https://download.konghq.com/gateway-3.x-ubuntu-jammy/pool/all/k/kong/{{ kong_deb_pkg_pre_0_11_x }}"
-    ##kong_cassandra_host: <my_cassandra_ip_or_fqdn>
+    # kong_cassandra_host: <my_cassandra_ip_or_fqdn>
     ## OR for postgres backend
     kong_database: postgres
     kong_pg_host: postgres-kong.service.gra.dev.consul
     # kong_pg_user: "{{ kong_pg_user|default('kong') }}"
     kong_pg_user: "kong"
-    #kong_pg_password: "{{ kong_pg_password|default('kongpass') }}"
+    # kong_pg_password: "{{ kong_pg_password|default('kongpass') }}"
     kong_pg_password: "kongpass"
-    #kong_pg_database: "{{ kong_pg_database|default('kong') }}"
+    # kong_pg_database: "{{ kong_pg_database|default('kong') }}"
     kong_pg_database: "kong"
     # kong_dns_resolver: ""
     kong_use_old_config_format: false

@@ -15,85 +15,97 @@
           - ansible_os_family in ['Debian', 'RedHat', 'CentOS', 'Windows', 'Solaris']
           - ansible_architecture in ['x86_64']
 
-#supported version
-#Solaris
+# supported version
+# Solaris
 ##  when: ((ansible_distribution == 'Solaris') and (ansible_distribution_version not in ['11.1']))
 #  when: ansible_distribution_release is defined and ansible_distribution_release == 'Solaris 10 10/08 s10x_u6wos_07b X86'
 #  when: ansible_distribution_release is defined and ansible_distribution_release == 'Oracle Solaris 10 9/10 s10x_u9wos_14a X86'
 #  when: ansible_distribution_release is defined and ansible_distribution_release == 'Oracle Solaris 10 1/13 s10x_u11wos_24a X86'
-#SPARC
+# SPARC
 #  when: ansible_distribution_release is defined and ansible_distribution_release == 'Solaris 10 10/08 s10s_u6wos_07b SPARC'
 #  when: ansible_distribution_release is defined and ansible_distribution_release == 'Oracle Solaris 10 1/13 s10s_u11wos_24a SPARC'
-#REDHAT
+# REDHAT
 #  when: ansible_distribution == 'RedHat' and ansible_lsb.major_release|int >= 5
 #  when: ansible_distribution == 'RedHat' and ansible_distribution_major_version == "5"
 #  when: ansible_distribution == 'RedHat' and ansible_distribution_major_version == "6"
 #  when: ansible_distribution == 'RedHat' and ansible_distribution_major_version == "7"
-#CENTOS
+# CENTOS
 #  when: ansible_distribution == 'CentOS' and ansible_distribution_major_version == "6"
 #  when: ansible_distribution == 'CentOS' and ansible_distribution_major_version == "7"
-#UBUNTU
-#https://wiki.ubuntu.com/DevelopmentCodeNames
+# UBUNTU
+# https://wiki.ubuntu.com/DevelopmentCodeNames
 #  when: ansible_distribution == 'Ubuntu' and ansible_distribution_version == "12.04"
 #  when: ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'precise'
 #  when: ansible_distribution == 'Ubuntu' and ansible_distribution_version == "14.04"
 #  when: ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'trusty'
 #  when: ansible_distribution == 'Ubuntu' and ansible_distribution_version == "16.04"
 #  when: ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'xenial'
-#SLES
+# SLES
 #  when: ansible_distribution == 'SLES' and ansible_distribution_version == "12"
-#Windows
+# Windows
 #  when: ansible_os_family == 'Windows' and ansible_os_name == 'Microsoft Windows Server 2008 R2 Enterprise'
 #  when: ansible_os_family == 'Windows' and ansible_os_name == 'Microsoft Windows Server 2012 R2 Standard'
 
-- hosts: all
+- name: Group hosts by distribution
+  hosts: all
   gather_facts: true
   tasks:
     - name: Group hosts by distribution
       ansible.builtin.group_by:
-
         key: "{{ ansible_distribution }}-{{ ansible_distribution_version }}"
-- hosts: RedHat-7*:RedHat-6*:RedHat-5*:CentOS-7*:CentOS-6*:Ubuntu-19*:Ubuntu-18*:Ubuntu-17*:Ubuntu-16*:Ubuntu-15*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
+- name: Group hosts for supported distributions
+  hosts: RedHat-7*:RedHat-6*:RedHat-5*:CentOS-7*:CentOS-6*:Ubuntu-19*:Ubuntu-18*:Ubuntu-17*:Ubuntu-16*:Ubuntu-15*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
   gather_facts: false
   tasks:
     - name: Group hosts for supported distributions
       ansible.builtin.group_by:
-
         key: "supported"
-- hosts: "!supported"
+- name: Fail on unsupported distributions
+  hosts: "!supported"
   gather_facts: false
   tasks:
     - name: Fail for unsupported distribution
       ansible.builtin.fail:
         msg: "{{ ansible_distribution }} {{ ansible_distribution_version }} is not a supported OS for a Tower installation.  Supported OSes include Red Hat Enterprise
           Linux 6/7/5, CentOS 6/7, or Ubuntu 12.04/13.04/14.04/15.04/16.04/17.04/18.04/19.04."
-    - ansible.builtin.debug: msg="Version {{ ansible_distribution }} {{ ansible_distribution_version }} {{ ansible_architecture }}"
+    - name: Show distribution
+      ansible.builtin.debug:
+        msg: "Version {{ ansible_distribution }} {{ ansible_distribution_version }} {{ ansible_architecture }}"
+- name: Import python-bootstrap
+  ansible.builtin.import_playbook: python-bootstrap.yml
 
-- import_playbook: python-bootstrap.yml
+- name: Import common
+  ansible.builtin.import_playbook: common.yml
 
-- import_playbook: common.yml
-
-- import_playbook: dns.yml
+- name: Import dns
+  ansible.builtin.import_playbook: dns.yml
   tags:
     - dns
     - vm
 
-- import_playbook: python.yml
+- name: Import python
+  ansible.builtin.import_playbook: python.yml
 
-- import_playbook: administration.yml automount_enabled=false nis_enabled=false
+- name: Import administration
+  ansible.builtin.import_playbook: administration.yml
+  vars:
+    automount_enabled: false
+    nis_enabled: false
 
-- include: firewall.yml
+- name: Import firewall
+  ansible.builtin.import_playbook: firewall.yml
   tags:
     - firewall
     - vm
 
-- include: security.yml
+- name: Import security
+  ansible.builtin.import_playbook: security.yml
   tags:
     - security
     - vm
 
-#Below cmake role is included in cpp role
-#- name: Install cmake
+# Below cmake role is included in cpp role
+# - name: Install cmake
 #  hosts: cmake
 #  remote_user: root
 #
@@ -101,8 +113,8 @@
 #  roles:
 #    - albanandrieu.cmake
 
-#Below scons role is included in cpp role
-#- name: Install scons
+# Below scons role is included in cpp role
+# - name: Install scons
 #  hosts: scons
 #  remote_user: root
 #
@@ -110,13 +122,15 @@
 #  roles:
 #    - albanandrieu.scons
 
-- import_playbook: cpp.yml
+- name: Import cpp
+  ansible.builtin.import_playbook: cpp.yml
 
-#- import_playbook: java.yml
+# - import_playbook: java.yml
 
-- import_playbook: certificate.yml
+- name: Import certificate
+  ansible.builtin.import_playbook: certificate.yml
 
-#- name: Install virtualbox
+# - name: Install virtualbox
 #  hosts: virtualbox
 #  remote_user: root
 #
@@ -128,38 +142,45 @@
 #      virtualbox_package_name: virtualbox
 #      virtualbox_dkms_enable: no
 
-- import_playbook: vagrant.yml
+- name: Import vagrant
+  ansible.builtin.import_playbook: vagrant.yml
 
 #  vars:
 #       vagrant_libvirt_enabled: false
 #       vagrant_windows_enabled: false
 ##      vagrant_url: https://dl.bintray.com/mitchellh/vagrant/vagrant_1.6.3_x86_64.deb
 
-- import_playbook: docker.yml
+- name: Import docker
+  ansible.builtin.import_playbook: docker.yml
   tags:
     - docker
     - vm
 
-- import_playbook: locale.yml
+- name: Import locale
+  ansible.builtin.import_playbook: locale.yml
 
-- import_playbook: zabbix-agent.yml
+- name: Import zabbix-agent
+  ansible.builtin.import_playbook: zabbix-agent.yml
   tags:
     - zabbix
     - vm
 
-- import_playbook: xvbf.yml
+- name: Import xvbf
+  ansible.builtin.import_playbook: xvbf.yml
   tags:
     - xvbf
     - vm
 
-- import_playbook: selenium.yml
+- name: Import selenium
+  ansible.builtin.import_playbook: selenium.yml
   tags:
     - selenium
     - vm
 
-#- import_playbook: zfs.yml
+# - import_playbook: zfs.yml
 
-- import_playbook: dropbox.yml
+- name: Import dropbox
+  ansible.builtin.import_playbook: dropbox.yml
   tags:
     - dropbox
     - vm
@@ -179,7 +200,7 @@
     dropbox_owner: "{{ user }}"
     dropbox_group: "{{ group }}"
 
-#- name: Apply swarm configuration to all jenkins slaves
+# - name: Apply swarm configuration to all jenkins slaves
 #  hosts: jenkins-swarm
 #  remote_user: root
 #
@@ -199,25 +220,21 @@
 #       docker_files_enable: yes,
 #       docker_files_generated_directory: "../roles/albanandrieu.jenkins-swarm",
 
-- import_playbook: webmin.yml
-  tags:
-    - webmin
-    - vm
+# - import_playbook: nexus.yml
 
-#- import_playbook: nexus.yml
-
-- import_playbook: tomcat.yml
+- name: Import tomcat
+  ansible.builtin.import_playbook: tomcat.yml
   tags:
     - tomcat
     - vm
 
 # This playbook deploys a simple standalone JBoss server.
 
-#- import_playbook: jboss.yml
+# - import_playbook: jboss.yml
 
-#- import_playbook: lamp.yml
+# - import_playbook: lamp.yml
 
-#WARNING jenkins-master role has disabled a2dissite 000-default
+# WARNING jenkins-master role has disabled a2dissite 000-default
 - name: Configure and deploy the nabla php sample application code to apache
   hosts: nabla-servers
   remote_user: root
@@ -227,7 +244,7 @@
 
   vars:
     apache_listen_port: 7070
-    #jenkins_proxy_port: "{{ apache_listen_port }}" #TODO why is it needed!!!
+    # jenkins_proxy_port: "{{ apache_listen_port }}" #TODO why is it needed!!!
     phpmyadmin_mysql_user: root
     phpmyadmin_mysql_password: microsoft
     phpmyadmin_mysql_port: "{{ apache_listen_port }}"
@@ -238,61 +255,49 @@
     docker_files_enable: true
     docker_files_generated_directory: "../roles/albanandrieu.web"
 
-- import_playbook: pagespeed.yml
-  tags:
-    - web
-    - vm
-
-- import_playbook: evasive.yml
-  tags:
-    - web
-    - vm
-
-- import_playbook: awstats.yml
-  tags:
-    - web
-    - vm
-
-- import_playbook: jenkins-master.yml
+- name: Import jenkins-master
+  ansible.builtin.import_playbook: jenkins-master.yml
   tags:
     - jenkins
     - vm
 
-- import_playbook: maven.yml
+- name: Import maven
+  ansible.builtin.import_playbook: maven.yml
 
-- import_playbook: jenkins-slave.yml
+- name: Import jenkins-slave
+  ansible.builtin.import_playbook: jenkins-slave.yml
   tags:
     - jenkins
     - vm
 
-- import_playbook: css.yml
+- name: Import css
+  ansible.builtin.import_playbook: css.yml
 
-- import_playbook: chrome.yml
+- name: Import chrome
+  ansible.builtin.import_playbook: chrome.yml
   tags:
     - chrome
     - vm
 
-- import_playbook: nodejs.yml
+- name: Import nodejs
+  ansible.builtin.import_playbook: nodejs.yml
 
-- import_playbook: supervisor.yml
+- name: Import supervisor
+  ansible.builtin.import_playbook: supervisor.yml
   tags:
     - supervisor
     - vm
 
-- import_playbook: sonar.yml
-  tags:
-    - sonar
-    - vm
-
-#Below cmake conky is included in workstation role
-#- name: Install conky
+# Below cmake conky is included in workstation role
+# - name: Install conky
 #  hosts: workstation
 #  remote_user: root
 #
 #  roles:
 #    - role: albanandrieu.conky
 
-- import_playbook: git.yml
+- name: Import git
+  ansible.builtin.import_playbook: git.yml
   tags:
     - git
     # - vm
@@ -350,7 +355,7 @@
     docker_files_enable: false
 #    docker_files_generated_directory: "../roles/albanandrieu.shell"
 
-#- name: Install eclipse
+# - name: Install eclipse
 
 #  hosts: workstation
 #  remote_user: root
@@ -365,41 +370,17 @@
 #      #user: "albandri"
 #      #home: "/workspace/users/albandri10"
 
-- import_playbook: sublimetext.yml
-
-- import_playbook: zap.yml
+- name: Import zap
+  ansible.builtin.import_playbook: zap.yml
   tags:
     - zap
     - vm
 
-- import_playbook: jmeter.yml
+- name: Import jmeter
+  ansible.builtin.import_playbook: jmeter.yml
 
-- name: Install mon
-  hosts: workstation
-
-  roles:
-    - albanandrieu.mon
-
-  vars:
-    apache_listen_port: 7070
-    mon_localhost: "albandri"
-    mon_custom_group: "nabla"
-    mon_admin_email: "alban.andrieu@free.fr"
-    mon_weekly_email: "team@free.fr"
-    user: root
-    home: "/root"
-
-- import_playbook: jdiskreport.yml
-  tags:
-    - jdiskreport
-    - vm
-
-- import_playbook: private-bower.yml
-  tags:
-    - bower
-    - vm
-
-- import_playbook: owasp-wte.yml
+- name: Import owasp-wte
+  ansible.builtin.import_playbook: owasp-wte.yml
 
 - name: Install samba
   hosts: workstation

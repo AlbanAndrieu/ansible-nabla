@@ -4,7 +4,7 @@
 # This playbook can be run using vagrant (on virtual box).
 - name: Install synergy
   hosts: workstation
-  #remote_user: root
+  # remote_user: root
   connection: local
 
   roles:
@@ -17,5 +17,5 @@
     synergy_major: "1"
     synergy_minor: "14.3.stable"
     synergy_number: "218fa800"
-    #synergy_url: "http://albandrieu.com:84/nabla/html/download/synergy/{{synergy_package_deb}}"
+    # synergy_url: "http://albandrieu.com:84/nabla/html/download/synergy/{{synergy_package_deb}}"
     synergy_url: "http://192.168.132.24:8680/download/synergy/{{synergy_package_deb}}"

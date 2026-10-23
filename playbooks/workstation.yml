@@ -5,36 +5,42 @@
 # for testing purpose
 # ansible-playbook -i inventory/hosts-albandrieu -c local -v playbooks/workstation.yml --check --diff --ask-become-pass -vvvv
 
-- hosts: all
+- name: Apply hardware
+  hosts: all
   gather_facts: true
-  gather_subset: hardware
+  gather_subset:
+    - hardware
   tasks:
     - name: Group hosts by distribution
       ansible.builtin.group_by:
-
         key: "{{ ansible_distribution }}-{{ ansible_distribution_version }}"
-- hosts:
+- name: Group hosts for supported distributions
+  hosts:
     RedHat-7*:RedHat-6*:RedHat-5*:CentOS-7*:CentOS-6*:Ubuntu-22*:Ubuntu-21*:Ubuntu-19*:Ubuntu-20*:Ubuntu-18*:Ubuntu-17*:Ubuntu-16*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
   gather_facts: false
   tasks:
     - name: Group hosts for supported distributions
       ansible.builtin.group_by:
-
         key: "supported"
-- hosts: "!supported"
+- name: Fail on unsupported distributions
+  hosts: "!supported"
   gather_facts: false
   tasks:
     - name: Fail for unsupported distribution
       ansible.builtin.fail:
         msg: "{{ ansible_distribution }} {{ ansible_distribution_version }} is not a supported OS for a Tower installation.  Supported OSes include Red Hat Enterprise
           Linux 5/6/7, CentOS 6/7, or Ubuntu 12.04/13.04/14.04/16.04/17.04/18.04/19.04/20.4/21.04/22.04."
-    - ansible.builtin.debug: msg="Version {{ ansible_distribution }} {{ ansible_distribution_version }} {{ ansible_architecture }}"
+    - name: Show distribution
+      ansible.builtin.debug:
+        msg: "Version {{ ansible_distribution }} {{ ansible_distribution_version }} {{ ansible_architecture }}"
 
-#- import_playbook: jenkins-full.yml workstation_enabled=true automount_enabled=true nis_enabled=true
+# - import_playbook: jenkins-full.yml workstation_enabled=true automount_enabled=true nis_enabled=true
 
-- import_playbook: maven.yml
+- name: Import maven
+  ansible.builtin.import_playbook: maven.yml
 
-- import_playbook: dropbox.yml
+- name: Import dropbox
+  ansible.builtin.import_playbook: dropbox.yml
 
 - name: Apply workstation configuration
   hosts: workstation
@@ -58,21 +64,22 @@
     dropbox_group: "{{ group }}"
     jenkins_user: "{{ user }}"
 
-- import_playbook: chrome.yml
+- name: Import chrome
+  ansible.builtin.import_playbook: chrome.yml
 
-- import_playbook: virtualbox.yml
+- name: Import virtualbox
+  ansible.builtin.import_playbook: virtualbox.yml
 
-- import_playbook: vagrant.yml
+- name: Import vagrant
+  ansible.builtin.import_playbook: vagrant.yml
 
-- import_playbook: locale.yml
+- name: Import locale
+  ansible.builtin.import_playbook: locale.yml
 
-- import_playbook: css.yml
+- name: Import css
+  ansible.builtin.import_playbook: css.yml
 
-- import_playbook: webmin.yml
-
-#- import_playbook: jenkins-master.yml
-
-- import_playbook: solaris.yml
+# - import_playbook: jenkins-master.yml
 
 # This playbook deploys a simple standalone Tomcat 7 server.
 - name: Deploy Tomcat
@@ -90,7 +97,7 @@
   roles:
     - geerlingguy.samba
 
-#- name: Install packer
+# - name: Install packer
 #  hosts: workstation
 #
 #  roles:
@@ -101,17 +108,17 @@
 
   roles:
     - andrewrothstein.terraform
-#- import_playbook: kubernetes.yml
+# - import_playbook: kubernetes.yml
 
-#- import_playbook: collectd.yml
+# - import_playbook: collectd.yml
 
-#- name: Install certbot
+# - name: Install certbot
 #  hosts: workstation
 #
 #  roles:
 #    - geerlingguy.certbot
 
-#- name: Install certbot
+# - name: Install certbot
 #  hosts: workstation
 #  become: true
 #

@@ -33,12 +33,13 @@
 #        - docker
 #        - vm # do not install on docker image
 
-- hosts: docker-cleaning
+- name: Remove ubuntu image
+  hosts: docker-cleaning
   become: true
 
   tasks:
     - name: Remove ubuntu image
-      docker_image:
+      community.docker.docker_image:
         state: absent
         name: ubuntu:14.04
         tag: latest
@@ -49,10 +50,10 @@
         - vm
 
     - name: Remove hello-world image
-      docker_image:
+      community.docker.docker_image:
         state: absent
         name: hello-world:latest
-        force: true
+        force_absent: true
 
     #    - name: Remove test image
     #      docker_image:
@@ -73,7 +74,7 @@
     #      changed_when: false
 
     - name: Remove container which are running since more than 1 day
-      shell: "docker kill $(docker ps | grep -Ev 'cadvisor|logstash|kibana|elasticsearch' | grep -E 'Up [0-9]+ days' | awk '{print $1}')"
+      ansible.builtin.shell: "docker kill $(docker ps | grep -Ev 'cadvisor|logstash|kibana|elasticsearch' | grep -E 'Up [0-9]+ days' | awk '{print $1}')"
       ignore_errors: true
       changed_when: false
       tags:
@@ -82,7 +83,7 @@
         - vm
 
     - name: Remove container which are running since more than 10 hours
-      shell: "docker kill $(docker ps | grep -Ev 'cadvisor|logstash|kibana|elasticsearch' | grep -E 'Up 1[0-9] hours' | awk '{print $1}')"
+      ansible.builtin.shell: "docker kill $(docker ps | grep -Ev 'cadvisor|logstash|kibana|elasticsearch' | grep -E 'Up 1[0-9] hours' | awk '{print $1}')"
       ignore_errors: true
       changed_when: false
       tags:
@@ -90,9 +91,9 @@
         - docker
         - vm
 
-    #TODO below is slow, we have to pull all the images again after
+    # TODO below is slow, we have to pull all the images again after
     - name: Remove reclaimable images and volumes
-      command: "docker system prune -a --volumes -f"
+      ansible.builtin.command: "docker system prune -a --volumes -f"
       changed_when: false
       ignore_errors: true
       tags:
@@ -101,7 +102,7 @@
         - vm
 
     - name: Remove hanging and old nabla docker images
-      shell: "docker rmi $(docker image ls | grep -i nabla | grep -E 'days|weeks|months ago' | grep -v jenkins-slave | awk '{print $3}')"
+      ansible.builtin.shell: "docker rmi $(docker image ls | grep -i nabla | grep -E 'days|weeks|months ago' | grep -v jenkins-slave | awk '{print $3}')"
       ignore_errors: true
       changed_when: false
       tags:
@@ -116,18 +117,19 @@
     #        tag: 1.0.0
     #
     - name: Pull ansible-jenkins-slave-docker latest images
-      docker_image:
+      community.docker.docker_image:
         name: hub.docker.com/nabla/ansible-jenkins-slave-docker
-        force: true
+        source: pull
+        force_source: true
         tag: latest
 
     - name: Check image is fully available
-      command: "docker inspect -f . nabla/ansible-jenkins-slave-docker:latest"
+      ansible.builtin.command: "docker inspect -f . nabla/ansible-jenkins-slave-docker:latest"
       changed_when: false
-#docker ps -a -s
-#docker images
+# docker ps -a -s
+# docker images
 
-#- hosts: docker-cleaning
+# - hosts: docker-cleaning
 #  become: true
 #
 # BELOW IS NOT WORKING

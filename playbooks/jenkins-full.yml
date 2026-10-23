@@ -3,29 +3,35 @@
 
 # TODO ansible myhost --sudo -m raw -a "yum install -y python2 python-simplejson"
 
-- hosts: all
+- name: Group hosts by distribution
+  hosts: all
   gather_facts: true
   #  gather_subset: hardware
   tasks:
-    - name: group hosts by distribution
-      group_by: key="{{ ansible_distribution }}-{{ ansible_distribution_version }}"
-
-- hosts: RedHat-7*:RedHat-6*:RedHat-5*:CentOS-7*:CentOS-6*:Ubuntu-21*:Ubuntu-20*:Ubuntu-19*:Ubuntu-18*:Ubuntu-17*:Ubuntu-16*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
+    - name: Group hosts by distribution
+      ansible.builtin.group_by:
+        key: "{{ ansible_distribution }}-{{ ansible_distribution_version }}"
+- name: Group hosts for supported distributions
+  hosts: RedHat-7*:RedHat-6*:RedHat-5*:CentOS-7*:CentOS-6*:Ubuntu-21*:Ubuntu-20*:Ubuntu-19*:Ubuntu-18*:Ubuntu-17*:Ubuntu-16*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
   gather_facts: false
   tasks:
-    - name: group hosts for supported distributions
-      group_by: key="supported"
-
-- hosts: "!supported"
+    - name: Group hosts for supported distributions
+      ansible.builtin.group_by:
+        key: "supported"
+- name: Fail on unsupported distributions
+  hosts: "!supported"
   gather_facts: false
   tasks:
-    - name: fail for unsupported distribution
-      fail: msg="{{ ansible_distribution }} {{ ansible_distribution_version }} is not a supported OS for a Tower installation.  Supported OSes include Red Hat
-        Enterprise Linux 6/7, CentOS 6/7, or Ubuntu 12.04/13.04/14.04/15.04/16.04/17.04/18.04/19.04/20.04/21.04."
-    - debug: msg="Version {{ ansible_distribution }} {{ ansible_distribution_version }} {{ ansible_architecture }}"
+    - name: Fail for unsupported distribution
+      ansible.builtin.fail:
+        msg: "{{ ansible_distribution }} {{ ansible_distribution_version }} is not a supported OS for a Tower installation.  Supported OSes include Red Hat Enterprise
+          Linux 6/7, CentOS 6/7, or Ubuntu 12.04/13.04/14.04/15.04/16.04/17.04/18.04/19.04/20.04/21.04."
+    - name: Show distribution
+      ansible.builtin.debug:
+        msg: "Version {{ ansible_distribution }} {{ ansible_distribution_version }} {{ ansible_architecture }}"
 
 # USELESS playbook will fail before
-#- hosts: localhost
+# - hosts: localhost
 #
 #  tasks:
 #    - name: Install Ansible-Galaxy dependencies DEBUG
@@ -38,98 +44,118 @@
 #      ignore_errors: true
 #      changed_when: false
 
-- import_playbook: python-bootstrap.yml
+- name: Import python-bootstrap
+  ansible.builtin.import_playbook: python-bootstrap.yml
   tags:
     - python
     - vm
 
-- import_playbook: hostname.yml
+- name: Import hostname
+  ansible.builtin.import_playbook: hostname.yml
   tags:
     - hostname
     - vm
 
-- import_playbook: administration.yml automount_enabled=true nis_enabled=true
+- name: Import administration
+  ansible.builtin.import_playbook: administration.yml
+  vars:
+    automount_enabled: true
+    nis_enabled: true
 
-- import_playbook: solaris.yml
-  tags:
-    - solaris
-    - vm
+- name: Import common
+  ansible.builtin.import_playbook: common.yml
 
-- import_playbook: common.yml
-
-- import_playbook: dns.yml
+- name: Import dns
+  ansible.builtin.import_playbook: dns.yml
   tags:
     - dns
     - vm
 
-- import_playbook: security.yml
+- name: Import security
+  ansible.builtin.import_playbook: security.yml
   tags:
     - security
     - vm
 
 # Filesystem such as workspace must be created before running jenkins-slave role
-- import_playbook: hdd.yml
+- name: Import hdd
+  ansible.builtin.import_playbook: hdd.yml
 
-- import_playbook: java.yml
+- name: Import java
+  ansible.builtin.import_playbook: java.yml
 
-- import_playbook: certificate.yml
+- name: Import certificate
+  ansible.builtin.import_playbook: certificate.yml
 
-- import_playbook: maven.yml
+- name: Import maven
+  ansible.builtin.import_playbook: maven.yml
 
-#- import_playbook: chrome.yml
+# - import_playbook: chrome.yml
 
-#- import_playbook: selenium.yml
+# - import_playbook: selenium.yml
 
-#- import_playbook: javascript.yml
+# - import_playbook: javascript.yml
 
-- import_playbook: yarn.yml
+- name: Import yarn
+  ansible.builtin.import_playbook: yarn.yml
 
 # Only for MacOSX
 # - import_playbook: brew.yml
 
-- import_playbook: sonar-runner.yml
+- name: Import sonar-runner
+  ansible.builtin.import_playbook: sonar-runner.yml
 
 # TODO jenkins-slaves.yml contains some python fixes. It must be run first
 # but jenkins-slaves.yml might need virtualenv and python
-- import_playbook: python.yml
+- name: Import python
+  ansible.builtin.import_playbook: python.yml
 
-- import_playbook: docker.yml
+- name: Import docker
+  ansible.builtin.import_playbook: docker.yml
   tags:
     - docker
     - vm
 
-- import_playbook: perl.yml
+- name: Import perl
+  ansible.builtin.import_playbook: perl.yml
 
-- import_playbook: jenkins-slave.yml
+- name: Import jenkins-slave
+  ansible.builtin.import_playbook: jenkins-slave.yml
 
-- import_playbook: zabbix-agent.yml
+- name: Import zabbix-agent
+  ansible.builtin.import_playbook: zabbix-agent.yml
   tags:
     - zabbix
     - vm
 
-- import_playbook: cron.yml
+- name: Import cron
+  ansible.builtin.import_playbook: cron.yml
   tags:
     - cron
     - vm
 
-- import_playbook: xvbf.yml
+- name: Import xvbf
+  ansible.builtin.import_playbook: xvbf.yml
   tags:
     - xvbf
     - vm
 
-- import_playbook: filebeat.yml
+- name: Import filebeat
+  ansible.builtin.import_playbook: filebeat.yml
   tags:
     - filebeat
     - vm
 
-#- import_playbook: opencl.yml
+# - import_playbook: opencl.yml
 
-- import_playbook: kubernetes.yml
+- name: Import kubernetes
+  ansible.builtin.import_playbook: kubernetes.yml
   tags:
     - kubernetes
     - vm
 
-- import_playbook: cleaning.yml
+- name: Import cleaning
+  ansible.builtin.import_playbook: cleaning.yml
   tags:
     - cleaning
     - vm

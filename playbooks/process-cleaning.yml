@@ -1,7 +1,8 @@
 ---
 # ansible-playbook -i inventory/production -v playbooks/process-cleaning.yml --limit albandri -e ansible_python_interpreter="/opt/ansible/env/bin/python" -vvvv | tee setup.log
 
-- hosts: docker-cleaning
+- name: Get running processes
+  hosts: docker-cleaning
   become: true
 
   tasks:
@@ -16,7 +17,7 @@
     #      shell: "ps -e --forest -p {{ item.path }}"
     #      with_items: "{{ all_processes.files }}"
 
-    - name: Get running processes # noqa 301
+    - name: Get running processes # noqa: no-changed-when
       ansible.builtin.shell: "find /proc -maxdepth 1 -user jenkins -type d -mmin +200 -exec basename {} \\; | xargs ps | grep {{ item.process_name_matcher }} | awk
         '{ print $1 }'"
       #      shell: "ps -few | grep {{ item.process_name_matcher }} | awk '{print $2}'"
@@ -41,7 +42,8 @@
     #        msg: "Process {{ item.stdout_lines }} for {{ item.item }}"
     #      with_items: '{{ running_processes.results }}'
 
-    - ansible.builtin.debug:
+    - name: Show process ids
+      ansible.builtin.debug:
         msg: "Show process id {{ item.stdout_lines }}"
       with_items: "{{ running_processes.results }}"
       tags:
@@ -50,31 +52,31 @@
 
     #    - name: Debug running processes
     #      debug:
-    #        msg: "{{ running_processes.results|map(attribute='stdout_lines')|list }}"
+    #        msg: "{{ running_processes.results | map(attribute='stdout_lines') | list }}"
     #
-    #    - name: Show running processes # noqa 301 305
+    #    - name: Show running processes # noqa: no-changed-when command-instead-of-shell
     #      shell: "ps -e --forest -p {{ item }}"
-    #      with_items: "{{ running_processes.results|map(attribute='stdout_lines')|list }}"
+    #      with_items: "{{ running_processes.results | map(attribute='stdout_lines') | list }}"
 
-    - name: Kill running processes # noqa 301 305
+    - name: Kill running processes # noqa: no-changed-when command-instead-of-shell
       ansible.builtin.shell: "kill {{ item }}"
-      with_items: "{{ running_processes.results|map(attribute='stdout_lines')|list }}"
+      with_items: "{{ running_processes.results | map(attribute='stdout_lines') | list }}"
       ignore_errors: true
       tags:
         - clean
         - vm
 
-    - name: Wait for running processes to stop # noqa 301 305
+    - name: Wait for running processes to stop # noqa: no-changed-when command-instead-of-shell
       ansible.builtin.wait_for:
         path: "/proc/{{ item }}/status"
         state: absent
-      with_items: "{{ running_processes.results|map(attribute='stdout_lines')|list }}"
+      with_items: "{{ running_processes.results | map(attribute='stdout_lines') | list }}"
       ignore_errors: true
       register: killed_processes
       tags:
         - clean
         - vm
 #
-#    - name: Force kill stuck processes # noqa 301 305
+#    - name: Force kill stuck processes # noqa: no-changed-when command-instead-of-shell
 #      shell: "kill -9 {{ item }}"
 #      with_items: "{{ killed_processes.results | select('failed') | map(attribute='item') | list }}"

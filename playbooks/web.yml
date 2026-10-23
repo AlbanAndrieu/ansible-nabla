@@ -8,113 +8,124 @@
 # TODO ansible -i production albandrieu.com --sudo --ask-become-pass -m raw -a "apt-get -f install && apt-get update"
 # TODO ansible -i production albandrieu.com --sudo --ask-become-pass -m raw -a "apt-get install -y python python-simplejson"
 
-- hosts: all
+- name: Apply hardware
+  hosts: all
   gather_facts: true
-  gather_subset: hardware
+  gather_subset:
+    - hardware
   tasks:
     - name: Group hosts by distribution
       ansible.builtin.group_by:
-
         key: "{{ ansible_distribution }}-{{ ansible_distribution_version }}"
-- hosts: RedHat-7*:RedHat-6*:RedHat-5*:CentOS-7*:CentOS-6*:Ubuntu-21*:Ubuntu-20*:Ubuntu-19*:Ubuntu-18*:Ubuntu-17*:Ubuntu-16*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
+- name: Group hosts for supported distributions
+  hosts: RedHat-7*:RedHat-6*:RedHat-5*:CentOS-7*:CentOS-6*:Ubuntu-21*:Ubuntu-20*:Ubuntu-19*:Ubuntu-18*:Ubuntu-17*:Ubuntu-16*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
   gather_facts: false
   tasks:
     - name: Group hosts for supported distributions
       ansible.builtin.group_by:
-
         key: "supported"
-- hosts: "!supported"
+- name: Fail on unsupported distributions
+  hosts: "!supported"
   gather_facts: false
   tasks:
     - name: Fail for unsupported distribution
       ansible.builtin.fail:
         msg: "{{ ansible_distribution }} {{ ansible_distribution_version }} is not a supported OS for a Tower installation.  Supported OSes include Red Hat Enterprise
           Linux 6/7, CentOS 6/7, or Ubuntu 12.04/13.04/14.04/16.04/17.04/18.04/19.04."
-    - ansible.builtin.debug: msg="Version {{ ansible_distribution }} {{ ansible_distribution_version }} {{ ansible_architecture }}"
+    - name: Show distribution
+      ansible.builtin.debug:
+        msg: "Version {{ ansible_distribution }} {{ ansible_distribution_version }} {{ ansible_architecture }}"
 
-#- hosts: localhost
-#
-#  tasks:
-#    - name: Install Ansible-Galaxy dependencies
-#      shell: ansible-galaxy install -r requirements.yml -p ./roles/
-#      #shell: ansible-galaxy install -r requirements.yml -p ./roles/ --ignore-errors --force
-#      ignore_errors: true
-
-- import_playbook: python-bootstrap.yml
+- name: Import python-bootstrap
+  ansible.builtin.import_playbook: python-bootstrap.yml
   tags:
     - python
     - vm
 
-- import_playbook: hostname.yml
+- name: Import hostname
+  ansible.builtin.import_playbook: hostname.yml
   tags:
     - hostname
     - vm
 
-#- import_playbook: nfs.yml
+# - import_playbook: nfs.yml
 
-- import_playbook: common.yml
+- name: Import common
+  ansible.builtin.import_playbook: common.yml
 
-- import_playbook: dns.yml
+- name: Import dns
+  ansible.builtin.import_playbook: dns.yml
   tags:
     - dns
     - vm
 
-- import_playbook: python.yml
+- name: Import python
+  ansible.builtin.import_playbook: python.yml
 
-- import_playbook: administration.yml automount_enabled=false nis_enabled=false
+- name: Import administration
+  ansible.builtin.import_playbook: administration.yml
+  vars:
+    automount_enabled: false
+    nis_enabled: false
 
-- import_playbook: security.yml
+- name: Import security
+  ansible.builtin.import_playbook: security.yml
   tags:
     - security
     - vm
 
-- import_playbook: java.yml
+- name: Import java
+  ansible.builtin.import_playbook: java.yml
 
-- import_playbook: certificate.yml
+- name: Import certificate
+  ansible.builtin.import_playbook: certificate.yml
 
-- import_playbook: python.yml
+- name: Import python
+  ansible.builtin.import_playbook: python.yml
   tags:
     - python
     - vm
 
-- import_playbook: webmin.yml
-  tags:
-    - webmin
-    - vm
-
-- import_playbook: chrome.yml
+- name: Import chrome
+  ansible.builtin.import_playbook: chrome.yml
   tags:
     - chrome
     - vm
 
-- import_playbook: selenium.yml
+- name: Import selenium
+  ansible.builtin.import_playbook: selenium.yml
   tags:
     - selenium
     - vm
 
-- import_playbook: xvbf.yml
+- name: Import xvbf
+  ansible.builtin.import_playbook: xvbf.yml
   tags:
     - xvbf
     - vm
 
-- import_playbook: zabbix-agent.yml
+- name: Import zabbix-agent
+  ansible.builtin.import_playbook: zabbix-agent.yml
   tags:
     - zabbix
     - vm
 
-- import_playbook: yarn.yml
+- name: Import yarn
+  ansible.builtin.import_playbook: yarn.yml
 
-#- import_playbook: jenkins-slave.yml
+# - import_playbook: jenkins-slave.yml
 
-#- import_playbook: docker.yml
+# - import_playbook: docker.yml
 
-- hosts: apache-servers
+- name: Show apache servers address
+  hosts: apache-servers
   gather_facts: true
   become: true
 
   tasks:
-    - ansible.builtin.debug: var=hostvars[inventory_hostname]['ansible_default_ipv4']['address']
-
+    - name: Show default IPv4 address
+      ansible.builtin.debug:
+        var: hostvars[inventory_hostname]['ansible_default_ipv4']['address']
 - name: Configure and deploy the nabla application to apache
   hosts: apache-servers
   gather_facts: true
@@ -137,7 +148,7 @@
     repository: "git@github.com:AlbanAndrieu/nabla-site-apache.git"
     repository_version: "master"
 
-#WARNING jenkins-master role has disabled a2dissite 000-default
+# WARNING jenkins-master role has disabled a2dissite 000-default
 - name: Configure and deploy the nabla php sample application code to apache
   hosts: apache-servers
   gather_facts: true
@@ -152,7 +163,7 @@
     php_mysql_package: "php7.3-mysql"
     __php_mysql_package: "php7.3-mysql"
     web_base_dir: "/var/www/nabla-servers-bower-sample"
-    #jenkins_proxy_port: "{{ apache_listen_port }}" #TODO why is it needed!!!
+    # jenkins_proxy_port: "{{ apache_listen_port }}" #TODO why is it needed!!!
     phpmyadmin_mysql_user: root
     phpmyadmin_mysql_password: microsoft
     phpmyadmin_mysql_port: "{{ apache_listen_port }}"
@@ -164,7 +175,8 @@
     repository: "https://github.com/AlbanAndrieu/nabla-servers-bower-sample.git"
     repository_version: "gh-pages"
 
-- import_playbook: lamp.yml
+- name: Import lamp
+  ansible.builtin.import_playbook: lamp.yml
   tags:
     - lamp
     - vm

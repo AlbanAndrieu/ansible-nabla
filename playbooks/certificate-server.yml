@@ -15,21 +15,125 @@
   hosts: certificate_server
   become: true
 
-  roles:
-    - role: ssl-certificate
-      ssl_certs_country: "FR"
-      ssl_certs_locality: "Paris"
-      ssl_certs_organization: "Nabla"
-      ssl_certs_state: "Ile de France"
-      #ssl_certs_common_name: "{{ ansible_fqdn }}"
-      ssl_certs_domain_name: "int.albandrieu.com"
-      ssl_certs_san_name: "vaultuat.{{ ssl_certs_domain_name }}"
-      ssl_certs_common_name: "{{ ansible_hostname }}.{{ ssl_certs_domain_name }}"
-      ssl_certs_email: "alban.andrieu@free.fr"
-      ssl_certs_days: "3650"
-      ssl_certs_fields: "/C={{ ssl_certs_country }}/ST={{ ssl_certs_state }}/L={{ ssl_certs_locality }}/O={{ ssl_certs_organization }}/CN={{ ssl_certs_common_name
-        }}/emailAddress={{ ssl_certs_email }}/subjectAltName=DNS.1={{ ssl_certs_common_name },DNS.2={{ ansible_fqdn }},DNS.3={{ ansible_hostname }},DNS.4=localhost,IP={{
-        ansible_default_ipv4.address }},IP=127.0.0.1" # noqa 204
-      #ssl_certs_path_owner: "root"
-      #ssl_certs_path_group: "root"
-      #ssl_certs_mode: 700
+  # Replaces the jdauphant ssl-certificate role: same ssl_certs_* variables and paths
+  vars:
+    ssl_certs_country: "FR"
+    ssl_certs_locality: "Paris"
+    ssl_certs_organization: "Nabla"
+    ssl_certs_state: "Ile de France"
+    # ssl_certs_common_name: "{{ ansible_fqdn }}"
+    ssl_certs_domain_name: "int.albandrieu.com"
+    ssl_certs_san_name: "vaultuat.{{ ssl_certs_domain_name }}"
+    ssl_certs_common_name: "{{ ansible_hostname }}.{{ ssl_certs_domain_name }}"
+    ssl_certs_email: "alban.andrieu@free.fr"
+    ssl_certs_days: "3650"
+    ssl_certs_key_size: 2048
+    ssl_certs_path: "/etc/ssl/{{ ssl_certs_common_name }}"
+    ssl_certs_path_owner: "www-data"
+    ssl_certs_path_group: "www-data"
+    ssl_certs_mode: "0700"
+    ssl_certs_privkey_path: "{{ ssl_certs_path }}/{{ ssl_certs_common_name }}.key"
+    ssl_certs_cert_path: "{{ ssl_certs_path }}/{{ ssl_certs_common_name }}.pem"
+    ssl_certs_csr_path: "{{ ssl_certs_path }}/{{ ssl_certs_common_name }}.csr"
+    ssl_certs_combined_path: "{{ ssl_certs_path }}/{{ ssl_certs_common_name }}.combined.pem"
+    ssl_certs_local_privkey_path: "{{ inventory_dir | default(playbook_dir) }}/files/ssl/{{ ssl_certs_common_name }}.key"
+    ssl_certs_local_cert_path: "{{ inventory_dir | default(playbook_dir) }}/files/ssl/{{ ssl_certs_common_name }}.pem"
+    ssl_certs_subject_alt_names:
+      - "DNS:{{ ssl_certs_common_name }}"
+      - "DNS:{{ ssl_certs_san_name }}"
+      - "DNS:{{ ansible_facts['fqdn'] }}"
+      - "DNS:{{ ansible_facts['hostname'] }}"
+      - "DNS:localhost"
+      # default_ipv4 is missing when the host has no default route
+      - "IP:{{ (ansible_facts['default_ipv4'] | default({}))['address'] | default('127.0.0.1') }}"
+      - "IP:127.0.0.1"
+
+  tasks:
+    # python3-cryptography is needed by the community.crypto modules on the target
+    - name: Install OpenSSL and python cryptography
+      ansible.builtin.package:
+        name:
+          - openssl
+          - python3-cryptography
+        state: present
+
+    - name: Ensure ssl folder exist
+      ansible.builtin.file:
+        path: "{{ ssl_certs_path }}"
+        state: directory
+        owner: "{{ ssl_certs_path_owner }}"
+        group: "{{ ssl_certs_path_group }}"
+        mode: "{{ ssl_certs_mode }}"
+
+    - name: Look for a local private key and certificate
+      ansible.builtin.stat:
+        path: "{{ item }}"
+      loop:
+        - "{{ ssl_certs_local_privkey_path }}"
+        - "{{ ssl_certs_local_cert_path }}"
+      delegate_to: localhost
+      become: false
+      register: ssl_certs_local
+
+    - name: Fail when only one of the local private key and certificate exists
+      ansible.builtin.assert:
+        that: ssl_certs_local.results[0].stat.exists == ssl_certs_local.results[1].stat.exists
+        fail_msg: "Both {{ ssl_certs_local_privkey_path }} and {{ ssl_certs_local_cert_path }} are needed"
+
+    - name: Copy local private key and certificate
+      ansible.builtin.copy:
+        src: "{{ item.src }}"
+        dest: "{{ item.dest }}"
+        owner: "{{ ssl_certs_path_owner }}"
+        group: "{{ ssl_certs_path_group }}"
+        mode: "{{ ssl_certs_mode }}"
+      loop:
+        - { src: "{{ ssl_certs_local_privkey_path }}", dest: "{{ ssl_certs_privkey_path }}" }
+        - { src: "{{ ssl_certs_local_cert_path }}", dest: "{{ ssl_certs_cert_path }}" }
+      when: ssl_certs_local.results[0].stat.exists
+
+    - name: Generate a self-signed certificate
+      when: not ssl_certs_local.results[0].stat.exists
+      block:
+        - name: Generate RSA key
+          community.crypto.openssl_privatekey:
+            path: "{{ ssl_certs_privkey_path }}"
+            size: "{{ ssl_certs_key_size }}"
+            owner: "{{ ssl_certs_path_owner }}"
+            group: "{{ ssl_certs_path_group }}"
+            mode: "{{ ssl_certs_mode }}"
+
+        - name: Generate CSR
+          community.crypto.openssl_csr:
+            path: "{{ ssl_certs_csr_path }}"
+            privatekey_path: "{{ ssl_certs_privkey_path }}"
+            country_name: "{{ ssl_certs_country }}"
+            state_or_province_name: "{{ ssl_certs_state }}"
+            locality_name: "{{ ssl_certs_locality }}"
+            organization_name: "{{ ssl_certs_organization }}"
+            common_name: "{{ ssl_certs_common_name }}"
+            email_address: "{{ ssl_certs_email }}"
+            subject_alt_name: "{{ ssl_certs_subject_alt_names | unique }}"
+            owner: "{{ ssl_certs_path_owner }}"
+            group: "{{ ssl_certs_path_group }}"
+            mode: "{{ ssl_certs_mode }}"
+
+        - name: Generate self-signed SSL certificate
+          community.crypto.x509_certificate:
+            path: "{{ ssl_certs_cert_path }}"
+            csr_path: "{{ ssl_certs_csr_path }}"
+            privatekey_path: "{{ ssl_certs_privkey_path }}"
+            provider: selfsigned
+            selfsigned_not_after: "+{{ ssl_certs_days }}d"
+            owner: "{{ ssl_certs_path_owner }}"
+            group: "{{ ssl_certs_path_group }}"
+            mode: "{{ ssl_certs_mode }}"
+
+    - name: Combine key and cert
+      ansible.builtin.assemble:
+        src: "{{ ssl_certs_path }}"
+        dest: "{{ ssl_certs_combined_path }}"
+        regexp: "^({{ ssl_certs_privkey_path | basename | regex_escape }}|{{ ssl_certs_cert_path | basename | regex_escape }})$"
+        owner: "{{ ssl_certs_path_owner }}"
+        group: "{{ ssl_certs_path_group }}"
+        mode: "{{ ssl_certs_mode }}"

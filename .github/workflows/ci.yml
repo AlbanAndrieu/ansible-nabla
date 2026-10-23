@@ -24,7 +24,8 @@ jobs:
   ansible-lint:
     name: Ansible lint
     runs-on: ubuntu-latest
-    # TODO: remove once the playbooks pass the syntax-check (missing roles, invalid play attributes)
+    # TODO: remove once the fix/ansible-core-2.21 pull requests of the roles are merged and
+    # re-pinned in requirements.yml: the playbooks pass, the pinned roles still use include/sudo
     continue-on-error: true
     steps:
       - name: Checkout

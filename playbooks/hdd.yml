@@ -9,20 +9,20 @@
   become: true
 
   tasks:
-    - name: set freenas_ssh_target_global to default
-      set_fact: freenas_ssh_target_global=iqn.2011-03.com.albandrieu.istgt
-
-    - name: set freenas_ssh_target to default
-      set_fact: freenas_ssh_target=nabla
-
-    - name: set freenas_ssh_host to default
-      set_fact: freenas_ssh_host=192.168.1.24
-
-    - name: set freenas_ssh_port to default
-      set_fact: freenas_ssh_port=3260
-
+    - name: Set freenas_ssh_target_global to default
+      ansible.builtin.set_fact:
+        freenas_ssh_target_global: iqn.2011-03.com.albandrieu.istgt
+    - name: Set freenas_ssh_target to default
+      ansible.builtin.set_fact:
+        freenas_ssh_target: nabla
+    - name: Set freenas_ssh_host to default
+      ansible.builtin.set_fact:
+        freenas_ssh_host: 192.168.1.24
+    - name: Set freenas_ssh_port to default
+      ansible.builtin.set_fact:
+        freenas_ssh_port: "3260"
     - name: Copy isci configuration
-      template:
+      ansible.builtin.template:
         src: iscsid.conf.j2
         dest: "/etc/iscsi/iscsid.conf"
         owner: root
@@ -43,51 +43,52 @@
 # TODO target albandri albandrieu
 
 # See https://www.tecmint.com/create-luns-using-lvm-in-iscsi-target/
-#fdisk -c /dev/sdd
-#Welcome to fdisk (util-linux 2.31.1).
-#Changes will remain in memory only, until you decide to write them.
-#Be careful before using the write command.
+# fdisk -c /dev/sdd
+# Welcome to fdisk (util-linux 2.31.1).
+# Changes will remain in memory only, until you decide to write them.
+# Be careful before using the write command.
 #
-#Device does not contain a recognized partition table.
-#Created a new DOS disklabel with disk identifier 0x06091fe8.
+# Device does not contain a recognized partition table.
+# Created a new DOS disklabel with disk identifier 0x06091fe8.
 #
-#Command (m for help): n
-#Partition type
+# Command (m for help): n
+# Partition type
 #   p   primary (0 primary, 0 extended, 4 free)
 #   e   extended (container for logical partitions)
-#Select (default p): p
-#Partition number (1-4, default 1):
-#First sector (2048-4194303, default 2048):
-#Last sector, +sectors or +size{K,M,G,T,P} (2048-4194303, default 4194303):
+# Select (default p): p
+# Partition number (1-4, default 1):
+# First sector (2048-4194303, default 2048):
+# Last sector, +sectors or +size{K,M,G,T,P} (2048-4194303, default 4194303):
 #
-#Created a new partition 1 of type 'Linux' and of size 2 GiB.
+# Created a new partition 1 of type 'Linux' and of size 2 GiB.
 #
-#Command (m for help): w
-#The partition table has been altered.
-#Calling ioctl() to re-read partition table.
-#Syncing disks.
+# Command (m for help): w
+# The partition table has been altered.
+# Calling ioctl() to re-read partition table.
+# Syncing disks.
 
-#lsblk
-#mkfs.ext4 /dev/sdd1
-#sudo mkdir /data
-#mount /dev/sdd1 /data
+# lsblk
+# mkfs.ext4 /dev/sdd1
+# sudo mkdir /data
+# mount /dev/sdd1 /data
 
-#fdisk -l /dev/sdd
+# fdisk -l /dev/sdd
 
-- hosts: iscsi
+- name: Hdd | Create vg_iscsi volume group
+  hosts: iscsi
   become: true
 
   tasks:
-    - name: hdd | Create vg_iscsi volume group
-      command: umount /data && vgcreate vg_iscsi /dev/sdd1
+    - name: Hdd | Create vg_iscsi volume group
+      ansible.builtin.command: umount /data && vgcreate vg_iscsi /dev/sdd1
       changed_when: false
       become: true
       ignore_errors: true
 
-    #pvs && vgs && lvs
+    # pvs && vgs && lvs
 
-    - name: hdd | Create sdd1
-      command: pvcreate /dev/sdd1
+    - name: Hdd | Create sdd1
+      ansible.builtin.command: pvcreate /dev/sdd1
       changed_when: false
       become: true
       ignore_errors: true
@@ -99,120 +100,120 @@
     #      become: true
     #      ignore_errors: true
 
-    - name: hdd | Extend sdb
-      command: vgextend VolGroup00 /dev/sdb
+    - name: Hdd | Extend sdb
+      ansible.builtin.command: vgextend VolGroup00 /dev/sdb
       when: (ansible_distribution == 'Red Hat Enterprise Linux' or ansible_distribution == 'RedHat') and ansible_distribution_major_version == '6'
       changed_when: false
       become: true
       ignore_errors: true
 
-    - name: hdd | Extend sdb
-      command: vgextend rhel_fr1cslvcacrhel71 /dev/sdb
+    - name: Hdd | Extend sdb
+      ansible.builtin.command: vgextend rhel_fr1cslvcacrhel71 /dev/sdb
       when: (ansible_distribution == 'Red Hat Enterprise Linux' or ansible_distribution == 'RedHat') and ansible_distribution_major_version == '7'
       changed_when: false
       become: true
       ignore_errors: true
 
-    - name: hdd | Extend sdb
-      command: vgextend centos_tmpvcaccent7 /dev/sdb
+    - name: Hdd | Extend sdb
+      ansible.builtin.command: vgextend centos_tmpvcaccent7 /dev/sdb
       when: (ansible_distribution == 'CentOS') and ansible_distribution_major_version == '7'
       changed_when: false
       become: true
       ignore_errors: true
 
-    - name: hdd | Create workspace filesystem
-      command: lvcreate -L 500G -n workspace vg_iscsi
+    - name: Hdd | Create workspace filesystem
+      ansible.builtin.command: lvcreate -L 500G -n workspace vg_iscsi
       when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and ansible_distribution_version not in ['12.04', '14.04']
       changed_when: false
       become: true
       ignore_errors: true
 
-    - name: hdd | Create docker filesystem
-      command: lvcreate -L 100G -n docker vg_iscsi
+    - name: Hdd | Create docker filesystem
+      ansible.builtin.command: lvcreate -L 100G -n docker vg_iscsi
       when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and ansible_distribution_version not in ['12.04', '14.04']
       changed_when: false
       become: true
       ignore_errors: true
 
-    - name: hdd | Create workspace filesystem
-      command: lvcreate -l 12805 -n workspace VolGroup00
+    - name: Hdd | Create workspace filesystem
+      ansible.builtin.command: lvcreate -l 12805 -n workspace VolGroup00
       when: (ansible_distribution == 'Red Hat Enterprise Linux' or ansible_distribution == 'RedHat') and ansible_distribution_major_version == '6'
       changed_when: false
       become: true
       ignore_errors: true
 
-    - name: hdd | Create workspace filesystem
-      command: lvcreate -l 12805 -n workspace rhel_fr1cslvcacrhel71
+    - name: Hdd | Create workspace filesystem
+      ansible.builtin.command: lvcreate -l 12805 -n workspace rhel_fr1cslvcacrhel71
       when: (ansible_distribution == 'Red Hat Enterprise Linux' or ansible_distribution == 'RedHat') and ansible_distribution_major_version == '7'
       changed_when: false
       become: true
       ignore_errors: true
 
-    - name: hdd | Create docker filesystem
-      command: lvcreate -l 12794 -n docker rhel_fr1cslvcacrhel71
+    - name: Hdd | Create docker filesystem
+      ansible.builtin.command: lvcreate -l 12794 -n docker rhel_fr1cslvcacrhel71
       when: (ansible_distribution == 'Red Hat Enterprise Linux' or ansible_distribution == 'RedHat') and ansible_distribution_major_version == '7'
       changed_when: false
       become: true
       ignore_errors: true
 
-    - name: hdd | Create workspace filesystem
-      command: lvcreate -l 12805 -n workspace centos_tmpvcaccent7
+    - name: Hdd | Create workspace filesystem
+      ansible.builtin.command: lvcreate -l 12805 -n workspace centos_tmpvcaccent7
       when: (ansible_distribution == 'CentOS') and ansible_distribution_major_version == '7'
       changed_when: false
       become: true
       ignore_errors: true
 
-    - name: hdd | Create docker filesystem
-      command: lvcreate -l 12794 -n docker centos_tmpvcaccent7
+    - name: Hdd | Create docker filesystem
+      ansible.builtin.command: lvcreate -l 12794 -n docker centos_tmpvcaccent7
       when: (ansible_distribution == 'CentOS') and ansible_distribution_major_version == '7'
       changed_when: false
       become: true
       ignore_errors: true
 
-    - name: hdd | Make workspace filesystem ext4
-      command: mkfs -t ext4 /dev/vg_iscsi/workspace
+    - name: Hdd | Make workspace filesystem ext4
+      ansible.builtin.command: mkfs -t ext4 /dev/vg_iscsi/workspace
       when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and ansible_distribution_version not in ['12.04', '14.04']
       changed_when: false
       become: true
       ignore_errors: true
 
-    - name: hdd | Make docker filesystem ext4
-      command: mkfs -t ext4 /dev/vg_iscsi/docker
+    - name: Hdd | Make docker filesystem ext4
+      ansible.builtin.command: mkfs -t ext4 /dev/vg_iscsi/docker
       when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and ansible_distribution_version not in ['12.04', '14.04']
       changed_when: false
       become: true
       ignore_errors: true
 
-    - name: hdd | Make workspace filesystem ext4
-      command: mkfs -t ext4 /dev/VolGroup00/workspace
+    - name: Hdd | Make workspace filesystem ext4
+      ansible.builtin.command: mkfs -t ext4 /dev/VolGroup00/workspace
       when: (ansible_distribution == 'Red Hat Enterprise Linux' or ansible_distribution == 'RedHat') and ansible_distribution_major_version == '6'
       changed_when: false
       become: true
       ignore_errors: true
 
-    - name: hdd | Make workspace filesystem xfs
-      command: mkfs -t xfs /dev/rhel_fr1cslvcacrhel71/workspace
+    - name: Hdd | Make workspace filesystem xfs
+      ansible.builtin.command: mkfs -t xfs /dev/rhel_fr1cslvcacrhel71/workspace
       when: (ansible_distribution == 'Red Hat Enterprise Linux' or ansible_distribution == 'RedHat') and ansible_distribution_major_version == '7'
       changed_when: false
       become: true
       ignore_errors: true
 
-    - name: hdd | Make docker filesystem xfs
-      command: mkfs -t xfs /dev/rhel_fr1cslvcacrhel71/docker
+    - name: Hdd | Make docker filesystem xfs
+      ansible.builtin.command: mkfs -t xfs /dev/rhel_fr1cslvcacrhel71/docker
       when: (ansible_distribution == 'Red Hat Enterprise Linux' or ansible_distribution == 'RedHat') and ansible_distribution_major_version == '7'
       changed_when: false
       become: true
       ignore_errors: true
 
-    - name: hdd | Make workspace filesystem xfs
-      command: mkfs -t xfs /dev/centos_tmpvcaccent7/workspace
+    - name: Hdd | Make workspace filesystem xfs
+      ansible.builtin.command: mkfs -t xfs /dev/centos_tmpvcaccent7/workspace
       when: (ansible_distribution == 'CentOS') and ansible_distribution_major_version == '7'
       changed_when: false
       become: true
       ignore_errors: true
 
-    - name: hdd | Make docker filesystem xfs
-      command: mkfs -t xfs /dev/centos_tmpvcaccent7/docker
+    - name: Hdd | Make docker filesystem xfs
+      ansible.builtin.command: mkfs -t xfs /dev/centos_tmpvcaccent7/docker
       when: (ansible_distribution == 'CentOS') and ansible_distribution_major_version == '7'
       changed_when: false
       become: true
@@ -231,8 +232,8 @@
     # sudo mkdir /workspace
     # sudo mkdir /docker
     #
-    - name: hdd | Mount up device by label data
-      mount:
+    - name: Hdd | Mount up device by label data
+      ansible.posix.mount:
         path: /data
         src: /dev/rhel_fr1cslvcacrhel71/workspace
         fstype: ext4
@@ -240,8 +241,8 @@
         passno: 2
         state: present
 
-    - name: hdd | Mount up device by label
-      mount:
+    - name: Hdd | Mount up device by label
+      ansible.posix.mount:
         path: /docker
         src: /dev/rhel_fr1cslvcacrhel71/docker
         fstype: ext4
@@ -263,20 +264,20 @@
   become: true
 
   tasks:
-    - name: set freenas_ssh_target_global to default
-      set_fact: freenas_ssh_target_global=iqn.2011-03.com.albandrieu.istgt
-
-    - name: set freenas_ssh_target to default
-      set_fact: freenas_ssh_target=nabla
-
-    - name: set freenas_ssh_host to default
-      set_fact: freenas_ssh_host=192.168.1.24
-
-    - name: set freenas_ssh_port to default
-      set_fact: freenas_ssh_port=3260
-
+    - name: Set freenas_ssh_target_global to default
+      ansible.builtin.set_fact:
+        freenas_ssh_target_global: iqn.2011-03.com.albandrieu.istgt
+    - name: Set freenas_ssh_target to default
+      ansible.builtin.set_fact:
+        freenas_ssh_target: nabla
+    - name: Set freenas_ssh_host to default
+      ansible.builtin.set_fact:
+        freenas_ssh_host: 192.168.1.24
+    - name: Set freenas_ssh_port to default
+      ansible.builtin.set_fact:
+        freenas_ssh_port: "3260"
     - name: Copy fstab configuration.
-      template:
+      ansible.builtin.template:
         src: fstab.j2
         dest: "/etc/fstab"
         owner: root
@@ -297,16 +298,16 @@
     # IMPORTANT
     # Do not reboot the server if entry in wrong in fstab you will have IS team to get console on booting
 
-    - name: hdd | Install hdd tools
-      action: "{{ ansible_pkg_mgr }} name={{ item }} state={{ util_pkg_state|default('present') }}"
+    - name: Hdd | Install hdd tools
+      action: "{{ ansible_pkg_mgr }} name={{ item }} state={{ util_pkg_state | default('present') }}"
       when: (ansible_distribution == 'RedHat' and not ansible_distribution_major_version == '6')
       with_items:
         - system-storage-manager
       become: true
       changed_when: false
 
-    - name: hdd | Install hdd tools
-      action: "{{ ansible_pkg_mgr }} name={{ item }} state={{ util_pkg_state|default('present') }} update_cache=true"
+    - name: Hdd | Install hdd tools
+      action: "{{ ansible_pkg_mgr }} name={{ item }} state={{ util_pkg_state | default('present') }} update_cache=true"
       when: (ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux' or ansible_distribution == 'RedHat')
       with_items:
         - gnome-disk-utility

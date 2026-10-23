@@ -16,7 +16,7 @@
       - language-pack-fr
     locales_default:
       lang: en_US.UTF-8
-      #language:
+      # language:
       lc_ctype: en_US.UTF-8
       lc_numeric: fr_FR.UTF-8
       lc_time: fr_FR.UTF-8

@@ -1,13 +1,13 @@
 ---
 # ansible-playbook playbooks/certificate-old.yml -i inventory/production --limit albandrieu.com -vvvv --vault-password-file vault.passwd
 
-- hosts: jenkins-slaves
+- name: Set proxy_cdnurl_server to default
+  hosts: jenkins-slaves
   remote_user: root
 
   tasks:
     - name: Set proxy_cdnurl_server to default
       ansible.builtin.set_fact:
-
         proxy_cdnurl_server: "albandrieu.com/download"
     - name: Get the CA root certificate (2) OLD
       ansible.builtin.get_url:
@@ -22,7 +22,7 @@
 - name: Install CA root certificate (2) OLD
   hosts: jenkins-slaves
   gather_facts: false
-  #remote_user: root
+  # remote_user: root
   check_mode: false
   #  ignore_errors: yes
   become: true

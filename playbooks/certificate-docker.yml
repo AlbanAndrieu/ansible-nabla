@@ -1,6 +1,7 @@
 ---
 # Below is no more needed for ubuntu-19 and docker 19.03.3
-- hosts: Ubuntu-18*:Ubuntu-17*:Ubuntu-16*:Ubuntu-14*:Ubuntu-12*
+- name: Get the Docker root certificate
+  hosts: Ubuntu-18*:Ubuntu-17*:Ubuntu-16*:Ubuntu-14*:Ubuntu-12*
 
   tasks:
     - name: Get the Docker root certificate
@@ -15,26 +16,28 @@
       ignore_errors: true
 
 # Below is no more needed for ubuntu-19 and docker 19.03.3
-- hosts: Ubuntu-18*:Ubuntu-17*:Ubuntu-16*:Ubuntu-14*:Ubuntu-12*
+- name: Apply ssl-ca-certificate
+  hosts: Ubuntu-18*:Ubuntu-17*:Ubuntu-16*:Ubuntu-14*:Ubuntu-12*
   become: true
   check_mode: false
   ignore_errors: true
   remote_user: root
 
-  #See /root/pki/docker.pem
+  # See /root/pki/docker.pem
   roles:
     - role: ssl-ca-certificate
       trust_ca_pki_dir: "~/pki"
       trust_ca_pki_prefix: "registry"
       trust_ca_cert_prefix: "registry"
 
-#TODO secure docker https://docs.docker.com/engine/security/https/
-#mkdir -pv ~/.docker
-#cp -v {ca,registry,cert,key}.pem ~/.docker
-#docker --tlsverify ps
+# TODO secure docker https://docs.docker.com/engine/security/https/
+# mkdir -pv ~/.docker
+# cp -v {ca,registry,cert,key}.pem ~/.docker
+# docker --tlsverify ps
 
 # Below is no more needed for ubuntu-19 and docker 19.03.3
-- hosts: Ubuntu-18*:Ubuntu-17*:Ubuntu-16*:Ubuntu-14*:Ubuntu-12*
+- name: Create .docker
+  hosts: Ubuntu-18*:Ubuntu-17*:Ubuntu-16*:Ubuntu-14*:Ubuntu-12*
 
   tasks:
     - name: Create .docker
@@ -45,7 +48,7 @@
       become: true
       become_user: root
 
-    #- name: Copy docker registry pem crt
+    # - name: Copy docker registry pem crt
     #  copy:
     #    src: ~/pki/registry.pem
     #    dest: "{{ item }}"

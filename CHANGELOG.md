@@ -33,10 +33,20 @@ Switch to docker/ubuntu24/Dockerfile (image 2.1.0)
 - Image npm tools: npm 12, newman 6, jest 30, storybook 10, jest-junit 17, pyright 1.1.414
 - playbooks/python.yml: a single /opt/ansible/env python 3.12 virtualenv for Ubuntu 22.04/24.04 and RHEL 8/9,
   installed from requirements-current.txt (compiled from requirements-current.in)
+- All playbooks pass the ansible-core 2.21 syntax-check and ansible-lint (baseline in .ansible-lint-ignore):
+  `include` / `sudo` / inline `import_playbook` arguments replaced, plays and tasks named
+- docker_service replaced by community.docker.docker_compose_v2, docker_image_facts by docker_image_info,
+  the docker module by community.docker.docker_container
+- zabbix-api.yml uses community.zabbix over httpapi; chocolatey.chocolatey and community.windows collections added
+- docker-ubuntu.yml installs Docker CE from the official deb822 repository
+- java.yml installs OpenJDK 21, login.yml edits /etc/login.defs, certificate-server.yml uses community.crypto
+- Secrets in playbooks replaced by vault variables
 ### Remove
 - docker/ubuntu16 to ubuntu20, Jenkinsfile, .travis.yml, tox.ini, package.json
 - PHP/Apache/Composer, s6-overlay, Nomad, tfsec and dockerfile_lint from the image
 - Python 2.7 to 3.8 virtualenvs and their requirements-current-*.txt files
+- 19 archived roles and 5 unmaintained third-party roles, with the playbooks that only used them
+  (awstats, collectd, evasive, grive, jboss, kibana, logstash, mon, monit, newrelic, sonar, webmin, zfs...)
 
 ## [1.0.0] - 2020-01-21
 

@@ -1,0 +1,13 @@
+# This file contains ignores rule violations for ansible-lint
+playbooks/boot-cleaning.yml ignore-errors
+playbooks/certificate-docker.yml ignore-errors
+playbooks/certificate.yml ignore-errors
+playbooks/chrome.yml var-naming[no-role-prefix]
+playbooks/cleaning.yml ignore-errors
+playbooks/docker-cleaning-full.yml ignore-errors
+playbooks/docker-cleaning.yml ignore-errors
+playbooks/docker-container.yml ignore-errors
+playbooks/docker.yml ignore-errors
+playbooks/hdd.yml ignore-errors
+playbooks/process-cleaning.yml ignore-errors
+playbooks/workspace-cleaning.yml ignore-errors

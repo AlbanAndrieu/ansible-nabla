@@ -7,8 +7,11 @@
 # sudo docker logout https://docker.nabla.mobi:5000
 # sudo docker login dtr.nabla.mobi:443
 
-- import_playbook: docker-registry-nabla.yml
+- name: Import docker-registry-nabla
+  ansible.builtin.import_playbook: docker-registry-nabla.yml
 
-- import_playbook: docker-registry-oracle.yml
+- name: Import docker-registry-oracle
+  ansible.builtin.import_playbook: docker-registry-oracle.yml
 
-- import_playbook: docker-cleaning.yml
+- name: Import docker-cleaning
+  ansible.builtin.import_playbook: docker-cleaning.yml

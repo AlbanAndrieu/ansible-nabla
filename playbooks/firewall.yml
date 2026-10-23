@@ -86,12 +86,12 @@
       - "24800" # Synergy
       - "25826" # Collectd
       - "32400" # Plex
-    #Do not enable
+    # Do not enable
     #       - "139" #Samba/NetBIOS
     #       - "445" #Samba/NetBIOS
     #       - "17500" #DropBox
     #       firewall_allowed_udp_ports:
-    #Do not enable
+    # Do not enable
     #       - "137" #Samba/NetBIOS
     #       - "138" #Samba/NetBIOS
 

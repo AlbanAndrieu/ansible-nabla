@@ -1,37 +1,39 @@
 ---
 # ansible-playbook playbooks/workspace-cleaning.yml -i inventory/production --limit albandrieu.com -vvvv
 
-- hosts: all
+- name: Group hosts by distribution
+  hosts: all
   gather_facts: true
   tasks:
     - name: Group hosts by distribution
       ansible.builtin.group_by:
-
         key: "{{ ansible_distribution }}-{{ ansible_distribution_version }}"
-- hosts: all
+- name: Group hosts for supported distributions
+  hosts: all
   gather_facts: false
   tasks:
     - name: Group hosts for supported distributions
       ansible.builtin.group_by:
-
         key: "supported"
-- hosts:
+- name: Group hosts for supported distributions
+  hosts:
     RedHat-7*:RedHat-6*:RedHat-5*:CentOS-7*:CentOS-6*:Ubuntu-21*:Ubuntu-20*:Ubuntu-19*:Ubuntu-18*:Ubuntu-17*:Ubuntu-16*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*:Solaris-10-sun4v*:Solaris-11-sun4v*:Solaris-10*
   gather_facts: false
   tasks:
     - name: Group hosts for supported distributions
       ansible.builtin.group_by:
-
         key: "supported"
-- hosts: "!supported"
+- name: Fail on unsupported distributions
+  hosts: "!supported"
   gather_facts: false
   tasks:
     - name: Fail for unsupported distribution
       ansible.builtin.fail:
         msg: "{{ ansible_distribution }} {{ ansible_distribution_version }} is not a supported OS for a Tower installation.  Supported OSes include Red Hat Enterprise
           Linux 6/7, CentOS 6/7, or Ubuntu 12.04/13.04/14.04/16.04/17.04/18.04/19.04/20.04/21.04, or Solaris 10, or Solaris 11."
-    - ansible.builtin.debug: msg="Version {{ ansible_distribution }} {{ ansible_distribution_version }} {{ ansible_architecture }}"
-
+    - name: Show distribution
+      ansible.builtin.debug:
+        msg: "Version {{ ansible_distribution }} {{ ansible_distribution_version }} {{ ansible_architecture }}"
 - name: Tmp cleaning
   hosts: all
   #  become: true
@@ -58,7 +60,7 @@
         - clean
         - vm
 
-    - name: Jetty Cache cleanup # noqa 302
+    - name: Jetty Cache cleanup # noqa: no-free-form
       ansible.builtin.command: rm -Rf /tmp/jetty*
       changed_when: false
       ignore_errors: true
@@ -71,7 +73,7 @@
   become: true
 
   tasks:
-    - name: Clean worskpace # noqa 302 305
+    - name: Clean worskpace # noqa: no-free-form command-instead-of-shell
       ansible.builtin.shell: find {{ item }} -maxdepth 2 -not \( -path '*/.git' -o -path '*/docker-cleaning*' -o -path './repository' -o -path
         '*/ADMIN_CLEAN_LINUX*' \) -mtime +1 -type d | xargs -I{} bash -c " echo removing dir {}; rm -rf {}"
       changed_when: false

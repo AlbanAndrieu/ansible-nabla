@@ -25,7 +25,8 @@
   become: true
 
   tasks:
-    - ansible.builtin.include_role:
+    - name: Install zabbix agent
+      ansible.builtin.include_role:
         name: zabbix
 
       vars:
@@ -41,7 +42,7 @@
         zabbix_create_host: present
         zabbix_api_create_hosts: true
         zabbix_agent_become_on_localhost: false
-        #zabbix_api_create_hostgroup: true
+        # zabbix_api_create_hostgroup: true
         zabbix_api_user: "nabla"
         zabbix_api_pass: "microsoft"
         zabbix_host_groups:
@@ -69,7 +70,8 @@
   become: true
 
   tasks:
-    - ansible.builtin.include_role:
+    - name: Install zabbix agent
+      ansible.builtin.include_role:
         name: zabbix
 
       vars:
@@ -84,7 +86,7 @@
         zabbix_create_host: present
         zabbix_api_create_hosts: true
         zabbix_agent_become_on_localhost: false
-        #zabbix_api_create_hostgroup: true
+        # zabbix_api_create_hostgroup: true
         zabbix_api_user: "nabla"
         zabbix_api_pass: "microsoft"
         zabbix_host_groups:
