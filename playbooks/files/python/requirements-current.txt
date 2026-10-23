@@ -48,7 +48,7 @@ django-filter==26.2       # via ara
 django-health-check==3.24.0  # via ara
 djangorestframework==3.18.3  # via ara
 docker==7.2.0             # via -r requirements-current.in
-docutils==0.22.4          # via restructuredtext-lint, sphinx
+docutils==0.23          # via restructuredtext-lint, sphinx
 durationpy==0.11          # via kubernetes
 dynaconf==3.3.5           # via ara
 enrich==1.2.7             # via molecule
