@@ -1,0 +1,112 @@
+---
+name: CI
+
+on:
+  push:
+    branches: ["master"]
+  pull_request:
+    branches: ["master"]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  IMAGE: nabla/ansible-nabla:ci
+  CST_VERSION: "1.22.1"
+
+jobs:
+  ansible-lint:
+    name: Ansible lint
+    runs-on: ubuntu-latest
+    # TODO: remove once the playbooks pass the syntax-check (missing roles, invalid play attributes)
+    continue-on-error: true
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup Python
+        uses: actions/setup-python@v7
+        with:
+          python-version-file: .python-version
+
+      - name: Install Python dependencies
+        run: |
+          pip install pipenv==2026.10.2
+          pipenv install --system --deploy --dev
+
+      - name: Install Galaxy collections and roles
+        run: |
+          ansible-galaxy collection install -r requirements.yml
+          ansible-galaxy role install -r requirements.yml --ignore-errors
+
+      - name: Run ansible-lint
+        run: |
+          echo "ci-dummy" > ~/vault.passwd
+          ansible-lint --offline playbooks/
+
+  hadolint:
+    name: Dockerfile lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Run hadolint
+        uses: hadolint/hadolint-action@v3.5.0
+        with:
+          dockerfile: docker/ubuntu24/Dockerfile
+          config: .hadolint.yaml
+          failure-threshold: warning
+
+  image:
+    name: Build, test and scan image
+    runs-on: ubuntu-latest
+    needs: hadolint
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@v4
+
+      - name: Build image
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          file: docker/ubuntu24/Dockerfile
+          platforms: linux/amd64
+          load: true
+          push: false
+          tags: ${{ env.IMAGE }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Run container-structure-test
+        run: |
+          curl -fsSL -o container-structure-test \
+            "https://github.com/GoogleContainerTools/container-structure-test/releases/download/v${CST_VERSION}/container-structure-test-linux-amd64"
+          chmod +x container-structure-test
+          ./container-structure-test test --image "${IMAGE}" --config docker/ubuntu24/config.yaml
+
+      - name: Scan image with Trivy
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          image-ref: ${{ env.IMAGE }}
+          format: sarif
+          output: trivy-results.sarif
+          severity: CRITICAL,HIGH
+          ignore-unfixed: true
+
+      - name: Upload Trivy results
+        if: always()
+        uses: github/codeql-action/upload-sarif@v4
+        with:
+          sarif_file: trivy-results.sarif
+          category: trivy-image

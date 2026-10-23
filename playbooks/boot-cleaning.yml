@@ -1,28 +1,29 @@
 ---
-#ansible-playbook playbooks/boot-cleaning.yml -i inventory/production --limit test.albandrieu.com -vvvv
+# ansible-playbook playbooks/boot-cleaning.yml -i inventory/production --limit test.albandrieu.com -vvvv
 
 - hosts: all
   gather_facts: true
   gather_subset: hardware
   tasks:
-    - name: group hosts by distribution
-      group_by: key="{{ ansible_distribution }}-{{ ansible_distribution_version }}"
+    - name: Group hosts by distribution
+      ansible.builtin.group_by:
 
+        key: "{{ ansible_distribution }}-{{ ansible_distribution_version }}"
 - hosts: RedHat-7*:RedHat-6*:RedHat-5*:CentOS-7*:CentOS-6*:Ubuntu-20*:Ubuntu-19*:Ubuntu-18*:Ubuntu-17*:Ubuntu-16*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
   gather_facts: false
   tasks:
-    - name: group hosts for supported distributions
-      group_by: key="supported"
+    - name: Group hosts for supported distributions
+      ansible.builtin.group_by:
 
+        key: "supported"
 - hosts: "!supported"
   gather_facts: false
   tasks:
-    - name: fail for unsupported distribution
-      fail: msg="{{ ansible_distribution }} {{ ansible_distribution_version }}
-        is not a supported OS for a Tower installation.  Supported
-        OSes include Red Hat Enterprise Linux 6/7, CentOS 6/7, or
-        Ubuntu 12.04/13.04/14.04/16.04/17.04/18.04/19.04."
-    - debug: msg="Version {{ ansible_distribution }} {{ ansible_distribution_version }} {{ ansible_architecture }}"
+    - name: Fail for unsupported distribution
+      ansible.builtin.fail:
+        msg: "{{ ansible_distribution }} {{ ansible_distribution_version }} is not a supported OS for a Tower installation.  Supported OSes include Red Hat Enterprise
+          Linux 6/7, CentOS 6/7, or Ubuntu 12.04/13.04/14.04/16.04/17.04/18.04/19.04."
+    - ansible.builtin.debug: msg="Version {{ ansible_distribution }} {{ ansible_distribution_version }} {{ ansible_architecture }}"
 
 - name: Boot cleaning
   hosts: Ubuntu-20*:Ubuntu-19*:Ubuntu-18*:Ubuntu-17*:Ubuntu-16*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
@@ -31,32 +32,33 @@
 
   tasks:
     - name: Get kernel
-      command: uname -a
+      ansible.builtin.command: uname -a
       changed_when: false
       register: kernel_result
 
     - name: Print kernel
-      debug: msg="Kernel are {{ kernel_result }}"
+      ansible.builtin.debug:
 
+        msg: "Kernel are {{ kernel_result }}"
     - name: List the old kernel # noqa 306
-      shell: dpkg --list 'linux-image*'|awk '{ if ($1=="ii") print $2}'|grep -v `uname -r`
+      ansible.builtin.shell: dpkg --list 'linux-image*'|awk '{ if ($1=="ii") print $2}'|grep -v `uname -r`
       changed_when: false
       ignore_errors: true
 
     - name: Clean apt source git-lfs # noqa 302 305
-      shell: rm -f /etc/apt/sources.list.d/github_git-lfs.list
+      ansible.builtin.shell: rm -f /etc/apt/sources.list.d/github_git-lfs.list
       changed_when: false
       ignore_errors: true
 
     - name: Update
-      apt:
-        update_cache: yes
+      ansible.builtin.apt:
+        update_cache: true
       ignore_errors: true
 
     - name: Autoremove
-      apt:
-        autoremove: yes
-        purge: yes
+      ansible.builtin.apt:
+        autoremove: true
+        purge: true
       ignore_errors: true
 
     #    - name: Clean kernel by hand
@@ -65,28 +67,27 @@
     #find .  -regextype posix-egrep  -regex '^.*\-4\.4\.0\-(139|42)\-.*$'
 
     - name: Clean kernel by hand (1)
-      find:
+      ansible.builtin.find:
         paths: /boot
-        patterns:
-          ['^.*\-4\.4\.0\-(59|81|93|104|108|109|112|130|131|138|139)\-.*$']
+        patterns: ["^.*\\-4\\.4\\.0\\-(59|81|93|104|108|109|112|130|131|138|139)\\-.*$"]
         file_type: file
         age: 2w
         use_regex: true
       register: wildcard_files_to_delete
 
     - name: Clean kernel by hand (2)
-      file:
+      ansible.builtin.file:
         path: "{{ item.path }}"
         state: absent
       with_items: "{{ wildcard_files_to_delete.files }}"
 
     - name: Install fix # noqa 303
-      command: apt-get -f install
+      ansible.builtin.command: apt-get -f install
       changed_when: false
     #      ignore_errors: true
 
     - name: Grub update-grub
-      command: update-grub
+      ansible.builtin.command: update-grub
       changed_when: false
       ignore_errors: true # for docker
       tags:
@@ -94,14 +95,14 @@
         - vm
 
     - name: Apt cleanup # noqa 301 306
-      file:
+      ansible.builtin.file:
         path: /var/lib/apt/lists/
         state: absent
       ignore_errors: true
 
     - name: Autoclean
-      apt:
-        autoclean: yes
+      ansible.builtin.apt:
+        autoclean: true
 
     #    - name: Cron | Purge kernel images @reboot special time
     #      cron:
@@ -118,7 +119,7 @@
     #        reboot_timeout: 3600
 
     - name: Homebrew cleanup
-      command: brew cleanup
+      ansible.builtin.command: brew cleanup
       changed_when: false
       become: true
       become_user: jenkins
@@ -128,7 +129,7 @@
         - vm
 
     - name: Log cleanup
-      command: find /var/log -type f -name "*.gz"  -not \( -path '*/error.log*' -o -path '*/other_vhosts_access.log*' \) -mtime +30 -delete
+      ansible.builtin.command: find /var/log -type f -name "*.gz"  -not \( -path '*/error.log*' -o -path '*/other_vhosts_access.log*' \) -mtime +30 -delete
       changed_when: false
       ignore_errors: true
       tags:
@@ -136,7 +137,7 @@
         - vm
 
     - name: Memory cleanup
-      command: free -h && sudo sysctl vm.drop_caches=3 && free -h
+      ansible.builtin.command: free -h && sudo sysctl vm.drop_caches=3 && free -h
       changed_when: false
       ignore_errors: true
       tags:
@@ -144,14 +145,14 @@
         - vm
 
     - name: Tmp cleanup by hand (1)
-      find:
+      ansible.builtin.find:
         paths: /tmp
         file_type: file
         age: 2d
       register: tmp_files_to_delete
 
     - name: Tmp kernel by hand (2)
-      file:
+      ansible.builtin.file:
         path: "{{ item.path }}"
         state: absent
       with_items: "{{ tmp_files_to_delete.files }}"
@@ -174,7 +175,7 @@
     #systemctl start sendmail
 
     - name: Mqueue cleanup # noqa 301 306
-      file:
+      ansible.builtin.file:
         path: /var/spool/mqueue-client/
         state: absent
       ignore_errors: true

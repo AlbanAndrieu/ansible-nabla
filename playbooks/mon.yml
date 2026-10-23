@@ -1,4 +1,5 @@
-#sudo ansible-playbook -i hosts-albandri -c local -v mon.yml | tee setup.log
+---
+# sudo ansible-playbook -i hosts-albandri -c local -v mon.yml | tee setup.log
 
 - name: Install mon
   hosts: workstation
@@ -13,7 +14,7 @@
     mon_custom_group: "nabla"
     mon_hostgroup_fs: "freenas"
     mon_hostgroup_gw: "freebox"
-    mon_user_enabled: yes
+    mon_user_enabled: true
     mon_user: "albandri:787bV0y65kxs6"
     mon_admin_email: "alban.andrieu@free.fr"
     mon_weekly_email: "team@free.fr"

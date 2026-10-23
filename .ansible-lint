@@ -1,7 +1,6 @@
 ---
 exclude_paths:
   - ./requirements.yml
-  - ./.travis.yml
   - ./playbooks/group_vars/all/vault.yml
   - ./docker/
   - ./playbooks/mac.yml
@@ -69,11 +68,10 @@ exclude_paths:
 #rulesdir:
 #  - ./rule/directory/
 skip_list:
-  - '602' # See https://github.com/ansible/ansible-lint/issues/457
-  - '204'
-  - '503'
-  - '208' # File permissions not mentioned
-  - filenotfounderror
+  - empty-string-compare # was 602, see https://github.com/ansible/ansible-lint/issues/457
+  - yaml[line-length] # was 204
+  - no-handler # was 503
+  - risky-file-permissions # was 208, file permissions not mentioned
 #  - skip_this_tag
 #  - and_this_one_too
 #  - skip_this_id

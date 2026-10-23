@@ -4,7 +4,7 @@
   become: true
 
   pre_tasks:
-    #- name: 'Include some additional variables'
+    # - name: 'Include some additional variables'
     #  #include_vars: group_vars/all/vault.yml
     #  include_vars:
     #    dir: "group_vars/all"
@@ -12,7 +12,7 @@
 
     - name: Show vault pass
       no_log: true
-      debug:
+      ansible.builtin.debug:
         msg: "System {{ inventory_hostname }} has uuid {{ ansible_product_uuid }} - {{ zabbix_api_pass }}"
 
 #  - name: Show all variables
@@ -25,7 +25,7 @@
   become: true
 
   tasks:
-    - include_role:
+    - ansible.builtin.include_role:
         name: zabbix
 
       vars:
@@ -69,7 +69,7 @@
   become: true
 
   tasks:
-    - include_role:
+    - ansible.builtin.include_role:
         name: zabbix
 
       vars:

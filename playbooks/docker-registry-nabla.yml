@@ -1,5 +1,6 @@
-#ansible-playbook -i production -c local -v docker-registry-fusionrisk.yml --ask-pass -vvvv | tee setup.log
-#ansible-playbook -i production -c local -v docker-registry-fusionrisk.yml --limit albandri.albandrieu.com --ask-become-pass -vvvv | tee setup.log
+---
+# ansible-playbook -i production -c local -v docker-registry-fusionrisk.yml --ask-pass -vvvv | tee setup.log
+# ansible-playbook -i production -c local -v docker-registry-fusionrisk.yml --limit albandri.albandrieu.com --ask-become-pass -vvvv | tee setup.log
 
 - hosts: all
   gather_facts: true
@@ -17,10 +18,8 @@
   gather_facts: false
   tasks:
     - name: fail for unsupported distribution
-      fail: msg="{{ ansible_distribution }} {{ ansible_distribution_version }}
-        is not a supported OS for a Tower installation.  Supported
-        OSes include Red Hat Enterprise Linux 6/7, CentOS 6, or
-        Ubuntu 12.04/13.04/14.04/16.04/17.04."
+      fail: msg="{{ ansible_distribution }} {{ ansible_distribution_version }} is not a supported OS for a Tower installation.  Supported OSes include Red Hat
+        Enterprise Linux 6/7, CentOS 6, or Ubuntu 12.04/13.04/14.04/16.04/17.04."
     - debug: msg="Version {{ ansible_distribution }} {{ ansible_distribution_version }} {{ ansible_architecture }}"
 
 - hosts: docker-container
@@ -69,7 +68,7 @@
         name: ansible-jenkins-slave
         image: registry.nabla.mobi/fusion-risk/ansible-jenkins-slave
         state: stopped
-        pull: yes
+        pull: true
         #command: sleep infinity
 
     - name: Pull zaproxy images
@@ -77,7 +76,7 @@
         name: zap2docker-stable
         image: owasp/zap2docker-stable
         state: stopped
-        pull: yes
+        pull: true
         #command: sleep infinity
 
     - name: Pull centos images
@@ -85,7 +84,7 @@
         name: centos
         image: docker/nabla/centos:6.8-latest
         state: stopped
-        pull: yes
+        pull: true
         #command: sleep infinity
 
     - name: Pull selenium hub images
@@ -93,7 +92,7 @@
         name: selenium-hub
         image: selenium/hub
         #state: stopped
-        pull: yes
+        pull: true
         #command: sleep infinity
 
     - name: Pull selenium chrome images
@@ -101,7 +100,7 @@
         name: selenium-node-chrome
         image: selenium/node-chrome
         state: stopped
-        pull: yes
+        pull: true
         #command: sleep infinity
 
     - name: Pull selenium standalone chrome images
@@ -109,7 +108,7 @@
         name: selenium-standalone-chrome-debug
         image: selenium/standalone-chrome-debug
         state: stopped
-        pull: yes
+        pull: true
         #command: sleep infinity
 
     - name: Pull selenium standalone firefox images
@@ -117,5 +116,5 @@
         name: selenium-standalone-firefox-debug
         image: selenium/standalone-firefox-debug
         state: stopped
-        pull: yes
+        pull: true
         #command: sleep infinity

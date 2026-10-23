@@ -1,7 +1,7 @@
 ---
-#ansible-playbook -i hosts-albandri -v albandri.yml --limit albandri-laptop-work -c local --ask-become-pass -vvvv | tee setup.log
+# ansible-playbook -i hosts-albandri -v albandri.yml --limit albandri-laptop-work -c local --ask-become-pass -vvvv | tee setup.log
 # -c local  --ask-pass --ask-become-pass --sudo
-#ansible all -m setup -i hosts-albandri --limit albandri-laptop-work -vvvv
+# ansible all -m setup -i hosts-albandri --limit albandri-laptop-work -vvvv
 
 - name: Assert platform is supported
   hosts: all
@@ -10,7 +10,7 @@
 
   tasks:
     - name: Assert platform is supported
-      assert:
+      ansible.builtin.assert:
         that:
           - ansible_os_family in ['Debian', 'RedHat', 'CentOS', 'Windows', 'Solaris']
           - ansible_architecture in ['x86_64']
@@ -49,24 +49,25 @@
 - hosts: all
   gather_facts: true
   tasks:
-    - name: group hosts by distribution
-      group_by: key="{{ ansible_distribution }}-{{ ansible_distribution_version }}"
+    - name: Group hosts by distribution
+      ansible.builtin.group_by:
 
+        key: "{{ ansible_distribution }}-{{ ansible_distribution_version }}"
 - hosts: RedHat-7*:RedHat-6*:RedHat-5*:CentOS-7*:CentOS-6*:Ubuntu-19*:Ubuntu-18*:Ubuntu-17*:Ubuntu-16*:Ubuntu-15*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
   gather_facts: false
   tasks:
-    - name: group hosts for supported distributions
-      group_by: key="supported"
+    - name: Group hosts for supported distributions
+      ansible.builtin.group_by:
 
+        key: "supported"
 - hosts: "!supported"
   gather_facts: false
   tasks:
-    - name: fail for unsupported distribution
-      fail: msg="{{ ansible_distribution }} {{ ansible_distribution_version }}
-        is not a supported OS for a Tower installation.  Supported
-        OSes include Red Hat Enterprise Linux 6/7/5, CentOS 6/7, or
-        Ubuntu 12.04/13.04/14.04/15.04/16.04/17.04/18.04/19.04."
-    - debug: msg="Version {{ ansible_distribution }} {{ ansible_distribution_version }} {{ ansible_architecture }}"
+    - name: Fail for unsupported distribution
+      ansible.builtin.fail:
+        msg: "{{ ansible_distribution }} {{ ansible_distribution_version }} is not a supported OS for a Tower installation.  Supported OSes include Red Hat Enterprise
+          Linux 6/7/5, CentOS 6/7, or Ubuntu 12.04/13.04/14.04/15.04/16.04/17.04/18.04/19.04."
+    - ansible.builtin.debug: msg="Version {{ ansible_distribution }} {{ ansible_distribution_version }} {{ ansible_architecture }}"
 
 - import_playbook: python-bootstrap.yml
 
@@ -234,7 +235,7 @@
     mysql_innodb_log_file_size: "5M"
     mysql_root_username: root
     mysql_root_password: microsoft
-    docker_files_enable: yes
+    docker_files_enable: true
     docker_files_generated_directory: "../roles/albanandrieu.web"
 
 - import_playbook: pagespeed.yml
@@ -308,21 +309,19 @@
 
   vars:
     shell_default_version: "30"
-    shell_git_configure_enabled: yes
+    shell_git_configure_enabled: true
     shell_git:
       # Additional properties: 'shell_git_machine, shell_git_login, shell_git_email, shell_git_password, shell_git_name, shell_git_path, shell_git_ssl'.
-      - {
-          shell_git_machine: "82.231.208.223",
-          shell_git_login: "AlbanAndrieu",
-          shell_git_email: "alban.andrieu@free.fr",
-          shell_git_password: "microsoft",
-          shell_git_name: "Andrieu, Alban",
-          shell_git_maildomain: "free.fr",
-          shell_git_path: "/usr/bin",
-          shell_git_ssl: false,
-          shell_git_meld_enabled: yes,
-          shell_git_editor: "gedit",
-        }
+      - shell_git_machine: "82.231.208.223"
+        shell_git_login: "AlbanAndrieu"
+        shell_git_email: "alban.andrieu@free.fr"
+        shell_git_password: "microsoft"
+        shell_git_name: "Andrieu, Alban"
+        shell_git_maildomain: "free.fr"
+        shell_git_path: "/usr/bin"
+        shell_git_ssl: false
+        shell_git_meld_enabled: true
+        shell_git_editor: "gedit"
     #         - {
     #           shell_git_machine: 'https://github.com',
     #           shell_git_login: 'AlbanAndrieu',
@@ -346,9 +345,9 @@
     #           shell_git_editor: "gedit"
     #           }
     #      shell_rlogin_enabled: no
-    shell_maven_enabled: no
+    shell_maven_enabled: false
     newrelic_license_key: de35bf5d191ebb208d359b2cd24a60616a02b1f3
-    docker_files_enable: no
+    docker_files_enable: false
 #    docker_files_generated_directory: "../roles/albanandrieu.shell"
 
 #- name: Install eclipse

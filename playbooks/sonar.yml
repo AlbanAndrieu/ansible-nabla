@@ -1,5 +1,5 @@
 ---
-#sudo ansible-playbook -i hosts-albandri -c local -v sonar.yml -vvvv | tee setup.log
+# sudo ansible-playbook -i hosts-albandri -c local -v sonar.yml -vvvv | tee setup.log
 
 - name: Install sonar
   hosts: sonar
@@ -11,7 +11,7 @@
     - role: sonar
 
   vars:
-    #TODO merge sonar-runner.properties.j2 file from jenkins_slave role
+    # TODO merge sonar-runner.properties.j2 file from jenkins_slave role
     sonar_analyzer_runner_install: false
     #Handle by jenkins_slave role, Warning it will override settings.xml.j2 from jenkins_slave role
     maven_install: false

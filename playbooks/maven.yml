@@ -1,5 +1,5 @@
 ---
-#ansible-playbook -i hosts-albandri -c local -v maven.yml -vvvv --ask-become-pass | tee setup.log
+# ansible-playbook -i hosts-albandri -c local -v maven.yml -vvvv --ask-become-pass | tee setup.log
 
 - name: Install maven
   hosts: maven

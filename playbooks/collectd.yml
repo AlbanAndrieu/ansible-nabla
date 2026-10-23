@@ -1,7 +1,7 @@
 ---
-#sudo rm -Rf /opt/collectd
-#sudo rm -Rf /usr/src/collectd-*
-#sudo ansible-playbook -i hosts-albandri -c local --limit albandri -v collectd.yml -vvvv --ask-sudo | tee setup.log
+# sudo rm -Rf /opt/collectd
+# sudo rm -Rf /usr/src/collectd-*
+# sudo ansible-playbook -i hosts-albandri -c local --limit albandri -v collectd.yml -vvvv --ask-sudo | tee setup.log
 
 - name: Add collectd configuration
   hosts: collectd
@@ -22,21 +22,7 @@
     #collectd_prefix_custom_dir: "/usr/lib/collectd"
     collectd_upstart: false # used ubuntu default one
     collectd_plugins: [apache, battery, irq, java, mysql, nginx, memcached]
-    collectd_default_plugins:
-      [
-        cpu,
-        df,
-        disk,
-        entropy,
-        interface,
-        load,
-        memory,
-        swap,
-        processes,
-        network,
-        uptime,
-        users,
-      ]
+    collectd_default_plugins: [cpu, df, disk, entropy, interface, load, memory, swap, processes, network, uptime, users]
     collectd_default_plugins_options:
       swap:
         - ReportByDevice false

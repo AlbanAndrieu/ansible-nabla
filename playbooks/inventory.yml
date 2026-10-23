@@ -1,3 +1,4 @@
+---
 - name: master1
   box: ubuntu/trusty64
   check_updates: false

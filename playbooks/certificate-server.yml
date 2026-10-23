@@ -3,8 +3,8 @@
   hosts: certificate_server
   gather_facts: false
   remote_user: root
-  check_mode: no
-  ignore_errors: yes
+  check_mode: false
+  ignore_errors: true
   become: true
 
   roles:
@@ -27,7 +27,9 @@
       ssl_certs_common_name: "{{ ansible_hostname }}.{{ ssl_certs_domain_name }}"
       ssl_certs_email: "alban.andrieu@free.fr"
       ssl_certs_days: "3650"
-      ssl_certs_fields: "/C={{ ssl_certs_country }}/ST={{ ssl_certs_state }}/L={{ ssl_certs_locality }}/O={{ ssl_certs_organization }}/CN={{ ssl_certs_common_name }}/emailAddress={{ ssl_certs_email }}/subjectAltName=DNS.1={{ ssl_certs_common_name },DNS.2={{ ansible_fqdn }},DNS.3={{ ansible_hostname }},DNS.4=localhost,IP={{ ansible_default_ipv4.address }},IP=127.0.0.1" # noqa 204
+      ssl_certs_fields: "/C={{ ssl_certs_country }}/ST={{ ssl_certs_state }}/L={{ ssl_certs_locality }}/O={{ ssl_certs_organization }}/CN={{ ssl_certs_common_name
+        }}/emailAddress={{ ssl_certs_email }}/subjectAltName=DNS.1={{ ssl_certs_common_name },DNS.2={{ ansible_fqdn }},DNS.3={{ ansible_hostname }},DNS.4=localhost,IP={{
+        ansible_default_ipv4.address }},IP=127.0.0.1" # noqa 204
       #ssl_certs_path_owner: "root"
       #ssl_certs_path_group: "root"
       #ssl_certs_mode: 700

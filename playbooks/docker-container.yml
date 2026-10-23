@@ -1,9 +1,9 @@
 ---
-#ansible-playbook -i staging -c local -v docker-container.yml --ask-pass -vvvv | tee setup.log
-#ansible-playbook -i staging -c local -v docker-container.yml --limit localhost --ask-become-pass -vvvv | tee setup.log
+# ansible-playbook -i staging -c local -v docker-container.yml --ask-pass -vvvv | tee setup.log
+# ansible-playbook -i staging -c local -v docker-container.yml --limit localhost --ask-become-pass -vvvv | tee setup.log
 
-#sudo docker logout https://docker.nabla.mobi:5000
-#sudo docker login registry.nabla.mobi:443
+# sudo docker logout https://docker.nabla.mobi:5000
+# sudo docker login registry.nabla.mobi:443
 - hosts: docker-container
   #  become: true
 
@@ -47,15 +47,15 @@
       docker_service:
         project_src: "{{ repository_target_dir }}/dockerfile-nabla/centos"
         files: docker-compose.yml
-        build: no
+        build: false
         recreate: never
-        restarted: no
+        restarted: false
         project_name: "TEST"
         remove_images: local
         remove_orphans: true
         remove_volumes: true
         state: absent
-        stopped: yes
+        stopped: true
         #        pull: true
         #        timeout: 120
         debug: true
@@ -149,7 +149,7 @@
         project_src: "{{ repository_target_dir }}/dockerfile-nabla/centos"
         files: docker-compose-nabla.yml
         #        build: yes
-        pull: yes
+        pull: true
         #restarted: true
         #recreate: always
         recreate: smart

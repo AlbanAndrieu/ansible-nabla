@@ -1,3 +1,4 @@
+---
 - name: Install java certificate for java
   hosts: RedHat-7*:RedHat-6*:RedHat-5*:CentOS-7*:CentOS-6*
   remote_user: root

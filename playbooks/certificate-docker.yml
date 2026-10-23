@@ -1,9 +1,10 @@
+---
 # Below is no more needed for ubuntu-19 and docker 19.03.3
 - hosts: Ubuntu-18*:Ubuntu-17*:Ubuntu-16*:Ubuntu-14*:Ubuntu-12*
 
   tasks:
     - name: Get the Docker root certificate
-      shell: |
+      ansible.builtin.shell: |
         set -o pipefail
         openssl s_client -showcerts -connect registry.albandrieu.com:443 </dev/null 2>/dev/null | openssl x509 -outform PEM | tee ~/pki/registry.pem
       args:
@@ -11,13 +12,13 @@
       changed_when: false
       become: true
       become_user: root
-      ignore_errors: yes
+      ignore_errors: true
 
 # Below is no more needed for ubuntu-19 and docker 19.03.3
 - hosts: Ubuntu-18*:Ubuntu-17*:Ubuntu-16*:Ubuntu-14*:Ubuntu-12*
   become: true
-  check_mode: no
-  ignore_errors: yes
+  check_mode: false
+  ignore_errors: true
   remote_user: root
 
   #See /root/pki/docker.pem
@@ -37,7 +38,10 @@
 
   tasks:
     - name: Create .docker
-      file: path=~/.docker state=directory mode=0700
+      ansible.builtin.file:
+        path: ~/.docker
+        state: directory
+        mode: "0700"
       become: true
       become_user: root
 
@@ -53,19 +57,22 @@
     #  become_user: root
 
     - name: Create registry
-      file: path=/etc/docker/certs.d/registry.albandrieu.com/ state=directory mode=0700
+      ansible.builtin.file:
+        path: /etc/docker/certs.d/registry.albandrieu.com/
+        state: directory
+        mode: "0700"
       become: true
       become_user: root
 
     - name: Copy ca pem crt
-      copy:
+      ansible.builtin.copy:
         src: ~/pki/ca.pem
         dest: "{{ item }}"
-        remote_src: yes
+        remote_src: true
       with_items:
         - ~/.docker/ca.crt
         - /etc/docker/certs.d/registry.albandrieu.com/ca.crt
       become: true
-      check_mode: no
-      ignore_errors: yes
+      check_mode: false
+      ignore_errors: true
       become_user: root

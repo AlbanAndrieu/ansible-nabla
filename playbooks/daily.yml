@@ -1,6 +1,6 @@
 ---
 - hosts: "{{ hosts }}"
-  become: yes
+  become: true
 
   tasks:
     - name: Get disk usage
@@ -37,8 +37,8 @@
     - name: upgrade apt packages
       become: true
       apt:
-        upgrade: yes
-        update_cache: yes
+        upgrade: true
+        update_cache: true
 
     # Check if reboot is required
     - name: check if system reboot is required

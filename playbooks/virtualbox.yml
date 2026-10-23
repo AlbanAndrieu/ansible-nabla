@@ -10,7 +10,7 @@
     - albanandrieu.virtualbox
 
   vars:
-    #virtualbox_version: "5.2.26"
+    # virtualbox_version: "5.2.26"
     virtualbox_version: "6.0.14-dfsg-1"
     virtualbox_package_name: virtualbox
     virtualbox_users:

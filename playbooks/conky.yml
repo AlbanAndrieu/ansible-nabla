@@ -11,5 +11,5 @@
     - role: albanandrieu.conky
 
   vars:
-    conky_sensor_enabled: yes
-    conky_manager_enabled: yes
+    conky_sensor_enabled: true
+    conky_manager_enabled: true

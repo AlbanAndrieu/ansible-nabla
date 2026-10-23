@@ -1,3 +1,4 @@
+---
 - name: Apply login configuration
   hosts: security
   remote_user: root
@@ -7,5 +8,5 @@
     - ansible-login
 
   vars:
-    login_umask: 077
+    login_umask: "077"
     login_usergroups_enab: "no"

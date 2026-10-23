@@ -1,4 +1,5 @@
-#sudo ansible-playbook -i hosts-albandri -c local -v visualvm.yml | tee setup.log
+---
+# sudo ansible-playbook -i hosts-albandri -c local -v visualvm.yml | tee setup.log
 
 - name: Install visualvm
   connection: local
@@ -7,15 +8,13 @@
   #  accelerate: true
 
   roles:
-    - { role: albanandrieu.visualvm, visualvm_remote_hosts_enable: yes }
+    - { role: albanandrieu.visualvm, visualvm_remote_hosts_enable: true }
 
   vars:
     visualvm_remote_hosts:
-      - {
-          name: "Zone",
-          serverip: "192.168.0.29",
-          serverhostname: "albandri.nabla.mobi",
-          servername: "albandri",
-          serverjstatdport: "albandri",
-          serverposition: "4",
-        }
+      - name: "Zone"
+        serverip: "192.168.0.29"
+        serverhostname: "albandri.nabla.mobi"
+        servername: "albandri"
+        serverjstatdport: "albandri"
+        serverposition: "4"

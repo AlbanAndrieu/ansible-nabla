@@ -1,2 +1,3 @@
 [tools]
 ansible = "latest"
+python = "3.14"

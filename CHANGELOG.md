@@ -19,6 +19,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+Switch to docker/ubuntu24/Dockerfile (image 2.1.0)
+
+### Added
+- GitHub Actions CI: ansible-lint, hadolint, image build, container-structure-test, Trivy scan
+- Renovate tracking for pre-commit hooks and Dockerfile tool versions
+- gitleaks and shellcheck pre-commit hooks
+### Updated
+- Python 3.14, ansible-core 2.21, ansible-lint 26
+- selenium/standalone-chrome 4.51, Docker 29.9, Node 24, Go 1.27, Trivy 0.76
+- Galaxy roles pinned to a tag or a commit sha
+- Playbooks fixed with `ansible-lint --fix` (FQCN, YAML)
+### Remove
+- docker/ubuntu16 to ubuntu20, Jenkinsfile, .travis.yml, tox.ini, package.json
+- PHP/Apache/Composer, s6-overlay, Nomad and tfsec from the image
+
 ## [1.0.0] - 2020-01-21
 
 Switch to docker/ubuntu18/Dockerfile

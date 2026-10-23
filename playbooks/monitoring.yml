@@ -1,6 +1,6 @@
 ---
 - hosts: "{{ hosts }}"
-  become: yes
+  become: true
 
   tasks:
     - name: install core packages
@@ -10,4 +10,4 @@
           #- nfs-common
           #- qemu-guest-agent
           #- unzip
-        update_cache: yes
+        update_cache: true

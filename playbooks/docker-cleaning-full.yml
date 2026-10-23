@@ -1,9 +1,9 @@
 ---
-#WARNING run it with -e ansible_python_interpreter="/opt/ansible/env35/bin/python3.5"
-#ansible-playbook -i inventory/production -v playbooks/docker-cleaning.yml -e ansible_python_interpreter="/opt/ansible/env35/bin/python3.5" -vvvv | tee setup.log
+# WARNING run it with -e ansible_python_interpreter="/opt/ansible/env35/bin/python3.5"
+# ansible-playbook -i inventory/production -v playbooks/docker-cleaning.yml -e ansible_python_interpreter="/opt/ansible/env35/bin/python3.5" -vvvv | tee setup.log
 
-#sudo docker logout https://docker.albandrieu.com:5000
-#sudo docker login registry.albandrieu.com
+# sudo docker logout https://docker.albandrieu.com:5000
+# sudo docker login registry.albandrieu.com
 
 # - hosts: docker-cleaning
 #   become: true
@@ -31,7 +31,7 @@
       docker_image:
         state: absent
         name: hello-world:latest
-        force: yes
+        force: true
 
     #    - name: Remove test image
     #      docker_image:

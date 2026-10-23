@@ -77,16 +77,12 @@ A typical top-level directory layout:
    │   production
    ├── playbooks               # Ansible playbooks
    ├── roles                   # Ansible roles
-   bower.json                  # Bower not build directly, using maven instead
    Dockerfile                  # A link to default Dockerfile to build (DockerHub)
-   Jenkinsfile
-   package.json                # Nnpm not build directly, using maven instead
-   pom.xml                     # Will run maven clean install
+   .github/workflows           # GitHub Actions CI (lint, image build, Trivy scan)
    .pre-commit-config.yaml
-   requirements.testing.txt    # Python package used for test and build only
+   Pipfile                     # Python packages (pipenv), locked in Pipfile.lock
    requirements.txt            # Python package used for production only
    requirements.yml            # Ansible requirements, will be add to roles directory
-   tox.ini
    sonar-project.properties    # Will run sonar standalone scan
    LICENSE
    CHANGELOG.md
@@ -97,9 +93,7 @@ A typical top-level directory layout:
    .
    ├── ...
    ├── docker                  # Docker files used to build project
-   │   ├── centos7             # End-to-end, integration tests (alternatively `e2e`)
-   │   ├── ubuntu18            # End-to-end, integration tests (alternatively `e2e`)
-   │   └── ubuntu20
+   │   └── ubuntu24
    │       Dockerfile          # File to build
    │       config.yaml         # File to run CST
    └── ...

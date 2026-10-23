@@ -1,5 +1,5 @@
 ---
-#ansible-playbook -i inventory/hosts-albandrieu -c local -v /playbooks/dropbox.yml -vvvv --ask-become-pass | tee setup.log
+# ansible-playbook -i inventory/hosts-albandrieu -c local -v /playbooks/dropbox.yml -vvvv --ask-become-pass | tee setup.log
 
 - name: Install subversion
   connection: local
@@ -8,13 +8,9 @@
   #  accelerate: true
 
   roles:
-    - {
-        role: albanandrieu.dropbox,
-        docker_files_enable: yes,
-        docker_files_generated_directory: "../roles/albanandrieu.dropbox",
-        dropbox_owner: "{{ user }}",
-        dropbox_group: "{{ group }}",
-        #dropbox_user_directory: "/workspace/Dropbox",
-        #dropbox_user_directory: "/home/albandrieu/Dropbox",
-        dropbox_user_host: "2366450895",
-      }
+    - role: albanandrieu.dropbox
+      docker_files_enable: true
+      docker_files_generated_directory: "../roles/albanandrieu.dropbox"
+      dropbox_owner: "{{ user }}"
+      dropbox_group: "{{ group }}"
+      dropbox_user_host: "2366450895"

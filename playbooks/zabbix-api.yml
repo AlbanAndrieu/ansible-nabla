@@ -12,14 +12,14 @@
 # $ ansible-playbook -i inventory/production  playbooks/zabbix-api.yml -e zabbix_username=nabla -e zabbix_password=***
 # $ ansible-playbook -i inventory/production  playbooks/zabbix-api.yml -e zabbix_username=nabla -e zabbix_password=*** --tags remove --skip-tags configure
 
-#TODO clean by hand, before downgrading zabbix-agent for instance
+# TODO clean by hand, before downgrading zabbix-agent for instance
 
-#yum remove zabbix zabbix-agent zabbix-sender zabbix-get zabbix-*
-#sudo apt-get remove zabbix-sender zabbix-get
-#rm -Rf /etc/zabbix/zabbix_agentd.d/*
+# yum remove zabbix zabbix-agent zabbix-sender zabbix-get zabbix-*
+# sudo apt-get remove zabbix-sender zabbix-get
+# rm -Rf /etc/zabbix/zabbix_agentd.d/*
 
-- hosts: zabbix
-  name: Add hosts to Zabbix monitoring
+- name: Add hosts to Zabbix monitoring
+  hosts: zabbix
   vars_prompt:
     - name: "zabbix_username"
       prompt: "User for specified Zabbix server"
@@ -27,8 +27,7 @@
       prompt: "Password for Zabbix user"
   tasks:
     - name: Change zabbix server
-      local_action:
-        module: zabbix_host
+      zabbix_host:
         server_url: https://nabla/zabbix/
         login_user: "{{ zabbix_username }}"
         login_password: "{{ zabbix_password }}"
@@ -42,8 +41,8 @@
           - Template OS Linux
         status: enabled
         state: present
-        force: yes
-        proxy: null
+        force: true
+        proxy:
         inventory_mode: automatic
         interfaces:
           - type: 1
@@ -54,13 +53,14 @@
             main: 0
             useip: 1
             ip: "{{ ansible_facts.default_ipv4.address }}"
-  become: no
+      delegate_to: localhost
+  become: false
   tags:
     - configure
 
-- hosts: zabbix-deprecated
-  name: Remove hosts from Zabbix monitoring
-  gather_facts: no
+- name: Remove hosts from Zabbix monitoring
+  hosts: zabbix-deprecated
+  gather_facts: false
   vars_prompt:
     - name: "zabbix_username"
       prompt: "User for specified Zabbix server"
@@ -68,14 +68,14 @@
       prompt: "Password for Zabbix user"
   tasks:
     - name: Change zabbix server
-      local_action:
-        module: zabbix_host
+      zabbix_host:
         server_url: https://nabla/zabbix/
         login_user: "{{ zabbix_username }}"
         login_password: "{{ zabbix_password }}"
         host_name: "{{ inventory_hostname.split('.')[0] }}"
         state: absent
-  become: no
+      delegate_to: localhost
+  become: false
   tags:
     - never
     - remove

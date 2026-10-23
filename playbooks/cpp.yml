@@ -43,9 +43,9 @@
     - albanandrieu.cpp
 
   vars:
-    #ubuntu 16 cppunit_version: "-1.13-0v5"
-    #cppunit_version: "-1.14-0=1.14.0-3" # ubuntu 18
-    #cppunit_version: "-dev=1.14.0-3" # ubuntu 18
+    # ubuntu 16 cppunit_version: "-1.13-0v5"
+    # cppunit_version: "-1.14-0=1.14.0-3" # ubuntu 18
+    # cppunit_version: "-dev=1.14.0-3" # ubuntu 18
     cppunit_version: "1.14.0-4" # ubuntu 19
     #ubuntu 16 boost_version: "1.61"
     #boost_version: "=1.65.1+dfsg-0ubuntu5" # ubuntu 18

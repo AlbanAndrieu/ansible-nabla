@@ -13,7 +13,6 @@ Nabla ansible playbooks
   * [Install python dependencies](#install-python-dependencies)
   * [Install ansible](#install-ansible)
   * [Quality tools](#quality-tools)
-  * [npm-groovy-lint groovy formating for Jenkinsfile](#npm-groovy-lint-groovy-formating-for-jenkinsfile)
   * [Docker image](#docker-image)
   * [Build & development](#build--development)
 - [Folder Structure Conventions](#folder-structure-conventions)
@@ -79,16 +78,6 @@ Run `pre-commit run --all-files`
 Run `SKIP=ansible-lint git commit -am 'Add key'`
 Run `git commit -am 'Add key' --no-verify`
 
-### npm-groovy-lint groovy formating for Jenkinsfile
-
-Tested with nodejs 12 and 16 on ubuntu 20 and 21 (not working with nodejs 11 and 16)
-
-```bash
-npm install -g npm-groovy-lint@8.2.0
-npm-groovy-lint --format
-ls -lrta .groovylintrc.json
-```
-
 ### Docker image
 
 See [ansible-nabla](https://hub.docker.com/r/nabla/ansible-nabla/) or [ansible-jenkins-slave-docker](https://hub.docker.com/r/nabla/ansible-jenkins-slave-docker/)
@@ -146,16 +135,12 @@ Run `./scripts/docker-build.sh` for building docker image.
     │   production
     ├── playbooks               # Ansible playbooks
     ├── roles                   # Ansible roles
-    bower.json                  # Bower not build directly, using maven instead
     Dockerfile                  # A link to default Dockerfile to build (DockerHub)
-    Jenkinsfile
-    package.json                # Nnpm not build directly, using maven instead
-    pom.xml                     # Will run maven clean install
+    .github/workflows           # GitHub Actions CI (lint, image build, Trivy scan)
     .pre-commit-config.yaml
-    requirements.testing.txt    # Python package used for test and build only
+    Pipfile                     # Python packages (pipenv), locked in Pipfile.lock
     requirements.txt            # Python package used for production only
     requirements.yml            # Ansible requirements, will be add to roles directory
-    tox.ini
     sonar-project.properties    # Will run sonar standalone scan
     LICENSE
     CHANGELOG.md
@@ -166,8 +151,7 @@ Run `./scripts/docker-build.sh` for building docker image.
     .
     ├── ...
     ├── docker                  # Docker files used to build project
-    │   ├── ubuntu18            # End-to-end, integration tests (alternatively `e2e`)
-    │   └── ubuntu20
+    │   └── ubuntu24
     │       Dockerfile          # File to build
     │       config.yaml         # File to run CST
     └── ...

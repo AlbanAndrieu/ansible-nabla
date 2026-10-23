@@ -1,8 +1,9 @@
-#ansible-playbook -i staging -c local -v docker-container.yml --ask-pass -vvvv | tee setup.log
-#ansible-playbook -i staging -c local -v docker-container.yml --limit albandri --ask-become-pass -vvvv | tee setup.log
+---
+# ansible-playbook -i staging -c local -v docker-container.yml --ask-pass -vvvv | tee setup.log
+# ansible-playbook -i staging -c local -v docker-container.yml --limit albandri --ask-become-pass -vvvv | tee setup.log
 
-#sudo docker logout https://docker.albandrieu.com:5000
-#sudo docker login registry.nabla.mobi
+# sudo docker logout https://docker.albandrieu.com:5000
+# sudo docker login registry.nabla.mobi
 - hosts: docker-container-oracle
   #  become: true
 
@@ -17,7 +18,7 @@
 ##        reauthorize: yes
 ##        ignore_errors: true
 
-#See https://docs.ansible.com/ansible/docker_service_module.html
+# See https://docs.ansible.com/ansible/docker_service_module.html
 #    - name: Stop all containers
 #      docker_service:
 #        project_src: "{{ lookup('env','WORKSPACE') }}/dockerfile-nabla/centos"

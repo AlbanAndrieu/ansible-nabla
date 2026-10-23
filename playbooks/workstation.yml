@@ -1,32 +1,34 @@
 ---
-#This script is used to configure your workstation (for developer)
+# This script is used to configure your workstation (for developer)
 
-#ansible-playbook -i pinventory/hosts -v playbooks/workstation.yml --limit albandrieu -vvvv | tee setup.log
-#for testing purpose
-#ansible-playbook -i inventory/hosts-albandrieu -c local -v playbooks/workstation.yml --check --diff --ask-become-pass -vvvv
+# ansible-playbook -i pinventory/hosts -v playbooks/workstation.yml --limit albandrieu -vvvv | tee setup.log
+# for testing purpose
+# ansible-playbook -i inventory/hosts-albandrieu -c local -v playbooks/workstation.yml --check --diff --ask-become-pass -vvvv
 
 - hosts: all
   gather_facts: true
   gather_subset: hardware
   tasks:
-    - name: group hosts by distribution
-      group_by: key="{{ ansible_distribution }}-{{ ansible_distribution_version }}"
+    - name: Group hosts by distribution
+      ansible.builtin.group_by:
 
-- hosts: RedHat-7*:RedHat-6*:RedHat-5*:CentOS-7*:CentOS-6*:Ubuntu-22*:Ubuntu-21*:Ubuntu-19*:Ubuntu-20*:Ubuntu-18*:Ubuntu-17*:Ubuntu-16*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
+        key: "{{ ansible_distribution }}-{{ ansible_distribution_version }}"
+- hosts:
+    RedHat-7*:RedHat-6*:RedHat-5*:CentOS-7*:CentOS-6*:Ubuntu-22*:Ubuntu-21*:Ubuntu-19*:Ubuntu-20*:Ubuntu-18*:Ubuntu-17*:Ubuntu-16*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
   gather_facts: false
   tasks:
-    - name: group hosts for supported distributions
-      group_by: key="supported"
+    - name: Group hosts for supported distributions
+      ansible.builtin.group_by:
 
+        key: "supported"
 - hosts: "!supported"
   gather_facts: false
   tasks:
-    - name: fail for unsupported distribution
-      fail: msg="{{ ansible_distribution }} {{ ansible_distribution_version }}
-        is not a supported OS for a Tower installation.  Supported
-        OSes include Red Hat Enterprise Linux 5/6/7, CentOS 6/7, or
-        Ubuntu 12.04/13.04/14.04/16.04/17.04/18.04/19.04/20.4/21.04/22.04."
-    - debug: msg="Version {{ ansible_distribution }} {{ ansible_distribution_version }} {{ ansible_architecture }}"
+    - name: Fail for unsupported distribution
+      ansible.builtin.fail:
+        msg: "{{ ansible_distribution }} {{ ansible_distribution_version }} is not a supported OS for a Tower installation.  Supported OSes include Red Hat Enterprise
+          Linux 5/6/7, CentOS 6/7, or Ubuntu 12.04/13.04/14.04/16.04/17.04/18.04/19.04/20.4/21.04/22.04."
+    - ansible.builtin.debug: msg="Version {{ ansible_distribution }} {{ ansible_distribution_version }} {{ ansible_architecture }}"
 
 #- import_playbook: jenkins-full.yml workstation_enabled=true automount_enabled=true nis_enabled=true
 
@@ -45,10 +47,10 @@
 
   vars:
     dropbox_user_host: "2366450895"
-    dash_enabled: no
-    webapps_enabled: no
-    ansigenome_enabled: no
-    apache_create_vhosts: no
+    dash_enabled: false
+    webapps_enabled: false
+    ansigenome_enabled: false
+    apache_create_vhosts: false
     nodejs_enabled: false
     variety_owner: "{{ user }}"
     variety_group: "{{ group }}"
@@ -73,7 +75,7 @@
 - import_playbook: solaris.yml
 
 # This playbook deploys a simple standalone Tomcat 7 server.
-- name: deploy Tomcat
+- name: Deploy Tomcat
   hosts: tomcat-servers
 
   roles:

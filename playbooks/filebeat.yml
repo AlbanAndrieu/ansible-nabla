@@ -1,5 +1,5 @@
 ---
-#ansible-playbook -i inventory/production -v playbooks/filebeat.yml --limit albandri -vvvv | tee setup.log
+# ansible-playbook -i inventory/production -v playbooks/filebeat.yml --limit albandri -vvvv | tee setup.log
 
 - name: Install filebeat
   hosts: jenkins-master
@@ -33,7 +33,7 @@
 - name: Install filebeat
   hosts: jenkins-slaves
   become: true
-  ignore_errors: yes
+  ignore_errors: true
 
   roles:
     - geerlingguy.filebeat
@@ -65,17 +65,19 @@
   become: true
 
   tasks:
-    - name: set filebeat_ssh_host to default
-      set_fact: filebeat_ssh_host=192.168.1.24
+    - name: Set filebeat_ssh_host to default
+      ansible.builtin.set_fact:
 
-    - name: set filebeat_ssh_port to default
-      set_fact: filebeat_ssh_port=9200
+        filebeat_ssh_host: 192.168.1.24
+    - name: Set filebeat_ssh_port to default
+      ansible.builtin.set_fact:
 
+        filebeat_ssh_port: "9200"
     - name: Copy Filebeat configuration.
-      template:
+      ansible.builtin.template:
         src: filebeat.yml.j2
         dest: "/etc/filebeat/filebeat.yml"
         owner: root
         group: root
-        mode: 0644
+        mode: "0644"
 #      notify: restart filebeat

@@ -57,7 +57,6 @@ repos:
             templates/.*.gitlab-ci.yml|  # because of !reference
             k8s/.*|
           )$
-      - id: check-symlinks
       - id: check-merge-conflict
       - id: debug-statements
         exclude: ^.cache/
@@ -77,7 +76,6 @@ repos:
           )$
       # - id: no-commit-to-branch
       #   args: [--branch, develop, --branch, main, --branch, master, --branch, release/*]
-      - id: end-of-file-fixer
       - id: fix-byte-order-marker
 
       - id: requirements-txt-fixer
@@ -85,12 +83,12 @@ repos:
       - id: file-contents-sorter
       - id: mixed-line-ending
         args: [--fix=lf]
-  - repo: https://github.com/pre-commit/mirrors-autopep8
-    rev: v2.0.4
+  - repo: https://github.com/hhatto/autopep8
+    rev: v2.3.2
     hooks:
       - id: autopep8
   - repo: https://github.com/pre-commit/pre-commit.git
-    rev: v4.5.0
+    rev: v4.7.0
     hooks:
       - id: validate_manifest
 
@@ -98,31 +96,26 @@ repos:
     rev: v4.0.0
     hooks:
       - id: add-trailing-comma
-  - repo: https://github.com/willthames/ansible-lint.git
-    rev: v25.12.1
+  - repo: https://github.com/ansible/ansible-lint
+    rev: v26.10.1
     hooks:
       - id: ansible-lint
         files: \.(yaml|yml)$
         exclude: >
           (?x)^(
-            .travis.yml|
             docker/|
             requirements.yml|
             playbooks/group_vars/all/vault.yml|
             .gitlab-ci.yml|
           )$
-  - repo: https://github.com/doublify/pre-commit-hindent.git
-    rev: b3680b6ebf9f7cf29b19307f246adef66756feef
-    hooks:
-      - id: hindent
   - repo: https://github.com/scop/pre-commit-shfmt
-    rev: v3.12.0-2
+    rev: v3.14.1-1
     hooks:
       - id: shfmt-docker # Docker image (requires Docker to run)
-  - repo: https://github.com/detailyang/pre-commit-shell
-    rev: 1.0.5
+  - repo: https://github.com/shellcheck-py/shellcheck-py
+    rev: v0.11.0.1
     hooks:
-      - id: shell-lint
+      - id: shellcheck
         args: [-x]
         exclude: >
           (?x)^(
@@ -133,61 +126,27 @@ repos:
             tests/.*
           )$
   - repo: https://github.com/asottile/pyupgrade
-    rev: v3.21.2
+    rev: v3.22.0
     hooks:
       - id: pyupgrade
-  - repo: https://github.com/pre-commit/mirrors-autopep8
-    rev: v2.0.4
-    hooks:
-      - id: autopep8
   - repo: https://github.com/IamTheFij/ansible-pre-commit
     rev: v1.0.1
     hooks:
       - id: encryption-check
   - repo: https://github.com/hadolint/hadolint
-    rev: v2.14.0
+    rev: v2.15.1
     hooks:
       - id: hadolint-docker
-  #  - repo: https://github.com/gitguardian/ggshield
-  #    rev: v1.10.7
-  #    hooks:
-  #      - id: ggshield
-  #        language_version: python3
-  #        stages: [commit]
-  # - repo: https://github.com/zricethezav/gitleaks
-  #   rev: v8.15.2
-  #   hooks:
-  #     - id: gitleaks-docker
-  #       entry: zricethezav/gitleaks protect --verbose --redact --staged
-  #       # entry: zricethezav/gitleaks detect --verbose
-  - repo: https://github.com/antonbabenko/pre-commit-terraform
-    rev: v1.104.0
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.30.1
     hooks:
-      - id: terraform_fmt
-      - id: terraform_docs
-      - id: terraform_validate
-        args:
-          - --init-args=-lockfile=readonly
-      - id: terraform_tfsec
-        args:
-          - --args=--config-file=tfsec.yml
-          - --args=-m HIGH
-      # - --args=--exclude-path=network/example
-      - id: terraform_providers_lock
-        args:
-          - --args=-platform=linux_amd64
-      - id: terraform_tflint
-      - id: terraform_checkov
-        args:
-          - --args=--quiet
-          - --args=--skip-path ansible/roles/
-  #  - --args=--skip-check CKV2_AWS_8
+      - id: gitleaks
   - repo: https://github.com/python-jsonschema/check-jsonschema
-    rev: 0.35.0
+    rev: 0.38.2
     hooks:
       - id: check-github-workflows
   - repo: https://github.com/oxsecurity/megalinter
-    rev: v9.2.0
+    rev: v10.1.0
     hooks:
       - id: megalinter-incremental # Faster, less thorough
         stages:

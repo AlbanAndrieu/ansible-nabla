@@ -1,9 +1,10 @@
-#see https://blog.trifork.com/2013/04/02/ansible-example-playbook-to-setup-jenkins-slave/
+---
+# see https://blog.trifork.com/2013/04/02/ansible-example-playbook-to-setup-jenkins-slave/
 
-#as root
-#ansible-playbook jenkins-slave.yml -i hosts-albandri -vvvv
-#as albandri
-#ansible-playbook jenkins-slave.yml -i hosts-albandri -vvvv --ask-become-pass --sudo
+# as root
+# ansible-playbook jenkins-slave.yml -i hosts-albandri -vvvv
+# as albandri
+# ansible-playbook jenkins-slave.yml -i hosts-albandri -vvvv --ask-become-pass --sudo
 # --extra-vars "jenkins_username=aandrieu jenkins_password=tbd"
 
 - import_playbook: hostname.yml
@@ -95,7 +96,7 @@
         image: "{{ docker_image_name }}"
         name: jenkins-slaves
         state: present
-        publish_all_ports: yes
+        publish_all_ports: true
       with_sequence: count=2
 #- name: Remove image from local docker storage:
 #  hosts: jenkins-slaves

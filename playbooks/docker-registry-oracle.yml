@@ -1,6 +1,6 @@
 ---
-#ansible-playbook -i staging -c local -v docker-registry.yml --ask-pass -vvvv | tee setup.log
-#ansible-playbook -i staging -c local -v docker-registry.yml --limit albandri --ask-become-pass -vvvv | tee setup.log
+# ansible-playbook -i staging -c local -v docker-registry.yml --ask-pass -vvvv | tee setup.log
+# ansible-playbook -i staging -c local -v docker-registry.yml --limit albandri --ask-become-pass -vvvv | tee setup.log
 
 - hosts: docker-container-oracle
 

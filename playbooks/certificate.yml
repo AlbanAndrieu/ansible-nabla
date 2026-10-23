@@ -1,12 +1,12 @@
 ---
-#ansible-playbook -i hosts-albandri -v certificate.yml -c local --limit albandri-laptop-work --ask-become-pass -vvvv | tee setup.log
+# ansible-playbook -i hosts-albandri -v certificate.yml -c local --limit albandri-laptop-work --ask-become-pass -vvvv | tee setup.log
 
 - hosts: jenkins-slaves
   remote_user: root
 
   tasks:
-    - name: set proxy_cdnurl_server to default
-      set_fact: proxy_cdnurl_server="albandrieu.com/download"
+    - name: Set proxy_cdnurl_server to default
+      ansible.builtin.set_fact:
 
     #- name: Create private key
     #  shell: ssh-keygen -t rsa -C "alban.andrieu@free.fr"
@@ -14,8 +14,12 @@
     #  become: true
     #  become_user: albandri
 
+        proxy_cdnurl_server: "albandrieu.com/download"
     - name: Create ~/pki
-      file: path=~/pki/ state=directory mode=0700
+      ansible.builtin.file:
+        path: ~/pki/
+        state: directory
+        mode: "0700"
       become: true
       become_user: root
 
@@ -28,8 +32,8 @@
 
   tasks:
     - name: Get the CA root certificate (3) HELM
-      command: curl --cacert ~/.cert/helm-cert.pem https://albandrieu.com/chartrepo/nabla/index.yaml
-      ignore_errors: yes
+      ansible.builtin.command: curl --cacert ~/.cert/helm-cert.pem https://albandrieu.com/chartrepo/nabla/index.yaml
+      ignore_errors: true
       changed_when: false
       become: true
       tags:
@@ -39,23 +43,26 @@
   remote_user: root
 
   tasks:
-    #- name: Get the CA root certificate
+    # - name: Get the CA root certificate
     #  get_url: dest=~/pki/ca.pem url=http://albandrieu.com:7072/download/certs/NABLA.crt
     #  ignore_errors: yes
     #  become: true
     #  become_user: root
 
     - name: Get the server DER certificate
-      get_url: dest=~/pki/{{ ansible_fqdn }}-der.cer url=http://albandrieu.com:7072/download/certs/servers/{{ ansible_fqdn }}-der.cer
-      ignore_errors: yes
+      ansible.builtin.get_url:
+        dest: ~/pki/{{ ansible_fqdn }}-der.cer
+        url: http://albandrieu.com:7072/download/certs/servers/{{ ansible_fqdn }}-der.cer
+      ignore_errors: true
       become: true
       tags:
         - certificate
         - vm
 
     - name: Convert DER certificate to PEM
-      command: openssl x509 -inform DER -outform PEM -in ~/pki/{{ ansible_fqdn }}-der.cer -out /etc/ssl/{{ ansible_fqdn }}/{{ ansible_fqdn }}.pem
-      ignore_errors: yes
+      ansible.builtin.command: openssl x509 -inform DER -outform PEM -in ~/pki/{{ ansible_fqdn }}-der.cer -out /etc/ssl/{{ ansible_fqdn }}/{{ ansible_fqdn
+        }}.pem
+      ignore_errors: true
       changed_when: false
       become: true
       tags:
@@ -76,14 +83,13 @@
 
   tasks:
     - name: Test the CA root certificate (3) HELM
-      get_url:
+      ansible.builtin.get_url:
         dest: /home/jenkins/index.yaml
         url: https://albandrieu.com/chartrepo/nabla/index.yaml
         timeout: 20
         validate_certs: true
-        use_proxy: no
+        use_proxy: false
       #become: true
       ignore_errors: true
-      become_user: jenkins
       tags:
         - certificate

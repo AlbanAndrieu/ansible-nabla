@@ -1,5 +1,5 @@
 ---
-#ansible all -m setup -i hosts-albandri --limit albandri -vvvv
+# ansible all -m setup -i hosts-albandri --limit albandri -vvvv
 
 # ansible-playbook -i inventory/hosts-albandrieu -c local -v playbooks/lamp.yml --ask-become-pass -vvvv
 
@@ -13,7 +13,7 @@
     apache_global_vhost_settings: |
       DirectoryIndex index.php index.html
       # Add other global settings on subsequent lines.
-    #apache_allow_override: "All"
+    # apache_allow_override: "All"
     apache_allow_override: "FileInfo Indexes"
     #apache_options: "-Indexes +FollowSymLinks"
     #apache_options: "MultiViews Indexes SymLinksIfOwnerMatch IncludesNoExec"
@@ -24,7 +24,7 @@
     apache_create_vhosts: true
     #apache_vhosts_template: "vhosts.conf.j2"
     apache_vhosts:
-      #- servername: "{{ ansible_fqdn }}"
+      # - servername: "{{ ansible_fqdn }}"
       - servername: "albandrieu.com"
         documentroot: "/var/www/nabla-site-apache"
         allow_override: "FileInfo Indexes"
@@ -38,7 +38,7 @@
             AuthUserFile /var/www/password-protected-directory/.htpasswd
           </Directory>
     apache_vhosts_ssl:
-      #- servername: "{{ ansible_fqdn }}"
+      # - servername: "{{ ansible_fqdn }}"
       - servername: "albandrieu.com"
         documentroot: "/var/www/nabla-site-apache"
         #TODO

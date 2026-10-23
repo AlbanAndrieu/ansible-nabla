@@ -1,31 +1,33 @@
-#ansible -m setup sparc-sun4sol-u6-1-sun4v -vvvv -i staging -vvvv
-#ansible sparc-sun4sol-u6-1-sun4v -i staging -m raw -a "pkginfo -l"  -k -u jenkins  -vvvv
+---
+# ansible -m setup sparc-sun4sol-u6-1-sun4v -vvvv -i staging -vvvv
+# ansible sparc-sun4sol-u6-1-sun4v -i staging -m raw -a "pkginfo -l"  -k -u jenkins  -vvvv
 
-#ansible-playbook -i staging  -v solaris.yml --limit sparc-sun4sol-u6-1-sun4v --ask-become-pass
+# ansible-playbook -i staging  -v solaris.yml --limit sparc-sun4sol-u6-1-sun4v --ask-become-pass
 # --ask-pass
 
 - hosts: all
   gather_facts: true
   tasks:
-    - name: group hosts by distribution
-      group_by: key="{{ ansible_distribution }}-{{ ansible_distribution_version }}-{{ ansible_architecture }}"
+    - name: Group hosts by distribution
+      ansible.builtin.group_by:
 
-#Solaris-10-sun4u not managed via ansible on purpose
+        #Solaris-10-sun4u not managed via ansible on purpose
+        key: "{{ ansible_distribution }}-{{ ansible_distribution_version }}-{{ ansible_architecture }}"
 - hosts: Solaris-10-sun4v*:Solaris-11-sun4v*
   gather_facts: false
   tasks:
-    - name: group hosts for supported distributions
-      group_by: key="supported"
+    - name: Group hosts for supported distributions
+      ansible.builtin.group_by:
 
+        key: "supported"
 - hosts: "!supported"
   gather_facts: false
   tasks:
-    - name: fail for unsupported distribution
-      fail: msg="{{ ansible_distribution }} {{ ansible_distribution_version }}
-        is not a supported OS for a Tower installation.  Supported
-        OSes include Solaris 10, or
-        Solaris 11"
+    - name: Fail for unsupported distribution
+      ansible.builtin.fail:
 
+        msg: "{{ ansible_distribution }} {{ ansible_distribution_version }} is not a supported OS for a Tower installation.  Supported OSes include Solaris 10, or
+          Solaris 11"
 - name: Apply common configuration to solaris nodes
   hosts: solaris
   become: true

@@ -9,12 +9,12 @@
 
   vars:
     apt_notification_email: "alban.andrieu@free.fr"
-    apt_upgrade_system_enabled: no
+    apt_upgrade_system_enabled: false
 
 - name: Timezone
   hosts: all
   gather_facts: true
-  become: yes
+  become: true
   tags:
     - tz
     - utc

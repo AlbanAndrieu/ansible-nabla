@@ -2,15 +2,15 @@
 # ansible-galaxy collection install devsec.hardening
 # ansible-playbook playbooks/hardening.yml --become --ask-become-pass -vvvvv
 
-- name: "sandbox"
+- name: "Sandbox"
   hosts: localhost
-  gather_facts: yes
+  gather_facts: true
   #become: true
 
   tasks:
-    - debug:
+    - ansible.builtin.debug:
         var: ansible_version.full
-    - debug:
+    - ansible.builtin.debug:
         var: ansible_en.container
 
 - hosts: localhost

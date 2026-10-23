@@ -1,8 +1,8 @@
 ---
-#as albandri
-#ansible-playbook opencl.yml -i hosts-production --limit pricer.nabla.mobi -vvvv --ask-become-pass
+# as albandri
+# ansible-playbook opencl.yml -i hosts-production --limit pricer.nabla.mobi -vvvv --ask-become-pass
 
-#TODO service lightdm stop
+# TODO service lightdm stop
 # pkill -u jenkins
 # pkill -u jenkins-bm
 
@@ -12,13 +12,13 @@
 
   pre_tasks:
     - name: Set cpu_driver
-      set_fact:
-        cpu_driver: "{% if 'GenuineIntel' in ansible_processor %}intel{% elif 'AuthenticAMD' in ansible_processor %}amd{%else%}unknown{%endif%}"
+      ansible.builtin.set_fact:
+        cpu_driver: "{% if 'GenuineIntel' in ansible_processor %}intel{% elif 'AuthenticAMD' in ansible_processor %}amd{%else %}unknown{%endif %}"
 
-    - debug: msg="{{ cpu_driver }}"
+    - ansible.builtin.debug: msg="{{ cpu_driver }}"
 
     - name: Get dkms status
-      command: "dkms status"
+      ansible.builtin.command: "dkms status"
       changed_when: false
 
 #Remove older nvidia driver from kernel

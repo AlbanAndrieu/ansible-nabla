@@ -1,4 +1,5 @@
-#ansible-playbook -i hosts-albandri -c local -v squirrel.yml -vvvv --ask-become-pass | tee setup.log
+---
+# ansible-playbook -i hosts-albandri -c local -v squirrel.yml -vvvv --ask-become-pass | tee setup.log
 
 - hosts: all
   gather_facts: true
@@ -16,9 +17,8 @@
   gather_facts: false
   tasks:
     - name: fail for unsupported distribution
-      fail: msg="{{ ansible_distribution }} {{ ansible_distribution_version }}
-        is not a supported OS for a Tower installation.  Supported
-        OSes include Ubuntu 12.04/14.04."
+      fail: msg="{{ ansible_distribution }} {{ ansible_distribution_version }} is not a supported OS for a Tower installation.  Supported OSes include Ubuntu
+        12.04/14.04."
 
 - name: Install squirrel
   connection: local

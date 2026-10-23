@@ -6,7 +6,7 @@
   become: true
 
   tasks:
-    - cron:
+    - ansible.builtin.cron:
         name: "Clean Jenkins Workspace"
         minute: "0"
         hour: "*"

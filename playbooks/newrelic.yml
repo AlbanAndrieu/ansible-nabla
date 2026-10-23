@@ -1,4 +1,5 @@
-#sudo ansible-playbook -i hosts-albandri -c local -v newrelic.yml | tee setup.log
+---
+# sudo ansible-playbook -i hosts-albandri -c local -v newrelic.yml | tee setup.log
 
 - name: Install newrelic server
   connection: local
@@ -7,11 +8,8 @@
   #  accelerate: true
 
   roles:
-    - {
-        role: ansible-newrelic,
-        newrelic_license_key: de35bf5d191ebb208d359b2cd24a60616a02b1f3,
-      }
-#- name: Install newrelic java
+    - { role: ansible-newrelic, newrelic_license_key: de35bf5d191ebb208d359b2cd24a60616a02b1f3 }
+# - name: Install newrelic java
 #  connection: local
 #  hosts: workstation
 ##  remote_user: root

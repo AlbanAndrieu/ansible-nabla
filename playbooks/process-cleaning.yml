@@ -1,5 +1,5 @@
 ---
-#ansible-playbook -i inventory/production -v playbooks/process-cleaning.yml --limit albandri -e ansible_python_interpreter="/opt/ansible/env35/bin/python3.5" -vvvv | tee setup.log
+# ansible-playbook -i inventory/production -v playbooks/process-cleaning.yml --limit albandri -e ansible_python_interpreter="/opt/ansible/env35/bin/python3.5" -vvvv | tee setup.log
 
 - hosts: docker-cleaning
   become: true
@@ -17,7 +17,8 @@
     #      with_items: "{{ all_processes.files }}"
 
     - name: Get running processes # noqa 301
-      shell: "find /proc -maxdepth 1 -user jenkins -type d -mmin +200 -exec basename {} \\; | xargs ps | grep {{ item.process_name_matcher }} | awk '{ print $1 }'"
+      ansible.builtin.shell: "find /proc -maxdepth 1 -user jenkins -type d -mmin +200 -exec basename {} \\; | xargs ps | grep {{ item.process_name_matcher }} | awk
+        '{ print $1 }'"
       #      shell: "ps -few | grep {{ item.process_name_matcher }} | awk '{print $2}'"
       #      args:
       #        executable: /bin/bash
@@ -40,7 +41,7 @@
     #        msg: "Process {{ item.stdout_lines }} for {{ item.item }}"
     #      with_items: '{{ running_processes.results }}'
 
-    - debug:
+    - ansible.builtin.debug:
         msg: "Show process id {{ item.stdout_lines }}"
       with_items: "{{ running_processes.results }}"
       tags:
@@ -56,7 +57,7 @@
     #      with_items: "{{ running_processes.results|map(attribute='stdout_lines')|list }}"
 
     - name: Kill running processes # noqa 301 305
-      shell: "kill {{ item }}"
+      ansible.builtin.shell: "kill {{ item }}"
       with_items: "{{ running_processes.results|map(attribute='stdout_lines')|list }}"
       ignore_errors: true
       tags:
@@ -64,7 +65,7 @@
         - vm
 
     - name: Wait for running processes to stop # noqa 301 305
-      wait_for:
+      ansible.builtin.wait_for:
         path: "/proc/{{ item }}/status"
         state: absent
       with_items: "{{ running_processes.results|map(attribute='stdout_lines')|list }}"

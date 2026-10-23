@@ -1,9 +1,9 @@
 ---
-#ansible-playbook playbooks/hdd.yml -i inventory/production --limit albandrieu.com -vvvv
+# ansible-playbook playbooks/hdd.yml -i inventory/production --limit albandrieu.com -vvvv
 
 # WARNING below order is important
 
-#TODO reboot if you do not see sdb
+# TODO reboot if you do not see sdb
 - name: Iscsi configuration
   hosts: iscsi
   become: true
@@ -27,7 +27,7 @@
         dest: "/etc/iscsi/iscsid.conf"
         owner: root
         group: root
-        mode: 0600
+        mode: "0600"
 #      notify: restart iscsi
 
 #    - name: Copy isci configuration.
@@ -281,7 +281,7 @@
         dest: "/etc/fstab"
         owner: root
         group: root
-        mode: 0600
+        mode: "0600"
 
     # Check entry in /etc/fstab
     # sudo mount /workspace
