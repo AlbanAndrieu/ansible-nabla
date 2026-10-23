@@ -204,9 +204,10 @@ RUN curl -sL https://deb.nodesource.com/setup_${NODE_VERSION}.x | bash - && \
     apt-get update && apt-get install --no-install-recommends -y nodejs=${NODE_VERSION}* && apt-get clean && rm -rf /var/lib/apt/lists/* && \
     npm set progress=false && \
     npm config set depth 0;
-RUN npm install -g npm@11.21.1 && apt-get purge -y npm
-RUN npm -v && command -v npm # 11.21.1
-RUN npm install -g yarn@1.22.22 dockerfile_lint@0.3.4 newman@5.2.2 newman-reporter-htmlextra@1.19.7 jest@28.1.0 storybook@8.1.9 jest-junit@14.0.1 pyright@1.1.381 pyright-to-gitlab-ci@0.1.3 cloc@2.0.0-cloc && apt-get purge -y npm
+RUN npm install -g npm@12.2.1 && apt-get purge -y npm
+RUN npm -v && command -v npm # 12.2.1
+RUN npm install -g yarn@1.22.22 newman@6.2.3 newman-reporter-htmlextra@1.23.1 jest@30.5.2 storybook@10.6.3 jest-junit@17.0.0 pyright@1.1.414 pyright-to-gitlab-ci@0.1.3 cloc@2.10.0-cloc \
+  && npm cache clean --force
 
 # GO
 

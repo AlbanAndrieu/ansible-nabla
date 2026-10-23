@@ -1,0 +1,69 @@
+# Top-level packages of the /opt/ansible/env virtualenv (python3.12)
+# Compile with: uv pip compile --python-version 3.12 requirements-current.in -o requirements-current.txt
+
+# Ansible
+ansible
+ansible-cmdb
+ansible-lint
+ara[server]
+molecule
+jmespath
+netaddr
+pywinrm[credssp]
+zabbix-api
+
+# Cloud and containers
+docker
+kubernetes
+s3cmd
+
+# Quality and tests
+bandit
+coverage
+cpplint
+fastcov
+flake8
+gcovr
+isort
+junit-xml
+lcov-cobertura
+pep8-naming
+pre-commit
+pre-commit-hooks
+pylint
+pylint-junit
+pytest
+pytest-cov
+tox
+yamllint
+
+# Build
+conan
+cookiecutter
+scons
+
+# Documentation
+restructuredtext-lint
+sphinx
+
+# Tools
+beautifulsoup4
+gitpython
+gprof2dot
+graphviz
+jaydebeapi
+jira
+keyring
+lxml
+matplotlib
+numpy
+openpyxl
+pandas
+psutil
+pydot
+python-gnupg
+python-magic
+selenium
+tabulate
+xlsxwriter
+zaproxy

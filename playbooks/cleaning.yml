@@ -1,5 +1,5 @@
 ---
-# ansible-playbook -i inventory/production -v playbooks/cleaning.yml --limit albandrieu@albandrieu.com -e ansible_python_interpreter="/opt/ansible/env35/bin/python3.5" -vvvv | tee setup.log
+# ansible-playbook -i inventory/production -v playbooks/cleaning.yml --limit albandrieu@albandrieu.com -e ansible_python_interpreter="/opt/ansible/env/bin/python" -vvvv | tee setup.log
 
 - name: Apt cleaning
   hosts: Ubuntu-20*:Ubuntu-19*:Ubuntu-18*:Ubuntu-17*:Ubuntu-16*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*

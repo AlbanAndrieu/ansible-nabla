@@ -1,0 +1,204 @@
+aiohappyeyeballs==2.7.1   # via aiohttp
+aiohttp==3.14.5           # via aiohttp-retry, kubernetes
+aiohttp-retry==2.9.1      # via kubernetes
+aiosignal==1.4.0          # via aiohttp
+alabaster==1.0.0          # via sphinx
+annotated-types==0.8.0    # via pydantic
+ansible==14.5.0           # via -r requirements-current.in
+ansible-cmdb==1.31        # via -r requirements-current.in
+ansible-compat==26.10.0   # via ansible-lint, molecule
+ansible-core==2.21.5      # via ansible, ansible-compat, ansible-lint, molecule
+ansible-lint==26.10.1     # via -r requirements-current.in
+ara==1.8.0                # via -r requirements-current.in
+arrow==1.4.0              # via cookiecutter
+asgiref==3.12.1           # via django, django-cors-headers
+astroid==4.3.4            # via pylint
+attrs==26.1.0             # via aiohttp, jsonschema, outcome, referencing, trio
+autopage==0.6.0           # via cliff
+babel==2.18.0             # via sphinx
+bandit==1.9.4             # via -r requirements-current.in
+beautifulsoup4==4.15.0    # via -r requirements-current.in
+binaryornot==0.6.0        # via cookiecutter
+black==26.10.1            # via ansible-lint
+bracex==3.2               # via wcmatch
+cachetools==7.2.4         # via tox
+certifi==2026.10.19       # via kubernetes, requests, selenium
+cffi==2.1.1               # via ansible-lint, cryptography
+cfgv==3.5.0               # via pre-commit
+charset-normalizer==3.5.2  # via requests
+click==8.5.0              # via black, cookiecutter, molecule
+cliff==4.17.0             # via ara
+cmd2==4.3.0               # via cliff
+colorama==0.4.6           # via conan, tox
+colorlog==6.12.0          # via gcovr
+conan==2.33.0             # via -r requirements-current.in
+contourpy==1.4.0          # via matplotlib
+cookiecutter==2.7.1       # via -r requirements-current.in
+coverage==7.17.0          # via pytest-cov, -r requirements-current.in
+cpplint==2.0.2            # via -r requirements-current.in
+cryptography==50.0.2      # via ansible-core, ansible-lint, pyspnego, requests-credssp, requests-ntlm, secretstorage
+cycler==0.12.1            # via matplotlib
+defusedxml==0.7.1         # via jira
+dill==0.4.1               # via pylint
+distlib==0.4.4            # via virtualenv
+distro==1.9.0             # via ansible-lint, conan
+django==5.2.18            # via ara, django-cors-headers, django-filter, django-health-check, djangorestframework
+django-cors-headers==4.9.0  # via ara
+django-filter==26.2       # via ara
+django-health-check==3.24.0  # via ara
+djangorestframework==3.18.3  # via ara
+docker==7.2.0             # via -r requirements-current.in
+docutils==0.22.4          # via restructuredtext-lint, sphinx
+durationpy==0.11          # via kubernetes
+dynaconf==3.3.5           # via ara
+enrich==1.2.7             # via molecule
+et-xmlfile==2.0.0         # via openpyxl
+fastcov==1.17             # via -r requirements-current.in
+fasteners==0.20           # via conan
+filelock==4.2.4           # via ansible-lint, python-discovery, tox, virtualenv
+flake8==7.4.1             # via pep8-naming, -r requirements-current.in
+fonttools==4.67.0         # via matplotlib
+frozenlist==1.8.0         # via aiohttp, aiosignal
+gcovr==8.7                # via -r requirements-current.in
+gitdb==4.0.12             # via gitpython
+gitpython==3.2.1          # via -r requirements-current.in
+gprof2dot==2025.4.14      # via -r requirements-current.in
+graphviz==0.21            # via -r requirements-current.in
+h11==0.16.0               # via wsproto
+identify==2.6.20          # via pre-commit
+idna==3.20                # via requests, trio, yarl
+imagesize==2.0.1          # via sphinx
+iniconfig==2.3.1          # via pytest
+isort==9.0.2              # via pylint, -r requirements-current.in
+jaraco-classes==3.4.0     # via keyring
+jaraco-context==6.1.2     # via keyring
+jaraco-functools==4.6.0   # via keyring
+jaydebeapi==1.2.3         # via -r requirements-current.in
+jeepney==0.9.0            # via keyring, secretstorage
+jinja2==3.1.6             # via ansible-core, conan, cookiecutter, gcovr, molecule, sphinx
+jira==3.10.5              # via -r requirements-current.in
+jmespath==1.1.0           # via -r requirements-current.in
+jpype1==1.7.1             # via jaydebeapi
+jsonschema==4.26.0        # via ansible-compat, ansible-lint, molecule
+jsonschema-specifications==2025.9.1  # via jsonschema
+jsonxs==0.6               # via ansible-cmdb
+junit-xml==1.9            # via -r requirements-current.in
+junit-xml-2==1.9          # via pylint-junit
+keyring==25.7.0           # via -r requirements-current.in
+kiwisolver==1.5.1         # via matplotlib
+kubernetes==37.0.1        # via -r requirements-current.in
+lcov-cobertura==2.1.1     # via -r requirements-current.in
+lxml==6.1.3               # via gcovr, -r requirements-current.in
+mako==1.4.3               # via ansible-cmdb
+markdown-it-py==4.2.0     # via rich
+markupsafe==3.0.4         # via jinja2, mako
+matplotlib==3.11.2        # via -r requirements-current.in
+mccabe==0.7.0             # via flake8, pylint
+mdurl==0.1.2              # via markdown-it-py
+molecule==26.10.0         # via -r requirements-current.in
+more-itertools==11.2.1    # via jaraco-classes, jaraco-functools
+multidict==7.1.0          # via aiohttp, yarl
+mypy-extensions==1.1.0    # via black, isort
+netaddr==1.3.0            # via -r requirements-current.in
+nodeenv==1.11.0           # via pre-commit
+numpy==2.5.4              # via contourpy, matplotlib, pandas, -r requirements-current.in
+oauthlib==4.0.0           # via requests-oauthlib
+openpyxl==3.1.5           # via -r requirements-current.in
+outcome==1.3.0.post0      # via trio, trio-websocket
+packaging==26.3           # via ansible-compat, ansible-core, ansible-lint, black, jira, jpype1, matplotlib, molecule, pyproject-api, pytest, sphinx, tox, virtualenv
+pandas==3.1.0             # via -r requirements-current.in
+patch-ng==1.19.1          # via conan
+pathspec==1.1.1           # via ansible-lint, black, yamllint
+pep8-naming==0.15.1       # via -r requirements-current.in
+pillow==13.0.0            # via matplotlib
+platformdirs==4.13.5      # via black, pylint, tox, virtualenv
+pluggy==1.7.0             # via molecule, pytest, pytest-cov, tox
+pre-commit==4.7.0         # via -r requirements-current.in
+pre-commit-hooks==6.0.0   # via -r requirements-current.in
+prettytable==3.18.0       # via cliff
+prompt-toolkit==3.0.53    # via cmd2
+propcache==0.5.4          # via aiohttp, yarl
+psutil==7.2.2             # via django-health-check, -r requirements-current.in
+pycodestyle==2.15.0       # via flake8
+pycparser==3.12           # via cffi
+pydantic==2.14.1          # via kubernetes
+pydantic-core==2.50.1     # via pydantic
+pydot==4.0.1              # via -r requirements-current.in
+pyflakes==4.0.3           # via flake8
+pygments==2.21.0          # via ara, gcovr, pytest, rich, sphinx
+pylint==4.1.3             # via pylint-junit, -r requirements-current.in
+pylint-junit==0.3.5       # via -r requirements-current.in
+pyparsing==3.3.3          # via matplotlib, pydot
+pyperclip==1.11.0         # via cmd2
+pyproject-api==1.12.0     # via tox
+pysocks==1.7.1            # via urllib3
+pyspnego==0.12.4          # via requests-credssp, requests-ntlm
+pytest==9.1.1             # via pytest-cov, -r requirements-current.in
+pytest-cov==7.1.0         # via -r requirements-current.in
+python-dateutil==2.9.0.post0  # via arrow, conan, kubernetes, matplotlib, pandas, s3cmd
+python-discovery==1.6.4   # via tox, virtualenv
+python-gnupg==0.5.7       # via -r requirements-current.in
+python-magic==0.4.27      # via s3cmd, -r requirements-current.in
+python-slugify==9.1.3     # via cookiecutter
+pytokens==0.4.1           # via black
+pywinrm==0.5.0            # via -r requirements-current.in
+pyyaml==6.0.3             # via ansible-cmdb, ansible-compat, ansible-core, ansible-lint, bandit, cliff, conan, cookiecutter, kubernetes, molecule, pre-commit, yamllint
+referencing==0.37.0       # via ansible-lint, jsonschema, jsonschema-specifications
+requests==2.34.2          # via ara, conan, cookiecutter, docker, jira, kubernetes, pywinrm, requests-credssp, requests-ntlm, requests-oauthlib, requests-toolbelt, sphinx, zaproxy
+requests-credssp==2.0.0   # via pywinrm
+requests-ntlm==1.3.0      # via pywinrm
+requests-oauthlib==2.0.0  # via jira, kubernetes
+requests-toolbelt==1.0.0  # via jira
+resolvelib==1.2.1         # via ansible-core
+restructuredtext-lint==2.0.2  # via -r requirements-current.in
+rich==15.0.0              # via bandit, cmd2, cookiecutter, enrich, molecule, rich-argparse
+rich-argparse==1.8.0      # via cmd2
+roman-numerals==4.1.0     # via sphinx
+rpds-py==2026.9.1         # via jsonschema, referencing
+ruamel-yaml==0.19.1       # via ansible-lint, ara, dynaconf, pre-commit-hooks
+s3cmd==2.4.0              # via -r requirements-current.in
+scons==4.11.1             # via -r requirements-current.in
+secretstorage==3.5.0      # via keyring
+selenium==4.51.0          # via -r requirements-current.in
+six==1.17.0               # via junit-xml, junit-xml-2, python-dateutil, zaproxy
+smmap==5.0.3              # via gitdb
+sniffio==1.3.1            # via trio
+snowballstemmer==3.1.1    # via sphinx
+sortedcontainers==2.4.0   # via trio
+soupsieve==3.0.4          # via beautifulsoup4
+sphinx==9.1.1             # via -r requirements-current.in
+sphinxcontrib-applehelp==2.0.0  # via sphinx
+sphinxcontrib-devhelp==2.0.0  # via sphinx
+sphinxcontrib-htmlhelp==2.1.0  # via sphinx
+sphinxcontrib-jsmath==2.0.0  # via sphinx
+sphinxcontrib-qthelp==2.0.0  # via sphinx
+sphinxcontrib-serializinghtml==2.0.0  # via sphinx
+sqlparse==0.6.0           # via django
+stevedore==5.9.1          # via bandit, cliff
+subprocess-tee==0.4.2     # via ansible-compat, ansible-lint
+tabulate==0.10.0          # via -r requirements-current.in
+text-unidecode==1.3       # via python-slugify
+tomli-w==1.2.0            # via tox
+tomlkit==0.15.2           # via pylint
+tox==4.67.1               # via -r requirements-current.in
+trio==0.34.0              # via selenium, trio-websocket
+trio-websocket==0.12.2    # via selenium
+truststore==0.10.5        # via conan
+typing-extensions==4.16.0  # via aiohttp, aiosignal, beautifulsoup4, jira, kubernetes, pydantic, pydantic-core, referencing, selenium, tox, typing-inspection
+typing-inspection==0.4.4  # via pydantic
+tzdata==2026.5            # via ara, arrow
+tzlocal==5.4.5            # via ara
+urllib3==2.8.0            # via conan, docker, kubernetes, requests, selenium
+ushlex==0.99.1            # via ansible-cmdb
+virtualenv==21.14.13      # via pre-commit, tox
+wcmatch==11.2             # via ansible-lint, molecule
+wcwidth==0.9.3            # via prettytable, prompt-toolkit
+websocket-client==1.9.2   # via kubernetes, selenium
+whitenoise==6.12.0        # via ara
+wsproto==1.3.2            # via trio-websocket
+xlsxwriter==3.3.0         # via -r requirements-current.in
+xmltodict==1.0.4          # via pywinrm
+yamllint==1.38.0          # via ansible-lint, -r requirements-current.in
+yarl==1.25.1              # via aiohttp
+zabbix-api==0.5.6         # via -r requirements-current.in
+zaproxy==0.6.0            # via -r requirements-current.in

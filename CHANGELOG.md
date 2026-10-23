@@ -30,9 +30,13 @@ Switch to docker/ubuntu24/Dockerfile (image 2.1.0)
 - selenium/standalone-chrome 4.51, Docker 29.9, Node 24, Go 1.27, Trivy 0.76
 - Galaxy roles pinned to a tag or a commit sha
 - Playbooks fixed with `ansible-lint --fix` (FQCN, YAML)
+- Image npm tools: npm 12, newman 6, jest 30, storybook 10, jest-junit 17, pyright 1.1.414
+- playbooks/python.yml: a single /opt/ansible/env python 3.12 virtualenv for Ubuntu 22.04/24.04 and RHEL 8/9,
+  installed from requirements-current.txt (compiled from requirements-current.in)
 ### Remove
 - docker/ubuntu16 to ubuntu20, Jenkinsfile, .travis.yml, tox.ini, package.json
-- PHP/Apache/Composer, s6-overlay, Nomad and tfsec from the image
+- PHP/Apache/Composer, s6-overlay, Nomad, tfsec and dockerfile_lint from the image
+- Python 2.7 to 3.8 virtualenvs and their requirements-current-*.txt files
 
 ## [1.0.0] - 2020-01-21
 

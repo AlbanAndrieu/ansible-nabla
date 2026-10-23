@@ -82,8 +82,7 @@ fileExistenceTests:
 
   - name: "dockerfile_lint"
     path: "/usr/bin/dockerfile_lint"
-    shouldExist: true
-    permissions: "Lrwxrwxrwx"
+    shouldExist: false
 
   - name: "docker credentials"
     path: "/home/ubuntu/.docker/config.json"
@@ -130,20 +129,30 @@ commandTests:
     args: ["--version"]
     expectedOutput: ["v24\\..*"]
 
-  - name: "check npm 11.21 version"
+  - name: "check npm 12.2 version"
     command: "npm"
     args: ["--version"]
-    expectedOutput: ["11\\.21\\..*"]
+    expectedOutput: ["12\\.2\\..*"]
 
-  - name: "check newman 5.2 version"
+  - name: "check newman 6.2 version"
     command: "newman"
     args: ["--version"]
-    expectedOutput: ["5\\.2\\..*"]
+    expectedOutput: ["6\\.2\\..*"]
 
-  - name: "check jest 28.1 version"
+  - name: "check jest 30.5 version"
     command: "jest"
     args: ["--version"]
-    expectedOutput: ["28\\.1\\..*"]
+    expectedOutput: ["30\\.5\\..*"]
+
+  - name: "check storybook 10.6 version"
+    command: "storybook"
+    args: ["--version"]
+    expectedOutput: [".*10\\.6\\..*"]
+
+  - name: "check pyright 1.1.414 version"
+    command: "pyright"
+    args: ["--version"]
+    expectedOutput: ["pyright 1\\.1\\.414.*"]
 
   - name: "check pip from virtualenv"
     command: "pip"
