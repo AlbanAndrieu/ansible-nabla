@@ -12,7 +12,8 @@ permissions:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  # only cancel superseded pull request runs, every master commit is validated
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 env:
   IMAGE: nabla/ansible-nabla:ci
