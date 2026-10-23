@@ -11,7 +11,7 @@ ansible-core==2.21.5      # via ansible, ansible-compat, ansible-lint, molecule
 ansible-lint==26.10.1     # via -r requirements-current.in
 ara==1.8.0                # via -r requirements-current.in
 arrow==1.4.0              # via cookiecutter
-asgiref==3.12.1           # via django, django-cors-headers
+asgiref==3.13.0           # via django, django-cors-headers
 astroid==4.3.4            # via pylint
 attrs==26.1.0             # via aiohttp, jsonschema, outcome, referencing, trio
 autopage==0.6.0           # via cliff
