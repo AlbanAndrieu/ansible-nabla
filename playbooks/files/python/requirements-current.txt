@@ -111,7 +111,7 @@ patch-ng==1.19.1          # via conan
 pathspec==1.1.1           # via ansible-lint, black, yamllint
 pep8-naming==0.15.1       # via -r requirements-current.in
 pillow==13.0.0            # via matplotlib
-platformdirs==4.13.5      # via black, pylint, tox, virtualenv
+platformdirs==4.13.6      # via black, pylint, tox, virtualenv
 pluggy==1.7.0             # via molecule, pytest, pytest-cov, tox
 pre-commit==4.7.0         # via -r requirements-current.in
 pre-commit-hooks==6.0.0   # via -r requirements-current.in
