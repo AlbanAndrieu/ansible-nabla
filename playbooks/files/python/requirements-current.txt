@@ -130,7 +130,7 @@ pylint==4.1.3             # via pylint-junit, -r requirements-current.in
 pylint-junit==0.3.5       # via -r requirements-current.in
 pyparsing==3.3.3          # via matplotlib, pydot
 pyperclip==1.11.0         # via cmd2
-pyproject-api==1.12.0     # via tox
+pyproject-api==1.12.2     # via tox
 pysocks==1.7.1            # via urllib3
 pyspnego==0.12.4          # via requests-credssp, requests-ntlm
 pytest==9.1.1             # via pytest-cov, -r requirements-current.in
