@@ -21,7 +21,7 @@ beautifulsoup4==4.15.0    # via -r requirements-current.in
 binaryornot==0.6.0        # via cookiecutter
 black==26.10.1            # via ansible-lint
 bracex==3.2               # via wcmatch
-cachetools==7.2.4         # via tox
+cachetools==7.2.7         # via tox
 certifi==2026.10.23       # via kubernetes, requests, selenium
 cffi==2.1.1               # via ansible-lint, cryptography
 cfgv==3.5.0               # via pre-commit
