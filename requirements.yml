@@ -444,7 +444,7 @@ roles:
   - src: "https://github.com/andrewrothstein/ansible-kubectl"
     name: "andrewrothstein.kubectl"
     scm: "git"
-    version: "v1.5.8"
+    version: "v1.5.9"
 
   - src: https://github.com/geerlingguy/ansible-role-clamav.git
     name: geerlingguy.clamav
