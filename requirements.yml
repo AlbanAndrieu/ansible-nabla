@@ -457,7 +457,7 @@ roles:
 
   - src: https://github.com/andrewrothstein/ansible-terraform.git
     name: andrewrothstein.terraform
-    version: "v3.2.15"
+    version: "v3.2.16"
 
   - src: "https://github.com/ANXS/perl"
     name: "anxs.perl"
