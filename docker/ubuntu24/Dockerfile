@@ -262,7 +262,7 @@ ENV PATH=${GOPATH}/bin:${GOROOT}/bin:${PATH}
 # TRIVY
 
 # renovate: datasource=github-releases depName=aquasecurity/trivy
-ENV TRIVY_VERSION=${TRIVY_VERSION:-"0.76.1"}
+ENV TRIVY_VERSION=${TRIVY_VERSION:-"0.76.2"}
 RUN curl -fsSL -o /tmp/html.tpl https://github.com/aquasecurity/trivy/raw/v${TRIVY_VERSION}/contrib/html.tpl \
   && curl -fsSL -o /tmp/gitlab-codequality.tpl https://github.com/aquasecurity/trivy/raw/v${TRIVY_VERSION}/contrib/gitlab-codequality.tpl
 # hadolint ignore=DL3006,DL4006
