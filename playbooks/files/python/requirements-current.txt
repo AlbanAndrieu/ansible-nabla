@@ -86,7 +86,7 @@ junit-xml==1.9            # via -r requirements-current.in
 junit-xml-2==1.9          # via pylint-junit
 keyring==25.7.0           # via -r requirements-current.in
 kiwisolver==1.5.1         # via matplotlib
-kubernetes==37.0.1        # via -r requirements-current.in
+kubernetes==37.0.3        # via -r requirements-current.in
 lcov-cobertura==2.1.1     # via -r requirements-current.in
 lxml==6.1.3               # via gcovr, -r requirements-current.in
 mako==1.4.3               # via ansible-cmdb
