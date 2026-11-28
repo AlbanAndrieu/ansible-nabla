@@ -25,7 +25,7 @@ cachetools==7.2.4         # via tox
 certifi==2026.10.23       # via kubernetes, requests, selenium
 cffi==2.1.1               # via ansible-lint, cryptography
 cfgv==3.5.0               # via pre-commit
-charset-normalizer==3.5.2  # via requests
+charset-normalizer==3.5.3  # via requests
 click==8.5.0              # via black, cookiecutter, molecule
 cliff==4.17.0             # via ara
 cmd2==4.3.0               # via cliff
