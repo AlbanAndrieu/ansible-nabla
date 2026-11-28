@@ -216,7 +216,7 @@ RUN npm install -g yarn@1.22.22 newman@6.2.3 newman-reporter-htmlextra@1.23.1 je
 USER root
 
 # renovate: datasource=golang-version depName=go
-ENV GO_VERSION=${GO_VERSION:-"1.27.3"}
+ENV GO_VERSION=${GO_VERSION:-"1.27.4"}
 ENV GO_FILENAME=go${GO_VERSION}.linux-amd64.tar.gz
 ENV GO_URL=https://go.dev/dl/${GO_FILENAME}
 
