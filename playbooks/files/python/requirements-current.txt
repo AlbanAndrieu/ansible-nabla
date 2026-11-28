@@ -34,7 +34,7 @@ colorlog==6.12.0          # via gcovr
 conan==2.33.0             # via -r requirements-current.in
 contourpy==1.4.0          # via matplotlib
 cookiecutter==2.7.1       # via -r requirements-current.in
-coverage==7.17.0          # via pytest-cov, -r requirements-current.in
+coverage==7.17.5          # via pytest-cov, -r requirements-current.in
 cpplint==2.0.2            # via -r requirements-current.in
 cryptography==50.0.2      # via ansible-core, ansible-lint, pyspnego, requests-credssp, requests-ntlm, secretstorage
 cycler==0.12.1            # via matplotlib
